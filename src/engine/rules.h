@@ -260,6 +260,7 @@ TARGET  * bindtarget                     ( OBJECT * const );
 void      freetargets                    ( TARGETS * );
 TARGETS * targetchain                    ( TARGETS *, TARGETS * );
 TARGETS * targetentry                    ( TARGETS *, TARGET * );
+TARGETS * targetremove                   ( TARGETS *, TARGET * );
 void      target_include                 ( TARGET * const including,
                                            TARGET * const included );
 void      target_include_many            ( TARGET * const including,

@@ -57,6 +57,8 @@ static TARGETS * make0sort( TARGETS * c );
     static void dependGraphOutput( TARGET * t, int depth );
 #endif
 
+struct hash * targets_hash = NULL;
+
 static char const * target_fate[] =
 {
     "init",     /* T_FATE_INIT     */
@@ -290,6 +292,8 @@ void make0
     int          fate;
     char const * flag = "";
     SETTINGS   * s;
+    int found;
+    target_entry * te;
 
 #ifdef OPT_GRAPH_DEBUG_EXT
     int savedFate;
@@ -325,6 +329,22 @@ void make0
         object_free( t->boundname );
         t->boundname = search( t->name, &t->time, &another_target,
             t->flags & T_FLAG_ISFILE );
+
+        /* Add tuple of filename and target to hash.*/
+        if ( targets_hash != NULL )
+        {
+            te = (target_entry *)hash_insert( targets_hash, t->boundname, &found );
+            if ( !found )
+            {
+                te->path = object_copy( t->boundname );
+                te->target = list_new( (OBJECT *)t );
+            }
+            else
+            {
+                te->target = list_push_back(te->target, (OBJECT *)t );
+            }
+        }
+
         /* If it was detected that this target refers to an already existing and
          * bound target, we add a dependency so that every target depending on
          * us will depend on that other target as well.
@@ -436,9 +456,25 @@ void make0
     /* Step 3c: Add dependencies' includes to our direct dependencies. */
     {
         TARGETS * incs = 0;
+        TARGETS * ds = t->depends;
+        int unic = 1;
         for ( c = t->depends; c; c = c->next )
-            if ( c->target->includes )
-                incs = targetentry( incs, c->target->includes );
+          if ( c->target->includes )
+          {
+              /* Prevents duplication of includes targets in targets tree.
+               * We need this, because after refresh, targets, that hadn't changed
+               * already have includes are in direct dependencies.
+               */
+              while (ds)
+              {
+                  if(ds->target == c->target->includes)
+                    unic = 0;
+                  ds = ds ->next;
+              }
+              if (unic) incs = targetentry( incs, c->target->includes );
+              unic = 1;
+              ds = t->depends;
+          }
         t->depends = targetchain( t->depends, incs );
     }
 

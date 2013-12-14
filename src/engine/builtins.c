@@ -224,6 +224,12 @@ void load_builtins()
                   builtin_flags, T_FLAG_RMOLD, 0 );
 
     {
+        char const * args[] = { "filenames", "*", 0 };
+        bind_builtin( "REFRESH",
+                      builtin_refresh, 0, args );
+    }
+
+    {
         char const * args[] = { "targets", "*", 0 };
         bind_builtin( "UPDATE",
                       builtin_update, 0, args );
@@ -1381,6 +1387,131 @@ LIST * builtin_pwd( FRAME * frame, int flags )
     return list_new( object_copy( cwd() ) );
 }
 
+typedef struct tmp_entry
+{
+    TARGET * target;
+} tmp_entry;
+
+/* Recursively refreshes target and its dependants. Returns timepstamp of target,
+ * that has just been refreshed.
+ */
+
+timestamp refresh_target( TARGET * t, struct hash * tmp_hash )
+{
+    TARGETS * ts, * ds;
+    ACTIONS * a0;
+    timestamp high, tmp;
+    int found;
+    tmp_entry * tmpe;
+
+    tmpe = (tmp_entry *)hash_insert( tmp_hash, (OBJECT *)t, &found );
+
+    /* Check if target has already been refreshed. */
+    if ( found ) return t->time;
+    if ( !found )
+    {
+        tmpe->target = t;
+    }
+
+    timestamp_clear(&high);
+
+    ds = t->dependants;
+
+    /* Refresh flags. */
+    t->fate = T_FATE_INIT;
+    t->progress = T_MAKE_INIT;
+    t->status = 0;
+
+    for ( a0 = t->actions; a0; a0 = a0->next )
+    {
+        a0->action->running = A_INIT;
+    }
+
+    /* Refresh dependants. If there is no dependants, check for t->original_targets
+     * (it means, that t is includes branch).
+     */
+    if (!ds && t->original_target)
+        ds = t->original_target->dependants;
+    while ( ds )
+    {
+        tmp = refresh_target ( ds->target, tmp_hash );
+        timestamp_max(&high, &high, &tmp);
+        ds = ds->next;
+    }
+
+    /* Timestamp of target should be higher, than timestamps of it's dependants. */
+    timestamp_max(&t->time, &high, &t->time );
+
+    return t->time;
+}
+
+/*
+ * Takes a list of filenames, searches for targets, that uses this filenames and refreshes those targets.
+ */
+LIST * builtin_refresh( FRAME * frame, int flags )
+{
+    LIST * torefresh  = lol_get( frame->args, 0 );
+    LISTITER refresh_iter = list_begin( torefresh ), refresh_end = list_end( torefresh );
+    LISTITER targets_iter, targets_end;
+
+    TARGET * t ;
+    TARGETS * ds;
+    target_entry * te;
+
+    struct hash * tmp_hash;
+
+    char str[80];
+    int i;
+
+    /* Hash for targets, that has already been refreshed. */
+    tmp_hash = (struct hash *)hashinit( sizeof( tmp_entry ), "tmp_hash" );
+
+    for ( ; refresh_iter != refresh_end; refresh_iter = list_next( refresh_iter ) )
+    {
+        t = bindtarget( list_item( refresh_iter ) );
+
+        if (t->name != NULL)
+        {
+            te = (target_entry *)hash_find( targets_hash, t->name );
+            if ( te )
+            {
+                targets_iter = list_begin( te->target );
+                targets_end = list_end( te->target );
+                for ( ; targets_iter != targets_end; targets_iter = list_next( targets_iter ) )
+                {
+                    t = (TARGET *)list_item(targets_iter);
+                    refresh_target( t, tmp_hash );
+
+                    t->time.secs = t->time.secs + 1;
+
+                    /* If t has includes, delete it's dependencies and
+                     * remove t->includes target from dependants dependencies.
+                     * This is because in case of changes in source file,
+                     * some of it's includes could be changed.
+                     */
+                    if (t->includes )
+                    {
+                        ds = t->dependants;
+                        while ( ds )
+                        {
+                            ds->target->depends = targetremove(ds->target->depends, t->includes);
+                            ds = ds->next;
+                        }
+
+                        while (t->includes->depends )
+                        {
+                            ds = t->includes->depends;
+                            ds->target->dependants = targetremove(ds->target->dependants, t->includes);
+                            t->includes->depends = t->includes->depends->next;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    hash_free(tmp_hash);
+    return 0;
+}
 
 /*
  * Adds targets to the list of target that jam will attempt to update.
@@ -1445,6 +1576,8 @@ LIST * builtin_update_now( FRAME * frame, int flags )
         globs.quitquick = 0;
     }
 
+    if ( targets_hash == NULL )
+      targets_hash = (struct hash *)hashinit( sizeof( target_entry ), "targets_hash" );
     status = make( targets, anyhow );
 
     if ( !list_empty( force ) )

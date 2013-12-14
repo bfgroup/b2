@@ -32,6 +32,8 @@ from b2.manager import get_manager
 from b2.util import cached
 from b2.util import option
 
+import dbus
+from b2.daemon import inotify_starter, daemon_starter, check_for_daemon
 
 import bjam
 
@@ -476,9 +478,21 @@ def main_real():
     # target ids.
     current_project = None
     projects = get_manager().projects()
-    if projects.find(".", "."):
-        current_project = projects.target(projects.load("."))
+    project_module = projects.find(".", ".")
 
+    project_root = os.path.abspath(projects.attributes(project_module).get("project-root"))
+    daemon_dbus_name = "org.boost.boost_build." + re.sub(r'/', 'sl', project_root)
+    daemon_dbus_iface = "org.boost.boost_build.daemon_iface"
+    # TODO changing / with "sl" is not enough
+
+    # Check if there is a daemon running. If it is, then pass work to it and finish.
+    if "--daemon" in sys.argv or "--daemon-stop" in sys.argv:
+        res = check_for_daemon(daemon_dbus_name, daemon_dbus_iface)
+        if res: 
+            return []
+    if project_module:
+        current_project = projects.target(projects.load("."))
+            
     # Load the default toolset module if no other has already been specified.
     if not feature.values("toolset"):
 
@@ -853,7 +867,22 @@ def main_real():
         # Prevent automatic update of the 'all' target, now that
         # we have explicitly updated what we wanted.
         bjam.call("UPDATE")
+   
+    def daemonize():
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        # Starting Inotify daemon
+        inotify_starter(project_root, daemon_dbus_name, daemon_dbus_iface)
+        #Starting server
+        daemon_starter(daemon_dbus_name)
 
+
+    if "--daemon" in sys.argv:
+        #from multiprocessing import Process
+        #p = Process(target=daemon
+        #p.start()
+        #print ("Server shut down")
+        daemonize()
+        
     if manager.errors().count() == 0:
         return ["ok"]
     else:

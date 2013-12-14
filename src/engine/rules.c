@@ -269,6 +269,31 @@ TARGETS * targetentry( TARGETS * chain, TARGET * target )
     return chain;
 }
 
+/*
+ * targetremove() - removes a TARGET from a chain of TARGETS.
+ *
+ * Inputs:
+ *  chain   existing TARGETS to remove from
+ *  target  target to remove
+ */
+TARGETS * targetremove( TARGETS * chain, TARGET * target )
+{
+    TARGETS * ts = chain;
+    if ( !target || !chain ) return chain;
+    if ( ts->target == target) return ts->next;
+    
+    while ( ts && ts->next)
+    {
+        if ( ts->next->target == target)
+        {
+            ts->next = ts->next->next;
+            if (ts->next == NULL)
+                chain->tail = ts;
+        }
+        ts = ts->next;
+    }
+    return chain;
+}
 
 /*
  * targetchain() - append two TARGET chains.

@@ -27,6 +27,16 @@ typedef struct {
     int made;
 } COUNTS ;
 
+typedef struct target_entry
+{
+    OBJECT * path;
+    LIST * target;
+} target_entry;
+
+/* targets_hash stores tuples of filename and target, that uses source file with this filename.
+ * This information is used in builtin function REFRESH.
+ */
+extern struct hash * targets_hash;
 
 void make0( TARGET * t, TARGET * p, int depth, COUNTS * counts, int anyhow,
     TARGET * rescanning );

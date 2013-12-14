@@ -43,6 +43,7 @@ LIST *builtin_export( FRAME * frame, int flags );
 LIST *builtin_caller_module( FRAME * frame, int flags );
 LIST *builtin_backtrace( FRAME * frame, int flags );
 LIST *builtin_pwd( FRAME * frame, int flags );
+LIST *builtin_refresh( FRAME * frame, int flags );
 LIST *builtin_update( FRAME * frame, int flags );
 LIST *builtin_update_now( FRAME * frame, int flags );
 LIST *builtin_import_module( FRAME * frame, int flags );
