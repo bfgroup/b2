@@ -450,8 +450,6 @@ daemon_projects = None
             
 def main_real():
 
-    
-
     if not "--daemon-second" in sys.argv: 
         global debug_config, out_xml
 
@@ -530,12 +528,8 @@ def main_real():
 
     import time
     curr = time.time()
-    
-    project_module = projects.find(".", ".")
-    while projects.daemon_changed_jams:
-        projects.load( os.path.dirname(projects.daemon_changed_jams[0]))
-    #print "m2t:", projects.module2target
-    
+
+
     daemon_dbus_name = "org.boost.boost_build"
     daemon_dbus_iface = "org.boost.boost_build.daemon_iface"
     # # TODO changing / with "sl" is not enough
@@ -545,6 +539,13 @@ def main_real():
          res = check_for_daemon(daemon_dbus_name, daemon_dbus_iface)
          if res == 1: 
             return []
+    
+    project_module = projects.find(".", ".")
+    while projects.daemon_changed_jams:
+        projects.load( os.path.dirname(projects.daemon_changed_jams[0]))
+    #print "m2t:", projects.module2target
+    
+ 
     
     if project_module:
         current_project = projects.target(projects.load("."))
