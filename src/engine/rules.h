@@ -256,6 +256,7 @@ void   rule_free       ( RULE * );
 
 /* Target related functions. */
 void      bind_explicitly_located_targets();
+void      target_cache_reload            ();
 TARGET  * bindtarget                     ( OBJECT * const );
 void      freetargets                    ( TARGETS * );
 TARGETS * targetchain                    ( TARGETS *, TARGETS * );

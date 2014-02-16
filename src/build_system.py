@@ -34,6 +34,7 @@ from b2.util import option
 
 import dbus
 from b2.daemon import inotify_starter, daemon_starter, check_for_daemon
+import pdb
 
 import bjam
 
@@ -442,54 +443,109 @@ def main():
         except ExceptionWithUserContext, e:
             e.report()
 
+
+daemon_engine = None
+daemon_manager = None
+daemon_projects = None
+            
 def main_real():
 
-    global debug_config, out_xml
+    
 
-    debug_config = "--debug-configuration" in sys.argv
-    out_xml = any(re.match("^--out-xml=(.*)$", a) for a in sys.argv)
+    if not "--daemon-second" in sys.argv: 
+        global debug_config, out_xml
 
-    engine = Engine()
+        debug_config = "--debug-configuration" in sys.argv
+        out_xml = any(re.match("^--out-xml=(.*)$", a) for a in sys.argv)
 
-    global_build_dir = option.get("build-dir")
-    manager = Manager(engine, global_build_dir)
+        engine = Engine()
+        global daemon_engine, daemon_manager
+        daemon_engine = engine
+        
+        global_build_dir = option.get("build-dir")
+        manager = Manager(engine, global_build_dir)
+        daemon_manager = manager
 
-    import b2.build.configure as configure
+        import b2.build.configure as configure
 
-    if "--version" in sys.argv:
+        if "--version" in sys.argv:
 
-        version.report()
-        return
+            version.report()
+            return
 
-    # This module defines types and generator and what not,
-    # and depends on manager's existence
-    import b2.tools.builtin
+        # This module defines types and generator and what not,
+        # and depends on manager's existence
+        import b2.tools.builtin
 
-    b2.tools.common.init(manager)
+        b2.tools.common.init(manager)
 
-    load_configuration_files()
+        load_configuration_files()
 
-    # Load explicitly specified toolset modules.
-    extra_properties = process_explicit_toolset_requests()
+        # Load explicitly specified toolset modules.
+        extra_properties = process_explicit_toolset_requests()
 
-    # Load the actual project build script modules. We always load the project
-    # in the current folder so 'use-project' directives have any chance of
-    # being seen. Otherwise, we would not be able to refer to subprojects using
-    # target ids.
-    current_project = None
-    projects = get_manager().projects()
+        # Load the actual project build script modules. We always load the project
+        # in the current folder so 'use-project' directives have any chance of
+        # being seen. Otherwise, we would not be able to refer to subprojects using
+        # target ids.
+        current_project = None
+        projects = get_manager().projects()
+
+    if "--daemon-second" in sys.argv:
+
+        debug_config = "--debug-configuration" in sys.argv
+        out_xml = any(re.match("^--out-xml=(.*)$", a) for a in sys.argv)
+
+        engine = daemon_engine
+        
+        global_build_dir = option.get("build-dir")
+        manager = daemon_manager
+
+        import b2.build.configure as configure
+
+        if "--version" in sys.argv:
+
+            version.report()
+            return
+
+        # This module defines types and generator and what not,
+        # and depends on manager's existence
+        import b2.tools.builtin
+
+
+        load_configuration_files()
+
+        # Load explicitly specified toolset modules.
+        extra_properties = process_explicit_toolset_requests()
+
+        # Load the actual project build script modules. We always load the project
+        # in the current folder so 'use-project' directives have any chance of
+        # being seen. Otherwise, we would not be able to refer to subprojects using
+        # target ids.
+        current_project = None
+        projects = get_manager().projects()
+
+    #pdb.set_trace()
+    #print "m2t:", projects.module2target
+
+    import time
+    curr = time.time()
+    
     project_module = projects.find(".", ".")
-
-    project_root = os.path.abspath(projects.attributes(project_module).get("project-root"))
-    daemon_dbus_name = "org.boost.boost_build." + re.sub(r'/', 'sl', project_root)
+    while projects.daemon_changed_jams:
+        projects.load( os.path.dirname(projects.daemon_changed_jams[0]))
+    #print "m2t:", projects.module2target
+    
+    daemon_dbus_name = "org.boost.boost_build"
     daemon_dbus_iface = "org.boost.boost_build.daemon_iface"
-    # TODO changing / with "sl" is not enough
+    # # TODO changing / with "sl" is not enough
 
     # Check if there is a daemon running. If it is, then pass work to it and finish.
-    if "--daemon" in sys.argv or "--daemon-stop" in sys.argv:
-        res = check_for_daemon(daemon_dbus_name, daemon_dbus_iface)
-        if res: 
+    if ( "--daemon" in sys.argv or "--daemon-stop" in sys.argv) and not "--daemon-second" in sys.argv:
+         res = check_for_daemon(daemon_dbus_name, daemon_dbus_iface)
+         if res == 1: 
             return []
+    
     if project_module:
         current_project = projects.target(projects.load("."))
             
@@ -627,10 +683,43 @@ def main_real():
             except Exception:
                 raise
 
+    print ""
+    def vt_tree(vt, str):
+        for q in vt:
+            print str + q.name(), " :: ", [q]
+            #print "D", str, q.dependencies_
+            if q.action():
+                if q.action().sources():
+                    vt_tree(q.action().sources(), str + "  ")
+
+    #vt_tree(virtual_targets, "")
+
+    print "Generation time:", time.time() - curr
+    curr = time.time()
+    #pdb.set_trace()
     # Convert collected virtual targets into actual raw Jam targets.
+
+
+    def daemon_clean_vt_tree(vt):
+        for q in vt:
+            q.made_ = {}
+            if q.action():
+                if q.action().sources():
+                    q.action().actualized_ = False
+                    q.action().actual_sources_ = []
+                    daemon_clean_vt_tree(q.action().sources())
+
+    if "--daemon-second" in sys.argv:                
+        for q in virtual_targets:
+            q.virtual_targets().actual_ = {}
+        daemon_clean_vt_tree(virtual_targets)
+        b2.tools.common.mkdir_set_clean()
+    
     for t in virtual_targets:
         actual_targets.append(t.actualize())
 
+    print "Actualization time:", time.time() - curr
+    curr = time.time()
 
      # FIXME: restore
 ##     # If XML data output has been requested prepare additional rules and targets
@@ -869,6 +958,7 @@ def main_real():
         bjam.call("UPDATE")
    
     def daemonize():
+        project_root = os.path.abspath(projects.attributes(project_module).get("project-root"))
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         # Starting Inotify daemon
         inotify_starter(project_root, daemon_dbus_name, daemon_dbus_iface)
@@ -876,14 +966,23 @@ def main_real():
         daemon_starter(daemon_dbus_name)
 
 
-    if "--daemon" in sys.argv:
-        #from multiprocessing import Process
-        #p = Process(target=daemon
-        #p.start()
-        #print ("Server shut down")
+    if "--daemon" in sys.argv and not "--daemon-second" in sys.argv:
+        global changed_jams
         daemonize()
-        
+
+    print "Building time:", time.time() - curr
+
     if manager.errors().count() == 0:
         return ["ok"]
     else:
         return []
+
+
+def main_daemon(jams):
+    changed_jams = jams
+    projects = get_manager().projects()
+    projects.daemon_changed_jams = changed_jams
+    bjam.call("DELETE", "all")
+    sys.argv.append("--daemon-second")
+    #pass
+    main_real()

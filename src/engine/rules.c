@@ -149,6 +149,16 @@ void rule_free( RULE * r )
     r->actions = 0;
 }
 
+/*
+ * target_cache_reload() - reinitialize cache
+ */
+
+void target_cache_reload()
+{
+    targethash = hashinit( sizeof( TARGET ), "targets" );
+
+}
+
 
 /*
  * bindtarget() - return pointer to TARGET, creating it if necessary.
@@ -158,6 +168,7 @@ TARGET * bindtarget( OBJECT * const target_name )
 {
     int found;
     TARGET * t;
+    //printf ("BINDTIME %s", target_name);
 
     if ( !targethash )
         targethash = hashinit( sizeof( TARGET ), "targets" );
@@ -165,10 +176,12 @@ TARGET * bindtarget( OBJECT * const target_name )
     t = (TARGET *)hash_insert( targethash, target_name, &found );
     if ( !found )
     {
+      //  printf (" NOT FOUND");
         memset( (char *)t, '\0', sizeof( *t ) );
         t->name = object_copy( target_name );
         t->boundname = object_copy( t->name );  /* default for T_FLAG_NOTFILE */
     }
+    //printf(" %s \n", timestamp_str(&(t->time)));
 
     return t;
 }

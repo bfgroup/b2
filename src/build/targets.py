@@ -542,6 +542,12 @@ class ProjectTarget (AbstractTarget):
         return result
 
     def find (self, id, no_error = False):
+
+        # DTODO Might be inaccurate
+        if "--daemon-second" in sys.argv:
+                self.ids_cache_ = {}
+            #print "IDS", self, self.ids_cache_, id
+        
         v = self.ids_cache_.get (id, None)
         
         if not v:
@@ -1105,6 +1111,11 @@ class BasicTarget (AbstractTarget):
             
         self.manager().targets().push_target(self)
 
+        if "--daemon-second" in sys.argv:
+            #DTODO This is inaccurate. We should do this only when current targets depends on changed target
+            #print self.generated_
+            self.generated_ = {}
+        
         if not self.generated_.has_key(ps):
 
             # Apply free features form the command line.  If user

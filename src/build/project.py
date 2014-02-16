@@ -8,7 +8,7 @@
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-# Implements project representation and loading. Each project is represented
+# Implements project representation and loadin. Each project is represented
 # by:
 #  - a module where all the Jamfile content live.
 #  - an instance of 'project-attributes' class.
@@ -120,6 +120,10 @@ class ProjectRegistry:
             self.JAMFILE = ["[Bb]uild.jam", "[Jj]amfile.v2", "[Jj]amfile",
                             "[Jj]amfile.jam"]
 
+        self.daemon_changed_jams = []
+        self.daemon_need_to_reload = []
+        self.daemon_reload_started = []
+
 
     def load (self, jamfile_location):
         """Loads jamfile at the given location. After loading, project global
@@ -127,11 +131,23 @@ class ProjectRegistry:
         If the jamfile at that location is loaded already, does nothing.
         Returns the project module for the Jamfile."""
 
+        import pdb
+        
         absolute = os.path.join(os.getcwd(), jamfile_location)
         absolute = os.path.normpath(absolute)
         jamfile_location = b2.util.path.relpath(os.getcwd(), absolute)
 
         mname = self.module_name(jamfile_location)
+
+        if "--daemon-second" in sys.argv:      
+            for i, data in enumerate(self.daemon_changed_jams):
+                if os.path.abspath(jamfile_location) == os.path.dirname(data):
+                    del self.daemon_changed_jams[i]
+                    if mname in self.jamfile_modules:
+                        del self.jamfile_modules[mname]
+                    if mname in self.module2target:
+                        del self.module2target[mname]
+        
         # If Jamfile is already loaded, do not try again.
         if not mname in self.jamfile_modules:
 
@@ -184,12 +200,24 @@ class ProjectRegistry:
         return project module corresponding to that id or directory.
         Returns nothing of project is not found."""
 
-        project_module = None
-
+        project_module = None        
+            
         # Try interpreting name as project id.
         if name[0] == '/':
             project_module = self.id2module.get(name)
 
+        
+        if "--daemon-second" in sys.argv:
+            if project_module:
+                # Not sure what happens here
+                # DTODO
+                pass
+            location = os.path.join(current_location, name)
+            for i, data in enumerate(self.daemon_changed_jams):
+                if os.path.abspath(location) == os.path.dirname(data):
+                    if self.location2module.get(location):
+                        print "FIX THIS 2!"
+                    
         if not project_module:
             location = os.path.join(current_location, name)
             # If no project is registered for the given location, try to
@@ -198,6 +226,17 @@ class ProjectRegistry:
             # must be placed in the directory referred by id.
 
             project_module = self.module_name(location)
+
+            if "--daemon-second" in sys.argv:
+                for i, data in enumerate(self.daemon_changed_jams):
+                    if os.path.abspath(location) == os.path.dirname(data):
+                        # We're reloading Jam
+                        del self.daemon_changed_jams[i]
+                        if project_module in self.jamfile_modules:
+                            del self.jamfile_modules[project_module]
+                        if project_module in self.module2target:
+                            del self.module2target[project_module]
+                
             if not project_module in self.jamfile_modules:
                 if b2.util.path.glob([location], self.JAMROOT + self.JAMFILE):
                     project_module = self.load(location)

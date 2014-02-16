@@ -52,6 +52,7 @@ int file_time( OBJECT * const path, timestamp * const );
 /* Internal utility worker functions. */
 void file_query_posix_( file_info_t * const );
 
+void file_cache_reload();
 void file_done();
 
 #endif

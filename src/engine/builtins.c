@@ -224,6 +224,12 @@ void load_builtins()
                   builtin_flags, T_FLAG_RMOLD, 0 );
 
     {
+        char const * args[] = { "targets", "*", 0 };
+        bind_builtin( "DELETE",
+                      builtin_delete, 0, args );
+    }
+
+    {
         char const * args[] = { "filenames", "*", 0 };
         bind_builtin( "REFRESH",
                       builtin_refresh, 0, args );
@@ -1512,6 +1518,23 @@ LIST * builtin_refresh( FRAME * frame, int flags )
     hash_free(tmp_hash);
     return 0;
 }
+
+
+LIST * builtin_delete( FRAME * frame, int flags )
+{
+  LIST * targets = lol_get( frame->args, 0 );
+  LISTITER iter = list_begin( targets ), end = list_end( targets );
+  for ( ; iter != end; iter = list_next( iter ) )
+  {
+    
+    //TARGET * t = bindtarget( list_item( iter ) );
+    //printf ("BINGO %s \n", t->name);
+    target_cache_reload();
+    file_cache_reload();
+    //rules_done();
+  }
+}
+
 
 /*
  * Adds targets to the list of target that jam will attempt to update.

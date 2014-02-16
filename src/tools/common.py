@@ -548,6 +548,10 @@ def file_creation_command():
 __mkdir_set = set()
 __re_windows_drive = re.compile(r'^.*:\$')
 
+def mkdir_set_clean():
+    global __mkdir_set
+    __mkdir_set = set()
+
 def mkdir(engine, target):
     # If dir exists, do not update it. Do this even for $(DOT).
     bjam.call('NOUPDATE', target)

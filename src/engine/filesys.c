@@ -99,6 +99,16 @@ void file_dirscan( OBJECT * dir, scanback func, void * closure )
     PROFILE_EXIT( FILE_DIRSCAN );
 }
 
+/*
+ * file_cache_reload() - reinitialize cache
+ */
+
+void file_cache_reload()
+{
+    filecache_hash = hashinit( sizeof( file_info_t ), "file_info" );
+}
+
+
 
 /*
  * file_done() - module cleanup called on shutdown
