@@ -684,7 +684,7 @@ def main_real():
             except Exception:
                 raise
 
-    print ""
+    
     def vt_tree(vt, str):
         for q in vt:
             print str + q.name(), " :: ", [q]
@@ -692,7 +692,7 @@ def main_real():
             if q.action():
                 if q.action().sources():
                     vt_tree(q.action().sources(), str + "  ")
-
+    #print ""
     #vt_tree(virtual_targets, "")
 
     print "Generation time:", time.time() - curr
@@ -984,6 +984,8 @@ def main_daemon(jams):
     projects = get_manager().projects()
     projects.daemon_changed_jams = changed_jams
     bjam.call("DELETE", "all")
+    from b2.tools.unix import reorder
+    reorder()
     sys.argv.append("--daemon-second")
     #pass
     main_real()

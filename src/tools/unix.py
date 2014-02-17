@@ -120,6 +120,10 @@ def unix_archive (manager, targets, sources, properties):
 from b2.util.order import Order
 __order = Order ()
 
+def reorder():
+    global __order
+    __order = Order ()
+
 def set_library_order_aux (from_libs, to_libs):
     for f in from_libs:
         for t in to_libs:
