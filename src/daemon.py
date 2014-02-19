@@ -9,6 +9,20 @@ import sys
 
 # Checks if daemon is running. Stops daemon if --daemon-stop found in argv.
 def check_for_daemon(daemon_dbus_name, daemon_dbus_iface):
+    def output_parser():
+            import time
+            pipein = os.open(daemon_dbus_name, os.O_RDONLY)
+            a = os.fdopen(pipein)
+            #os.dup2(pipein,0)
+            line = a.readline()
+            while (not (line == daemon_dbus_name)):
+                print  line.replace("\n","")
+                line = a.readline()
+            os.unlink(daemon_dbus_name)
+
+    from multiprocessing import Process
+    p = Process(target=output_parser)
+    
     try:
         try_bus = dbus.SessionBus()
         daemon_object = try_bus.get_object(daemon_dbus_name, "/CommandHandler")
@@ -21,29 +35,17 @@ def check_for_daemon(daemon_dbus_name, daemon_dbus_iface):
 
         os.mkfifo(daemon_dbus_name)
 
-        from multiprocessing import Process
+        
 
-        def output_parser():
-            import time
-            pipein = os.open(daemon_dbus_name, os.O_RDONLY)
-            a = os.fdopen(pipein)
-            #os.dup2(pipein,0)
-            line = a.readline()
-            while (not (line == daemon_dbus_name)):
-                print  line.replace("\n","")
-                line = a.readline()
-            os.unlink(daemon_dbus_name)
-            
-        p = Process(target=output_parser)
         p.start()
         res = iface.check_args(sys.argv)
         p.join()
-
         if res:
             #print "Work passed to daemon"
             return 1
     except dbus.DBusException as e:
         if (e.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply"):
+            p.join()
             return 1
         else:
             print "No daemon found"
@@ -95,7 +97,8 @@ def inotify_handler (dir, daemon_dbus_name, daemon_dbus_iface):
             print "Inotify process connected to dbus" 
             notifier.loop()
         except dbus.DBusException as e:
-            print "Inotify process error: " + str(e)   
+            num_retry += 1
+            #print "Inotify process error: " + str(e)   
         num_retry -= 1
         time.sleep(1)
 
@@ -140,9 +143,12 @@ def daemon_starter(daemon_dbus_name):
                     if jams:
                         from b2.build_system import main_daemon
                         main_daemon(jams)
-                        
-                        del self.refrlist[ : ]
-                        self.refrlist.append(time.time())
+                    elif self.refrlist[1:]:
+                        bjam.call("REFRESH",self.refrlist[1:])
+                        bjam.call("UPDATE_NOW", "all")
+    
+                    del self.refrlist[ : ]
+                    self.refrlist.append(time.time())
                     
                     # set_args_old = set(self.args)
                     # set_args_new = set(args)
