@@ -526,6 +526,7 @@ def main_real():
     #pdb.set_trace()
     #print "m2t:", projects.module2target
 
+    daemon_output = "--daemon-output" in sys.argv
     import time
     curr = time.time()
 
@@ -692,8 +693,10 @@ def main_real():
             if q.action():
                 if q.action().sources():
                     vt_tree(q.action().sources(), str + "  ")
-    #print ""
-    #vt_tree(virtual_targets, "")
+
+    if daemon_output:
+        print "VirtualTargets tree:"
+        vt_tree(virtual_targets, "")
 
     print "Generation time:", time.time() - curr
     curr = time.time()

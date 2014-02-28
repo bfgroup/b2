@@ -350,6 +350,8 @@ Please consult the documentation at 'http://boost.org/boost-build2'."""
 
             saved_project = self.current_project
 
+            if "--daemon-output" in sys.argv:
+                print "Loading Jam at: ", jamfile_module
             bjam.call("load", jamfile_module, jamfile_to_load)
             basename = os.path.basename(jamfile_to_load)
 
