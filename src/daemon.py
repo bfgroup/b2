@@ -132,6 +132,8 @@ def daemon_starter(daemon_dbus_name):
                     tmpdesc = os.dup( sys.stdout.fileno())
                     os.dup2( pipeout, sys.stdout.fileno())
 
+                    if "--daemon-output" in sys.argv:
+                        print "Files changed since last run:", self.refrlist[1:]
 
                     # Check if Jamfile's has been changed
                     jams = []
