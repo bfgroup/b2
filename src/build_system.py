@@ -982,10 +982,14 @@ def main_real():
         return []
 
 
-def main_daemon(jams):
+def main_daemon(jams, args):
     changed_jams = jams
     projects = get_manager().projects()
     projects.daemon_changed_jams = changed_jams
+    if args:
+        get_manager().argv_ = args
+        sys.argv = args
+    
     bjam.call("DELETE", "all")
     from b2.tools.unix import reorder
     reorder()

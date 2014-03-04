@@ -135,16 +135,34 @@ def daemon_starter(daemon_dbus_name):
                     if "--daemon-output" in sys.argv:
                         print "Files changed since last run:", self.refrlist[1:]
 
+                    # Check if args has been changed 
+                    args2 = []
+                    for i in args:
+                        args2.append(str(i))
+
+                    for i, data in enumerate(args2):
+                        if data == "--daemon-output":
+                            del args2[i]
+
+                    for i, data in enumerate(self.args):
+                        if data == "--daemon-output" or data == "--daemon-second":
+                            del self.args[i]
+
+                    if args2 == self.args:
+                        args2 = []
+                    else:
+                        self.args = args2
+
                     # Check if Jamfile's has been changed
                     jams = []
                     for s in self.refrlist[1:]:
                         tmp = os.path.basename(s).lower()
                         if (tmp == "jamfile.jam" or tmp == "jamroot.jam"):
                             jams.append(os.path.abspath(s))
-
-                    if jams:
+                        
+                    if jams or args2:
                         from b2.build_system import main_daemon
-                        main_daemon(jams)
+                        main_daemon(jams,args2)
                     elif self.refrlist[1:]:
                         bjam.call("REFRESH",self.refrlist[1:])
                         bjam.call("UPDATE_NOW", "all")
@@ -152,29 +170,10 @@ def daemon_starter(daemon_dbus_name):
                     del self.refrlist[ : ]
                     self.refrlist.append(time.time())
                     
-                    # set_args_old = set(self.args)
-                    # set_args_new = set(args)
-                    # args_removed = set_args_old.difference(set_args_new)
-                    # args_added = set_args_new.difference(set_args_old)
-                    args_matches = 1
-                    
-                    # if ( len(args_removed) > 0 or len(args_added)>0 ):
-                    #     mainloop.quit()
-                    #     print "args are not equal"
-                    #     os.write(pipeout, daemon_dbus_name)
-                    #     args_matches = False
-                    
-                    # if args_matches:
-                    #     #print "Refreshing. Updated files: ", self.refrlist[1:]
-                    #     if self.refrlist[1:]:
-                    #         bjam.call("REFRESH",self.refrlist[1:])
-                    #         bjam.call("UPDATE_NOW", "all")
-                    #         del self.refrlist[ : ]
-                    #         self.refrlist.append(time.time())
                     os.write(pipeout, daemon_dbus_name)
                     os.close(pipeout)
                     os.dup2(tmpdesc, sys.stdout.fileno())
-                    return args_matches
+                    return 1
                     
                 @dbus.service.method(daemon_dbus_iface,
                                      in_signature='', out_signature='')
