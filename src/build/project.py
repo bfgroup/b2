@@ -139,9 +139,10 @@ class ProjectRegistry:
 
         mname = self.module_name(jamfile_location)
 
-        if "--daemon-second" in sys.argv:      
+        if "--daemon-second" in sys.argv:
+            tmp = os.path.abspath(jamfile_location)
             for i, data in enumerate(self.daemon_changed_jams):
-                if os.path.abspath(jamfile_location) == os.path.dirname(data):
+                if tmp == data:
                     del self.daemon_changed_jams[i]
                     if mname in self.jamfile_modules:
                         del self.jamfile_modules[mname]
@@ -213,8 +214,9 @@ class ProjectRegistry:
                 # DTODO
                 pass
             location = os.path.join(current_location, name)
+            location = os.path.abspath(location)
             for i, data in enumerate(self.daemon_changed_jams):
-                if os.path.abspath(location) == os.path.dirname(data):
+                if location == data:
                     if self.location2module.get(location):
                         print "FIX THIS 2!"
                     
@@ -228,8 +230,9 @@ class ProjectRegistry:
             project_module = self.module_name(location)
 
             if "--daemon-second" in sys.argv:
+                tmpl = os.path.abspath(location)
                 for i, data in enumerate(self.daemon_changed_jams):
-                    if os.path.abspath(location) == os.path.dirname(data):
+                    if tmpl == data:
                         # We're reloading Jam
                         del self.daemon_changed_jams[i]
                         if project_module in self.jamfile_modules:

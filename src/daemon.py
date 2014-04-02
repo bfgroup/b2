@@ -158,7 +158,7 @@ def daemon_starter(daemon_dbus_name):
                     for s in self.refrlist[1:]:
                         tmp = os.path.basename(s).lower()
                         if (tmp == "jamfile.jam" or tmp == "jamroot.jam"):
-                            jams.append(os.path.abspath(s))
+                            jams.append(os.path.dirname(os.path.abspath(s)))
                         
                     if jams or args2:
                         from b2.build_system import main_daemon

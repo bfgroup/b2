@@ -540,10 +540,11 @@ def main_real():
          res = check_for_daemon(daemon_dbus_name, daemon_dbus_iface)
          if res == 1: 
             return []
-    
+
+    # print projects.daemon_changed_jams
     project_module = projects.find(".", ".")
     while projects.daemon_changed_jams:
-        projects.load( os.path.dirname(projects.daemon_changed_jams[0]))
+        projects.load( projects.daemon_changed_jams[0])
     #print "m2t:", projects.module2target
     
  
