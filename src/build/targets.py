@@ -1111,10 +1111,10 @@ class BasicTarget (AbstractTarget):
             
         self.manager().targets().push_target(self)
 
-        if "--daemon-second" in sys.argv:
+        #if "--daemon-second" in sys.argv:
             #DTODO This is inaccurate. We should do this only when current targets depends on changed target
             #print self.generated_
-            self.generated_ = {}
+        #    self.generated_ = {}
         
         if not self.generated_.has_key(ps):
 

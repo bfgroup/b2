@@ -15,7 +15,7 @@ from b2.manager import Manager
 from b2.util.path import glob
 from b2.build import feature, property_set
 import b2.build.virtual_target
-from b2.build.targets import ProjectTarget
+from b2.build.targets import ProjectTarget, MainTarget
 from b2.util.sequence import unique
 import b2.build.build_request
 from b2.build.errors import ExceptionWithUserContext
@@ -672,10 +672,45 @@ def main_real():
     # build the targets with, we can start the main build process by using each
     # property set to generate virtual targets from all of our listed targets
     # and any of their dependants.
+    #pdb.set_trace()
+    def daemon_check_generated(t,ps):
+        q = True
+        if t.__class__ is ProjectTarget:
+            for i in t.targets_to_build ():
+                res = daemon_check_generated(i,ps)
+                if q:
+                    q = res
+            return q
+            
+        elif t.__class__ is MainTarget:
+            p = ps.expand ()
+            all_property_sets = t.apply_default_build (ps)
+            selset = all_property_sets[0]
+            best_alternative = t._MainTarget__select_alternatives(selset, debug=0)
+            if not best_alternative:
+                print "daemon_check_dependencies, No best alternative found."
+
+            if not best_alternative.generated_:
+                return False
+            
+            for g in best_alternative.sources():
+                if g.__class__ is ProjectTarget or g.__class__ is MainTarget:
+                    res = daemon_check_generated(g,ps)
+                    if q:
+                        q = res
+            if not q:
+                best_alternative.generated_ = {}
+            return q
+        else:
+            print "You're not supposed to see this"
+    
+    
     for p in expanded:
         manager.set_command_line_free_features(property_set.create(p.free()))
 
         for t in targets:
+            if "--daemon-second" in sys.argv:
+                daemon_check_generated(t,p)
             try:
                 g = t.generate(p)
                 if not isinstance(t, ProjectTarget):
