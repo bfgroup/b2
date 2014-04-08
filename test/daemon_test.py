@@ -1,3 +1,5 @@
+# Testing daemon functionality
+
 import BoostBuild
 from multiprocessing import Process
 import time

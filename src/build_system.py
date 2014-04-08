@@ -526,6 +526,7 @@ def main_real():
     #pdb.set_trace()
     #print "m2t:", projects.module2target
 
+    # For debugging purposes
     daemon_output = "--daemon-output" in sys.argv
     import time
     curr = time.time()
@@ -535,13 +536,13 @@ def main_real():
     daemon_dbus_iface = "org.boost.boost_build.daemon_iface"
     # # TODO changing / with "sl" is not enough
 
-    # Check if there is a daemon running. If it is, then pass work to it and finish.
+    # Check if there is a daemon running.
+    # If it is, then pass work to it and finish.
     if ( "--daemon" in sys.argv or "--daemon-stop" in sys.argv) and not "--daemon-second" in sys.argv:
          res = check_for_daemon(daemon_dbus_name, daemon_dbus_iface)
          if res == 1: 
             return []
 
-    # print projects.daemon_changed_jams
     project_module = projects.find(".", ".")
     while projects.daemon_changed_jams:
         projects.load( projects.daemon_changed_jams[0])
@@ -672,17 +673,28 @@ def main_real():
     # build the targets with, we can start the main build process by using each
     # property set to generate virtual targets from all of our listed targets
     # and any of their dependants.
+
+    
     #pdb.set_trace()
+    # Tells if current target or any of her dependants were generated
+    # If some of them were not - then mark a target as ungenerated
     def daemon_check_generated(t,ps):
         q = True
+
+        # Current target is ProjectTarget
+        # Visit all her dependencies
         if t.__class__ is ProjectTarget:
             for i in t.targets_to_build ():
                 res = daemon_check_generated(i,ps)
                 if q:
                     q = res
             return q
-            
+
+        # Current target is MainTarget
+        # Choose alternative and visit all her dependencies
         elif t.__class__ is MainTarget:
+
+            # Choosing alternative
             p = ps.expand ()
             all_property_sets = t.apply_default_build (ps)
             selset = all_property_sets[0]
@@ -692,7 +704,8 @@ def main_real():
 
             if not best_alternative.generated_:
                 return False
-            
+
+            # Visiting dependencies
             for g in best_alternative.sources():
                 if g.__class__ is ProjectTarget or g.__class__ is MainTarget:
                     res = daemon_check_generated(g,ps)
@@ -721,7 +734,8 @@ def main_real():
             except Exception:
                 raise
 
-    
+    # Print virtual targets tree
+    # Need this for debugging
     def vt_tree(vt, str):
         for q in vt:
             print str + q.name(), " :: ", [q]
@@ -739,7 +753,8 @@ def main_real():
     #pdb.set_trace()
     # Convert collected virtual targets into actual raw Jam targets.
 
-
+    
+    # Clean some caches in virtual tree
     def daemon_clean_vt_tree(vt):
         for q in vt:
             q.made_ = {}
@@ -996,13 +1011,14 @@ def main_real():
         # Prevent automatic update of the 'all' target, now that
         # we have explicitly updated what we wanted.
         bjam.call("UPDATE")
-   
+
+    # Start daemon and inotify
     def daemonize():
         project_root = os.path.abspath(projects.attributes(project_module).get("project-root"))
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         # Starting Inotify daemon
         inotify_starter(project_root, daemon_dbus_name, daemon_dbus_iface)
-        #Starting server
+        # Starting daemon
         daemon_starter(daemon_dbus_name)
 
 
@@ -1017,18 +1033,27 @@ def main_real():
     else:
         return []
 
-
+# Set some variables and run main_real()
 def main_daemon(jams, args):
+    
+    # List of changed Jamfiles
     changed_jams = jams
+    
     projects = get_manager().projects()
     projects.daemon_changed_jams = changed_jams
+
+    # Changing args of current process.
+    # Matatarget tree will be genereted with new args.
     if args:
         get_manager().argv_ = args
         sys.argv = args
-    
+
+    # Deleting C layer target tree
     bjam.call("DELETE", "all")
+
+    # Cleaning cache
     from b2.tools.unix import reorder
     reorder()
+
     sys.argv.append("--daemon-second")
-    #pass
     main_real()
