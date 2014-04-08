@@ -8,7 +8,7 @@
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-# Implements project representation and loadin. Each project is represented
+# Implements project representation and loading. Each project is represented
 # by:
 #  - a module where all the Jamfile content live.
 #  - an instance of 'project-attributes' class.
@@ -120,6 +120,10 @@ class ProjectRegistry:
             self.JAMFILE = ["[Bb]uild.jam", "[Jj]amfile.v2", "[Jj]amfile",
                             "[Jj]amfile.jam"]
 
+        # Initiating some lists for daemon purposes.
+        # daemon_changed_jams stores list of changed Jamfiles.
+        # daemon_changed_jams is filled in main_daemon function,
+        # that is located in build_system.py
         self.daemon_changed_jams = []
         self.daemon_need_to_reload = []
         self.daemon_reload_started = []
@@ -139,11 +143,19 @@ class ProjectRegistry:
 
         mname = self.module_name(jamfile_location)
 
+        # "--daemon-second" is in sys.argv only during
+        # rebuilds that are initiated by daemon
         if "--daemon-second" in sys.argv:
             tmp = os.path.abspath(jamfile_location)
+
+            # Try to find Jamfile in list of changed Jamfiles
+            # If it is there - then clean up some caches
+            # so Jamfile can be loaded again
             for i, data in enumerate(self.daemon_changed_jams):
                 if tmp == data:
+                    # Delete Jamfile from list of changed Jamfiles
                     del self.daemon_changed_jams[i]
+                    # Clean up caches
                     if mname in self.jamfile_modules:
                         del self.jamfile_modules[mname]
                     if mname in self.module2target:
@@ -207,7 +219,8 @@ class ProjectRegistry:
         if name[0] == '/':
             project_module = self.id2module.get(name)
 
-        
+        # "--daemon-second" is in sys.argv only during
+        # rebuilds that are initiated by daemon
         if "--daemon-second" in sys.argv:
             if project_module:
                 # Not sure what happens here
@@ -218,7 +231,8 @@ class ProjectRegistry:
             for i, data in enumerate(self.daemon_changed_jams):
                 if location == data:
                     if self.location2module.get(location):
-                        print "FIX THIS 2!"
+                        #print "FIX THIS 2!"
+                        pass
                     
         if not project_module:
             location = os.path.join(current_location, name)
@@ -233,8 +247,9 @@ class ProjectRegistry:
                 tmpl = os.path.abspath(location)
                 for i, data in enumerate(self.daemon_changed_jams):
                     if tmpl == data:
-                        # We're reloading Jam
+                        # Remove Jamfile from list of changed Jamfiles
                         del self.daemon_changed_jams[i]
+                        # Clean some caches so Jamfile can be reloaded
                         if project_module in self.jamfile_modules:
                             del self.jamfile_modules[project_module]
                         if project_module in self.module2target:
@@ -353,6 +368,7 @@ Please consult the documentation at 'http://boost.org/boost-build2'."""
 
             saved_project = self.current_project
 
+            # For debugging purposes
             if "--daemon-output" in sys.argv:
                 print "Loading Jam at: ", jamfile_module
             bjam.call("load", jamfile_module, jamfile_to_load)

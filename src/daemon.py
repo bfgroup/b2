@@ -9,6 +9,9 @@ import sys
 
 # Checks if daemon is running. Stops daemon if --daemon-stop found in argv.
 def check_for_daemon(daemon_dbus_name, daemon_dbus_iface):
+
+    # Parses output from daemon and writes it to console
+    # Stops when daemon_dbus_name is found in output
     def output_parser():
             import time
             pipein = os.open(daemon_dbus_name, os.O_RDONLY)
@@ -24,26 +27,36 @@ def check_for_daemon(daemon_dbus_name, daemon_dbus_iface):
     p = Process(target=output_parser)
     
     try:
+        # Try to find out if daemon is running
         try_bus = dbus.SessionBus()
         daemon_object = try_bus.get_object(daemon_dbus_name, "/CommandHandler")
         iface = dbus.Interface(daemon_object, daemon_dbus_iface)
 
+        # Stop daemon if needed
         if "--daemon-stop" in sys.argv:
             iface.Exit()
             print "daemon stopped"
             return 1
 
+        # Make named pipe to pass output from daemon to our process
         os.mkfifo(daemon_dbus_name)
 
         
-
+        # Start parcing process
         p.start()
+        
+        # Initiate rebuild by daemon
         res = iface.check_args(sys.argv)
+
+        # Wait until parcer stops, which means that daemon finished rebuilding 
         p.join()
         if res:
             #print "Work passed to daemon"
             return 1
+        
     except dbus.DBusException as e:
+        # Weird error that is caused by daemon not responding while he is rebuilding
+        # So if rebuild process takes more than 15 secons this error pops out
         if (e.get_dbus_name() == "org.freedesktop.DBus.Error.NoReply"):
             p.join()
             return 1
@@ -88,7 +101,7 @@ def inotify_handler (dir, daemon_dbus_name, daemon_dbus_iface):
     notifier = pyinotify.Notifier(wm, InotifyProcess())
     wm.add_watch(dir, inotify_mask, rec=True)
     
-    # Trying to connect to dbus in a loop. If connection is successfull, start inotife
+    # Trying to connect to dbus in a loop. If connection is successfull, start inotify
     while num_retry:
         try:
             daemon_bus = dbus.SessionBus()
@@ -128,6 +141,7 @@ def daemon_starter(daemon_dbus_name):
                 @dbus.service.method(daemon_dbus_iface,
                                  in_signature='as', out_signature='b')
                 def check_args(self, args):
+                    # Send output to user process
                     pipeout = os.open(daemon_dbus_name, os.O_WRONLY, 0)
                     tmpdesc = os.dup( sys.stdout.fileno())
                     os.dup2( pipeout, sys.stdout.fileno())
@@ -159,14 +173,17 @@ def daemon_starter(daemon_dbus_name):
                         tmp = os.path.basename(s).lower()
                         if (tmp == "jamfile.jam" or tmp == "jamroot.jam"):
                             jams.append(os.path.dirname(os.path.abspath(s)))
-                        
+
+                    # If Jamfiles or args changed - initiate full rebuild
                     if jams or args2:
                         from b2.build_system import main_daemon
                         main_daemon(jams,args2)
+                    # If only source files changed - refresh target tree and initiate rebuild
                     elif self.refrlist[1:]:
                         bjam.call("REFRESH",self.refrlist[1:])
                         bjam.call("UPDATE_NOW", "all")
-    
+
+                    # Empty list with changed files
                     del self.refrlist[ : ]
                     self.refrlist.append(time.time())
                     
