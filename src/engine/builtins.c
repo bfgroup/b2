@@ -538,6 +538,16 @@ LIST * builtin_depends( FRAME * frame, int flags )
         TARGET * const s = bindtarget( list_item( iter ) );
         if ( flags )
         {
+            
+            TARGETS * ccc = s->dependants;
+            if (ccc != NULL)
+            {
+                while ( ccc -> next != NULL )
+                {
+                    ccc = ccc -> next;
+                }
+                s->dependants->tail = ccc;
+            }
             LISTITER t_iter = list_begin( targets );
             LISTITER const t_end = list_end( targets );
             for ( ; t_iter != t_end; t_iter = list_next( t_iter ) )
