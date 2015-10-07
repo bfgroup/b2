@@ -172,8 +172,9 @@ rule handle-input-files ( input-files * )
 
 
 rule run ( sources + : args * : input-files * : requirements * : target-name ? :
-    default-build * )
+    default-build * : tester-args * )
 {
+    requirements += <testing.tester-arg>$(tester-args:J=" ") ;
     requirements += <testing.arg>$(args:J=" ") ;
     requirements += [ handle-input-files $(input-files) ] ;
     return [ make-test run : $(sources) : $(requirements) : $(target-name) ] ;
@@ -181,8 +182,9 @@ rule run ( sources + : args * : input-files * : requirements * : target-name ? :
 
 
 rule run-fail ( sources + : args * : input-files * : requirements * :
-    target-name ? : default-build * )
+    target-name ? : default-build * : tester-args * )
 {
+    requirements += <testing.tester-arg>$(tester-args:J=" ") ;
     requirements += <testing.arg>$(args:J=" ") ;
     requirements += [ handle-input-files $(input-files) ] ;
     return [ make-test run-fail : $(sources) : $(requirements) : $(target-name)
@@ -404,6 +406,7 @@ rule run-path-setup ( target : source : properties * )
 
 local argv = [ modules.peek : ARGV ] ;
 
+toolset.flags testing.capture-output TESTER_ARGS <testing.tester-arg> ;
 toolset.flags testing.capture-output ARGS <testing.arg> ;
 toolset.flags testing.capture-output INPUT_FILES <testing.input-file> ;
 toolset.flags testing.capture-output LAUNCHER <testing.launcher> ;
@@ -564,6 +567,7 @@ if --verbose-test in [ modules.peek : ARGV ]
 
 .RM = [ common.rm-command ] ;
 
+.ARGS_SEPARATOR = "--" ;
 
 actions capture-output bind INPUT_FILES output-file
 {
@@ -573,7 +577,7 @@ actions capture-output bind INPUT_FILES output-file
         echo Skipping test execution due to testing.execute=off
         exit 0
     $(.ENDIF)
-    $(LAUNCHER) "$(>)" $(ARGS) "$(INPUT_FILES)" > "$(output-file)" 2>&1 $(.NULLIN)
+    $(LAUNCHER) "$(>)" $(TESTER_ARGS) $(.ARGS_SEPARATOR) $(ARGS) "$(INPUT_FILES)" > "$(output-file)" 2>&1 $(.NULLIN)
     $(.SET_STATUS)
     $(.RUN_OUTPUT_NL) >> "$(output-file)"
     echo EXIT STATUS: $(.STATUS) >> "$(output-file)"
@@ -614,7 +618,7 @@ rule unit-test ( target : source : properties * )
 actions unit-test
 {
     $(PATH_SETUP)
-    $(LAUNCHER) "$(>)" $(ARGS) && $(.MAKE_FILE) "$(<)"
+    $(LAUNCHER) "$(>)" $(TESTER_ARGS) $(.ARGS_SEPARATOR) $(ARGS) && $(.MAKE_FILE) "$(<)"
 }
 
 
