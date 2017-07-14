@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>What is the difference between Boost.Build, b2, bjam and Perforce Jam?</title>
+<link rel="stylesheet" href="../../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Boost.Build User Manual">
+<link rel="up" href="../faq.html" title="Chapter&#160;8.&#160;Frequently Asked Questions">
+<link rel="prev" href="header-only-libraries.html" title="Header-only libraries">
+<link rel="next" href="../../examples.html" title="Appendix&#160;A.&#160;Examples">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../boost.png"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="header-only-libraries.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../faq.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../../examples.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="bbv2.faq.names"></a>
+        What is the difference between Boost.Build, 
+        <code class="filename">b2</code>, <code class="filename">bjam</code> and Perforce Jam?
+      </h2></div></div></div>
+<p>
+        Boost.Build is the name of the complete build system. The executable that runs
+        it is <code class="filename">b2</code>. That executable is written in C and implements
+        performance-critical algorithms, like traversal of dependency graph and executing
+        commands. It also implements an interpreted language used to implement the rest of 
+        Boost.Build. This executable is formally called "Boost.Build engine".
+      </p>
+<p>
+        The Boost.Build engine is derived from an earlier build tool called Perforce Jam. Originally,
+        there were just minor changes, and the filename was <code class="filename">bjam</code>. Later on,
+        with more and more changes, the similarity of names because a disservice to users, and as of
+        Boost 1.47.0, the official name of the executable was changed to <code class="filename">b2</code>.
+        A copy named <code class="filename">bjam</code> is still created for compatibility,
+        but you are encouraged to use the new name in all cases.
+      </p>
+<p>
+        Perforce Jam was an important foundation, and we gratefully acknowledge its influence,
+        but for users today, these tools share only some basics of the interpreted language.
+      </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer"></div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="header-only-libraries.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../faq.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../../examples.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

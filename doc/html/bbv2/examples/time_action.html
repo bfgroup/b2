@@ -1,0 +1,113 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Time Action</title>
+<link rel="stylesheet" href="../../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Boost.Build User Manual">
+<link rel="up" href="../../examples.html" title="Appendix&#160;A.&#160;Examples">
+<link rel="prev" href="hello.html" title="Hello">
+<link rel="next" href="../jam.html" title="Appendix&#160;B.&#160;Boost.Jam Documentation">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../boost.png"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="hello.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../examples.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../jam.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="bbv2.examples.time_action"></a><a class="link" href="time_action.html" title="Time Action">Time Action</a>
+</h2></div></div></div>
+<p>
+      This example shows how to use the <code class="computeroutput"><span class="identifier">testing</span><span class="special">.</span><span class="identifier">time</span></code> utility
+      to show time information for building a target.
+    </p>
+<p>
+      Files:
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          <a href="../../../../example/time/jamroot.jam" target="_top">jamroot.jam</a>
+        </li>
+<li class="listitem">
+          <a href="../../../../example/time/main_cpp.pro" target="_top">main_cpp.pro</a>
+        </li>
+</ul></div>
+<p>
+      Our <code class="computeroutput"><span class="identifier">jamroot</span><span class="special">.</span><span class="identifier">jam</span></code> specifies the target we build and the
+      <code class="computeroutput"><span class="identifier">testing</span><span class="special">.</span><span class="identifier">time</span></code> declaration to time the target we build:
+    </p>
+<pre class="programlisting"><a class="co" name="bbv2.examples.time_action.c0" href="time_action.html#bbv2.examples.time_action.c1"><img src="../../../images/callouts/1.png" alt="1" border="0"></a><span class="keyword">import</span> <span class="identifier">testing</span> <span class="special">;</span>
+
+<a class="co" name="bbv2.examples.time_action.c2" href="time_action.html#bbv2.examples.time_action.c3"><img src="../../../images/callouts/2.png" alt="2" border="0"></a><span class="identifier">make</span> <span class="identifier">main</span><span class="special">.</span><span class="identifier">cpp</span> <span class="special">:</span> <span class="identifier">main_cpp</span><span class="special">.</span><span class="identifier">pro</span> <span class="special">:</span> <span class="error">@</span><span class="identifier">do</span><span class="special">-</span><span class="identifier">something</span> <span class="special">;</span>
+
+<a class="co" name="bbv2.examples.time_action.c4" href="time_action.html#bbv2.examples.time_action.c5"><img src="../../../images/callouts/3.png" alt="3" border="0"></a><span class="identifier">time</span> <span class="identifier">main</span><span class="special">.</span><span class="identifier">time</span> <span class="special">:</span> <span class="identifier">main</span><span class="special">.</span><span class="identifier">cpp</span> <span class="special">;</span>
+
+<a class="co" name="bbv2.examples.time_action.c6" href="time_action.html#bbv2.examples.time_action.c7"><img src="../../../images/callouts/4.png" alt="4" border="0"></a><span class="identifier">actions</span> <span class="identifier">do</span><span class="special">-</span><span class="identifier">something</span>
+<span class="special">{</span>
+    <span class="identifier">sleep</span> <span class="number">2</span> <span class="special">&amp;&amp;</span> <span class="identifier">echo</span> <span class="string">"$(&lt;)"</span> <span class="special">&gt;</span> <span class="string">"$(&lt;)"</span>
+<span class="special">}</span>
+</pre>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="bbv2.examples.time_action.c1"></a><a href="#bbv2.examples.time_action.c0"><img src="../../../images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Import the time rule from the testing module.
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="bbv2.examples.time_action.c3"></a><a href="#bbv2.examples.time_action.c2"><img src="../../../images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          The target we are timing.
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="bbv2.examples.time_action.c5"></a><a href="#bbv2.examples.time_action.c4"><img src="../../../images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          This target records the time to build the <code class="computeroutput"><span class="identifier">main</span><span class="special">.</span><span class="identifier">cpp</span></code>
+          target.
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="bbv2.examples.time_action.c7"></a><a href="#bbv2.examples.time_action.c6"><img src="../../../images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          This simple action waits and then copies the source to target.
+        </p></td>
+</tr>
+</table></div>
+<p>
+      Building the example yields:
+    </p>
+<pre class="programlisting">&gt; cd /example/time
+&gt; b2
+...found 8 targets...
+...updating 5 targets...
+common.mkdir bin
+common.mkdir bin/clang-darwin-4.2.1
+common.mkdir bin/clang-darwin-4.2.1/debug
+Jamfile&lt;/build/example/time&gt;.do-something bin/clang-darwin-4.2.1/debug/main.cpp
+testing.time bin/clang-darwin-4.2.1/debug/main.time
+user: [main.cpp] 0.002240
+system: [main.cpp] 0.001804
+clock: [main.cpp] 2.000000
+...updated 5 targets...
+</pre>
+<div class="note">
+<h3 class="title">Note</h3>
+<p>
+        The actual paths in the <code class="computeroutput">bin</code> sub-directory will depend on your
+        toolset.
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer"></div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="hello.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../examples.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../jam.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
