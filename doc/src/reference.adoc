@@ -562,57 +562,7 @@ its own iostream implementation, so the library path is required.
 When STLport is configured, you can build with STLport by requesting
 `stdlib=stlport` on the command line.
 
-[[bbv2.reference.tools.libraries.zlib]]
-==== zlib
-
-Provides support for the http://www.zlib.net[zlib] library. zlib can be
-configured either to use precompiled binaries or to build the library
-from source.
-
-zlib can be initialized using the following syntax
-
-----
-using zlib : version : options : condition : is-default ;
-----
-
-Options for using a prebuilt library:
-
-`search`::
-  The directory containing the zlib binaries.
-`name`::
-  Overrides the default library name.
-`include`::
-  The directory containing the zlib headers.
-
-If none of these options is specified, then the environmental variables
-ZLIB_LIBRARY_PATH, ZLIB_NAME, and ZLIB_INCLUDE will be used instead.
-
-Options for building zlib from source:
-
-`source`::
-  The zlib source directory. Defaults to the environmental variable
-  ZLIB_SOURCE.
-`tag`::
-  Sets the link:#bbv2.builtin.features.tag[tag] property to adjust the
-  file name of the library. Ignored when using precompiled binaries.
-`build-name`::
-  The base name to use for the compiled library. Ignored when using
-  precompiled binaries.
-
-Examples:
-
-----
-# Find zlib in the default system location
-using zlib ;
-# Build zlib from source
-using zlib : 1.2.7 : <source>/home/steven/zlib-1.2.7 ;
-# Find zlib in /usr/local
-using zlib : 1.2.7 : <include>/usr/local/include <search>/usr/local/lib ;
-# Build zlib from source for msvc and find
-# prebuilt binaries for gcc.
-using zlib : 1.2.7 : <source>C:/Devel/src/zlib-1.2.7 : <toolset>msvc ;
-using zlib : 1.2.7 : : <toolset>gcc ;
-----
+include::zlib.adoc[leveloffset=+3]
 
 [[bbv2.reference.tools.libraries.bzip2]]
 ==== bzip2

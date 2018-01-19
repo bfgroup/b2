@@ -5,7 +5,7 @@
 # License Version 1.0. (See accompanying file LICENSE_1_0.txt or
 # http://www.boost.org/LICENSE_1_0.txt)
 
-# Supports the zlib library
+# Supports the http://www.zlib.net[zlib] library
 #
 # After `using zlib`, the following targets are available:
 #

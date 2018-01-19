@@ -3,7 +3,7 @@
 == Documentation Tools
 
 :leveloffset: +2
-include::../../src/tools/asciidoctor.jam[tag=doc]
+include::asciidoctor.adoc[]
 :leveloffset: -2
 
 

@@ -276,7 +276,7 @@ rule list-item (
     }
     else if $(output-type) = adoc
     {
-        lines [ split-at-words * $(item) ] : "  " "" ;
+        text "* $(item:J= )" ;
     }
 }
 
@@ -335,20 +335,24 @@ local rule fix-adoc-sections ( description * )
 {
     local result ;
     local tag = none ;
-    if [ MATCH "^(=)[^=]" : $(description[1]) ]
+    local section-prefix = $(section-prefix:E=:J=) ;
+    local m1 = [ MATCH "^(=)(=*)[^=]" : $(description[1]) ] ;
+    local m2 = [ MATCH "^(=)(=*)[^=]" : $(description[2]) ] ;
+    if $(m1)
     {
         tag = header ;
+        section-prefix = [ MATCH ^$(m1[2])(.*)$ : $(section-prefix) ] ;
     }
-    else if [ MATCH "^(\\[[#[])" : $(description[1]) ]
-         && [ MATCH "^(=)[^=]" : $(description[2]) ]
+    else if $(m2) && [ MATCH "^(\\[[#[])" : $(description[1]) ]
     {
         tag = id ;
+        section-prefix = [ MATCH ^$(m[2])(.*)$ : $(section-prefix) ] ;
     }
     for local line in $(description)
     {
         if [ MATCH "^(=)" : $(line) ]
         {
-            line = $(section-prefix:E=:J=)$(line) ;
+            line = $(section-prefix)$(line) ;
         }
         result += $(line) ;
     }

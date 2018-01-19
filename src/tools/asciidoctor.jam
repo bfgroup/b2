@@ -5,14 +5,14 @@ accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt)
 |#
 
-#| tag::doc[]
+#|!
 = Asciidoctor
 
 The asciidoctor tool converts the ascidoc documentation format to various
 backend formats for either viewing or further processing by documentation
 tools. This tool supports the baseline asciidoctor distribution (i.e. the
 Ruby based tool).
-|# # end::doc[]
+|#
 
 import common ;
 import feature ;
@@ -22,7 +22,7 @@ import "class" : new ;
 
 feature.feature asciidoctor : : implicit propagated symmetric ;
 
-#| tag::doc[]
+#|!
 
 == Feature: `asciidoctor-attribute`
 
@@ -38,24 +38,24 @@ html example : example.adoc :
 This is a `free` feature and is not `propagated`. I.e. it applies only to the
 target it's specified on.
 
-|# # end::doc[]
+|#
 
 feature.subfeature asciidoctor : attribute : : free ;
 
-#| tag::doc[]
+#|!
 
 == Feature: `asciidoctor-doctype`
 
 Specifies the `doctype` to use for generating the output format. Allowed
 `doctype` values are: `article`, `book`, `manpage`, and `inline`.
 
-|# # end::doc[]
+|#
 
 feature.subfeature asciidoctor : doctype
     : article book manpage inline
     : optional propagated ;
 
-#| tag::doc[]
+#|!
 
 == Feature: `asciidoctor-backend`
 
@@ -84,13 +84,13 @@ docbook example : example.adoc :
 
 Allowed `backend` values are: `html5`, `docbook45`, `docbook5`, `pdf`.
 
-|# # end::doc[]
+|#
 
 feature.subfeature asciidoctor : backend
     : html5 docbook5 docbook45 manpage pdf
     : propagated symmetric composite ;
 
-#| tag::doc[]
+#|!
 
 == Initialization
 
@@ -108,7 +108,7 @@ using asciidoctor : "/usr/local/bin/asciidoctor" ;
 If no `command` is given it defaults to just `asciidoctor` with assumption
 that the `asciidoctor` is available in the search `PATH`.
 
-|# # end::doc[]
+|#
 
 rule init ( command * )
 {

@@ -15,6 +15,7 @@ import set ;
 import container ;
 import "class" ;
 import sequence ;
+import string ;
 import path ;
 
 
@@ -111,6 +112,7 @@ local rule set-module-doc (
 )
 {
     module-name ?= * ;
+    docs = [ reformat-comment $(docs) ] ;
 
     $(module-name).brief = [ brief-comment $(docs) ] ;
     $(module-name).docs = $(docs) ;
@@ -121,6 +123,16 @@ local rule set-module-doc (
     }
 }
 
+# Appends additional elements to the module docs.
+local rule add-module-doc (
+    module-name ?
+    : docs *
+)
+{
+    module-name ?= * ;
+    docs = [ reformat-comment $(docs) ] ;
+    $(module-name).docs += $(docs) ;
+}
 
 # Specifies the documentation for the current module.
 #
@@ -152,6 +164,7 @@ local rule set-rule-doc (
 )
 {
     module-name ?= * ;
+    docs = [ reformat-comment $(docs) ] ;
 
     $(module-name).$(name).brief = [ brief-comment $(docs) ] ;
     $(module-name).$(name).docs = $(docs) ;
@@ -170,20 +183,28 @@ local rule set-class-doc (
     name  # The name of the class.
     module-name ?  # The name of the module to document.
     : super-name ?  # The super class name.
+    : docs *
 )
 {
     module-name ?= * ;
+    docs = [ reformat-comment $(docs) ] ;
 
     $(module-name).$(name).is-class = true ;
     if $(super-name)
     {
         $(module-name).$(name).super-name = $(super-name) ;
     }
+
+    $(module-name).$(name).brief = [ brief-comment $(docs) ] ;
+    $(module-name).$(name).docs = $(docs) ;
     $(module-name).$(name).class-rules =
         [ MATCH "^($(name)[.].*)" : $($(module-name).rules) ] ;
     $(module-name).$($(module-name).$(name).class-rules).is-class-rule = true ;
 
-    $(module-name).classes += $(name) ;
+    if $(docs) || $($(module-name).$(name).class-rules)
+    {
+        $(module-name).classes += $(name) ;
+    }
     $(module-name).class-rules += $($(module-name).$(name).class-rules) ;
     $(module-name).rules =
         [ set.difference $($(module-name).rules) :
@@ -216,6 +237,7 @@ local rule set-argument-doc (
 )
 {
     module-name ?= * ;
+    docs = [ reformat-comment $(docs) ] ;
 
     $(module-name).$(rule-name).args.$(name).qualifier = $(qualifier) ;
     $(module-name).$(rule-name).args.$(name).docs = $(docs) ;
@@ -239,6 +261,7 @@ local rule set-variable-doc (
 )
 {
     module-name ?= * ;
+    docs = [ reformat-comment $(docs) ] ;
 
     $(module-name).$(name).brief = [ brief-comment $(docs) ] ;
     $(module-name).$(name).default = $(default) ;
@@ -418,6 +441,8 @@ local rule print-help-module-section (
 )
 {
     if $($(module).$(section))
+      # We don't need an index to a single element
+      && ( ! $(.option.detailed) || $($(module).$(section)[2]) )
     {
         if $(help-output) != console
         {
@@ -568,13 +593,13 @@ local rule print-help-classes (
         # Print out the given classes.
         for local class-name in [ sequence.insertion-sort $(name) ]
         {
-            if $(.option.show-locals) || ! $($(module-name).$(class-name).is-local)
+            if ( $(.option.show-locals) || ! $($(module-name).$(class-name).is-local) ) && $($(module-name).$(class-name).docs)
             {
                 local signature = $($(module-name).$(class-name).signature:J=" ") ;
                 signature ?= "" ;
-                print.section "Class '$(module-name).$(class-name) ( $(signature) )'"
+                print.section-start "Class '$(module-name).$(class-name) ( $(signature) )'"
                     $($(module-name).$(class-name).docs)
-                   "Inherits from '"$($(module-name).$(class-name).super-name)"'." ;
+                   "Inherits from '"$($(module-name).$(class-name).super-name)"'." : $(.id-prefix)class.$(class-name) $(class-name) ;
                 if $($(module-name).$(class-name).args)
                 {
                     print.list-start ;
@@ -584,6 +609,7 @@ local rule print-help-classes (
                     }
                     print.list-end ;
                 }
+                print.section-end ;
             }
 
             # Print out the documented rules of the class.
@@ -591,7 +617,7 @@ local rule print-help-classes (
                 Use --help $(module-name).<rule-name> to get more information. ;
 
             # Print out all the rules if details are requested.
-            if $(.option.detailed)
+            if $(.option.detailed) && $($(module-name).$(class-name).class-rules)
             {
                 print-help-rules $(module-name) : $($(module-name).$(class-name).class-rules) ;
             }
@@ -727,6 +753,21 @@ local rule extract-comment (
     return $(comment) ;
 }
 
+# Strips leading ! and whitespace characters from text
+local rule reformat-comment ( text * )
+{
+    local result ;
+    for local line in $(text)
+    {
+        processed = [ MATCH ^(![$(ws)]?)?(.*)$ : $(line) ] ;
+        # Skip leading blank lines
+        if $(result) || ! [ string.is-whitespace $(processed[2]) ]
+        {
+            result += $(processed[2]) ;
+        }
+    }
+    return $(result) ;
+}
 
 # Extract s single line of Jam syntax, ignoring any comments.
 #
@@ -958,7 +999,8 @@ local rule scan-class (
 
         # This has to come after parsing the rules, because
         # it looks up the rules for the class from the global list.
-        set-class-doc $(class-parts[2]) $(module-name) : $(class-parts[3]) ;
+        set-class-doc $(class-parts[2]) $(module-name) : $(class-parts[3])
+            : $(comment-block) ;
 
         return true ;
     }
@@ -1012,6 +1054,10 @@ rule scan-module (
             # document the module.
             set-module-doc $(module-name) : $(comment-block) ;
             module-documented = true ;
+        }
+        else if [ MATCH ^([!]) : $(comment-block) ]
+        {
+            add-module-doc $(module-name) : $(comment-block) ;
         }
     }
     if $(action)
@@ -1092,4 +1138,22 @@ local rule do-scan (
         scan-module $(module-file) : [ read-file $(module-file) ] ;
     }
     scan-module $(modules[-1]) : [ read-file $(modules[-1]) ] : $(action) ;
+}
+
+# A normal target rule used for building the documentation
+#
+rule generate-module-doc ( target : source : properties * )
+{
+    local .option.detailed = true ;
+    local .option.show-locals ;
+    local help-output = [ MATCH \\.(adoc|html) : $(target:S) ] ;
+    print.output $(target) $(help-output) ;
+    print.text : overwrite ;
+    if ! $(help-output)
+    {
+        help-ouput = plain ;
+    }
+    local search = [ on $(source) return $(LOCATE) $(SEARCH) ] ;
+    source = $(source:G=:R=$(search[1])) ;
+    scan-module $(target) : [ read-file $(source) ] : print-help-module ;
 }

@@ -3,11 +3,24 @@
 # (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
 
 import asciidoctor ;
+import doc ;
 
 project tools/build/doc
     ;
 
-html index : src/standalone.adoc ;
+make zlib.adoc : ../src/tools/zlib.jam
+  : @doc.generate-module-doc
+  : # asciidoctor is very picky about includes and there's no way
+    # to set an include path.
+    <location>src
+  ;
+make asciidoctor.adoc : ../src/tools/asciidoctor.jam
+  : @doc.generate-module-doc
+  : <location>src
+  ;
+explicit zlib.adoc asciidoctor.adoc ;
+
+html index : src/standalone.adoc : <dependency>zlib.adoc <dependency>asciidoctor.adoc ;
 explicit index ;
 
 install html-hljs : [ glob src/hljs/*.js ] : <location>html/hljs ;
