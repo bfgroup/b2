@@ -7,7 +7,7 @@
 
 # Supports the zlib library
 #
-# After 'using zlib', the following targets are available:
+# After `using zlib`, the following targets are available:
 #
 # /zlib//zlib -- The zlib library
 
@@ -45,11 +45,11 @@ if --debug-configuration in [ modules.peek : ARGV ]
 #
 # Options for configuring a prebuilt zlib::
 #
-#   <search>
+#   `<search>`::
 #       The directory containing the zlib binaries.
-#   <name>
+#   `<name>`::
 #       Overrides the default library name.
-#   <include>
+#   `<include>`::
 #       The directory containing the zlib headers.
 #
 # If none of these options is specified, then the environmental
@@ -58,19 +58,20 @@ if --debug-configuration in [ modules.peek : ARGV ]
 #
 # Options for building zlib from source::
 #
-#   <source>
+#   `<source>`::
 #       The zlib source directory.  Defaults to the environmental variable
 #       ZLIB_SOURCE.
-#   <tag>
+#   `<tag>`::
 #       A rule which computes the actual name of the compiled
 #       libraries based on the build properties.  Ignored
 #       when using precompiled binaries.
-#   <build-name>
+#   `<build-name>`::
 #       The base name to use for the compiled library.  Ignored
 #       when using precompiled binaries.
 #
 # Examples::
 #
+# ```
 #   # Find zlib in the default system location
 #   using zlib ;
 #   # Build zlib from source
@@ -82,6 +83,7 @@ if --debug-configuration in [ modules.peek : ARGV ]
 #   # prebuilt binaries for gcc.
 #   using zlib : 1.2.7 : <source>C:/Devel/src/zlib-1.2.7 : <toolset>msvc ;
 #   using zlib : 1.2.7 : : <toolset>gcc ;
+# ```
 #
 rule init (
     version ?

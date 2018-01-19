@@ -20,7 +20,9 @@ import os ;
 # The current output target. Defaults to console.
 output-target = console ;
 
-# The current output type. Defaults to plain. Other possible values are "html".
+# The current output type. Defaults to plain. Other possible values are "html"
+# or adoc.
+#
 output-type = plain ;
 
 # Whitespace.
@@ -35,6 +37,8 @@ if [ os.name ] = VMS
     .redirect-append = "| APPEND/NEW SYS$INPUT " ;
 }
 
+.adoc-delimiters = ``` ---- .... ++++ ;
+
 # Set the target and type of output to generate. This sets both the destination
 # output and the type of docs to generate to that output. The target can be
 # either a file or "console" for echoing to the console. If the type of output
@@ -42,7 +46,7 @@ if [ os.name ] = VMS
 #
 rule output (
     target  # The target file or device; file or "console".
-    type ?  # The type of output; "plain" or "html".
+    type ?  # The type of output; "plain", "html", or "adoc".
 )
 {
     type ?= plain ;
@@ -70,12 +74,37 @@ rule output (
 }
 
 
+local rule preformatted ( text * )
+{
+    if $(output-type) = plain
+    {
+        lines $(paragraph) "" : "  " "  " ;
+    }
+    else if $(output-type) = html
+    {
+        text <blockquote> ;
+        lines $(paragraph) ;
+        text </blockquote> ;
+    }
+}
+
 # Generate a section with a description. The type of output can be controlled by
 # the value of the 'output-type' variable.
 #
 rule section (
     name  # The name of the section.
     description *  # A number of description lines.
+)
+{
+    section-start $(name) $(description) ;
+    section-end ;
+}
+
+rule section-start (
+    name           # The name of the section.
+    description *  # A number of description lines.
+  : id ?           # The section id
+  : reftext ?      # Default text for links
 )
 {
     if $(output-type) = plain
@@ -88,6 +117,23 @@ rule section (
         name = [ escape-html $(name) ] ;
         text <h3>$(name)</h3> <p> ;
     }
+    else if $(output-type) = adoc
+    {
+        local adjust = [ fix-adoc-sections $(description) ] ;
+        section-prefix += "=" ;
+        if $(adjust[1]) != id
+        {
+            reftext = ,$(reftext) ;
+            text [[$(id)$(reftext:E=)]] ;
+        }
+        if $(adjust[1]) = none
+        {
+            text $(section-prefix:J=)" "$(name) ;
+        }
+        text $(adjust[2-]) ;
+        lines ;
+        return ;
+    }
     local pre = ;
     while $(description)
     {
@@ -99,24 +145,38 @@ rule section (
                 $(pre) = " $(description[1])" ||
                 ( $(pre) < [ string.chars [ MATCH "^([$(.whitespace)]*)" : " $(description[1])" ] ] )
                 )
-                { paragraph += $(description[1]) ; description = $(description[2-]) ; }
-            while [ string.is-whitespace $(paragraph[-1]) ] { paragraph = $(paragraph[1--2]) ; }
+            {
+                paragraph += $(description[1]) ;
+                description = $(description[2-]) ;
+            }
+            while $(paragraph)-is-defined &&
+                [ string.is-whitespace $(paragraph[-1]) ]
+            {
+                paragraph = $(paragraph[1--2]) ;
+            }
             pre = ;
-            if $(output-type) = plain
+            preformatted $(paragraph) ;
+        }
+        else if $(description) && $(description[1]) in $(.adoc-delimiters)
+        {
+            local terminator = $(description[1]) ;
+            description = $(description[2-]) ;
+            while $(description) && $(description[1]) != $(terminator)
             {
-                lines $(paragraph) "" : "  " "  " ;
+                paragraph += $(description[1]) ;
+                description = $(description[2-]) ;
             }
-            else if $(output-type) = html
-            {
-                text <blockquote> ;
-                lines $(paragraph) ;
-                text </blockquote> ;
-            }
+            description = $(description[2-]) ;
+            preformatted $(paragraph) ;
         }
         else
         {
             while $(description) && ! [ string.is-whitespace $(description[1]) ]
-                { paragraph += $(description[1]) ; description = $(description[2-]) ; }
+                  && ! $(description[1]) in $(.adoc-delimiters)
+            {
+                paragraph += $(description[1]) ;
+                description = $(description[2-]) ;
+            }
             if $(paragraph[1]) = :: && ! $(paragraph[2])
             {
                 pre = " " ;
@@ -176,13 +236,20 @@ rule section (
     }
 }
 
+rule section-end ( )
+{
+    if $(output-type) = adoc
+    {
+        section-prefix = $(section-prefix[1--2]) ;
+    }
+}
 
 # Generate the start of a list of items. The type of output can be controlled by
 # the value of the 'output-type' variable.
 #
 rule list-start ( )
 {
-    if $(output-type) = plain
+    if $(output-type) in plain adoc
     {
     }
     else if $(output-type) = html
@@ -207,6 +274,10 @@ rule list-item (
     {
         text <li> [ escape-html $(item) ] </li> ;
     }
+    else if $(output-type) = adoc
+    {
+        lines [ split-at-words * $(item) ] : "  " "" ;
+    }
 }
 
 
@@ -215,7 +286,7 @@ rule list-item (
 #
 rule list-end ( )
 {
-    if $(output-type) = plain
+    if $(output-type) in plain adoc
     {
         lines ;
     }
@@ -225,6 +296,64 @@ rule list-end ( )
     }
 }
 
+# For every match of pattern, all text outside capturing groups will be
+# removed.
+#
+local rule strip-adoc-impl ( pattern : text )
+{
+    local result ;
+    while $(text)
+    {
+        local match = [ MATCH (.*)$(pattern)(.*) : $(text) ] ;
+        if $(match)
+        {
+            result += $(match[1--2]) ;
+        }
+        else
+        {
+            result += $(text) ;
+        }
+        text = $(match[-1]) ;
+    }
+    return $(result:E=:J=) ;
+}
+
+# Removes the following asciidoc formatting:
+# * link:.*[]
+#
+local rule strip-adoc-formatting ( text )
+{
+    return [ strip-adoc-impl "link:[^[]*\\[([^]]*)\\]" : $(text) ] ;
+}
+
+# Adjust all section headers relative to the current offset.
+# Also, prefixes the result with none, id, or header, depending
+# on whether the description includes a top level header or
+# both a header and section id.
+#
+local rule fix-adoc-sections ( description * )
+{
+    local result ;
+    local tag = none ;
+    if [ MATCH "^(=)[^=]" : $(description[1]) ]
+    {
+        tag = header ;
+    }
+    else if [ MATCH "^(\\[[#[])" : $(description[1]) ]
+         && [ MATCH "^(=)[^=]" : $(description[2]) ]
+    {
+        tag = id ;
+    }
+    for local line in $(description)
+    {
+        if [ MATCH "^(=)" : $(line) ]
+        {
+            line = $(section-prefix:E=:J=)$(line) ;
+        }
+        result += $(line) ;
+    }
+    return $(tag) $(result) ;
+}
 
 # Split the given text into separate lines, word-wrapping to a margin. The
 # default margin is 78 characters.
@@ -235,7 +364,8 @@ rule split-at-words (
 )
 {
     local lines = ;
-    text = [ string.words $(text:J=" ") ] ;
+    text = [ strip-adoc-formatting $(text:J=" ") ] ;
+    text = [ string.words $(text) ] ;
     text = $(text:J=" ") ;
     margin ?= 78 ;
     local char-match-1 = ".?" ;
@@ -287,7 +417,7 @@ rule lines (
     text ?= "" ;
     indent ?= "" ;
     outdent ?= "" ;
-    if $(output-type) = plain
+    if $(output-type) in plain adoc
     {
         text $(outdent)$(text[1]) $(indent)$(text[2-]) ;
     }

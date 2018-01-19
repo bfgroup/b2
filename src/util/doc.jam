@@ -51,6 +51,9 @@ help-output-file = help ;
 #
 .option-description = Help Options ;
 
+# The prefix to be applied to all generated ids.
+.id-prefix = "" ;
+
 # Enable or disable a documentation option.
 #
 local rule set-option (
@@ -416,7 +419,11 @@ local rule print-help-module-section (
 {
     if $($(module).$(section))
     {
-        print.section $(section-head) $(section-description) ;
+        if $(help-output) != console
+        {
+            section-description = ; # This is useless command line help
+        }
+        print.section-start $(section-head) $(section-description) ;
         print.list-start ;
         for local item in [ sequence.insertion-sort $($(module).$(section)) ]
         {
@@ -431,10 +438,11 @@ local rule print-help-module-section (
             }
             if $(show)
             {
-                print.list-item $(item): $($(module).$(item).brief) ;
+                print.list-item link:\#$(.id-prefix)$(module).$(item)[$(item)]: $($(module).$(item).brief) ;
             }
         }
         print.list-end ;
+        print.section-end ;
     }
 }
 
@@ -446,7 +454,7 @@ local rule print-help-all (
     ignored  # Usually the module name, but is ignored here.
 )
 {
-    print.section "Modules"
+    print.section-start "Modules"
         "These are all the known modules. Use --help <module> to get more"
         "detailed information."
         ;
@@ -469,6 +477,7 @@ local rule print-help-all (
             print-help-module $(module-name) ;
         }
     }
+    print.section-end ;
 }
 
 
@@ -480,7 +489,7 @@ local rule print-help-module (
 )
 {
     # Print the docs.
-    print.section "Module '$(module-name)'" $($(module-name).docs) ;
+    print.section-start "Module '$(module-name)'" $($(module-name).docs) : $(.id-prefix)$(module-name) ;
 
     # Print out the documented classes.
     print-help-module-section $(module-name) classes : "Module '$(module-name)' classes"
@@ -501,6 +510,7 @@ local rule print-help-module (
         print-help-rules $(module-name) ;
         print-help-variables $(module-name) ;
     }
+    print.section-end ;
 }
 
 
@@ -521,11 +531,12 @@ local rule print-help-rules (
             {
                 local signature = $($(module-name).$(rule-name).signature:J=" ") ;
                 signature ?= "" ;
-                print.section "Rule '$(module-name).$(rule-name) ( $(signature) )'"
-                    $($(module-name).$(rule-name).docs) ;
+                print.section-start "Rule '$(module-name).$(rule-name) ( $(signature) )'"
+                    $($(module-name).$(rule-name).docs) : $(.id-prefix)$(module-name).$(rule-name) ;
                 if $($(module-name).$(rule-name).args) &&
                     $($(module-name).$(rule-name).args.$($(module-name).$(rule-name).args).docs)
                 {
+                    print.section-start "Parameters" ;
                     print.list-start ;
                     for local arg-name in $($(module-name).$(rule-name).args)
                     {
@@ -535,7 +546,9 @@ local rule print-help-rules (
                         }
                     }
                     print.list-end ;
+                    print.section-end ;
                 }
+                print.section-end ;
             }
         }
     }
@@ -1067,6 +1080,12 @@ local rule do-scan (
         print.output $(help-output-file).html html ;
         ALWAYS $(help-output-file).html ;
         DEPENDS all : $(help-output-file).html ;
+    }
+    if $(help-output) = adoc
+    {
+        print.output $(help-output-file).adoc adoc ;
+        ALWAYS $(help-output-file).adoc ;
+        DEPENDS all : $(help-output-file).adoc ;
     }
     for local module-file in $(modules[1--2])
     {

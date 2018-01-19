@@ -27,6 +27,7 @@
 # different classes derived from it such as 'make-target', created by the 'make'
 # rule, and 'typed-target', created by rules such as 'exe' and 'lib'.
 #
+# ```
 #                  +--------------------------+
 #                  | abstract-target          |
 #                  +==========================+
@@ -64,6 +65,7 @@
 #                     .   +==============+   +=============+   +==============+
 #                     .   | construct    |   | construct   |   | construct    |
 #                         +--------------+   +-------------+   +--------------+
+# ```
 
 import assert ;
 import build-request ;
