@@ -4,10 +4,26 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
 
-# Documentation system, handles --help requests.
+## Documentation system, handles --help requests.
 # It defines rules that attach documentation to modules, rules, and variables.
 # Collects and generates documentation for the various parts of the build
 # system. The documentation is collected from comments integrated into the code.
+# Documentation comments should be of the form.
+#
+# ----
+# ##
+# # Single line comments
+# ----
+# or
+# ----
+# #|!
+# A multiline comment
+# |#
+# ----
+#
+# Note that for backwards compatibility with previous versions of
+# the documentation system, plain comments will be accepted as long
+# as there are no special comments in the same module.
 
 import modules ;
 import print ;
@@ -33,20 +49,20 @@ help-output = console ;
 #
 help-output-file = help ;
 
-# Whether to include local rules in help output.
+## Whether to include local rules in help output.
 #
 .option.show-locals ?= ;
 
-# When showing documentation for a module, whether to also generate
+## When showing documentation for a module, whether to also generate
 # automatically the detailed docs for each item in the module.
 #
 .option.detailed ?= ;
 
-# Generate debug output as the help is generated and modules are parsed.
+## Generate debug output as the help is generated and modules are parsed.
 #
 .option.debug ?= ;
 
-# These are all the options available for enabling or disabling to control the 
+## These are all the options available for enabling or disabling to control the
 # help system in various ways. Options can be enabled or disabled with 
 # '--help-enable-<option>', and '--help-disable-<option>' respectively.
 #
@@ -54,6 +70,8 @@ help-output-file = help ;
 
 # The prefix to be applied to all generated ids.
 .id-prefix = "" ;
+
+.only-explicit-doc-comments ?= ;
 
 # Enable or disable a documentation option.
 #
@@ -742,34 +760,73 @@ local rule extract-comment (
 )
 {
     local comment = ;
+    local first = true ;
+    local is-explicit ;
     local line = $($(var)[1]) ;
     local l = [ MATCH "^[$(ws)]*(#)(.*)$" : $(line) ] ;
     while $(l[1]) && $($(var))
     {
+        local multiline = [ MATCH "^(\\|)(!)?" : $(l[2]) ] ;
+        if $(multiline) && ! $(first)
+        {
+            break ;
+        }
+        if $(multiline[2]) ||
+            ( $(first) && [ MATCH "^(!|#([^#]|$))" : $(l[2]) ] )
+        {
+            is-explicit = true ;
+        }
         comment += [ extract-one-comment $(var) : $(l[2]) ] ;
+        if $(multiline)
+        {
+            break ;
+        }
+        if $(first)
+        {
+            local adjust = [ MATCH "^#[$(ws)]?(.*)" : $(comment) ] ;
+            if $(adjust)
+            {
+                comment = !$(adjust) ;
+            }
+            first = ;
+        }
         line = $($(var)[1]) ;
         l = [ MATCH "^[$(ws)]*(#)(.*)$" : $(line) ] ;
+    }
+    if $(is-explicit)
+    {
+        .only-explicit-doc-comments = true ;
+    }
+    else if $(.only-explicit-doc-comments)
+    {
+        comment = ;
     }
     return $(comment) ;
 }
 
-# Strips leading ! and whitespace characters from text
+# Strips leading ! and blank lines from text
 local rule reformat-comment ( text * )
 {
     local result ;
+    local first = true ;
     for local line in $(text)
     {
-        processed = [ MATCH ^(![$(ws)]?)?(.*)$ : $(line) ] ;
-        # Skip leading blank lines
-        if $(result) || ! [ string.is-whitespace $(processed[2]) ]
+        if $(first)
         {
-            result += $(processed[2]) ;
+            local processed = [ MATCH ^(![$(ws)]?)?(.*)$ : $(line) ] ;
+            line = $(processed[2]) ;
+            first = ;
+        }
+        # Skip leading blank lines
+        if $(result) || ! [ string.is-whitespace $(line) ]
+        {
+            result += $(line) ;
         }
     }
     return $(result) ;
 }
 
-# Extract s single line of Jam syntax, ignoring any comments.
+# Extract a single line of Jam syntax, ignoring any comments.
 #
 local rule extract-syntax (
     var  # The name of the variable to extract from.
@@ -1018,6 +1075,7 @@ rule scan-module (
     : action *  # Rule to call to output docs for the module.
 )
 {
+    local .only-explicit-doc-comments ;
     if $(.option.debug) { ECHO "HELP:" scanning module target '$(target)' ; }
     local module-name = $(target:B) ;
     local module-documented = ;
@@ -1105,7 +1163,7 @@ local rule read-file (
     return $(.file<$(file)>.lines) ;
 }
 
-
+##
 # Add a scan action to perform to generate the help documentation. The action
 # rule is passed the name of the module as the first argument. The second
 # argument(s) are optional and passed directly as specified here.
@@ -1140,6 +1198,7 @@ local rule do-scan (
     scan-module $(modules[-1]) : [ read-file $(modules[-1]) ] : $(action) ;
 }
 
+##
 # A normal target rule used for building the documentation
 #
 rule generate-module-doc ( target : source : properties * )
