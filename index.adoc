@@ -1,0 +1,51 @@
+:nofooter:
+:caution-caption: ⚑
+:important-caption: ‼
+:note-caption: ℹ
+:tip-caption: ☀
+:warning-caption: ⚠
+
+ifdef::backend-html5[]
+++++
+<style>
+include::b2.css[]
+</style>
+++++
+endif::[]
+
+[.menubar]
+image:website/boost_build.png[Boost.Build,198,30]
+[.menubar-item]#link:https://www.boost.org/build/tutorial.html[Tutorial]#
+[.menubar-item]#link:manual.html[Documentation]#
+[.menubar-item]#link:http://github.com/boostorg/build[GitHub]#
+
+== Boost.Build
+
+Boost.Build makes it easy to build C++ projects, everywhere.
+
+You name your executables and libraries and list their sources. Boost.Build
+takes care about compiling your sources with right options, creating static
+and shared libraries, making executables, and other chores — whether you're
+using gcc, msvc, or a dozen more supported C++ compilers — on Windows, OSX,
+Linux and commercial UNIX systems.
+
+*Simple and high level build description.* In most cases a name of target and
+list of sources is all you need.
+
+*Portability.* Most important build properties have symbolic names that work
+everywhere. Why memorize compiler flags necessary for multi-threaded 64-bit
+shared library, if Boost.Build can do it for you?
+
+*Variant builds.* When you build the same project twice with different
+properties, all produced files are placed in different directories, so you
+can build with 2 versions of gcc, or both debug and release variants in one
+invocation.
+
+*Global dependencies.* No matter what directory you build in, Boost.Build
+will always check all dependencies in your entire project, preventing
+inconsistent binaries. And it's easy to use one Boost.Build project in other,
+again with full dependency tracking.
+
+*Usage requirements.* A target can specify properties, like include paths and
+preprocessor defines, that are necessary to use it. Those properties will be
+automatically applied whenever the target is used.

@@ -1,0 +1,27 @@
+import feature ;
+
+using asciidoctor ;
+
+#using python : : /usr/local/bin/python2 ;
+using python : 2.7 : /usr/local/bin/python2 ;
+#using python : 3.6 : /usr/local/bin/python3 ;
+#using python : 2.6 : python2.6 ; # : : : <target-os>linux ;
+using doxygen
+  : /Developer/Tools/Doxygen.app/Contents/Resources/doxygen ;
+using boostbook
+  : /Users/grafik/Applications/Quickbook/docbook-xsl-1.78.1
+  : /Users/grafik/Applications/Quickbook/docbook-xml-4.5
+  : /Users/grafik/devroots/Boost/super/develop/tools/boostbook ;
+using quickbook : /Users/grafik/devroots/Boost/super/develop/dist/bin/quickbook ;
+using emscripten : : /Developer/Tools/emscripten/emscripten/tag-1.36.5/emcc ;
+using docutils ;
+
+using clang : : /usr/bin/clang++ ;
+using clang : tot : /usr/bin/clang ;
+using gcc : : /usr/local/bin/g++-7 ;
+using gcc : tot : /usr/local/bin/g++-7 ;
+
+##using gcc : : /usr/local/bin/gcc-7 : : <target-os>linux ;
+
+using mpi ;
+
