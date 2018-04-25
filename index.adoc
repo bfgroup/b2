@@ -16,7 +16,7 @@ endif::[]
 [.menubar]
 image:website/boost_build.png[Boost.Build,198,30]
 [.menubar-item]#link:https://www.boost.org/build/tutorial.html[Tutorial]#
-[.menubar-item]#link:manual.html[Documentation]#
+[.menubar-item]#link:manual/develop/index.html[Documentation]#
 [.menubar-item]#link:http://github.com/boostorg/build[GitHub]#
 
 == Boost.Build
