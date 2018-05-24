@@ -574,6 +574,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#bbv2.reference.precompiled_headers">4.7. Precompiled Headers</a></li>
 <li><a href="#bbv2.reference.generated_headers">4.8. Generated headers</a></li>
 <li><a href="#bbv2.tasks.crosscompile">4.9. Cross-compilation</a></li>
+<li><a href="#bbv2.tasks.packagemanagers">4.10. Package Managers</a></li>
 </ul>
 </li>
 <li><a href="#bbv2.reference">5. Reference</a>
@@ -3994,9 +3995,6 @@ of "app" for implicit-dependencies, it should consider targets from
 <div class="sect2">
 <h3 id="bbv2.tasks.crosscompile"><a class="anchor" href="#bbv2.tasks.crosscompile"></a>4.9. Cross-compilation</h3>
 <div class="paragraph">
-<p>cross compilation</p>
-</div>
-<div class="paragraph">
 <p>Boost.Build supports cross compilation with the gcc and msvc toolsets.</p>
 </div>
 <div class="paragraph">
@@ -4042,6 +4040,93 @@ feature</a>.</p>
 64-bit system on a 32-bit host. Please see
 <a href="#bbv2.reference.tools.compiler.msvc.64">the section called “64-bit support”</a>
 for details.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bbv2.tasks.packagemanagers"><a class="anchor" href="#bbv2.tasks.packagemanagers"></a>4.10. Package Managers</h3>
+<div class="paragraph">
+<p>Boost.Build support automatic, or manual, loading of generated build files
+from package managers. For example using the Conan package manager which
+generates <code>conanbuildinfo.jam</code> files B2 will load that files automatically
+when it loads the project at the same location. The included file can
+define targets and other project declarations in the context of the
+project it&#8217;s being loaded into. Control over what package manager file
+is loaded can be controlled with (in order of priority):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>With the <code>use-packages</code> rule.</p>
+</li>
+<li>
+<p>Command line argument <code>--use-package-manager=X</code>.</p>
+</li>
+<li>
+<p>Environment variable <code>PACKAGE_MANAGER_BUILD_INFO</code>.</p>
+</li>
+<li>
+<p>Built-in detection of the file. Currently this includes: "conan".</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong><code>use-packages</code> rule:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">use-packages</span><span class="tok-w"> </span>(<span class="tok-w"> </span>name-or-glob-pattern<span class="tok-w"> </span>?<span class="tok-w"> </span>)<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>use-packages</code> rule allows one to specify in the projects themselves kind
+of package definitions to use either as the ones for a built-in package
+manager support. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>use-packages<span class="tok-w"> </span>conan<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or to specify a <code>glob</code> pattern to find the file with the definitions. For
+instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>use-packages<span class="tok-w"> </span>&quot;packages.jam&quot;<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong><code>--use-package-manager</code> command line option:</strong></p>
+</div>
+<div class="paragraph">
+<p>The <code>--use-package-manager=NAME</code> command line option allows one to
+non-instrusively specify per invocation which of the built-in package manager
+types to use.</p>
+</div>
+<div class="paragraph">
+<p><strong><code>PACKAGE_MANAGER_BUILD_INFO</code> variable:</strong></p>
+</div>
+<div class="paragraph">
+<p>The <code>PACKAGE_MANAGER_BUILD_INFO</code> variable, which is taken from the environment
+or defined with the <code>-sX=Y</code> option, specifies a <code>glob</code> pattern to use to find
+the package definitions.</p>
+</div>
+<div class="paragraph">
+<p><strong>Built-in detection:</strong></p>
+</div>
+<div class="paragraph">
+<p>There are a number of built-in <code>glob</code> patterns to support popular package
+managers. Currently the supported ones are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Conan (<code>conan</code>): currently supports the
+<a href="https://bintray.com/bfgroup/public-conan/b2gen%3Abfgroup"><code>b2gen</code></a>
+generator.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
