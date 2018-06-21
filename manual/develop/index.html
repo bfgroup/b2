@@ -7782,8 +7782,9 @@ not contain the &#8216;&gt;&#8217; character.</p>
 <div class="paragraph">
 <p>Each feature in a build configuration has one or more associated
 <em>value</em>s. Feature values for non-free features may not contain the
-&#8216;&lt;&#8217;, &#8216;:&#8217;, or &#8216;=&#8217; characters. Feature values for free features may
-not contain the &#8216;&lt;&#8217; character.</p>
+punctuation characters of pointy bracket (‘<code>&lt;</code>’), colon (‘<code>:</code>’ ),
+equal sign (‘<code>=</code>’) and dashes (‘<code>-</code>’). Feature values for free
+features may not contain the pointy bracket (‘<code>&lt;</code>’) character.</p>
 </div>
 <div class="paragraph">
 <p>A <em>property</em> is a (feature,value) pair, expressed as &lt;feature&gt;value.</p>
@@ -7799,9 +7800,9 @@ hierarchy.</p>
 <p>A <em>value-string</em> for a feature <strong>F</strong> is a string of the form
 <code>value-subvalue1-subvalue2</code>&#8230;&#8203;<code>-subvalueN</code>, where <code>value</code> is a legal
 value for <strong>F</strong> and <code>subvalue1</code>&#8230;&#8203;<code>subvalueN</code> are legal values of some of
-<strong>F</strong>'s subfeatures. For example, the properties
-<code>&lt;toolset&gt;gcc &lt;toolset-version&gt;3.0.1</code> can be expressed more concisely
-using a value-string, as <code>&lt;toolset&gt;gcc-3.0.1</code>.</p>
+<strong>F</strong>'s subfeatures separated with dashes (‘<code>-</code>’).
+For example, the properties <code>&lt;toolset&gt;gcc &lt;toolset-version&gt;3.0.1</code> can
+be expressed more concisely using a value-string, as <code>&lt;toolset&gt;gcc-3.0.1</code>.</p>
 </div>
 <div class="paragraph">
 <p>A <em>property set</em> is a set of properties (i.e. a collection without
