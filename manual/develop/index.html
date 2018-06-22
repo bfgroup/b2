@@ -674,7 +674,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#bbv2.faq.projectroot">8.7. How to get the project root (a.k.a. Jamroot) location?</a></li>
 <li><a href="#bbv2.faq.flags">8.8. How to change compilation flags for one file?</a></li>
 <li><a href="#bbv2.faq.dll-path">8.9. Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</a></li>
-<li><a href="#bbv2.recipies.site-config">8.10. Targets in site-config.jam</a></li>
+<li><a href="#bbv2.recipes.site-config">8.10. Targets in site-config.jam</a></li>
 <li><a href="#bbv2.faq.header-only-libraries">8.11. Header-only libraries</a></li>
 <li><a href="#bbv2.faq.names">8.12. What is the difference between Boost.Build, <code>b2</code>, <code>bjam</code> and Perforce Jam?</a></li>
 </ul>
@@ -780,9 +780,7 @@ and then read the <a href="#bbv2.overview.invocation">overview</a>.</p>
 <p>If there&#8217;s anything you find unclear in this documentation, report the
 problem directly in the <a href="https://github.com/boostorg/build/issues">issue
 tracker</a>. For more general questions, please post them to our mailing
-list (<a href="http://boost.org/more/mailing_lists.htm#jamboost" class="bare">http://boost.org/more/mailing_lists.htm#jamboost</a>). The mailing
-list is also mirrored to the newsgroup
-news://news.gmane.org/gmane.comp.lib.boost.build[].</p>
+list (<a href="http://boost.org/more/mailing_lists.htm#jamboost" class="bare">http://boost.org/more/mailing_lists.htm#jamboost</a>).</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -989,7 +987,7 @@ as described in
 For example, the locations of `#include`d header files are normally not
 specified on the command-line, but described in Jamfiles as <em>target
 requirements</em> and automatically combined with the build request for those
-targets. Multithread-enabled compilation is another example of a typical
+targets. Multi-threaded compilation is another example of a typical
 target requirement. The Jamfile fragment below illustrates how these
 requirements might be specified.</p>
 </div>
@@ -1004,7 +1002,7 @@ requirements might be specified.</p>
 <div class="paragraph">
 <p>When <code>hello</code> is built, the two requirements specified above will always
 be present. If the build request given on the <code>b2</code> command-line
-explictly contradicts a target&#8217;s requirements, the target requirements
+explicitly contradicts a target&#8217;s requirements, the target requirements
 usually override (or, in the case of “free” features like
 <code>&lt;include&gt;</code>, <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup>
 augment) the build request.</p>
@@ -1512,7 +1510,7 @@ command line (other compilers may use different options).</p>
 </div>
 <div class="paragraph">
 <p>A more advanced use of prebuilt targets is described in
-<a href="#bbv2.recipies.site-config">the section called “Targets in
+<a href="#bbv2.recipes.site-config">the section called “Targets in
 site-config.jam”</a>.</p>
 </div>
 </div>
@@ -1698,7 +1696,7 @@ Besides that, a <a href="#bbv2.jam">Boost.Jam</a> program contains classes and
 class instances.</p>
 </div>
 <div class="paragraph">
-<p>Syntantically, a <a href="#bbv2.jam">Boost.Jam</a> program consists of two kinds
+<p>Syntactically, a <a href="#bbv2.jam">Boost.Jam</a> program consists of two kinds
 of elements—keywords (which have a special meaning to
 <a href="#bbv2.jam">Boost.Jam</a>) and literals. Consider this code:</p>
 </div>
@@ -2087,7 +2085,7 @@ the command that invokes the compiler, for example:</p>
 <p>Some Boost.Build toolsets will use that path to take additional actions
 required before invoking the compiler, such as calling vendor-supplied
 scripts to set up its required environment variables. When the compiler
-executables for C and C are different, the path to the C compiler
+executables for C and C++ are different, the path to the C++ compiler
 executable must be specified. The command can be any command allowed by
 the operating system. For example:</p>
 </div>
@@ -2475,8 +2473,8 @@ and your compiler documentation in case of problems.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">toolset</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">(Depends on configuration)</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>The C compiler to use. See
-link:#bbv2.reference.tools.compilers[the section called “C Compilers”]
+<p>The C++ compiler to use. See
+<a href="#bbv2.reference.tools.compilers">the section called “C++ Compilers”</a>
 for a detailed list.</p>
 </div></div></td>
 </tr>
@@ -2659,7 +2657,7 @@ and prefixes.</p>
 </div>
 <div class="paragraph">
 <p>The name of a main target can contain alphanumeric characters, dashes,
-undescores and dots. The entire name is significant when resolving
+underscores and dots. The entire name is significant when resolving
 references from other targets. For determining filenames, only the part
 before the first dot is taken. For example:</p>
 </div>
@@ -3250,9 +3248,9 @@ have the common signature, described in
 </div>
 <div class="paragraph">
 <p>This will create an executable file from the sources&#8212;&#8203;in this case,
-one C file, one library file present in the same directory, and
+one C++ file, one library file present in the same directory, and
 another library that is created by Boost.Build. Generally, sources can
-include C and C files, object files and libraries. Boost.Build will
+include C and C++ files, object files and libraries. Boost.Build will
 automatically try to convert targets of other types.</p>
 </div>
 <div class="admonitionblock tip">
@@ -3383,7 +3381,7 @@ libraries with the same name, it&#8217;s safer to use <code>file</code>.</p>
 <p>When a library references another library you should put that other
 library in its list of sources. This will do the right thing in all
 cases. For portability, you should specify library dependencies even for
-searched and prebuilt libraries, othewise, static linking on Unix will
+searched and prebuilt libraries, otherwise, static linking on Unix will
 not work. For example:</p>
 </div>
 <div class="listingblock">
@@ -3733,7 +3731,7 @@ command-line option. The output will consist of lines of the form:</p>
 </div>
 <div class="paragraph">
 <p>It is possible to process the list of tests, Boost.Build output and the
-presense/absense of the <code>*.test</code> files created when test passes into
+presence/absence of the <code>*.test</code> files created when test passes into
 human-readable status table of tests. Such processing utilities are not
 included in Boost.Build.</p>
 </div>
@@ -3759,7 +3757,7 @@ before the list of input files.</p>
 <dd>
 <p>Specifies a file to be passed to the executable on the command line
 after the arguments. All files must be specified in alphabetical order
-due to constrainsts in the current implementation.</p>
+due to constraints in the current implementation.</p>
 </dd>
 <dt class="hdlist1"><code>testing.launcher</code></dt>
 <dd>
@@ -3806,7 +3804,7 @@ commands to run explicitly.</p>
 <p>Three main target rules can be used for that. The <code>make</code> rule allows you to
 construct a single file from any number of source file, by running a command
 you specify. The <code>notfile</code> rule allows you to run an arbitrary command,
-without creating any files. And finaly, the <code>generate</code> rule allows you to
+without creating any files. And finally, the <code>generate</code> rule allows you to
 describe a transformation using Boost.Build&#8217;s virtual targets. This is
 higher-level than the file names that the <code>make</code> rule operates with and
 allows you to create more than one target, create differently named targets
@@ -4101,7 +4099,7 @@ instance:</p>
 </div>
 <div class="paragraph">
 <p>The <code>--use-package-manager=NAME</code> command line option allows one to
-non-instrusively specify per invocation which of the built-in package manager
+non-intrusively specify per invocation which of the built-in package manager
 types to use.</p>
 </div>
 <div class="paragraph">
@@ -4182,7 +4180,7 @@ loads both <code>site-config.jam</code> and <code>user-config.jam</code>.</p>
 <h3 id="bbv2.reference.rules"><a class="anchor" href="#bbv2.reference.rules"></a>5.2. Builtin rules</h3>
 <div class="paragraph">
 <p>This section contains the list of all rules that can be used in
-Jamfile—both rules that define new targets and auxiliary rules.</p>
+Jamfile — both rules that define new targets and auxiliary rules.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -4220,7 +4218,7 @@ Jamfile—both rules that define new targets and auxiliary rules.</p>
 <dd>
 <p>The <code>check-target-builds</code> allows you to conditionally use different
 properties depending on whether some metatarget builds, or not. This
-is similar to functionality of configure script in autotools projects.
+is similar to functionality of configure script in <code>autotools</code> projects.
 The function signature is:</p>
 <div class="listingblock">
 <div class="content">
@@ -4528,14 +4526,14 @@ run without changing system paths to shared libraries or installing the
 libraries to system paths. This is very convenient during development.
 Please see the <a href="#bbv2.faq.dll-path">FAQ entry</a> for details. Note
 that on Mac OSX, the paths are unconditionally hardcoded by the
-linker, and it is not possible to disable that behaviour.</p>
+linker, and it is not possible to disable that behavior</p>
 </div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.flags"></a><code>cflags</code>; <code>cxxflags</code>; <code>linkflags</code></dt>
 <dd>
 <p>The value of those features is passed without modification to the
-corresponding tools. For <code>cflags</code> that is both the C and C
-compilers, for `cxxflags` that is the C compiler, and for
+corresponding tools. For <code>cflags</code> that is both the C and C++
+compilers, for <code>cxxflags</code> that is the C++ compiler, and for
 <code>linkflags</code> that is the linker. The features are handy when you are
 trying to do something special that cannot be achieved by a
 higher-level feature in Boost.Build.</p>
@@ -4577,7 +4575,7 @@ has the following values:</p>
 <dd>
 <p>The <code>&lt;warnings-as-errors&gt;</code> makes it possible to treat warnings as
 errors and abort compilation on a warning. The value <code>on</code> enables this
-behaviour. The default value is <code>off</code>.</p>
+behavior. The default value is <code>off</code>.</p>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.build"></a><code>build</code></dt>
 <dd>
@@ -4640,7 +4638,7 @@ information.</p>
 <p><strong>Allowed values:</strong> <code>on</code>, <code>off</code>.</p>
 <div class="paragraph">
 <p>The <code>runtime-debugging</code> feature specifies whether produced object
-files, executables, and libraries should include behaviour useful only
+files, executables, and libraries should include behavior useful only
 for debugging, such as asserts. Typically, the value of this feature
 is implicitly set by the <code>variant</code> feature, but it can be explicitly
 specified by the user. The most common usage is to build release
@@ -4656,13 +4654,13 @@ that operating system, and adjust build process accordingly. For
 example, with gcc, it controls if import libraries are produced for
 shared libraries or not.</p>
 <div class="paragraph">
-<p>The complete list of possible values for this feature is: aix,
-appletv, bsd, cygwin, darwin, freebsd, hpux, iphone, linux, netbsd,
-openbsd, osf, qnx, qnxnto, sgi, solaris, unix, unixware, windows.</p>
+<p>The complete list of possible values for this feature is: <code>aix</code>,
+<code>appletv</code>, <code>bsd</code>, <code>cygwin</code>, <code>darwin</code>, <code>freebsd</code>, <code>hpux</code>, <code>iphone</code>, <code>linux</code>, <code>netbsd</code>,
+<code>openbsd</code>, <code>osf</code>, <code>qnx</code>, <code>qnxnto</code>, <code>sgi</code>, <code>solaris</code>, <code>unix</code>, <code>unixware</code>, <code>windows</code>.</p>
 </div>
 <div class="paragraph">
 <p>See <a href="#bbv2.tasks.crosscompile">the section called “Cross-compilation”</a>
-for details of crosscompilation.</p>
+for details of cross-compilation.</p>
 </div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.architecture"></a><code>architecture</code></dt>
@@ -4773,10 +4771,10 @@ will not affect target paths, and will not cause conflicts.</p>
 <p>It is used by the requirements of a generator</p>
 </li>
 <li>
-<p>It is a subfeature of a relevant feature</p>
+<p>It is a sub-feature of a relevant feature</p>
 </li>
 <li>
-<p>It has a subfeature which is relevant</p>
+<p>It has a sub-feature which is relevant</p>
 </li>
 <li>
 <p>It is a composite feature, and any composed feature is relevant</p>
@@ -4795,7 +4793,7 @@ will not affect target paths, and will not cause conflicts.</p>
 value is relevant</p>
 </li>
 <li>
-<p>It is explicitly named as relevent</p>
+<p>It is explicitly named as relevant</p>
 </li>
 </ul>
 </div>
@@ -5781,8 +5779,8 @@ using the following syntax:</p>
 the location where STLport headers can be found, and libraries is the
 location where STLport libraries can be found. The version should always
 be provided, and the library path should be provided if you&#8217;re using
-STLport&#8217;s implementation of iostreams. Note that STLport 5.* always uses
-its own iostream implementation, so the library path is required.</p>
+STLport&#8217;s implementation of <code>iostreams</code>. Note that STLport 5.* always uses
+its own <code>iostream</code> implementation, so the library path is required.</p>
 </div>
 <div class="paragraph">
 <p>When STLport is configured, you can build with STLport by requesting
@@ -5967,7 +5965,7 @@ environment to be linked in as a library.</p>
 <dt class="hdlist1"><code>version</code></dt>
 <dd>
 <p>The version of Python to use. Should be in Major.Minor format, for example
-2.3. Do not include the subminor version.</p>
+2.3. Do not include the sub-minor version.</p>
 </dd>
 <dt class="hdlist1"><code>command-or-prefix</code></dt>
 <dd>
@@ -5994,10 +5992,10 @@ build configuration when Boost.Build selects a Python configuration to use.</p>
 <dd>
 <p>A string to append to the name of extension modules before the true filename
 extension. Ordinarily we would just compute this based on the value of the
-<code>&lt;python-debugging&gt;</code> feature. However ubuntu&#8217;s python-dbg package uses the
+<code>&lt;python-debugging&gt;</code> feature. However ubuntu&#8217;s <code>python-dbg</code> package uses the
 windows convention of appending _d to debug-build extension modules. We have
 no way of detecting ubuntu, or of probing python for the "_d" requirement,
-and if you configure and build python using --with-pydebug, you&#8217;ll be using
+and if you configure and build python using <code>--with-pydebug</code>, you&#8217;ll be using
 the standard *nix convention. Defaults to "" (or "_d" when targeting windows
 and &lt;python-debugging&gt; is set).</p>
 </dd>
@@ -6151,7 +6149,7 @@ stylesheets remotely.</p>
 locations. Otherwise, we let the XML processor load the DTD remotely.</p>
 </div>
 <div class="paragraph">
-<p><code>boostbook-dir</code> is the BoostBook directory with the DTD and XSL subdirs.</p>
+<p><code>boostbook-dir</code> is the BoostBook directory with the DTD and XSL sub-dirs.</p>
 </div>
 <div class="paragraph">
 <p>The boostbook module depends on xsltproc. For pdf or ps output, it also
@@ -6224,7 +6222,7 @@ BoostBook XML.</p>
 <dt class="hdlist1"><code>doxygen:param</code></dt>
 <dd>
 <div class="paragraph">
-<p>All the values of <code>doxygen:param</code> are added to the doxyfile.</p>
+<p>All the values of <code>doxygen:param</code> are added to the <code>doxyfile</code>.</p>
 </div>
 </dd>
 <dt class="hdlist1"><code>prefix</code></dt>
@@ -6646,7 +6644,7 @@ following special characters:</p>
 <li>
 <p>'*' matches an arbitrary number of characters</p>
 <div class="paragraph">
-<p>A file $(d)/e1/e2/e3 (where 'd' is in $(dirs)) matches the pattern
+<p>A file <code>$(d)/e1/e2/e3</code> (where 'd' is in <code>$(dirs)</code>) matches the pattern
 p1/p2/p3 if and only if e1 matches p1, e2 matches p2 and so on. For
 example:</p>
 </div>
@@ -7162,7 +7160,7 @@ target.</p>
 <div class="paragraph">
 <p>Generates virtual targets for this abstract target using the specified
 properties, unless a different value of some feature is required by the
-target. This is an abstract method which must be overriden by derived
+target. This is an abstract method which must be overridden by derived
 classes.</p>
 </div>
 <div class="paragraph">
@@ -7401,7 +7399,7 @@ method should not be overridden.</p>
 <div class="paragraph">
 <p>Constructs virtual targets for this abstract target. Returns a
 usage-requirements property-set and a list of virtual targets. Should be
-overriden in derived classes.</p>
+overridden in derived classes.</p>
 </div>
 </li>
 </ol>
@@ -7532,7 +7530,7 @@ Instances are immutable.</p>
 <li>
 <p><code>rule str ( )</code></p>
 <div class="paragraph">
-<p>Returns the string repesentation of the stored properties.</p>
+<p>Returns the string representation of the stored properties.</p>
 </div>
 </li>
 <li>
@@ -7652,7 +7650,7 @@ properties</a> are excluded.</p>
 present in the build request.</p>
 </li>
 <li>
-<p>If there&#8217;s only one viable alternative, it&#8217;s choosen. Otherwise, an
+<p>If there&#8217;s only one viable alternative, it&#8217;s chosen. Otherwise, an
 attempt is made to find the best alternative. An alternative a is better
 than another alternative b, if the set of properties in b&#8217;s condition is
 a strict subset of the set of properties of a&#8217;s condition. If one viable
@@ -7690,7 +7688,7 @@ unless it is overridden by a property in the requirements.</p>
 <li>
 <p>If either the build request, or the requirements (non-conditional or
 conditional) include an expandable property (either composite, or with a
-specified subfeature value), the behaviour is equivalent to explicitly
+specified sub-feature value), the behavior is equivalent to explicitly
 adding all the expanded properties to the build request or the
 requirements respectively.</p>
 </li>
@@ -7766,7 +7764,7 @@ project&#8217;s build directory. For example,</p>
 </div>
 </div>
 <div class="paragraph">
-<p>will create the files for <code>a</code> in bin/subdir/gcc-4.6.1/debug</p>
+<p>will create the files for <code>a</code> in <code>bin/subdir/gcc-4.6.1/debug</code></p>
 </div>
 </div>
 </div>
@@ -7900,10 +7898,10 @@ in the feature&#8217;s declaration.&#8201;&#8212;&#8201;move this elsewhere - dw
 <li>
 <p><a id="bbv2.reference.features.attributes.symmetric"></a> <em>symmetric</em></p>
 <div class="paragraph">
-<p>Normally a feature only generates a subvariant directory when its value
-differs from its default value, leading to an asymmetric subvariant
+<p>Normally a feature only generates a sub-variant directory when its value
+differs from its default value, leading to an asymmetric sub-variant
 directory structure for certain values of the feature. A symmetric
-feature always generates a corresponding subvariant directory.</p>
+feature always generates a corresponding sub-variant directory.</p>
 </div>
 </li>
 <li>
@@ -8256,9 +8254,9 @@ Jamfile.jam</pre>
 <div class="sect2">
 <h3 id="bbv2.extender.intro"><a class="anchor" href="#bbv2.extender.intro"></a>7.1. Introduction</h3>
 <div class="paragraph">
-<p>This section explains how to extend Boost.Build to accomodate your local
+<p>This section explains how to extend Boost.Build to accommodate your local
 requirements&#8201;&#8212;&#8201;primarily to add support for non-standard tools you
-have. Before we start, be sure you have read and understoon the concept
+have. Before we start, be sure you have read and understood the concept
 of metatarget, <a href="#bbv2.overview.concepts">Concepts</a>, which is critical to
 understanding the remaining material.</p>
 </div>
@@ -8333,7 +8331,7 @@ instance of <a href="#bbv2.reference.class.property-set">property-set</a>)</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>It&#8217;s possible to lookup a metataget by target-id using the
+<p>It&#8217;s possible to lookup a metatarget by target-id using the
 <code>targets.resolve-reference</code> function, and the
 <code>targets.generate-from-reference</code> function can both lookup and generate
 a metatarget.</p>
@@ -8476,8 +8474,8 @@ derived classes for custom scenarios.</p>
 <div class="sect2">
 <h3 id="bbv2.extender.example"><a class="anchor" href="#bbv2.extender.example"></a>7.2. Example: 1-to-1 generator</h3>
 <div class="paragraph">
-<p>Say you&#8217;re writing an application that generates C code. If you ever
-did this, you know that it's not nice. Embedding large portions of C
+<p>Say you&#8217;re writing an application that generates C++ code. If you ever
+did this, you know that it&#8217;s not nice. Embedding large portions of C++
 code in string literals is very awkward. A much better solution is:</p>
 </div>
 <div class="olist arabic">
@@ -8561,7 +8559,7 @@ possible to write the following in your Jamfile:</p>
 </div>
 <div class="paragraph">
 <p>The listed verbatim files will be automatically converted into C++
-source files, compiled and then linked to the codegen executable.</p>
+source files, compiled and then linked to the <code>codegen</code> executable.</p>
 </div>
 <div class="paragraph">
 <p>In subsequent sections, we will extend this example, and review all the
@@ -8620,7 +8618,7 @@ particular generators and suffix. Typically, you&#8217;ll change the new type
 in some way. For example, using <code>type.set-generated-target-suffix</code> you
 can set the suffix for the new type. Or you can write a special
 generator for the new type. For example, it can generate additional
-metainformation for the plugin. In either way, the <code>PLUGIN</code> type can be
+meta-information for the plugin. In either way, the <code>PLUGIN</code> type can be
 used whenever <code>SHARED_LIB</code> can. For example, you can directly link
 plugins to an application.</p>
 </div>
@@ -8700,7 +8698,7 @@ created. That object has specific types of targets that it accepts and
 produces. Using that information, Boost.Build is able to automatically
 invoke the generator. For example, if you declare a generator that takes
 a target of the type <code>D</code> and produces a target of the type <code>OBJ</code>, when
-placing a file with extention <code>.d</code> in a list of sources will cause
+placing a file with extension <code>.d</code> in a list of sources will cause
 Boost.Build to invoke your generator, and then to link the resulting
 object file into an application. (Of course, this requires that you
 specify that the <code>.d</code> extension corresponds to the <code>D</code> type.)</p>
@@ -8756,7 +8754,7 @@ linker.</p>
 <div class="paragraph">
 <p>You should also know about two specific functions for registering
 generators: <code>generators.register-c-compiler</code> and
-<code>generators.register-linker</code>. The first sets up header dependecy
+<code>generators.register-linker</code>. The first sets up header dependency
 scanning for C files, and the seconds handles various complexities like
 searched libraries. For that reason, you should always use those
 functions when adding support for compilers and linkers.</p>
@@ -8792,7 +8790,7 @@ generators.register<span class="tok-w"></span>
 <div class="paragraph">
 <p>This generator will work exactly like the <code>verbatim.inline-file</code>
 generator we&#8217;ve defined above, but it&#8217;s possible to customize the
-behaviour by overriding methods of the <code>generator</code> class.</p>
+behavior by overriding methods of the <code>generator</code> class.</p>
 </div>
 <div class="paragraph">
 <p>There are two methods of interest. The <code>run</code> method is responsible for
@@ -8840,11 +8838,11 @@ are not produced from anything. The found targets are added to the
 sources.</p>
 </div>
 <div class="paragraph">
-<p>The <code>run</code> method can be overriden to completely customize the way the
+<p>The <code>run</code> method can be overridden to completely customize the way the
 generator works. In particular, the conversion of sources to the desired
 types can be completely customized. Here&#8217;s another real example. Tests
 for the Boost Python library usually consist of two parts: a Python
-program and a C file. The C file is compiled to Python extension
+program and a C++ file. The C++ file is compiled to Python extension
 that is loaded by the Python program. But in the likely case that both
 files have the same name, the created Python extension must be renamed.
 Otherwise, the Python program will import itself, not the extension.
@@ -8893,8 +8891,8 @@ Here&#8217;s how it can be done:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>First, we separate all source into python files, libraries and C
-sources. For each C source we create a separate Python extension by
+<p>First, we separate all source into python files, libraries and C++
+sources. For each C++ source we create a separate Python extension by
 calling <code>generators.construct</code> and passing the C++ source and the
 libraries. At this point, we also change the extension&#8217;s name, if
 necessary.</p>
@@ -8926,7 +8924,7 @@ flags<span class="tok-w"> </span>verbatim.inline-file<span class="tok-w"> </span
 </div>
 <div class="paragraph">
 <p>We first define a new feature. Then, the <code>flags</code> invocation says that
-whenever verbatin.inline-file action is run, the value of the
+whenever verbatim.inline-file action is run, the value of the
 <code>verbatim-options</code> feature will be added to the <code>OPTIONS</code> variable, and
 can be used inside the action body. You&#8217;d need to consult online help
 (--help) to find all the features of the <code>toolset.flags</code> rule.</p>
@@ -8976,7 +8974,7 @@ with other tools.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>Steps for adding a feauture</strong></p>
+<p><strong>Steps for adding a feature</strong></p>
 </div>
 <div class="paragraph">
 <p>Adding a feature requires three steps:</p>
@@ -8990,8 +8988,8 @@ You have to decide on the set of
 <div class="ulist">
 <ul>
 <li>
-<p>if you want a feature value set for one target to automaticaly
-propagate to its dependant targets then make it “propagated”.</p>
+<p>if you want a feature value set for one target to automatically
+propagate to its dependent targets then make it “propagated”.</p>
 </li>
 <li>
 <p>if a feature does not have a fixed list of values, it must be “free.”
@@ -9076,7 +9074,7 @@ internal target name in <code>DEF_FILE</code> to a corresponding filename in the
 strange symbol that is not likely to make sense for the linker.</p>
 </div>
 <div class="paragraph">
-<p>We are almost done, except for adding the follwing code to <code>msvc.jam</code>:</p>
+<p>We are almost done, except for adding the following code to <code>msvc.jam</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9153,7 +9151,7 @@ should just produce a target
 of specific type. In that case, a rule is already defined for you! When
 you define a new type, Boost.Build automatically defines a corresponding
 rule. The name of the rule is obtained from the name of the type, by
-downcasing all letters and replacing underscores with dashes. For
+down-casing all letters and replacing underscores with dashes. For
 example, if you create a module <code>obfuscate.jam</code> containing:</p>
 </div>
 <div class="listingblock">
@@ -9257,7 +9255,7 @@ module several times. You need to check for this and decide what to do.
 Typically, unless you support several versions of a tool, duplicate
 initialization is a user error. If the tool&#8217;s version can be specified
 during initialization, make sure the version is either always specified,
-or never specified (in which case the tool is initialied only once). For
+or never specified (in which case the tool is initialized only once). For
 example, if you allow:</p>
 <div class="listingblock">
 <div class="content">
@@ -9434,7 +9432,7 @@ intention in such cases.</p>
 <p>Many users would like to use environment variables in Jamfiles, for
 example, to control the location of external libraries. In many cases it
 is better to declare those external libraries in the site-config.jam
-file, as documented in the <a href="#bbv2.recipies.site-config">recipes
+file, as documented in the <a href="#bbv2.recipes.site-config">recipes
 section</a>. However, if the users already have the environment variables
 set up, it may not be convenient for them to set up their
 site-config.jam files as well and using the environment variables might
@@ -9499,7 +9497,7 @@ Using it everywhere might negatively affect performance.</p>
 <p>On Unix-like operating systems, the order in which static libraries are
 specified when invoking the linker is important, because by default, the
 linker uses one pass though the libraries list. Passing the libraries in
-the incorrect order will lead to a link error. Further, this behaviour
+the incorrect order will lead to a link error. Further, this behavior
 is often used to make one library override symbols from another. So,
 sometimes it is necessary to force specific library linking order.</p>
 </div>
@@ -9544,7 +9542,7 @@ following lines will cause <code>a</code> to appear before <code>b</code> on the
 <h3 id="bbv2.faq.projectroot"><a class="anchor" href="#bbv2.faq.projectroot"></a>8.7. How to get the project root (a.k.a. Jamroot) location?</h3>
 <div class="paragraph">
 <p>You might want to use your project&#8217;s root location in your Jamfiles. To
-access it just declare a path constant in your Jamroot.jam file using:</p>
+access it just declare a path constant in your <code>Jamroot.jam</code> file using:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -9667,7 +9665,7 @@ that they should always be used.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.recipies.site-config"><a class="anchor" href="#bbv2.recipies.site-config"></a>8.10. Targets in site-config.jam</h3>
+<h3 id="bbv2.recipes.site-config"><a class="anchor" href="#bbv2.recipes.site-config"></a>8.10. Targets in site-config.jam</h3>
 <div class="paragraph">
 <p>It is desirable to declare standard libraries available on a given
 system. Putting target declaration in a specific project&#8217;s Jamfile is
@@ -9723,10 +9721,10 @@ their include path as a part of its usage requirements, for example:</p>
 </div>
 <div class="paragraph">
 <p>The includes specified in usage requirements of <code>my-lib</code> are
-automatically added to all of its dependants' build properties. The
-dependants need not care if <code>my-lib</code> is a header-only or not, and it is
+automatically added to all of its dependents build properties. The
+dependents need not care if <code>my-lib</code> is a header-only or not, and it is
 possible to later make <code>my-lib</code> into a regular compiled library without
-having to add the includes to its dependants' declarations.</p>
+having to add the includes to its dependents declarations.</p>
 </div>
 <div class="paragraph">
 <p>If you already have proper usage requirements declared for a project
@@ -10050,7 +10048,7 @@ complicated things manageable.</p>
 <div class="paragraph">
 <p>Installing <code>B2</code> after building it is simply a matter of copying the
 generated executables someplace in your <code>PATH</code>. For building the
-executables there are a set of <code>build</code> bootstrap scripts to accomodate
+executables there are a set of <code>build</code> bootstrap scripts to accommodate
 particular environments. The scripts take one optional argument, the
 name of the toolset to build with. When the toolset is not given an
 attempt is made to detect an available toolset and use that. The build
@@ -10505,7 +10503,7 @@ targets for the <code>build.jam</code> script.</p>
 setup script of the toolset, if available and if it needs to be invoked.
 This allows one to configure the toolset ass needed to do non-default
 builds of <code>b2</code>. For example to build a Win64 version with <code>vc8</code>. See the
-toolset descriptiona above for when particular toolsets support this.</p>
+toolset description above for when particular toolsets support this.</p>
 </div>
 <div class="paragraph">
 <p>The arguments starting with the <code>--option</code> forms are passed to the
@@ -10613,7 +10611,7 @@ And block comments start with <code>#|</code> and extend until the next <code>|#
 be updated. Source targets are the files used in updating built targets.
 Built targets and source targets are collectively referred to as file
 targets, and frequently built targets are source targets for other built
-targets. Pseudotargets are symbols representing dependencies on other
+targets. Pseudo-targets are symbols representing dependencies on other
 targets, but which are not themselves associated with any real file.</p>
 </div>
 <div class="paragraph">
@@ -10745,8 +10743,7 @@ replaced by bound versions of the target names. See Binding above.</p>
 <div class="paragraph">
 <p>The variable&#8217;s value names the rule (or rules) to be invoked. A rule is
 invoked for each element in the list of <code>$(var)`s values. The fields
-`field1 : field2
-        : &#8230;&#8203;</code> are passed as arguments for each invokation. For the [
+`field1 : field2 : &#8230;&#8203;</code> are passed as arguments for each invocation For the [
 &#8230;&#8203; ] forms, the return value is the concatenation of the return values
 for all of the invocations.</p>
 </div>
@@ -10996,12 +10993,12 @@ nonzero return code, dependent targets will still be built.
 </div>
 </div>
 <div class="paragraph">
-<p>Marks <em>targets</em> as pseudotargets and not real files. No timestamp is
+<p>Marks <em>targets</em> as pseudo-targets and not real files. No timestamp is
 checked, and so the actions on such a target are only executed if the
 target&#8217;s dependencies are updated, or if the target is also marked with
-<code>ALWAYS</code>. The default <code>b2</code> target <code>all</code> is a pseudotarget. In
+<code>ALWAYS</code>. The default <code>b2</code> target <code>all</code> is a pseudo-target In
 <code>Jambase</code>, <code>NOTFILE</code> is used to define several addition convenient
-pseudotargets.</p>
+pseudo-targets</p>
 </div>
 </div>
 <div class="sect5">
@@ -11133,7 +11130,7 @@ rules and not part of the language, like <code>include</code>.</p>
 <div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._glob__"><a class="anchor" href="#jam.language.rules.builtins.utility._glob__"></a><code>GLOB</code></h6>
 <div class="paragraph">
-<p>The <code>GLOB</code> rule does filename globbing.</p>
+<p>The <code>GLOB</code> rule does filename globing</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -11154,13 +11151,13 @@ to the file name without the directory.</p>
 before matching against the pattern; you can use this to do
 case-insensitive matching using lowercase patterns. The paths returned
 will still have mixed case if the OS supplies them. On Windows NT and
-Cygwin, and OpenVMS, filenames are always downcased before matching.</p>
+Cygwin, and OpenVMS, filenames are always down-cased before matching.</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._glob_archive__"><a class="anchor" href="#jam.language.rules.builtins.utility._glob_archive__"></a><code>GLOB_ARCHIVE</code></h6>
 <div class="paragraph">
-<p>The <code>GLOB_ARCHIVE</code> rule does name globbing of object archive members.</p>
+<p>The <code>GLOB_ARCHIVE</code> rule does name globing of object archive members.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -11183,7 +11180,7 @@ matching patterns can allow for portability.</p>
 all-lowercase before matching against the pattern; you can use this to
 do case-insensitive matching using lowercase patterns. The paths
 returned will still have mixed case if the OS supplies them. On Windows
-NT, Cygwin, and OpenVMS, filenames are always downcased before matching.</p>
+NT, Cygwin, and OpenVMS, filenames are always down-cased before matching.</p>
 </div>
 <div class="paragraph">
 <p>Additionally, members can be matched with symbol/function patterns on
@@ -11328,7 +11325,7 @@ format and constraints, please see <code>W32_GETREG</code>.</p>
 <dl>
 <dt class="hdlist1"><code>subkeys</code></dt>
 <dd>
-<p>Names of all direct subkeys of '<em>path</em>'.</p>
+<p>Names of all direct sub-keys of '<em>path</em>'.</p>
 </dd>
 <dt class="hdlist1"><code>values</code></dt>
 <dd>
@@ -11406,7 +11403,7 @@ case.</p>
 </div>
 </div>
 <div class="paragraph">
-<p><code>MD5</code> computes the MD5 hash of the string passed as paramater and
+<p><code>MD5</code> computes the MD5 hash of the string passed as parameter and
 returns it.</p>
 </div>
 </div>
@@ -11471,7 +11468,7 @@ descriptor number.</p>
 </div>
 <div class="paragraph">
 <p>The <code>UPDATE_NOW</code> caused the specified targets to be updated immediately.
-If update was successfull, non-empty string is returned. The <em>log</em>
+If update was successful, non-empty string is returned. The <em>log</em>
 parameter, if present, specifies a descriptor of a file where all output
 from building is redirected. If the <em>ignore-minus-n</em> parameter is
 specified, the targets are updated even if the <code>-n</code> parameter is
@@ -11927,7 +11924,7 @@ properly specify file paths in VMS-specific commands. For example</p>
 </dd>
 <dt class="hdlist1"><code>:J=joinval</code></dt>
 <dd>
-<p>Concatentate list elements into single element, separated by
+<p>Concatenate list elements into single element, separated by
 <em>joinval</em>.</p>
 </dd>
 </dl>
@@ -12134,7 +12131,7 @@ platform:</p>
 </dd>
 <dt class="hdlist1"><code>JAMUNAME</code></dt>
 <dd>
-<p>Ouput of uname(1) command (Unix only)</p>
+<p>Output of uname(1) command (Unix only)</p>
 </dd>
 <dt class="hdlist1"><code>JAMVERSION</code></dt>
 <dd>
@@ -12762,7 +12759,7 @@ should probably be titled "Modifying Update Determination".</p>
 <p>"Grist" is just a string prefix of the form &lt;<em>characters</em>&gt;. It is
 used in Jam to create unique target names based on simpler names. For
 example, the file name <code>test.exe</code> may be used by targets in separate
-subprojects, or for the debug and release variants of the "same"
+sub-projects, or for the debug and release variants of the "same"
 abstract target. Each distinct target bound to a file called "test.exe"
 has its own unique grist prefix. The Boost build system also takes full
 advantage of Jam&#8217;s ability to divide strings on grist boundaries,
@@ -12788,7 +12785,7 @@ ALL_LOCATE_TARGET).</p>
 <li>
 <p>When grist is extracted from a name with $(var:G), the result includes
 the leading and trailing angle brackets. When grist is added to a name
-with $(var:G=expr), existing grist is first stripped. Then, if expr is
+with <code>$(var:G=expr)</code>, existing grist is first stripped. Then, if <code>expr</code> is
 non-empty, leading &lt;s and trailing &gt;s are added if necessary to form an
 expression of the form &lt;expr2&gt;; &lt;expr2&gt; is then prepended.</p>
 </li>
@@ -12864,7 +12861,7 @@ complete on *nix.&#8201;&#8212;&#8201;<em>Noel B.</em></p>
 <p>Fix warnings, patch from Mateusz Loskot.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 </li>
 <li>
-<p>Add KEEP_GOING var to programatically override the '-q' option.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
+<p>Add KEEP_GOING var to programmatically override the '-q' option.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 </li>
 <li>
 <p>Add more parameters, up to 19 from 9, to rule invocations. Patch
@@ -12880,7 +12877,7 @@ from Jonathan Biggar.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 <p>More macros for detection of OSPLAT, patch from John W. Bito.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 </li>
 <li>
-<p>Add PARALLELISM var to programatically override the '-j' option.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
+<p>Add PARALLELISM var to programmatically override the '-j' option.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 </li>
 <li>
 <p>Tweak doc building to allow for PDF generation of docs.&#8201;&#8212;&#8201;<em>John M.</em></p>
@@ -12910,7 +12907,7 @@ with "=".&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 aliasing that causes crashes with hashing file cache entries.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
 <li>
-<p>Add -Wc,-fno-strict-aliasing for QCC/QNX to avoid the same aliasing
+<p>Add <code>-Wc,-fno-strict-aliasing</code> for QCC/QNX to avoid the same aliasing
 crashes as in the general GCC 4.x series (thanks to Niklas Angare for
 the fix).&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
@@ -12954,12 +12951,12 @@ lexical token being read started instead of finished which makes it
 much easier to find errors like unclosed quotes or curly braces.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 </li>
 <li>
-<p>Removed the -xarch=generic architecture from build.jam as this
+<p>Removed the <code>-xarch=generic</code> architecture from <code>build.jam</code> as this
 option is unknown so the Sun compilers on Linux.&#8201;&#8212;&#8201;<em>Noel B.</em></p>
 </li>
 <li>
-<p>Fixed a bug with T_FATE_ISTMP getting reported as T_FATE_ISTMP &amp;
-T_FATE_NEEDTMP at the same time due to a missing break in a switch
+<p>Fixed a bug with <code>T_FATE_ISTMP</code> getting reported as <code>T_FATE_ISTMP</code> &amp;
+<code>T_FATE_NEEDTMP</code> at the same time due to a missing break in a switch
 statement.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 </li>
 <li>
@@ -12995,7 +12992,7 @@ it allowing those executables to contain spaces in their name and/or
 path.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 </li>
 <li>
-<p>Change execunix.c to always use fork() instead of vfork() on the
+<p>Change <code>execunix.c</code> to always use <code>fork()</code> instead of <code>vfork()</code> on the
 Mac. This works around known issues with bjam on PPC under Tiger and a
 problem reported by Rene with bjam on x86 under Leopard.&#8201;&#8212;&#8201;<em>Noel B.</em></p>
 </li>
@@ -13009,7 +13006,7 @@ multiple times.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 import into root module.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 </li>
 <li>
-<p>Patch for the NORMALIZE_PATH builtin Boost Jam rule as well as an
+<p>Patch for the <code>NORMALIZE_PATH</code> builtin Boost Jam rule as well as an
 appropriate update for the path.jam Boost Build module where that rule
 was being used to implement path join and related operations.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 </li>
@@ -13022,8 +13019,8 @@ specified as both short and long file names correctly.&#8201;&#8212;&#8201;<em>J
 </li>
 <li>
 <p>Implemented a patch contributed by Igor Nazarenko reimplementing the
-list_sort() function to use a C qsort() function instead of a
-hand-crafted merge-sort algorithm. Makes some list sortings (e.g.
+<code>list_sort()</code> function to use a C <code>qsort()</code> function instead of a
+hand-crafted merge-sort algorithm. Makes some list sorts (e.g.
 1,2,1,2,1,2,1,2, &#8230;&#8203;) extremely faster, in turn significantly speeding
 up some project builds.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 </li>
@@ -13033,7 +13030,7 @@ correctly without its drive letter being specified.&#8201;&#8212;&#8201;<em>Jurk
 </li>
 <li>
 <p>Solved the problem with child process returning the value 259
-(Windows constant STILL_ACTIVE) causing bjam never to detect that it
+(Windows constant <code>STILL_ACTIVE</code>) causing bjam never to detect that it
 exited and therefore keep running in an endless loop.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 </li>
 <li>
@@ -13049,7 +13046,7 @@ generation/termination which could have caused bjam not to collect the
 terminated process&#8217;s final output.&#8201;&#8212;&#8201;<em>Jurko G.</em></p>
 </li>
 <li>
-<p>Change from vfork to fork for executing actions on Darwin to improve
+<p>Change from <code>vfork</code> to <code>fork</code> for executing actions on Darwin to improve
 stability.&#8201;&#8212;&#8201;<em>Noel B.</em></p>
 </li>
 <li>
@@ -13127,11 +13124,11 @@ GCC-4.2 crash problems.&#8201;&#8212;&#8201;<em>Boris G.</em></p>
 around the CMD shell using <code>=</code> as an argument separator.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
 <li>
-<p>Add values of variables specified with -s to .EVNRION module, so
+<p>Add values of variables specified with -s to <code>.ENVIRON</code> module, so
 that we can override environment on command line.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 </li>
 <li>
-<p>Make NORMALIZE_PATH convert \ to /.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
+<p>Make <code>NORMALIZE_PATH</code> convert <code>\</code> to <code>/</code>.&#8201;&#8212;&#8201;<em>Vladimir P.</em></p>
 </li>
 </ul>
 </div>
@@ -13160,13 +13157,13 @@ implemented for Unix variants, and Windows (Win32/NT).&#8201;&#8212;&#8201;<em>R
 <p>Add "sun" as alias to Sun Workshop compiler tools.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
 <li>
-<p>Set MAXLINE in jam.h to 23k bytes for AIX. The piecemeal archive
-action was broken with the default MAXLINE of 102400. Because the AIX
+<p>Set <code>MAXLINE</code> in jam.h to 23k bytes for AIX. The piecemeal archive
+action was broken with the default <code>MAXLINE</code> of 102400. Because the AIX
 shell uses some of the 24k default buffer size for its own use, I
 reduced it to 23k.&#8201;&#8212;&#8201;<em>Noel B.</em></p>
 </li>
 <li>
-<p>Make use of output dir options of msvc to not polute src dir with
+<p>Make use of output dir options of msvc to not pollute src dir with
 compiled files.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
 <li>
@@ -13188,7 +13185,7 @@ feature.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 <p>Update GC support to work with Boehm GC 7.0.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
 <li>
-<p>Revert the BOOST_BUILD_PATH change, since the directory passed to
+<p>Revert the <code>BOOST_BUILD_PATH</code> change, since the directory passed to
 boost-build should be first in searched paths, else project local
 build system will not be picked correctly. The order had been changed
 to allow searching of alternate user-config.jam files from boost
@@ -13206,10 +13203,10 @@ similar.&#8201;&#8212;&#8201;<em>Roland S.</em></p>
 possible.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
 <li>
-<p>Fix undeclared INT_MAX on some platforms, i.e. Linux.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
+<p>Fix undeclared <code>INT_MAX</code> on some platforms, i.e. Linux.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 </li>
 <li>
-<p>Modified execunix.c to add support for terminating processes that
+<p>Modified <code>execunix.c</code> to add support for terminating processes that
 consume too much cpu or that hang and fail to consume cpu at all. This
 in support of the bjam -lx option.&#8201;&#8212;&#8201;<em>Noel B.</em></p>
 </li>
@@ -13237,8 +13234,8 @@ instead of erroring out.&#8201;&#8212;&#8201;<em>Rene R.</em></p>
 <p>Add output for when actions timeout with -lN option.&#8201;&#8212;&#8201;<em>Rene R.</em>, <em>Noel B.</em></p>
 </li>
 <li>
-<p>Add needed include (according to XOPEN) for definition of WIFEXITED
-and WEXITSTATUS.&#8201;&#8212;&#8201;<em>Markus S.</em></p>
+<p>Add needed include (according to XOPEN) for definition of <code>WIFEXITED</code>
+and <code>WEXITSTATUS</code>.&#8201;&#8212;&#8201;<em>Markus S.</em></p>
 </li>
 </ul>
 </div>
