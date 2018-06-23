@@ -1106,7 +1106,7 @@ specified by the subproject. For example, if <code>top/Jamroot</code> has</p>
 </div>
 </div>
 <div class="paragraph">
-<p>in its requirements, then all of its subprojects will have it in their
+<p>in its requirements, then all of its sub-projects will have it in their
 requirements, too. Of course, any project can add include paths to those
 specified by its parents. <sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup> More
 details can be found in <a href="#bbv2.overview.projects">the section called “Projects”</a>.</p>
@@ -1114,7 +1114,7 @@ details can be found in <a href="#bbv2.overview.projects">the section called “
 <div class="paragraph">
 <p>Invoking <code>b2</code> without explicitly specifying any targets on the command
 line builds the project rooted in the current directory. Building a
-project does not automatically cause its subprojects to be built unless
+project does not automatically cause its sub-projects to be built unless
 the parent project&#8217;s Jamfile explicitly requests it. In our example,
 <code>top/Jamroot</code> might contain:</p>
 </div>
@@ -3316,7 +3316,7 @@ can be searched for by the tools using them (typically with the linker&#8217;s
 <div class="paragraph">
 <p>The <code>name</code> property specifies the name of the library without the
 standard prefixes and suffixes. For example, depending on the system,
-<code>z</code> could refer to a file called z.so, libz.a, or z.lib, etc. The
+<code>z</code> could refer to a file called <code>z.so</code>, <code>libz.a</code>, or <code>z.lib</code>, etc. The
 <code>search</code> feature specifies paths in which to search for the library in
 addition to the default compiler paths. <code>search</code> can be specified
 several times or it can be omitted, in which case only the default
@@ -3662,7 +3662,7 @@ way is the <code>unit-test</code> rule, which follows the
 rule, but after the executable is created it is also run. If the
 executable returns an error code, the build system will also return an
 error and will try running the executable on the next invocation until
-it runs successfully. This behaviour ensures that you can not miss a
+it runs successfully. This behavior ensures that you can not miss a
 unit test failure.</p>
 </div>
 <div class="paragraph">
@@ -3736,7 +3736,7 @@ human-readable status table of tests. Such processing utilities are not
 included in Boost.Build.</p>
 </div>
 <div class="paragraph">
-<p>The following features adjust behaviour of the testing metatargets.</p>
+<p>The following features adjust behavior of the testing metatargets.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -3904,10 +3904,10 @@ not enabled. Include the new header at the top of your source files.</p>
 <p>Declare a new Boost.Build target for the precompiled header and add
 that precompiled header to the sources of the target whose compilation
 you want to speed up:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>cpp-pch pch : pch.hpp ;
-exe main : main.cpp pch ;</pre>
+<pre class="pygments highlight"><code data-lang="jam"><span></span>cpp-pch<span class="tok-w"> </span>pch<span class="tok-w"> </span>:<span class="tok-w"> </span>pch.hpp<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">exe</span><span class="tok-w"> </span>main<span class="tok-w"> </span>:<span class="tok-w"> </span>main.cpp<span class="tok-w"> </span>pch<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3958,7 +3958,7 @@ details.</p>
 <div class="sect2">
 <h3 id="bbv2.reference.generated_headers"><a class="anchor" href="#bbv2.reference.generated_headers"></a>4.8. Generated headers</h3>
 <div class="paragraph">
-<p>Usually, Boost.Build handles implicit dependendies completely
+<p>Usually, Boost.Build handles implicit dependencies completely
 automatically. For example, for C++ files, all <code>#include</code> statements are
 found and handled. The only aspect where user help might be needed is
 implicit dependency on generated files.</p>
@@ -4029,7 +4029,7 @@ b2 toolset=gcc-mingw target-os=windows</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>For the complete list of allowed opeating system names, please see the
+<p>For the complete list of allowed operating system names, please see the
 documentation for <a href="#bbv2.builtin.features.target-os">target-os
 feature</a>.</p>
 </div>
@@ -13250,7 +13250,7 @@ and <code>WEXITSTATUS</code>.&#8201;&#8212;&#8201;<em>Markus S.</em></p>
 <a href="#_footnoteref_1">1</a>. See <a href="#bbv2.reference.features.attributes">the section called “Feature Attributes”</a>
 </div>
 <div class="footnote" id="_footnotedef_2">
-<a href="#_footnoteref_2">2</a>. Many features will be overridden, rather than added-to, in subprojects. See <a href="#bbv2.reference.features.attributes">the section called “Feature Attributes”</a> for more information
+<a href="#_footnoteref_2">2</a>. Many features will be overridden, rather than added-to, in sub-projects See <a href="#bbv2.reference.features.attributes">the section called “Feature Attributes”</a> for more information
 </div>
 <div class="footnote" id="_footnotedef_3">
 <a href="#_footnoteref_3">3</a>. see the definition of "free" in <a href="#bbv2.reference.features.attributes">the section called “Feature Attributes”</a>.
