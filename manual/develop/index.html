@@ -4834,6 +4834,38 @@ tell Boost.Build that the feature is actually used.</p>
 </ul>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.visibility"></a><code>visibility</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>global</code>, <code>protected</code>, <code>hidden</code>.</p>
+<div class="paragraph">
+<p>This feature is used to specify the default symbol visibility in compiled
+binaries. Not all values are supported on all platforms and on some
+platforms (for example, Windows) symbol visibility is not supported at all.</p>
+</div>
+<div class="paragraph">
+<p>The supported values have the following meaning:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>global</code> - a.k.a. "default" in gcc documentation. Global symbols are considered
+public, they are exported from shared libraries and can be redefined by another
+shared library or executable. This is the default value.</p>
+</li>
+<li>
+<p><code>protected</code> - a.k.a. "symbolic". Protected symbols are exported from shared
+libraries but cannot be redefined by another shared library or executable.
+This mode is not supported on some platforms, for example OS X.</p>
+</li>
+<li>
+<p><code>hidden</code> - Hidden symbols are not exported from shared libraries and cannot
+be redefined by a different shared library or executable loaded in a process.
+In this mode, public symbols have to be explicitly marked in the source code
+to be exported from shared libraries. This is the recommended mode.</p>
+</li>
+</ul>
+</div>
+</dd>
 </dl>
 </div>
 </div>
