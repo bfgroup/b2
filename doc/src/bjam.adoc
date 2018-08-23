@@ -11,12 +11,13 @@ ____
 
 Installing `B2` after building it is simply a matter of copying the
 generated executables someplace in your `PATH`. For building the
-executables there are a set of `build` bootstrap scripts to accomodate
+executables there are a set of `build` bootstrap scripts to accommodate
 particular environments. The scripts take one optional argument, the
 name of the toolset to build with. When the toolset is not given an
 attempt is made to detect an available toolset and use that. The build
 scripts accept these arguments:
 
+[source,shell]
 ----
 build [toolset]
 ----
@@ -24,6 +25,7 @@ build [toolset]
 Running the scripts without arguments will give you the best chance of
 success. On Windows platforms from a command console do:
 
+[source,bat]
 ----
 cd jam source location
 .\build.bat
@@ -31,6 +33,7 @@ cd jam source location
 
 On Unix type platforms do:
 
+[source,shell]
 ----
 cd jam source location
 sh ./build.sh
@@ -59,12 +62,12 @@ The supported toolsets, and whether they are auto-detected, are:
 |`build.bat`
 |Windows NT, 2000, and XP
 |http://www.codegear.com/downloads/free/cppbuilder[`borland`],
-http://www.borland.com/[Borland] C++Builder (BCC 5.5)
+http://www.borland.com/[Borland] {CPP}Builder (BCC 5.5)
 a|
 * Common install location: `C:\Borland\BCC55`
 * `BCC32.EXE` in `PATH`
 
-| | |http://www.comeaucomputing.com/[`como`], Comeau Computing C/C++ |
+| | |http://www.comeaucomputing.com/[`como`], Comeau Computing C/{CPP} |
 
 | | |http://gcc.gnu.org/[`gcc`], GNU GCC |
 
@@ -72,12 +75,12 @@ a|
 
 | |
 |http://www.intel.com/software/products/compilers/c60[`intel-win32`],
-Intel C++ Compiler for Windows
+Intel {CPP} Compiler for Windows
 a|
 * `ICL.EXE` in `PATH`
 
 | | |http://www.metrowerks.com/[`metrowerks`], MetroWerks CodeWarrior
-C/C++ 7.x, 8.x, 9.x
+C/{CPP} 7.x, 8.x, 9.x
 a|
 * `CWFolder` variable configured
 * `MWCC.EXE` in PATH
@@ -87,16 +90,16 @@ http://www.mingw.org/[MinGW] configuration
 a|
 * Common install location: `C:\MinGW`
 
-| | |http://msdn.microsoft.com/visualc/[`msvc`], Microsoft Visual C++
+| | |http://msdn.microsoft.com/visualc/[`msvc`], Microsoft Visual {CPP}
 6.x
 a|
 * `VCVARS32.BAT` already configured
 * `%MSVCDir%` is present in environment
 * Common install locations: `%ProgramFiles%\Microsoft Visual Studio`,
-`%ProgramFiles%\Microsoft Visual C++`
+`%ProgramFiles%\Microsoft Visual {CPP}`
 * `CL.EXE` in `PATH`
 
-| | |http://msdn.microsoft.com/visualc/[`vc7`], Microsoft Visual C++ 7.x
+| | |http://msdn.microsoft.com/visualc/[`vc7`], Microsoft Visual {CPP} 7.x
 a|
 * `VCVARS32.BAT` or `VSVARS32.BAT` already configured
 * `%VS71COMNTOOLS%` is present in environment
@@ -106,7 +109,7 @@ a|
 * `CL.EXE` in `PATH`
 
 | | |http://msdn.microsoft.com/visualc/[`vc8` and `vc9`], Microsoft
-Visual C++ 8.x and 9.x
+Visual {CPP} 8.x and 9.x
 a|
 Detection:
 
@@ -132,7 +135,7 @@ a|
 * `aCC` in `PATH`
 * `uname` is "HP-UX"
 
-| | |http://www.comeaucomputing.com/[`como`], Comeau Computing C/C++
+| | |http://www.comeaucomputing.com/[`como`], Comeau Computing C/{CPP}
 a|
 * `como` in `PATH`
 
@@ -142,18 +145,18 @@ a|
 
 | |
 |http://www.intel.com/software/products/compilers/c60l/[`intel-linux`],
-Intel C++ for Linux
+Intel {CPP} for Linux
 a|
 * `icc` in `PATH`
 * Common install locations: `/opt/intel/cc/9.0`, `/opt/intel_cc_80`,
   `/opt/intel/compiler70`, `/opt/intel/compiler60`, `/opt/intel/compiler50`
 
-| | |`kcc`, Intel KAI C++
+| | |`kcc`, Intel KAI {CPP}
 a|
 * `KCC` in `PATH`
 
 | | |http://www.codegear.com/downloads/free/cppbuilder[`kylix`],
-http://www.borland.com/[Borland] C++Builder
+http://www.borland.com/[Borland] {CPP}Builder
 a|
 * `bc++` in `PATH`
 
@@ -163,7 +166,7 @@ SGI MIPSpro C
 a|
 * `uname` is "IRIX" or "IRIX64"
 
-| | |`sunpro`, Sun Workshop 6 C++
+| | |`sunpro`, Sun Workshop 6 {CPP}
 a|
 * Standard install location: `/opt/SUNWspro`
 
@@ -171,13 +174,13 @@ a|
 a|
 * `uname` is "QNX" and `qcc` in `PATH`
 
-| | |http://www.tru64unix.compaq.com/cplus/[`true64cxx`], Compaq C++
+| | |http://www.tru64unix.compaq.com/cplus/[`true64cxx`], Compaq {CPP}
 Compiler for True64 UNIX
 a|
 * `uname` is "OSF1"
 
 | | |http://www.ibm.com/software/awdtools/vacpp/[`vacpp`], IBM VisualAge
-C++
+{CPP}
 a|
 * `xlc` in `PATH`
 
@@ -218,7 +221,7 @@ The arguments immediately after the toolset are passed directly to the
 setup script of the toolset, if available and if it needs to be invoked.
 This allows one to configure the toolset ass needed to do non-default
 builds of `b2`. For example to build a Win64 version with `vc8`. See the
-toolset descriptiona above for when particular toolsets support this.
+toolset description above for when particular toolsets support this.
 
 The arguments starting with the `--option` forms are passed to the
 `build.jam` script and are used to further customize what gets built.
@@ -293,7 +296,7 @@ The essential `b2` data entity is a target. Build targets are files to
 be updated. Source targets are the files used in updating built targets.
 Built targets and source targets are collectively referred to as file
 targets, and frequently built targets are source targets for other built
-targets. Pseudotargets are symbols representing dependencies on other
+targets. Pseudo-targets are symbols representing dependencies on other
 targets, but which are not themselves associated with any real file.
 
 A file target's identifier is generally the file's name, which can be
@@ -316,7 +319,7 @@ a rule which is called with the name of the target and the path it is
 being bound to. The signature of the rule named by `$(BINDRULE[1])`
 should match the following:
 
-[source,jam]
+[source]
 ----
 rule bind-rule ( target : path )
 ----
@@ -344,30 +347,35 @@ The `b2` statements for defining and invoking rules are as follows:
 
 Define a rule's procedure, replacing any previous definition.
 
+[source]
 ----
 rule rulename { statements }
 ----
 
 Define a rule's updating actions, replacing any previous definition.
 
+[source]
 ----
 actions [ modifiers ] rulename { commands }
 ----
 
 Invoke a rule.
 
+[source]
 ----
 rulename field1 : field2 : ... : fieldN ;
 ----
 
 Invoke a rule under the influence of target's specific variables..
 
+[source]
 ----
 on target rulename field1 : field2 : ... : fieldN ;
 ----
 
 Used as an argument, expands to the return value of the rule invoked.
 
+[source]
 ----
 [ rulename field1 : field2 : ... : fieldN ]
 [ on target rulename field1 : field2 : ... : fieldN ]
@@ -392,6 +400,7 @@ replaced by bound versions of the target names. See Binding above.
 
 Rule invocation may be indirected through a variable:
 
+[source]
 ----
 $(var) field1 : field2 : ... : fieldN ;
 
@@ -403,8 +412,7 @@ on target $(var) field1 : field2 : ... : fieldN ;
 
 The variable's value names the rule (or rules) to be invoked. A rule is
 invoked for each element in the list of `$(var)`s values. The fields
-`field1 : field2
-        : ...` are passed as arguments for each invokation. For the [
+`field1 : field2 : ...` are passed as arguments for each invocation For the [
 ... ] forms, the return value is the concatenation of the return values
 for all of the invocations.
 
@@ -437,7 +445,7 @@ You can describe the arguments accepted by a rule, and refer to them by
 name within the rule. For example, the following prints "I'm sorry,
 Dave" to the console:
 
-[source,jam]
+[source]
 ----
 rule report ( pronoun index ? : state : names + )
 {
@@ -470,6 +478,7 @@ rules.
 The actual and formal arguments are checked for inconsistencies, which
 cause `b2` to exit with an error code:
 
+[source]
 ----
 ### argument error
 # rule report ( pronoun index ?  : state  : names + )
@@ -500,7 +509,7 @@ are just utility rules.
 [[jam.language.rules.builtins.dependency_building._depends__]]
 ===== `DEPENDS`
 
-[source,jam]
+[source]
 ----
 rule DEPENDS ( targets1 * : targets2 * )
 ----
@@ -512,7 +521,7 @@ themselves rebuilt or are newer than _targets1_.
 [[jam.language.rules.builtins.dependency_building._includes__]]
 ===== `INCLUDES`
 
-[source,jam]
+[source]
 ----
 rule INCLUDES ( targets1 * : targets2 * )
 ----
@@ -524,7 +533,7 @@ object built from the source file depends both on the original and
 included source file, but the two sources files don't depend on each
 other. For example:
 
-[source,jam]
+[source]
 ----
 DEPENDS foo.o : foo.c ;
 INCLUDES foo.c : foo.h ;
@@ -546,7 +555,7 @@ be changed by invoking the following rules:
 [[jam.language.rules.builtins.modifying_binding._always__]]
 ===== `ALWAYS`
 
-[source,jam]
+[source]
 ----
 rule ALWAYS ( targets * )
 ----
@@ -561,7 +570,7 @@ be updated as well.
 [[jam.language.rules.builtins.modifying_binding._leaves__]]
 ===== `LEAVES`
 
-[source,jam]
+[source]
 ----
 rule LEAVES ( targets * )
 ----
@@ -575,7 +584,7 @@ updated only if original source files change.
 [[jam.language.rules.builtins.modifying_binding._nocare__]]
 ===== `NOCARE`
 
-[source,jam]
+[source]
 ----
 rule NOCARE ( targets * )
 ----
@@ -594,22 +603,22 @@ nonzero return code, dependent targets will still be built.
 [[jam.language.rules.builtins.modifying_binding._notfile__]]
 ===== `NOTFILE`
 
-[source,jam]
+[source]
 ----
 rule NOTFILE ( targets * )
 ----
 
-Marks _targets_ as pseudotargets and not real files. No timestamp is
+Marks _targets_ as pseudo-targets and not real files. No timestamp is
 checked, and so the actions on such a target are only executed if the
 target's dependencies are updated, or if the target is also marked with
-`ALWAYS`. The default `b2` target `all` is a pseudotarget. In
+`ALWAYS`. The default `b2` target `all` is a pseudo-target In
 `Jambase`, `NOTFILE` is used to define several addition convenient
-pseudotargets.
+pseudo-targets
 
 [[jam.language.rules.builtins.modifying_binding._noupdate__]]
 ===== `NOUPDATE`
 
-[source,jam]
+[source]
 ----
 rule NOUPDATE ( targets * )
 ----
@@ -624,7 +633,7 @@ directory exists, not when it has last been updated.
 [[jam.language.rules.builtins.modifying_binding._temporary__]]
 ===== `TEMPORARY`
 
-[source,jam]
+[source]
 ----
 rule TEMPORARY ( targets * )
 ----
@@ -639,7 +648,7 @@ archived.
 [[jam.language.rules.builtins.modifying_binding._fail_expected__]]
 ===== `FAIL_EXPECTED`
 
-[source,jam]
+[source]
 ----
 rule FAIL_EXPECTED ( targets * )
 ----
@@ -655,7 +664,7 @@ succeeds, dependent targets are skipped.
 [[jam.language.rules.builtins.modifying_binding._rmold__]]
 ===== `RMOLD`
 
-[source,jam]
+[source]
 ----
 rule RMOLD ( targets * )
 ----
@@ -668,7 +677,7 @@ arguments to be removed if any of their dependencies fail to build.
 [[jam.language.rules.builtins.modifying_binding._isfile__]]
 ===== `ISFILE`
 
-[source,jam]
+[source]
 ----
 rule ISFILE ( targets * )
 ----
@@ -690,7 +699,7 @@ parsing phase.
 [[jam.language.rules.builtins.utility._echo__]]
 ===== `ECHO`
 
-[source,jam]
+[source]
 ----
 rule ECHO ( args * )
 ----
@@ -700,7 +709,7 @@ Blurts out the message _args_ to stdout.
 [[jam.language.rules.builtins.utility._exit__]]
 ===== `EXIT`
 
-[source,jam]
+[source]
 ----
 rule EXIT ( message * : result-value ? )
 ----
@@ -716,9 +725,9 @@ rules and not part of the language, like `include`.
 [[jam.language.rules.builtins.utility._glob__]]
 ===== `GLOB`
 
-The `GLOB` rule does filename globbing.
+The `GLOB` rule does filename globing
 
-[source,jam]
+[source]
 ----
 rule GLOB ( directories * : patterns * : downcase-opt ? )
 ----
@@ -735,14 +744,14 @@ If _downcase-opt_ is supplied, filenames are converted to all-lowercase
 before matching against the pattern; you can use this to do
 case-insensitive matching using lowercase patterns. The paths returned
 will still have mixed case if the OS supplies them. On Windows NT and
-Cygwin, and OpenVMS, filenames are always downcased before matching.
+Cygwin, and OpenVMS, filenames are always down-cased before matching.
 
 [[jam.language.rules.builtins.utility._glob_archive__]]
 ===== `GLOB_ARCHIVE`
 
-The `GLOB_ARCHIVE` rule does name globbing of object archive members.
+The `GLOB_ARCHIVE` rule does name globing of object archive members.
 
-[source,jam]
+[source]
 ----
 rule GLOB_ARCHIVE ( archives * : member-patterns * : downcase-opt ? : symbol-patterns ? )
 ----
@@ -761,7 +770,7 @@ If _downcase-opt_ is supplied, the member names are converted to
 all-lowercase before matching against the pattern; you can use this to
 do case-insensitive matching using lowercase patterns. The paths
 returned will still have mixed case if the OS supplies them. On Windows
-NT, Cygwin, and OpenVMS, filenames are always downcased before matching.
+NT, Cygwin, and OpenVMS, filenames are always down-cased before matching.
 
 Additionally, members can be matched with symbol/function patterns on
 supported platforms (currently, OpenVMS only). In this case, members
@@ -775,7 +784,7 @@ specified.
 
 The `MATCH` rule does pattern matching.
 
-[source,jam]
+[source]
 ----
 rule MATCH ( regexps + : list * )
 ----
@@ -787,7 +796,7 @@ for each string in _list_, and for each regular expression in _regexps_.
 [[jam.language.rules.builtins.utility._backtrace__]]
 ===== `BACKTRACE`
 
-[source,jam]
+[source]
 ----
 rule BACKTRACE ( )
 ----
@@ -799,7 +808,7 @@ to generate useful diagnostic messages from Jam rules.
 [[jam.language.rules.builtins.utility._update__]]
 ===== `UPDATE`
 
-[source,jam]
+[source]
 ----
 rule UPDATE ( targets * )
 ----
@@ -818,7 +827,7 @@ updated. To support changing of the update list in more useful ways, the
 rule also returns the targets previously in the update list. This makes
 it possible to add targets as such:
 
-[source,jam]
+[source]
 ----
 local previous-updates = [ UPDATE ] ;
 UPDATE $(previous-updates) a-new-target ;
@@ -827,7 +836,7 @@ UPDATE $(previous-updates) a-new-target ;
 [[jam.language.rules.builtins.utility._w32_getreg__]]
 ===== `W32_GETREG`
 
-[source,jam]
+[source]
 ----
 rule W32_GETREG ( path : data ? )
 ----
@@ -854,7 +863,7 @@ type and other unsupported types will be put into a string without
 modification. If it can't receive the value of the data, it just return
 an empty list. For example,
 
-[source,jam]
+[source]
 ----
 local PSDK-location =
   [ W32_GETREG HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\MicrosoftSDK\\Directories : "Install Dir" ] ;
@@ -863,7 +872,7 @@ local PSDK-location =
 [[jam.language.rules.builtins.utility._w32_getregnames__]]
 ===== `W32_GETREGNAMES`
 
-[source,jam]
+[source]
 ----
 rule W32_GETREGNAMES ( path : result-type )
 ----
@@ -876,7 +885,7 @@ format and constraints, please see `W32_GETREG`.
 Depending on '_result-type_', the rule returns one of the following:
 
 `subkeys`::
-  Names of all direct subkeys of '_path_'.
+  Names of all direct sub-keys of '_path_'.
 `values`::
   Names of values contained in registry key given by '_path_'. The
   "default" value of the key appears in the returned list only if its
@@ -885,7 +894,7 @@ Depending on '_result-type_', the rule returns one of the following:
 If '_result-type_' is not recognized, or requested data cannot be
 retrieved, the rule returns an empty list. Example:
 
-[source,jam]
+[source]
 ----
 local key = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths" ;
 local subkeys = [ W32_GETREGNAMES "$(key)" : subkeys ] ;
@@ -903,7 +912,7 @@ for local subkey in $(subkeys)
 [[jam.language.rules.builtins.utility._shell__]]
 ===== `SHELL`
 
-[source,jam]
+[source]
 ----
 rule SHELL ( command : * )
 ----
@@ -932,18 +941,18 @@ case.
 [[jam.language.rules.builtins.utility._md5__]]
 ===== `MD5`
 
-[source,jam]
+[source]
 ----
 rule MD5 ( string )
 ----
 
-`MD5` computes the MD5 hash of the string passed as paramater and
+`MD5` computes the MD5 hash of the string passed as parameter and
 returns it.
 
 [[jam.language.rules.builtins.utility._split_by_characters__]]
 ===== `SPLIT_BY_CHARACTERS`
 
-[source,jam]
+[source]
 ----
 rule SPLIT_BY_CHARACTERS ( string : delimiters )
 ----
@@ -954,7 +963,7 @@ character present in _delimiters_ and returns the resulting list.
 [[jam.language.rules.builtins.utility._precious__]]
 ===== `PRECIOUS`
 
-[source,jam]
+[source]
 ----
 rule PRECIOUS ( targets * )
 ----
@@ -966,7 +975,7 @@ fails.
 [[jam.language.rules.builtins.utility._pad__]]
 ===== `PAD`
 
-[source,jam]
+[source]
 ----
 rule PAD ( string : width )
 ----
@@ -978,7 +987,7 @@ _string_ unmodified.
 [[jam.language.rules.builtins.utility._file_open__]]
 ===== `FILE_OPEN`
 
-[source,jam]
+[source]
 ----
 rule FILE_OPEN ( filename : mode )
 ----
@@ -991,13 +1000,13 @@ descriptor number.
 [[jam.language.rules.builtins.utility._update_now__]]
 ===== `UPDATE_NOW`
 
-[source,jam]
+[source]
 ----
 rule UPDATE_NOW ( targets * : log ? : ignore-minus-n ? )
 ----
 
 The `UPDATE_NOW` caused the specified targets to be updated immediately.
-If update was successfull, non-empty string is returned. The _log_
+If update was successful, non-empty string is returned. The _log_
 parameter, if present, specifies a descriptor of a file where all output
 from building is redirected. If the _ignore-minus-n_ parameter is
 specified, the targets are updated even if the `-n` parameter is
@@ -1008,6 +1017,7 @@ specified on the command line.
 
 `B2` has several simple flow-of-control statements:
 
+[source]
 ----
 for var in list { statements }
 ----
@@ -1015,6 +1025,7 @@ for var in list { statements }
 Executes _statements_ for each element in _list_, setting the variable
 _var_ to the element value.
 
+[source]
 ----
 if cond { statements }
 [ else { statements } ]
@@ -1050,6 +1061,7 @@ Does the obvious; the `else` clause is optional. _cond_ is built of:
 `( cond )`::
   precedence grouping
 
+[source]
 ----
 include file ;
 ----
@@ -1063,6 +1075,7 @@ phase. The primary input file and all the included file(s) are treated
 as a single file; that is, `b2` infers no scope boundaries from included
 files.
 
+[source]
 ----
 local vars [ = values ] ;
 ----
@@ -1076,6 +1089,7 @@ of a block (in which case the previous value is restored when the input
 ends). The _vars_ are initialized to _values_ if present, or left
 uninitialized otherwise.
 
+[source]
 ----
 return values ;
 ----
@@ -1083,6 +1097,7 @@ return values ;
 Within a rule body, the return statement sets the return value for an
 invocation of the rule and returns to the caller.
 
+[source]
 ----
 switch value
 {
@@ -1108,6 +1123,7 @@ values may include the following wildcards:
 `\x`::
   match _x_ (escapes the other wildcards)
 
+[source]
 ----
 while cond { statements }
 ----
@@ -1115,12 +1131,14 @@ while cond { statements }
 Repeatedly execute _statements_ while _cond_ remains true upon entry.
 (See the description of _cond_ expression syntax under if, above).
 
+[source]
 ----
 break ;
 ----
 
 Immediately exits the nearest enclosing while or for loop.
 
+[source]
 ----
 continue ;
 ----
@@ -1142,6 +1160,7 @@ specific target.
 
 A variable is defined with:
 
+[source]
 ----
 variable = elements ;
 variable += elements ;
@@ -1331,7 +1350,7 @@ Prepend _root_ to the whole file name, if not already rooted.
 Assign _value_ to the variable if it is unset.
 
 `:J=joinval`::
-Concatentate list elements into single element, separated by
+Concatenate list elements into single element, separated by
 _joinval_.
 
 On VMS, `$(var:P)` is the parent directory of `$(var:D)`.
@@ -1342,7 +1361,7 @@ On VMS, `$(var:P)` is the parent directory of `$(var:D)`.
 Boost Jam allows you to declare a local for loop control variable right
 in the loop:
 
-[source,jam]
+[source]
 ----
 x = 1 2 3 ;
 y = 4 5 6 ;
@@ -1482,7 +1501,7 @@ platform:
 `JAMDATE`::
   Time and date at `b2` start-up as an ISO-8601 UTC value.
 `JAMUNAME`::
-  Ouput of uname(1) command (Unix only)
+  Output of uname(1) command (Unix only)
 `JAMVERSION`::
   `b2` version, currently "3.1.19"
 `JAM_VERSION`::
@@ -1498,7 +1517,7 @@ passing the action block as an argument to the shell. The invocation of
 the shell can be controlled by `$(JAMSHELL)`. The default on Unix is,
 for example:
 
-[source,jam]
+[source]
 ----
 JAMSHELL = /bin/sh -c % ;
 ----
@@ -1547,14 +1566,14 @@ rule for `b2` to call *after* an action completes for a target. They
 both give diagnostic information about the action that completed. For
 `+__TIMING_RULE__+` the rule is called as:
 
-[source,jam]
+[source]
 ----
 rule timing-rule ( args * : target : start end user system )
 ----
 
 And `+__ACTION_RULE__+` is called as:
 
-[source,jam]
+[source]
 ----
 rule action-rule ( args * : target : command status start end user system : output ? )
 ----
@@ -1601,6 +1620,7 @@ to write Jam rules which provide a more elegant module interface.
 [[jam.language.modules.declaration]]
 ==== Declaration
 
+[source]
 ----
 module expression { ... }
 ----
@@ -1611,7 +1631,7 @@ and in the namespace of the global module as _module-name_._rule-name_,
 so within a module, other rules in that module may always be invoked
 without qualification:
 
-[source,jam]
+[source]
 ----
 module my_module
 {
@@ -1626,7 +1646,7 @@ When an invoked rule is not found in the current module's namespace, it
 is looked up in the namespace of the global module, so qualified calls
 work across modules:
 
-[source,jam]
+[source]
 ----
 module your_module
 {
@@ -1642,7 +1662,7 @@ execution passes from module A to module B, all the variable bindings
 from A become unavailable, and are replaced by the bindings that belong
 to B. This applies equally to local and global variables:
 
-[source,jam]
+[source]
 ----
 module A
 {
@@ -1671,7 +1691,7 @@ module B
 The only way to access another module's variables is by entering that
 module:
 
-[source,jam]
+[source]
 ----
 rule peek ( module-name ? : variables + )
 {
@@ -1689,6 +1709,7 @@ explains the use of `$(>)` in the peek rule above.
 [[jam.language.modules.local_rules]]
 ==== Local Rules
 
+[source]
 ----
 local rule rulename...
 ----
@@ -1697,6 +1718,7 @@ The rule is declared locally to the current module. It is not entered in
 the global module with qualification, and its name will not appear in
 the result of:
 
+[source]
 ----
 [ RULENAMES module-name ]
 ----
@@ -1704,7 +1726,7 @@ the result of:
 [[jam.language.modules.the__rulenames__rule]]
 ==== The `RULENAMES` Rule
 
-[source,jam]
+[source]
 ----
 rule RULENAMES ( module ? )
 ----
@@ -1716,7 +1738,7 @@ module are returned.
 [[jam.language.modules.the__varnames__rule]]
 ==== The `VARNAMES` Rule
 
-[source,jam]
+[source]
 ----
 rule VARNAMES ( module ? )
 ----
@@ -1733,7 +1755,7 @@ have not returned at the time of the `VARNAMES` invocation.
 
 `IMPORT` allows rule name aliasing across modules:
 
-[source,jam]
+[source]
 ----
 rule IMPORT ( source_module ? : source_rules *
             : target_module ? : target_rules * )
@@ -1748,7 +1770,7 @@ _target_module_. If _source_rules_ contains a name which doesn't
 correspond to a rule in _source_module_, or if it contains a different
 number of items than _target_rules_, an error is issued. For example,
 
-[source,jam]
+[source]
 ----
 # import m1.rule1 into m2 as local rule m1-rule1.
 IMPORT m1 : rule1 : m2 : m1-rule1 ;
@@ -1761,7 +1783,7 @@ IMPORT m1 : [ RULENAMES m1 ] : m2 : [ RULENAMES m1 ] ;
 
 `EXPORT` allows rule name aliasing across modules:
 
-[source,jam]
+[source]
 ----
 rule EXPORT ( module ? : rules * )
 ----
@@ -1770,7 +1792,7 @@ The `EXPORT` rule marks _rules_ from the `source_module` as non-local
 (and thus exportable). If an element of _rules_ does not name a rule in
 _module_, an error is issued. For example,
 
-[source,jam]
+[source]
 ----
 module X {
   local rule r { ECHO X.r ; }
@@ -1783,7 +1805,7 @@ IMPORT X : r : : r ; # OK.
 [[jam.language.modules.the__caller_module__rule]]
 ==== The `CALLER_MODULE` Rule
 
-[source,jam]
+[source]
 ----
 rule CALLER_MODULE ( levels ? )
 ----
@@ -1795,7 +1817,7 @@ module). If the scope belongs to the global module, or if no such module
 exists, returns the empty list. For example, the following prints "\{Y}
 \{X}":
 
-[source,jam]
+[source]
 ----
 module X {
     rule get-caller { return [ CALLER_MODULE ] ; }
@@ -1813,7 +1835,7 @@ ECHO {$(callers)} ;
 [[jam.language.modules.the__delete_module__rule]]
 ==== The `DELETE_MODULE` Rule
 
-[source,jam]
+[source]
 ----
 rule DELETE_MODULE ( module ? )
 ----
@@ -1974,7 +1996,7 @@ should probably be titled "Modifying Update Determination".
 * "Grist" is just a string prefix of the form <__characters__>. It is
 used in Jam to create unique target names based on simpler names. For
 example, the file name `test.exe` may be used by targets in separate
-subprojects, or for the debug and release variants of the "same"
+sub-projects, or for the debug and release variants of the "same"
 abstract target. Each distinct target bound to a file called "test.exe"
 has its own unique grist prefix. The Boost build system also takes full
 advantage of Jam's ability to divide strings on grist boundaries,
@@ -1990,7 +2012,7 @@ target, regardless of target file location (as allowed by setting
 ALL_LOCATE_TARGET).
 * When grist is extracted from a name with $(var:G), the result includes
 the leading and trailing angle brackets. When grist is added to a name
-with $(var:G=expr), existing grist is first stripped. Then, if expr is
+with `$(var:G=expr)`, existing grist is first stripped. Then, if `expr` is
 non-empty, leading <s and trailing >s are added if necessary to form an
 expression of the form <expr2>; <expr2> is then prepended.
 * When Jam is invoked it imports all environment variable settings into
@@ -2037,14 +2059,14 @@ and UPDATE_NOW. -- _Vladimir P._
 * Ensure all file descriptors are closed when executing actions
 complete on *nix. -- _Noel B._
 * Fix warnings, patch from Mateusz Loskot. -- _Vladimir P._
-* Add KEEP_GOING var to programatically override the '-q' option. -- _Vladimir P._
+* Add KEEP_GOING var to programmatically override the '-q' option. -- _Vladimir P._
 * Add more parameters, up to 19 from 9, to rule invocations. Patch
 from Jonathan Biggar. -- _Vladimir P._
 * Print failed command output even if the normally quite '-d0' option.
 -- _Vladimir P._
 * Build of bjam with vc10, aka Visual Studio 2010. -- _Vladimir P._
 * More macros for detection of OSPLAT, patch from John W. Bito. -- _Vladimir P._
-* Add PARALLELISM var to programatically override the '-j' option. -- _Vladimir P._
+* Add PARALLELISM var to programmatically override the '-j' option. -- _Vladimir P._
 * Tweak doc building to allow for PDF generation of docs. -- _John M._
 
 === Version 3.1.17
@@ -2059,7 +2081,7 @@ to fix handling of quoted arguments, options arguments, and arguments
 with "=". -- _Rene R._
 * Try to work around at least one compiler bug with GCC and variable
 aliasing that causes crashes with hashing file cache entries. -- _Rene R._
-* Add -Wc,-fno-strict-aliasing for QCC/QNX to avoid the same aliasing
+* Add `-Wc,-fno-strict-aliasing` for QCC/QNX to avoid the same aliasing
 crashes as in the general GCC 4.x series (thanks to Niklas Angare for
 the fix). -- _Rene R._
 * On Windows let the child bjam commands inherit stdin, as some
@@ -2084,10 +2106,10 @@ Now it reports the correct error location information when
 encountering an unexpected EOF. It now also reports where an invalid
 lexical token being read started instead of finished which makes it
 much easier to find errors like unclosed quotes or curly braces. -- _Jurko G._
-* Removed the -xarch=generic architecture from build.jam as this
+* Removed the `-xarch=generic` architecture from `build.jam` as this
 option is unknown so the Sun compilers on Linux. -- _Noel B._
-* Fixed a bug with T_FATE_ISTMP getting reported as T_FATE_ISTMP &
-T_FATE_NEEDTMP at the same time due to a missing break in a switch
+* Fixed a bug with `T_FATE_ISTMP` getting reported as `T_FATE_ISTMP` &
+`T_FATE_NEEDTMP` at the same time due to a missing break in a switch
 statement. -- _Jurko G._
 * Fixed a Boost Jam bug causing it to sometimes trigger actions
 depending on targets that have not been built yet. -- _Jurko G._
@@ -2107,7 +2129,7 @@ output to make that output more promptly displayed to the user. -- _Jurko G._
 * Made Boost Jam tests quote their bjam executable name when calling
 it allowing those executables to contain spaces in their name and/or
 path. -- _Jurko G._
-* Change execunix.c to always use fork() instead of vfork() on the
+* Change `execunix.c` to always use `fork()` instead of `vfork()` on the
 Mac. This works around known issues with bjam on PPC under Tiger and a
 problem reported by Rene with bjam on x86 under Leopard. -- _Noel B._
 * Corrected a bug in Boost Jam's base Jambase script causing it to
@@ -2115,21 +2137,21 @@ trim the error message displayed when its boost-build rule gets called
 multiple times. -- _Jurko G._
 * When importing from Python into an module with empty string as name,
 import into root module. -- _Vladimir P._
-* Patch for the NORMALIZE_PATH builtin Boost Jam rule as well as an
+* Patch for the `NORMALIZE_PATH` builtin Boost Jam rule as well as an
 appropriate update for the path.jam Boost Build module where that rule
 was being used to implement path join and related operations. -- _Jurko G._
 * Fixed a bug causing Boost Jam not to handle target file names
 specified as both short and long file names correctly. -- _Jurko G._
 * Relaxed test, ignoring case of drive letter. -- _Roland S._
 * Implemented a patch contributed by Igor Nazarenko reimplementing the
-list_sort() function to use a C qsort() function instead of a
-hand-crafted merge-sort algorithm. Makes some list sortings (e.g.
+`list_sort()` function to use a C `qsort()` function instead of a
+hand-crafted merge-sort algorithm. Makes some list sorts (e.g.
 1,2,1,2,1,2,1,2, ...) extremely faster, in turn significantly speeding
 up some project builds. -- _Jurko G._
 * Fixed a bug with bjam not handling the '' root Windows path
 correctly without its drive letter being specified. -- _Jurko G._
 * Solved the problem with child process returning the value 259
-(Windows constant STILL_ACTIVE) causing bjam never to detect that it
+(Windows constant `STILL_ACTIVE`) causing bjam never to detect that it
 exited and therefore keep running in an endless loop. -- _Jurko G._
 * Solved the problem with bjam going into an active wait state,
 hogging up processor resources, when waiting for one of its child
@@ -2139,7 +2161,7 @@ slots are being used. -- _Jurko G._
 termination detection and the child process's output
 generation/termination which could have caused bjam not to collect the
 terminated process's final output. -- _Jurko G._
-* Change from vfork to fork for executing actions on Darwin to improve
+* Change from `vfork` to `fork` for executing actions on Darwin to improve
 stability. -- _Noel B._
 * Code reformatting and cleanups. -- _Jurko G._
 * Implement ISFILE built-in. -- _Vladimir P._
@@ -2174,9 +2196,9 @@ GCC-4.2 crash problems. -- _Boris G._
 * Increased support for Python integration. -- _Vladimir P._, _Daniel W._
 * Allow specifying options with quotes, i.e. `--with-python=xyz`, to work
 around the CMD shell using `=` as an argument separator. -- _Rene R._
-* Add values of variables specified with -s to .EVNRION module, so
+* Add values of variables specified with -s to `.ENVIRON` module, so
 that we can override environment on command line. -- _Vladimir P._
-* Make NORMALIZE_PATH convert \ to /. -- _Vladimir P._
+* Make `NORMALIZE_PATH` convert `\` to `/`. -- _Vladimir P._
 
 === Version 3.1.15
 
@@ -2192,11 +2214,11 @@ Unix side of stuff.
 jumbled output when using parallel execution with -j option. This is
 implemented for Unix variants, and Windows (Win32/NT). -- _Rene R._, _Noel B._
 * Add "sun" as alias to Sun Workshop compiler tools. -- _Rene R._
-* Set MAXLINE in jam.h to 23k bytes for AIX. The piecemeal archive
-action was broken with the default MAXLINE of 102400. Because the AIX
+* Set `MAXLINE` in jam.h to 23k bytes for AIX. The piecemeal archive
+action was broken with the default `MAXLINE` of 102400. Because the AIX
 shell uses some of the 24k default buffer size for its own use, I
 reduced it to 23k. -- _Noel B._
-* Make use of output dir options of msvc to not polute src dir with
+* Make use of output dir options of msvc to not pollute src dir with
 compiled files. -- _Rene R._
 * A small fix, so -d+2 will always show the "real" commands being
 executed instead of casually the name of a temporary batch file. -- _Roland S._
@@ -2206,7 +2228,7 @@ executed instead of casually the name of a temporary batch file. -- _Roland S._
 be broken as it has been for a long time now because of the @ file
 feature. -- _Rene R._
 * Update GC support to work with Boehm GC 7.0. -- _Rene R._
-* Revert the BOOST_BUILD_PATH change, since the directory passed to
+* Revert the `BOOST_BUILD_PATH` change, since the directory passed to
 boost-build should be first in searched paths, else project local
 build system will not be picked correctly. The order had been changed
 to allow searching of alternate user-config.jam files from boost
@@ -2216,8 +2238,8 @@ similar. -- _Roland S._
 * Implement @() expansion during parse phase. -- _Rene R._
 * Define OSPLAT var unconditionally, and more generically, when
 possible. -- _Rene R._
-* Fix undeclared INT_MAX on some platforms, i.e. Linux. -- _Rene R._
-* Modified execunix.c to add support for terminating processes that
+* Fix undeclared `INT_MAX` on some platforms, i.e. Linux. -- _Rene R._
+* Modified `execunix.c` to add support for terminating processes that
 consume too much cpu or that hang and fail to consume cpu at all. This
 in support of the bjam -lx option. -- _Noel B._
 * Add internal dependencies for multi-file generating actions to
@@ -2231,5 +2253,5 @@ unix. -- _Rene R._
 instead of erroring out. -- _Rene R._
 * Various fixes to compile on SGI/Irix. -- _Noel B._
 * Add output for when actions timeout with -lN option. -- _Rene R._, _Noel B._
-* Add needed include (according to XOPEN) for definition of WIFEXITED
-and WEXITSTATUS. -- _Markus S._
+* Add needed include (according to XOPEN) for definition of `WIFEXITED`
+and `WEXITSTATUS`. -- _Markus S._

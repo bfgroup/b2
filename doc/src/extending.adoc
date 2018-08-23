@@ -4,10 +4,10 @@
 [[bbv2.extender.intro]]
 == Introduction
 
-This section explains how to extend Boost.Build to accomodate your local
+This section explains how to extend Boost.Build to accommodate your local
 requirements -- primarily to add support for non-standard tools you
-have. Before we start, be sure you have read and understoon the concept
-of metatarget, link:#bbv2.overview.concepts[???], which is critical to
+have. Before we start, be sure you have read and understood the concept
+of metatarget, <<bbv2.overview.concepts>>, which is critical to
 understanding the remaining material.
 
 The current version of Boost.Build has three levels of targets, listed
@@ -53,7 +53,7 @@ instance of link:#bbv2.reference.class.property-set[property-set])
 * As subsequent elements -- created concrete targets ( instances of the
 `virtual-target` class.)
 
-It's possible to lookup a metataget by target-id using the
+It's possible to lookup a metatarget by target-id using the
 `targets.resolve-reference` function, and the
 `targets.generate-from-reference` function can both lookup and generate
 a metatarget.
@@ -180,8 +180,8 @@ derived classes for custom scenarios.
 [[bbv2.extender.example]]
 == Example: 1-to-1 generator
 
-Say you're writing an application that generates C++ code. If you ever
-did this, you know that it's not nice. Embedding large portions of C++
+Say you're writing an application that generates {CPP} code. If you ever
+did this, you know that it's not nice. Embedding large portions of {CPP}
 code in string literals is very awkward. A much better solution is:
 
 1.  Write the template of the code to be generated, leaving placeholders
@@ -191,7 +191,7 @@ with appropriate text.
 3.  Write the result.
 
 It's quite easy to achieve. You write special verbatim files that are
-just C++, except that the very first line of the file contains the name
+just {CPP}, except that the very first line of the file contains the name
 of a variable that should be generated. A simple tool is created that
 takes a verbatim file and creates a cpp file with a single `char*`
 variable whose name is taken from the first line of the verbatim file
@@ -216,7 +216,7 @@ parameter is the suffix for files of this type. So, if Boost.Build sees
 `VERBATIM`.
 
 Next, you tell Boost.Build that the verbatim files can be transformed
-into C++ files in one build step. A generator is a template for a build
+into {CPP} files in one build step. A generator is a template for a build
 step that transforms targets of one type (or set of types) into another.
 Our generator will be called `verbatim.inline-file`; it transforms
 `VERBATIM` files into `CPP` files:
@@ -247,8 +247,8 @@ possible to write the following in your Jamfile:
 exe codegen : codegen.cpp class_template.verbatim usage.verbatim ;
 ----
 
-The listed verbatim files will be automatically converted into C++
-source files, compiled and then linked to the codegen executable.
+The listed verbatim files will be automatically converted into {CPP}
+source files, compiled and then linked to the `codegen` executable.
 
 In subsequent sections, we will extend this example, and review all the
 mechanisms in detail. The complete code is available in the
@@ -300,7 +300,7 @@ particular generators and suffix. Typically, you'll change the new type
 in some way. For example, using `type.set-generated-target-suffix` you
 can set the suffix for the new type. Or you can write a special
 generator for the new type. For example, it can generate additional
-metainformation for the plugin. In either way, the `PLUGIN` type can be
+meta-information for the plugin. In either way, the `PLUGIN` type can be
 used whenever `SHARED_LIB` can. For example, you can directly link
 plugins to an application.
 
@@ -370,7 +370,7 @@ created. That object has specific types of targets that it accepts and
 produces. Using that information, Boost.Build is able to automatically
 invoke the generator. For example, if you declare a generator that takes
 a target of the type `D` and produces a target of the type `OBJ`, when
-placing a file with extention `.d` in a list of sources will cause
+placing a file with extension `.d` in a list of sources will cause
 Boost.Build to invoke your generator, and then to link the resulting
 object file into an application. (Of course, this requires that you
 specify that the `.d` extension corresponds to the `D` type.)
@@ -421,7 +421,7 @@ linker.
 
 You should also know about two specific functions for registering
 generators: `generators.register-c-compiler` and
-`generators.register-linker`. The first sets up header dependecy
+`generators.register-linker`. The first sets up header dependency
 scanning for C files, and the seconds handles various complexities like
 searched libraries. For that reason, you should always use those
 functions when adding support for compilers and linkers.
@@ -453,7 +453,7 @@ generators.register
 
 This generator will work exactly like the `verbatim.inline-file`
 generator we've defined above, but it's possible to customize the
-behaviour by overriding methods of the `generator` class.
+behavior by overriding methods of the `generator` class.
 
 There are two methods of interest. The `run` method is responsible for
 the overall process - it takes a number of source targets, converts them
@@ -497,11 +497,11 @@ all targets the executable depends on, and we further find files that
 are not produced from anything. The found targets are added to the
 sources.
 
-The `run` method can be overriden to completely customize the way the
+The `run` method can be overridden to completely customize the way the
 generator works. In particular, the conversion of sources to the desired
 types can be completely customized. Here's another real example. Tests
 for the Boost Python library usually consist of two parts: a Python
-program and a C++ file. The C++ file is compiled to Python extension
+program and a {CPP} file. The {CPP} file is compiled to Python extension
 that is loaded by the Python program. But in the likely case that both
 files have the same name, the created Python extension must be renamed.
 Otherwise, the Python program will import itself, not the extension.
@@ -549,9 +549,9 @@ rule run ( project name ? : property-set : sources * )
 }
 ----
 
-First, we separate all source into python files, libraries and C++
-sources. For each C++ source we create a separate Python extension by
-calling `generators.construct` and passing the C++ source and the
+First, we separate all source into python files, libraries and {CPP}
+sources. For each {CPP} source we create a separate Python extension by
+calling `generators.construct` and passing the {CPP} source and the
 libraries. At this point, we also change the extension's name, if
 necessary.
 
@@ -580,7 +580,7 @@ actions inline-file
 ----
 
 We first define a new feature. Then, the `flags` invocation says that
-whenever verbatin.inline-file action is run, the value of the
+whenever verbatim.inline-file action is run, the value of the
 `verbatim-options` feature will be added to the `OPTIONS` variable, and
 can be used inside the action body. You'd need to consult online help
 (--help) to find all the features of the `toolset.flags` rule.
@@ -592,16 +592,16 @@ designing features.
 Most features should have a fixed set of values that is portable (tool
 neutral) across the class of tools they are designed to work with. The
 user does not have to adjust the values for a exact tool. For example,
-`<optimization>speed` has the same meaning for all C++ compilers and the
+`<optimization>speed` has the same meaning for all {CPP} compilers and the
 user does not have to worry about the exact options passed to the
 compiler's command line.
 
 Besides such portable features there are special 'raw' features that
 allow the user to pass any value to the command line parameters for a
 particular tool, if so desired. For example, the `<cxxflags>` feature
-allows you to pass any command line options to a C++ compiler. The
+allows you to pass any command line options to a {CPP} compiler. The
 `<include>` feature allows you to pass any string preceded by `-I` and
-the interpretation is tool-specific. (See link:#bbv2.faq.external[???]
+the interpretation is tool-specific. (See <<bbv2.faq.external>>
 for an example of very smart usage of that feature). Of course one
 should always strive to use portable features, but these are still be
 provided as a backdoor just to make sure Boost.Build does not take away
@@ -619,15 +619,15 @@ options.
 command-line flags in your Jamfile, and it will be more likely to work
 with other tools.
 
-*Steps for adding a feauture*
+*Steps for adding a feature*
 
 Adding a feature requires three steps:
 
 1.  Declaring a feature. For that, the "feature.feature" rule is used.
 You have to decide on the set of
 link:#bbv2.reference.features.attributes[feature attributes]:
-* if you want a feature value set for one target to automaticaly
-propagate to its dependant targets then make it “propagated”.
+* if you want a feature value set for one target to automatically
+propagate to its dependent targets then make it “propagated”.
 * if a feature does not have a fixed list of values, it must be “free.”
 For example, the `include` feature is a free feature.
 * if a feature is used to refer to a path relative to the Jamfile, it
@@ -685,7 +685,7 @@ internal target name in `DEF_FILE` to a corresponding filename in the
 `link` action. Without it the expansion of `$(DEF_FILE)` would be a
 strange symbol that is not likely to make sense for the linker.
 +
-We are almost done, except for adding the follwing code to `msvc.jam`:
+We are almost done, except for adding the following code to `msvc.jam`:
 +
 ----
 rule link
@@ -743,11 +743,12 @@ A main target rule (e.g “link:#bbv2.tasks.programs[exe]” Or
 quite likely that you'll want to declare your own and there are two ways
 to do that.
 
-The first way applies when your target rule should just produce a target
+[[bbv2.extending.rules.main-type]]The first way applies when your target rule
+should just produce a target
 of specific type. In that case, a rule is already defined for you! When
 you define a new type, Boost.Build automatically defines a corresponding
 rule. The name of the rule is obtained from the name of the type, by
-downcasing all letters and replacing underscores with dashes. For
+down-casing all letters and replacing underscores with dashes. For
 example, if you create a module `obfuscate.jam` containing:
 
 [source,jam]
@@ -836,7 +837,7 @@ module several times. You need to check for this and decide what to do.
 Typically, unless you support several versions of a tool, duplicate
 initialization is a user error. If the tool's version can be specified
 during initialization, make sure the version is either always specified,
-or never specified (in which case the tool is initialied only once). For
+or never specified (in which case the tool is initialized only once). For
 example, if you allow:
 +
 ----

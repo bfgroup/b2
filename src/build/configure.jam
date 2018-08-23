@@ -249,6 +249,15 @@ rule try-find-build ( ps : what : * )
 
     maybe-force-rebuild $($(args)[2-]) ;
 
+    # Make sure that the targets are always actualized,
+    # even if the result is cached.  This is needed to
+    # allow clean-all to find them and also to avoid
+    # unintentional behavior changes.
+    for local t in $($(args)[2-])
+    {
+        $(t).actualize ;
+    }
+
     if $(value)
     {
         local none = none ; # What to show when the argument
@@ -267,6 +276,10 @@ rule try-find-build ( ps : what : * )
         local x = [ PAD "    - $(what)" : $(.width) ] ;
         for local i in $(args)
         {
+            if ! $($(i)[1])
+            {
+                break ;
+            }
             local jam-targets ;
             for local t in $($(i)[2-])
             {
@@ -282,6 +295,7 @@ rule try-find-build ( ps : what : * )
         }
         if ! $(result)
         {
+            log-check-result "$(x) : none" ;
             result = none ;
         }
     }

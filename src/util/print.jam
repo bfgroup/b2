@@ -109,7 +109,7 @@ rule section-start (
 {
     if $(output-type) = plain
     {
-        lines [ split-at-words $(name): ] ;
+        lines [ split-at-words "$(name):" ] ;
         lines ;
     }
     else if $(output-type) = html
@@ -177,11 +177,11 @@ rule section-start (
                 paragraph += $(description[1]) ;
                 description = $(description[2-]) ;
             }
-            if $(paragraph[1]) = :: && ! $(paragraph[2])
+            if $(paragraph[1]) = "::" && ! $(paragraph[2])
             {
                 pre = " " ;
             }
-            if $(paragraph[1]) = ::
+            if $(paragraph[1]) = "::"
             {
                 if $(output-type) = plain
                 {
@@ -200,10 +200,10 @@ rule section-start (
                 local p = [ MATCH "(.*)(::)$" : $(paragraph[-1]) ] ;
                 local pws = [ MATCH "([ 	]*)$" : $(p[1]) ] ;
                 p = [ MATCH "(.*)($(pws))($(p[2]))$" :  $(paragraph[-1]) ] ;
-                if $(p[3]) = ::
+                if $(p[3]) = "::"
                 {
                     pre = [ string.chars [ MATCH "^([$(.whitespace)]*)" : " $(p[1])" ] ] ;
-                    if ! $(p[2]) || $(p[2]) = "" { paragraph = $(paragraph[1--2]) $(p[1]): ; }
+                    if ! $(p[2]) || $(p[2]) = "" { paragraph = $(paragraph[1--2]) "$(p[1]):" ; }
                     else { paragraph = $(paragraph[1--2]) $(p[1]) ; }
                     if $(output-type) = plain
                     {

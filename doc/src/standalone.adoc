@@ -3,11 +3,25 @@
 :toclevels: 3
 :sectanchors:
 :sectnums:
-:icons: font
 :nofooter:
-:source-highlighter: highlightjs
+:source-highlighter: pygments
 :source-language: jam
 :highlightjsdir: hljs
+:pygments-style: friendly
+:caution-caption: ⚑
+:important-caption: ‼
+:note-caption: ℹ
+:tip-caption: ☀
+:warning-caption: ⚠
+:CPP: C++
+
+ifdef::backend-html5[]
+++++
+<style>
+include::b2.css[]
+</style>
+++++
+endif::[]
 
 include::howto.adoc[]
 
