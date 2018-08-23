@@ -481,7 +481,7 @@ local rule print-help-module-section (
             }
             if $(show)
             {
-                print.list-item link\:\#$(.id-prefix)$(module).$(item)[$(item)]\: $($(module).$(item).brief) ;
+                print.list-item link\:\#$(.id-prefix)$(module).$(item)\[$(item)\]\: $($(module).$(item).brief) ;
             }
         }
         print.list-end ;
@@ -813,7 +813,7 @@ local rule reformat-comment ( text * )
     {
         if $(first)
         {
-            local processed = [ MATCH ^(![$(ws)]?)?(.*)$ : $(line) ] ;
+            local processed = [ MATCH "^(![$(ws)]?)?(.*)$" : $(line) ] ;
             line = $(processed[2]) ;
             first = ;
         }
@@ -1113,7 +1113,7 @@ rule scan-module (
             set-module-doc $(module-name) : $(comment-block) ;
             module-documented = true ;
         }
-        else if [ MATCH ^([!]) : $(comment-block) ]
+        else if [ MATCH "^([!])" : $(comment-block) ]
         {
             add-module-doc $(module-name) : $(comment-block) ;
         }

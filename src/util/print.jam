@@ -124,7 +124,7 @@ rule section-start (
         if $(adjust[1]) != id
         {
             reftext = ,$(reftext) ;
-            text [[$(id)$(reftext:E=)]] ;
+            text "[[$(id)$(reftext:E=)]]" ;
         }
         if $(adjust[1]) = none
         {
