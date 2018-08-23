@@ -138,9 +138,12 @@ rule section-start (
     while $(description)
     {
         local paragraph = ;
+        # skip blank lines
         while $(description) && [ string.is-whitespace $(description[1]) ] { description = $(description[2-]) ; }
         if $(pre)
         {
+            # inside a preformatted block, read lines that have the
+            # expected indentation.
             while $(description) && (
                 $(pre) = " $(description[1])" ||
                 ( $(pre) < [ string.chars [ MATCH "^([$(.whitespace)]*)" : " $(description[1])" ] ] )
@@ -149,6 +152,7 @@ rule section-start (
                 paragraph += $(description[1]) ;
                 description = $(description[2-]) ;
             }
+            # strip trailing blank lines
             while $(paragraph)-is-defined &&
                 [ string.is-whitespace $(paragraph[-1]) ]
             {
@@ -159,6 +163,8 @@ rule section-start (
         }
         else if $(description) && $(description[1]) in $(.adoc-delimiters)
         {
+            # This is an asciidoctor preformatted block.  Just pass it
+            # through without the delimiters.
             local terminator = $(description[1]) ;
             description = $(description[2-]) ;
             while $(description) && $(description[1]) != $(terminator)
@@ -268,6 +274,7 @@ rule list-item (
 {
     if $(output-type) = plain
     {
+        item = [ strip-adoc-formatting $(item:J=" ") ] ;
         lines [ split-at-words "*" $(item) ] : "    " "  " ;
     }
     else if $(output-type) = html
@@ -319,10 +326,14 @@ local rule strip-adoc-impl ( pattern : text )
 }
 
 # Removes the following asciidoc formatting:
+# * = Heading
 # * link:.*[]
 #
 local rule strip-adoc-formatting ( text )
 {
+    # This will remove leading whitespace as well, but that's okay,
+    # because we're about to reformat it anyway.
+    text = [ MATCH "^[$(.whitespace)]*=*(.*)" : $(text) ] ;
     return [ strip-adoc-impl "link:[^[]*\\[([^]]*)\\]" : $(text) ] ;
 }
 

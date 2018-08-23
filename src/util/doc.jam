@@ -100,6 +100,11 @@ local rule set-output-file ( file )
 }
 
 
+local rule .is-adoc-info ( line )
+{
+    return [ MATCH "^([$(ws)]*=).*" : $(line) ] ;
+}
+
 # Extracts the brief comment from a complete comment. The brief comment is the
 # first sentence.
 #
@@ -107,7 +112,22 @@ local rule brief-comment (
     docs *  # The comment documentation.
 )
 {
-    local d = $(docs:J=" ") ;
+    local first-paragraph ;
+    for local line in $(docs)
+    {
+        if [ string.is-whitespace $(line) ] || [ .is-adoc-info $(line) ]
+        {
+            if $(first-paragraph)
+            {
+                break ;
+            }
+        }
+        else
+        {
+            first-paragraph += $(line) ;
+        }
+    }
+    local d = $(first-paragraph:J=" ") ;
     local p = [ MATCH ".*([.])$" : $(d) ] ;
     if ! $(p) { d = $(d)"." ; }
     d = $(d)" " ;

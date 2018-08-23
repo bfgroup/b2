@@ -5,11 +5,15 @@
 # License Version 1.0. (See accompanying file LICENSE_1_0.txt or
 # http://www.boost.org/LICENSE_1_0.txt)
 
-# Supports the http://www.zlib.net[zlib] library
+## = zlib
+#
+# Supports the http://www.zlib.net[zlib] library.  zlib can be
+# configured either to use pre-existing binaries or to build
+# the library from source.
 #
 # After `using zlib`, the following targets are available:
 #
-# /zlib//zlib -- The zlib library
+# `/zlib//zlib` -- The zlib library
 
 import project ;
 import ac ;
@@ -38,10 +42,13 @@ if --debug-configuration in [ modules.peek : ARGV ]
     .debug =  true ;
 }
 
-# Initializes the zlib library.
+## = Initialization
 #
-# zlib can be configured either to use pre-existing binaries
-# or to build the library from source.
+# zlib can be initialized using the following syntax:
+#
+# ```
+# using zlib : [version] : [options] : [condition] ;
+# ```
 #
 # Options for configuring a prebuilt zlib::
 #
@@ -85,23 +92,7 @@ if --debug-configuration in [ modules.peek : ARGV ]
 #   using zlib : 1.2.7 : : <toolset>gcc ;
 # ```
 #
-rule init (
-    version ?
-    # The zlib version (currently ignored)
-
-    : options *
-    # A list of the options to use
-
-    : requirements *
-    # The requirements for the zlib target
-
-    : is-default ?
-    # Default configurations are only used when zlib
-    # has not yet been configured.  This option is
-    # deprecated.  A configuration will be treated
-    # as a default when none of <include>, <search>,
-    # <name>, and <source> are present.
-    )
+rule init ( version ? : options * : requirements * : is-default ? )
 {
     local caller = [ project.current ] ;
 
