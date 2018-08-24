@@ -139,15 +139,19 @@ rule section-start (
     {
         local paragraph = ;
         # skip blank lines
-        while $(description) && [ string.is-whitespace $(description[1]) ] { description = $(description[2-]) ; }
+        while $(description) && [ string.is-whitespace $(description[1]) ]
+        {
+            description = $(description[2-]) ;
+        }
+        # asciidoctor interprets indented blocks as pre-formatted.
+        # Note that we might already know that we're in a pre-formatted
+        # block for some other reason.
+        pre ?= [ MATCH "^([$(.whitespace)]+)" : $(description[1]) ] ;
         if $(pre)
         {
             # inside a preformatted block, read lines that have the
             # expected indentation.
-            while $(description) && (
-                $(pre) = " $(description[1])" ||
-                ( $(pre) < [ string.chars [ MATCH "^([$(.whitespace)]*)" : " $(description[1])" ] ] )
-                )
+            while [ MATCH "^($(pre))" : $(description[1]) ]
             {
                 paragraph += $(description[1]) ;
                 description = $(description[2-]) ;
@@ -208,7 +212,7 @@ rule section-start (
                 p = [ MATCH "(.*)($(pws))($(p[2]))$" :  $(paragraph[-1]) ] ;
                 if $(p[3]) = "::"
                 {
-                    pre = [ string.chars [ MATCH "^([$(.whitespace)]*)" : " $(p[1])" ] ] ;
+                    pre = [ MATCH "^([$(.whitespace)]*)" : " $(p[1])" ] ;
                     if ! $(p[2]) || $(p[2]) = "" { paragraph = $(paragraph[1--2]) "$(p[1]):" ; }
                     else { paragraph = $(paragraph[1--2]) $(p[1]) ; }
                     if $(output-type) = plain

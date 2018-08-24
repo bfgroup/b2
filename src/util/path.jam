@@ -5,14 +5,15 @@
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+##
 # Performs various path manipulations. Paths are always in a 'normalized'
 # representation. In it, a path may be either:
 #
-#     - '.', or
+#     - `'.'`, or
 #
-#     - ['/'] [ ( '..' '/' )* (token '/')* token ]
+#     - `['/'] [ ( '..' '/' )* (token '/')* token ]`
 #
-# In plain english, path can be rooted, '..' elements are allowed only at the
+# In plain english, path can be rooted, `'..'` elements are allowed only at the
 # beginning, and it never ends in slash, except for path consisting of slash
 # only.
 
@@ -34,6 +35,7 @@ if [ modules.peek : UNIX ]
 }
 
 
+##
 # Converts the native path into normalized form.
 #
 rule make ( native )
@@ -42,6 +44,7 @@ rule make ( native )
 }
 
 
+##
 # Builds native representation of the path.
 #
 rule native ( path )
@@ -50,6 +53,7 @@ rule native ( path )
 }
 
 
+##
 # Tests if a path is rooted.
 #
 rule is-rooted ( path )
@@ -58,6 +62,7 @@ rule is-rooted ( path )
 }
 
 
+##
 # Tests if a path has a parent.
 #
 rule has-parent ( path )
@@ -73,6 +78,7 @@ rule has-parent ( path )
 }
 
 
+##
 # Returns the path without any directory components.
 #
 rule basename ( path )
@@ -81,6 +87,7 @@ rule basename ( path )
 }
 
 
+##
 # Returns parent directory of the path. If no parent exists, error is issued.
 #
 rule parent ( path )
@@ -127,8 +134,9 @@ rule parent ( path )
 }
 
 
-# Returns path2 such that "[ join path path2 ] = .". The path may not contain
-# ".." element or be rooted.
+##
+# Returns `path2` such that `[ join path path2 ] = .`. The path may not contain
+# `..` element or be rooted.
 #
 rule reverse ( path )
 {
@@ -149,6 +157,7 @@ rule reverse ( path )
 }
 
 
+##
 # Concatenates the passed path elements. Generates an error if any element other
 # than the first one is rooted. Skips any empty or undefined path elements.
 #
@@ -173,7 +182,8 @@ rule join ( elements + )
 }
 
 
-# If 'path' is relative, it is rooted at 'root'. Otherwise, it is unchanged.
+##
+# If `path` is relative, it is rooted at `root`. Otherwise, it is unchanged.
 #
 rule root ( path root )
 {
@@ -188,6 +198,7 @@ rule root ( path root )
 }
 
 
+##
 # Returns the current working directory.
 #
 rule pwd ( )
@@ -200,19 +211,24 @@ rule pwd ( )
 }
 
 
+##
 # Returns the list of files matching the given pattern in the specified
 # directory. Both directories and patterns are supplied as portable paths. Each
 # pattern should be non-absolute path, and can't contain "." or ".." elements.
 # Each slash separated element of pattern can contain the following special
 # characters:
-#   - '?', which match any character
-#   - '*', which matches arbitrary number of characters.
-# A file $(d)/e1/e2/e3 (where 'd' is in $(dirs)) matches pattern p1/p2/p3 if and
-# only if e1 matches p1, e2 matches p2 and so on.
+#
+#   - `'?'`, which matches any character
+#   - `'*'`, which matches an arbitrary number of characters.
+#
+# A file `$(d)/e1/e2/e3` (where `d` is in `$(dirs)`) matches pattern `p1/p2/p3`
+# if and only if `e1` matches `p1`, `e2` matches `p2` and so on.
 #
 # For example:
+# ```
 #   [ glob . : *.cpp ]
 #   [ glob . : */build/Jamfile ]
+# ```
 #
 rule glob ( dirs * : patterns + : exclude-patterns * )
 {
@@ -244,6 +260,7 @@ rule glob ( dirs * : patterns + : exclude-patterns * )
 }
 
 
+##
 # Recursive version of GLOB. Builds the glob of files while also searching in
 # the subdirectories of the given roots. An optional set of exclusion patterns
 # will filter out the matching entries from the result. The exclusions also
@@ -283,7 +300,8 @@ local rule .glob-tree ( roots * : patterns * : exclude-patterns * )
 }
 
 
-# Returns true is the specified file exists.
+##
+# Returns true if the specified file exists.
 #
 rule exists ( file )
 {
@@ -292,6 +310,7 @@ rule exists ( file )
 NATIVE_RULE path : exists ;
 
 
+##
 # Find out the absolute name of path and returns the list of all the parents,
 # starting with the immediate one. Parents are returned as relative names. If
 # 'upper_limit' is specified, directories above it will be pruned.
@@ -332,8 +351,9 @@ rule all-parents ( path : upper_limit ? : cwd ? )
 }
 
 
-# Search for 'pattern' in parent directories of 'dir', up to and including
-# 'upper_limit', if it is specified, or up to the filesystem root otherwise.
+##
+# Search for `pattern` in parent directories of `dir`, up to and including
+# `upper-limit`, if it is specified, or up to the filesystem root otherwise.
 #
 rule glob-in-parents ( dir : patterns + : upper-limit ? )
 {
@@ -349,8 +369,9 @@ rule glob-in-parents ( dir : patterns + : upper-limit ? )
 }
 
 
-# Assuming 'child' is a subdirectory of 'parent', return the relative path from
-# 'parent' to 'child'.
+##
+# Assuming `child` is a subdirectory of `parent`, return the relative path from
+# `parent` to `child`.
 #
 rule relative ( child parent : no-error ? )
 {
@@ -404,7 +425,8 @@ rule relative ( child parent : no-error ? )
 }
 
 
-# Returns the minimal path to path2 that is relative to path1.
+##
+# Returns the minimal path to `path2` that is relative to `path1`.
 #
 rule relative-to ( path1 path2 )
 {
@@ -429,6 +451,7 @@ rule relative-to ( path1 path2 )
 }
 
 
+##
 # Returns the list of paths used by the operating system for looking up
 # programs.
 #
@@ -446,7 +469,9 @@ rule programs-path ( )
     return $(result) ;
 }
 
-
+##
+# Creates a directory and all parent directories that do not already exist.
+#
 rule makedirs ( path )
 {
     local result = true ;

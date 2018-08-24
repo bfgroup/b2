@@ -543,6 +543,31 @@ local rule print-help-all (
     print.section-end ;
 }
 
+rule format-module-heading ( module-name )
+{
+    if $(help-output) = adoc
+    {
+        return $(module-name) ;
+    }
+    else
+    {
+        return "Module '$(module-name)'" ;
+    }
+}
+
+local rule format-rule-heading ( module-name : rule-name )
+{
+    local signature =  $($(module-name).$(rule-name).signature:J=" ") ;
+    signature ?= "" ;
+    if $(help-output) = adoc
+    {
+        return "`rule $(module-name).$(rule-name) ( $(signature) )`" ;
+    }
+    else
+    {
+        return "Rule '$(module-name).$(rule-name) ( $(signature) )'" ;
+    }
+}
 
 # Generate documentation for a module. Basic information about the module is
 # generated.
@@ -552,8 +577,10 @@ local rule print-help-module (
 )
 {
     # Print the docs.
-    print.section-start "Module '$(module-name)'" $($(module-name).docs) : $(.id-prefix)$(module-name) ;
+    print.section-start [ format-module-heading $(module-name) ]
+        $($(module-name).docs) : $(.id-prefix)$(module-name) ;
 
+    if ! $(.option.detailed) {
     # Print out the documented classes.
     print-help-module-section $(module-name) classes : "Module '$(module-name)' classes"
         Use --help $(module-name).<class-name> to get more information. ;
@@ -565,6 +592,7 @@ local rule print-help-module (
     # Print out the documented variables.
     print-help-module-section $(module-name) variables : "Module '$(module-name)' variables"
         Use --help $(module-name).<variable-name> to get more information. ;
+    }
 
     # Print out all the same information but indetailed form.
     if $(.option.detailed)
@@ -594,7 +622,8 @@ local rule print-help-rules (
             {
                 local signature = $($(module-name).$(rule-name).signature:J=" ") ;
                 signature ?= "" ;
-                print.section-start "Rule '$(module-name).$(rule-name) ( $(signature) )'"
+                print.section-start
+                    [ format-rule-heading $(module-name) : $(rule-name) ]
                     $($(module-name).$(rule-name).docs) : $(.id-prefix)$(module-name).$(rule-name) ;
                 if $($(module-name).$(rule-name).args) &&
                     $($(module-name).$(rule-name).args.$($(module-name).$(rule-name).args).docs)
@@ -804,7 +833,7 @@ local rule extract-comment (
         if $(first)
         {
             local adjust = [ MATCH "^#[$(ws)]?(.*)" : $(comment) ] ;
-            if $(adjust)
+            if $(adjust)-is-defined
             {
                 comment = !$(adjust) ;
             }
@@ -1230,7 +1259,7 @@ rule generate-module-doc ( target : source : properties * )
     print.text : overwrite ;
     if ! $(help-output)
     {
-        help-ouput = plain ;
+        help-output = plain ;
     }
     local search = [ on $(source) return $(LOCATE) $(SEARCH) ] ;
     source = $(source:G=:R=$(search[1])) ;

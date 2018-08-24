@@ -32,20 +32,20 @@ import doc ;
 import modules ;
 import path ;
 
-project b2doc
-    ;
+project b2doc ;
 
-make zlib.adoc : ../src/tools/zlib.jam
-  : @doc.generate-module-doc
-  : # asciidoctor is very picky about includes and there's no way
-    # to set an include path.
-    <location>src
-  ;
-make asciidoctor.adoc : ../src/tools/asciidoctor.jam
-  : @doc.generate-module-doc
-  : <location>src
-  ;
-explicit zlib.adoc asciidoctor.adoc ;
+modules = tools/zlib tools/asciidoctor util/path ;
+
+for local filename in $(modules)
+{
+    make $(filename:B).adoc : ../src/$(filename).jam
+      : @doc.generate-module-doc
+      : # asciidoctor is very picky about includes and there's no way
+        # to set an include path.
+        <location>src
+      ;
+}
+explicit $(modules:B).adoc ;
 
 path-constant PYGMENTS_DIR : src/pygments ;
 
@@ -68,7 +68,7 @@ html index : src/standalone.adoc :
         <flags>--require=$(PYGMENTS_DIR)/pygments_init.rb
         <flags>--trace
         <flags>--verbose
-        <dependency>zlib.adoc <dependency>asciidoctor.adoc
+        <dependency>$(modules:B).adoc
     ;
 explicit index ;
 
