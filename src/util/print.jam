@@ -279,7 +279,7 @@ rule list-item (
     if $(output-type) = plain
     {
         item = [ strip-adoc-formatting $(item:J=" ") ] ;
-        lines [ split-at-words "*" $(item) ] : "    " "  " ;
+        lines [ split-at-words $(item) : 76 ] : "    " " *  " ;
     }
     else if $(output-type) = html
     {
