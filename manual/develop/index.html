@@ -4850,7 +4850,7 @@ platforms (for example, Windows) symbol visibility is not supported at all.</p>
 <li>
 <p><code>global</code> - a.k.a. "default" in gcc documentation. Global symbols are considered
 public, they are exported from shared libraries and can be redefined by another
-shared library or executable. This is the default value.</p>
+shared library or executable.</p>
 </li>
 <li>
 <p><code>protected</code> - a.k.a. "symbolic". Protected symbols are exported from shared
@@ -4862,8 +4862,41 @@ This mode is not supported on some platforms, for example OS X.</p>
 be redefined by a different shared library or executable loaded in a process.
 In this mode, public symbols have to be explicitly marked in the source code
 to be exported from shared libraries. This is the recommended mode.</p>
+<div class="paragraph">
+<p>By default compiler default visibility mode is used (no compiler flags are added).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+In Boost superproject Jamroot file this property is set to the default
+value of <code>hidden</code>. This means that Boost libraries are built with hidden
+visibility by default, unless the user overrides it with a different <code>visibility</code>
+or a library sets a different <code>local-visibility</code> (see below).
+</td>
+</tr>
+</table>
+</div>
 </li>
 </ul>
+</div>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.local-visibility"></a><code>local-visibility</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>global</code>, <code>protected</code>, <code>hidden</code>.</p>
+<div class="paragraph">
+<p>This feature has the same effect as the <code>visibility</code> feature but is intended
+to be used by targets that require a particular symbol visibility. Unlike
+the <code>visibility</code> feature, <code>local-visibility</code> is not inherited by the target
+dependencies and only affects the target to which it is applied.</p>
+</div>
+<div class="paragraph">
+<p>The <code>local-visibility</code> feature supports the same values with the same meaning
+as the <code>visibility</code> feature. By default, if <code>local-visibility</code> is not specified
+for a target, the value of the <code>visibility</code> feature is used.</p>
 </div>
 </dd>
 </dl>
