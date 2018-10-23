@@ -2310,7 +2310,7 @@ that don&#8217;t depend on the failed ones.</p>
 </dd>
 <dt class="hdlist1"><code>-j N</code></dt>
 <dd>
-<p>Run up to N commands in parallel.</p>
+<p>Run up to N commands in parallel. Default number of jobs is <code>1</code>.</p>
 </dd>
 <dt class="hdlist1"><code>--config=filename</code><a id="bbv2.reference.init.options.config"></a></dt>
 <dd>
@@ -4850,7 +4850,7 @@ platforms (for example, Windows) symbol visibility is not supported at all.</p>
 <li>
 <p><code>global</code> - a.k.a. "default" in gcc documentation. Global symbols are considered
 public, they are exported from shared libraries and can be redefined by another
-shared library or executable. This is the default value.</p>
+shared library or executable.</p>
 </li>
 <li>
 <p><code>protected</code> - a.k.a. "symbolic". Protected symbols are exported from shared
@@ -4862,8 +4862,41 @@ This mode is not supported on some platforms, for example OS X.</p>
 be redefined by a different shared library or executable loaded in a process.
 In this mode, public symbols have to be explicitly marked in the source code
 to be exported from shared libraries. This is the recommended mode.</p>
+<div class="paragraph">
+<p>By default compiler default visibility mode is used (no compiler flags are added).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+In Boost superproject Jamroot file this property is set to the default
+value of <code>hidden</code>. This means that Boost libraries are built with hidden
+visibility by default, unless the user overrides it with a different <code>visibility</code>
+or a library sets a different <code>local-visibility</code> (see below).
+</td>
+</tr>
+</table>
+</div>
 </li>
 </ul>
+</div>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.local-visibility"></a><code>local-visibility</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>global</code>, <code>protected</code>, <code>hidden</code>.</p>
+<div class="paragraph">
+<p>This feature has the same effect as the <code>visibility</code> feature but is intended
+to be used by targets that require a particular symbol visibility. Unlike
+the <code>visibility</code> feature, <code>local-visibility</code> is not inherited by the target
+dependencies and only affects the target to which it is applied.</p>
+</div>
+<div class="paragraph">
+<p>The <code>local-visibility</code> feature supports the same values with the same meaning
+as the <code>visibility</code> feature. By default, if <code>local-visibility</code> is not specified
+for a target, the value of the <code>visibility</code> feature is used.</p>
 </div>
 </dd>
 </dl>
@@ -9784,7 +9817,7 @@ implement the rest of Boost.Build. This executable is formally called
 <p>The Boost.Build engine is derived from an earlier build tool called
 Perforce Jam. Originally, there were just minor changes, and the
 filename was <code>bjam</code>. Later on, with more and more changes, the
-similarity of names because a disservice to users, and as of Boost
+similarity of names became a disservice to users, and as of Boost
 1.47.0, the official name of the executable was changed to <code>b2</code>. A copy
 named <code>bjam</code> is still created for compatibility, but you are encouraged
 to use the new name in all cases.</p>
@@ -9884,7 +9917,7 @@ requirement. The default for each target type are:</p>
 <h5 id="_initialization"><a class="anchor" href="#_initialization"></a>Initialization</h5>
 <div class="paragraph">
 <p>To use the <code>asciidoctor</code> tool you need to declare it in a configuration file
-with the <code>using</code> rule. The initialiation takes the following arguments:</p>
+with the <code>using</code> rule. The initialization takes the following arguments:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -12719,7 +12752,7 @@ as functions. Arguments are separated by colons.</p>
 </li>
 <li>
 <p>A Jam <strong>target</strong> is an abstract entity identified by an arbitrary
-string. The build-in <code>DEPENDS</code> rule creates a link in the dependency
+string. The built-in <code>DEPENDS</code> rule creates a link in the dependency
 graph between the named targets.</p>
 </li>
 <li>
