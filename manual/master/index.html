@@ -5,6 +5,8 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.8">
+<meta name="author" content="Rene Rivera, Vladimir Prus, Steven Watanabe">
+<meta name="copyright" content="Copyright 2018 Rene Rivera; Copyright 2006, 2014 Vladimir Prus">
 <title>Boost.Build User Manual</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -504,6 +506,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <body class="article toc2 toc-left">
 <div id="header">
 <h1>Boost.Build User Manual</h1>
+<div class="details">
+<span id="author" class="author">Rene Rivera, Vladimir Prus, Steven Watanabe</span><br>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -741,25 +746,41 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	font-size: 2.5em;
 	text-shadow: 1px 1px 2px rgba(0, 0, 0, .5);
 }
-
 .caution .icon .title {
 	color: rgba(192, 51, 0, 1);
 }
-
 .important .icon .title {
 	color: rgba(192, 0, 0, 1);
 }
-
 .note .icon .title {
 	color: rgba(26, 64, 128, 1);
 }
-
 .tip .icon .title {
 	color: rgba(255, 192, 0, 1);
 }
-
 .warning .icon .title {
 	color: rgba(192, 102, 0, 1);
+}
+p,blockquote,dt,td.content,span.alt {
+    font-size: 1.1rem
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+h1 {
+    font-size: 2.25em;
+}
+h2 {
+    font-size: 1.5em;
+}
+h3,#toctitle,.sidebarblock>.content>.title {
+    font-size: 1.3em;
+}
+h4, h5 {
+    font-size: 1.2em;
+}
+h6 {
+    font-size: 1.1em;
 }
 </style>
 <div class="paragraph">
@@ -861,7 +882,7 @@ use libraries, and finish with testing and installing features.</p>
 <div class="paragraph">
 <p>The simplest project that Boost.Build can construct is stored in
 <code>example/hello/</code> directory. The project is described by a file called
-<code>Jamroot</code> that contains:</p>
+<code>Jamfile</code> that contains:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -883,7 +904,7 @@ build the release variant of <code>hello</code>, invoke</p>
 <p>Note that the debug and release variants are created in different
 directories, so you can switch between variants or even build multiple
 variants at once, without any unnecessary recompilation. Let us extend
-the example by adding another line to our project&#8217;s <code>Jamroot</code>:</p>
+the example by adding another line to our project&#8217;s <code>Jamfile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -981,7 +1002,7 @@ request</em>—a description of the desired properties for building the
 requested targets (or, if no targets were explicitly requested, the
 project in the current directory). The <em>actual</em> properties used for
 building targets are typically a combination of the build request and
-properties derived from the project&#8217;s <code>Jamroot</code> (and its other Jamfiles,
+properties derived from the project&#8217;s <code>Jamfile</code> (and its other Jamfiles,
 as described in
 <a href="#bbv2.tutorial.hierarchy">the section called “Project Hierarchies”</a>).
 For example, the locations of `#include`d header files are normally not
@@ -1015,7 +1036,7 @@ augment) the build request.</p>
 </td>
 <td class="content">
 The value of the <code>&lt;include&gt;</code> feature is relative to the location of
-<code>Jamroot</code> where it is used.
+<code>Jamfile</code> where it is used.
 </td>
 </tr>
 </table>
@@ -1050,11 +1071,11 @@ including requirements:</p>
 <h3 id="bbv2.tutorial.hierarchy"><a class="anchor" href="#bbv2.tutorial.hierarchy"></a>2.3. Project Hierarchies</h3>
 <div class="paragraph">
 <p>So far we have only considered examples with one project, with one
-user-written Boost.Jam file, <code>Jamroot</code>. A typical large codebase would
+user-written <code>Jamfile</code> file. A typical large codebase would
 be composed of many projects organized into a tree. The top of the tree
 is called the <em>project root</em>. Every subproject is defined by a file called
 <code>Jamfile</code> in a descendant directory of the project root. The parent
-project of a subproject is defined by the nearest <code>Jamfile</code> or <code>Jamroot</code>
+project of a subproject is defined by the nearest Jamfile
 file in an ancestor directory. For example, in the following directory
 layout:</p>
 </div>
@@ -1062,7 +1083,7 @@ layout:</p>
 <div class="content">
 <pre>top/
   |
-  +-- Jamroot
+  +-- Jamfile
   |
   +-- app/
   |    |
@@ -1098,7 +1119,7 @@ filename will be set as “<code>Jamfile</code>” or “<code>Jamroot</code>.�
 <div class="paragraph">
 <p>Projects inherit all attributes (such as requirements) from their
 parents. Inherited requirements are combined with any requirements
-specified by the subproject. For example, if <code>top/Jamroot</code> has</p>
+specified by the subproject. For example, if <code>top/Jamfile</code> has</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1116,7 +1137,7 @@ details can be found in <a href="#bbv2.overview.projects">the section called “
 line builds the project rooted in the current directory. Building a
 project does not automatically cause its sub-projects to be built unless
 the parent project&#8217;s Jamfile explicitly requests it. In our example,
-<code>top/Jamroot</code> might contain:</p>
+<code>top/Jamfile</code> might contain:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1218,7 +1239,7 @@ can be used by many targets, and if they all use <code>Jamfile</code> location, 
 in directory organization entails much work.
 The solution is to use project ids—symbolic names not tied to directory
 layout. First, we need to assign a project id by adding this code to
-<code>Jamroot</code>:</p>
+<code>Jamfile</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1236,8 +1257,8 @@ layout. First, we need to assign a project id by adding this code to
 <div class="paragraph">
 <p>The <code>/library-example/foo//bar</code> syntax is used to refer to the target
 <code>bar</code> in the project with id <code>/library-example/foo</code>. We&#8217;ve achieved our
-goal—if the library is moved to a different directory, only <code>Jamroot</code> must be
-modified. Note that project ids are global—two Jamfiles
+goal—if the library is moved to a different directory, only <code>top/Jamfile</code>
+must be modified. Note that project ids are global—two Jamfiles
 are not allowed to assign the same project id to different directories.</p>
 </div>
 <div class="admonitionblock tip">
@@ -1585,7 +1606,7 @@ section. The best way to explain the concepts is by comparison with more
 classical build tools.</p>
 </div>
 <div class="paragraph">
-<p>When using any flavour of make, you directly specify <em>targets</em> and
+<p>When using any flavor of make, you directly specify <em>targets</em> and
 commands that are used to create them from other target. The below
 example creates <code>a.o</code> from <code>a.c</code> using a hardcoded compiler invocation
 command.</p>
@@ -1621,8 +1642,8 @@ impossible to perform multi-variant builds. Often, change in any build
 property requires a complete reconfiguration of the build tree.</p>
 </div>
 <div class="paragraph">
-<p>In order to support true multivariant builds, Boost.Build introduces the
-concept of a metatarget definition main target metataget
+<p>In order to support true multi-variant builds, Boost.Build introduces the
+concept of a metatarget definition main target metatarget
 <em>metatarget</em>&#8201;&#8212;&#8201;an object that is created when the build description is
 parsed and can be called later with specific build properties to
 generate actual targets.</p>
@@ -2015,7 +2036,7 @@ configuration files are actually loaded.
 </div>
 <div class="paragraph">
 <p>Usually, <code>user-config.jam</code> just defines the available compilers and
-other tools (see <a href="#bbv2.recipies.site-config">the section called “Targets
+other tools (see <a href="#bbv2.recipes.site-config">the section called “Targets
 in site-config.jam”</a> for more advanced usage). A tool is configured using
 the following syntax:</p>
 </div>
@@ -2143,9 +2164,9 @@ concatenated with quotes or have multiple instances of the option tag.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Multiple varaiations of the same tool can be used for most tools. These
-are deliniated by the version passed in. Because the dash '-' cannot be
-used here, the convention has become to use the tilde '~' to deliniate
+<p>Multiple variations of the same tool can be used for most tools. These
+are delineated by the version passed in. Because the dash '-' cannot be
+used here, the convention has become to use the tilde '~' to delineate
 variations.</p>
 </div>
 <div class="listingblock">
@@ -2253,7 +2274,7 @@ to use the help system with additional --help* options.</p>
 </dd>
 <dt class="hdlist1"><code>--clean</code></dt>
 <dd>
-<p>Cleans all targets in the current directory and in any subprojects.
+<p>Cleans all targets in the current directory and in any sub-projects.
 Note that unlike the <code>clean</code> target in make, you can use <code>--clean</code>
 together with target names to clean specific targets.</p>
 </dd>
@@ -2271,7 +2292,6 @@ name. The build directory for the project root will be computed by
 concatenating the value of the <code>--build-dir</code> option, the project name
 specified in Jamroot, and the build dir specified in Jamroot (or
 <code>bin</code>, if none is specified).
-+
 The option is primarily useful when building from read-only media,
 when you can&#8217;t modify Jamroot.</p>
 </dd>
@@ -2969,7 +2989,7 @@ are located.</p>
 </div>
 <div class="paragraph">
 <p><em>Project requirements</em> are requirements that apply to all the targets in
-the projects as well as all subprojects.</p>
+the projects as well as all sub-projects.</p>
 </div>
 <div class="paragraph">
 <p><em>Default build</em> is the build request that should be used when no build
@@ -3043,14 +3063,15 @@ used in Jamfile see
 <p>Each subproject inherits attributes, constants and rules from its parent
 project, which is defined by the nearest Jamfile in an ancestor
 directory above the subproject. The top-level project is declared in a
-file called <code>Jamroot</code> rather than <code>Jamfile</code>. When loading a project,
+file called <code>Jamroot</code>, or <code>Jamfile</code>. When loading a project,
 Boost.Build looks for either <code>Jamroot</code> or <code>Jamfile</code>. They are handled
 identically, except that if the file is called <code>Jamroot</code>, the search for
-a parent project is not performed.</p>
+a parent project is not performed. A <code>Jamfile</code> without a parent project
+is also considered the top-level project.</p>
 </div>
 <div class="paragraph">
 <p>Even when building in a subproject directory, parent project files are
-always loaded before those of their subprojects, so that every
+always loaded before those of their sub-projects, so that every
 definition made in a parent project is always available to its children.
 The loading order of any other projects is unspecified. Even if one
 project refers to another via the <code>use-project</code> or a target reference,
@@ -4872,7 +4893,7 @@ to be exported from shared libraries. This is the recommended mode.</p>
 <div class="title">ℹ</div>
 </td>
 <td class="content">
-In Boost superproject Jamroot file this property is set to the default
+In Boost super-project Jamroot file this property is set to the default
 value of <code>hidden</code>. This means that Boost libraries are built with hidden
 visibility by default, unless the user overrides it with a different <code>visibility</code>
 or a library sets a different <code>local-visibility</code> (see below).
