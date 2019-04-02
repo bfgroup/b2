@@ -4269,7 +4269,7 @@ implicitly when their containing project is built.</p>
 <dt class="hdlist1"><a id="bbv2.reference.rules.always"></a><code>always</code></dt>
 <dd>
 <p>The <code>always</code> function takes a single parameter—a list of metatarget
-names. The top-level targets produced by the named metatargets will be
+names. The targets produced by the named metatargets will be
 always considered out of date. Consider this example:</p>
 <div class="listingblock">
 <div class="content">
@@ -4279,10 +4279,9 @@ always considered out of date. Consider this example:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If a build of <code>hello</code> is requested, then the binary will always be
-relinked. The object files will not be recompiled, though. Note that
+<p>If a build of <code>hello</code> is requested, then it will always be recompiled. Note that
 if a build of <code>hello</code> is not requested, for example you specify just
-<code>bye</code> on the command line, <code>hello</code> will not be relinked.</p>
+<code>bye</code> on the command line, <code>hello</code> will not be recompiled.</p>
 </div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.reference.rules.constant"></a><code>constant</code></dt>
