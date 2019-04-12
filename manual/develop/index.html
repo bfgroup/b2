@@ -669,6 +669,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#b2.history">12. History</a>
+<ul class="sectlevel2">
+<li><a href="#_version_4_0_0">12.1. Version 4.0.0</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -13261,6 +13266,35 @@ and <code>WEXITSTATUS</code>.&#8201;&#8212;&#8201;<em>Markus S.</em></p>
 </li>
 </ul>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="b2.history"><a class="anchor" href="#b2.history"></a>12. History</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>12.1. Version 4.0.0</h3>
+<div class="paragraph">
+<p>After even more years of development the landscape of build systems has changed
+considerably, and so has the landscape of compilers. This version marks the
+start of B2 transitioning to a C++ implementation. Initially this means that
+the engine will be compiled as C++ source but that source is still the base
+C implementation. Over time it will transform to a C++ code base in both the
+engine and build system. Some changes in this start:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Requires C++ 11 to build engine.</p>
+</li>
+<li>
+<p>Simplified build scripts to make it easier to maintain.</p>
+</li>
+<li>
+<p>Building with C++ optimizations gives an immediate performance improvement.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
