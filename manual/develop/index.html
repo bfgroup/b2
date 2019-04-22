@@ -636,6 +636,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_introduction">10.1. Introduction</a></li>
 <li><a href="#_hello">10.2. Hello</a></li>
+<li><a href="#_sanitizers">10.3. Sanitizers</a></li>
 </ul>
 </li>
 <li><a href="#bbv2.jam">11. Boost.Jam Documentation</a>
@@ -10052,6 +10053,84 @@ Hello!</code></pre>
 <td class="content">
 The actual paths in the <code>bin</code> sub-directory will depend on your
 toolset.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sanitizers"><a class="anchor" href="#_sanitizers"></a>10.3. Sanitizers</h3>
+<div class="paragraph">
+<p>This example shows how to enable sanitizers when using a clang or gcc toolset</p>
+</div>
+<div class="listingblock">
+<div class="title"><code>main.cpp</code></div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">()</span>
+<span class="tok-p">{</span>
+    <span class="tok-kt">char</span><span class="tok-o">*</span> <span class="tok-n">c</span> <span class="tok-o">=</span> <span class="tok-k">nullptr</span><span class="tok-p">;</span>
+    <span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">cout</span> <span class="tok-o">&lt;&lt;</span> <span class="tok-s">&quot;Hello sanitizers</span><span class="tok-se">\n</span><span class="tok-s"> &quot;</span> <span class="tok-o">&lt;&lt;</span> <span class="tok-o">*</span><span class="tok-n">c</span><span class="tok-p">;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Our <code>jamroot.jam</code> is minimal and only specifies one <code>exe</code> target for the
+program:</p>
+</div>
+<div class="listingblock">
+<div class="title"><code>jamroot.jam</code></div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-nb">exe</span><span class="tok-w"> </span>main<span class="tok-w"> </span>:<span class="tok-w"> </span>main.cpp<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Sanitizers can be enabled by passing <code>on</code> or <code>norecover</code> to the appropriate sanitizer feature
+(e.g. <code>thread-sanitizer=on</code>). The <code>norecover</code> option causes the program to terminate after
+the first sanitizer issue is detected. The following example shows how to enable <code>address</code> and <code>undefined</code>
+sanitizers in a simple program:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>&gt; <span class="tok-nb">cd</span> /example/sanitizers
+&gt; b2 <span class="tok-nv">toolset</span><span class="tok-o">=</span>gcc address-sanitizer<span class="tok-o">=</span>norecover undefined-sanitizer<span class="tok-o">=</span>on
+...found <span class="tok-m">10</span> targets...
+...updating <span class="tok-m">7</span> targets...
+gcc.compile.c++ bin/gcc-7.3.0/debug/address-sanitizer-norecover/undefined-sanitizer-on/main.o
+gcc.link bin/gcc-7.3.0/debug/address-sanitizer-norecover/undefined-sanitizer-on/main
+...updated <span class="tok-m">7</span> targets...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Running the produced program may produce an output simillar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>&gt; ./bin/gcc-7.3.0/debug/address-sanitizer-norecover/undefined-sanitizer-on/main
+Hello sanitizers
+main.cpp:6:43: runtime error: load of null pointer of <span class="tok-nb">type</span> <span class="tok-s1">&#39;char&#39;</span>
+ASAN:DEADLYSIGNAL
+<span class="tok-o">=================================================================</span>
+<span class="tok-o">==</span><span class="tok-nv">29767</span><span class="tok-o">==</span>ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 <span class="tok-o">(</span>pc 0x55ba7988af1b bp 0x7ffdf3d76560 sp 0x7ffdf3d76530 T0<span class="tok-o">)</span>
+<span class="tok-o">==</span><span class="tok-nv">29767</span><span class="tok-o">==</span>The signal is caused by a READ memory access.
+<span class="tok-o">==</span><span class="tok-nv">29767</span><span class="tok-o">==</span>Hint: address points to the zero page.
+    <span class="tok-c1">#0 0x55ba7988af1a in main /home/damian/projects/boost/tools/build/example/sanitizers/main.cpp:6</span>
+    <span class="tok-c1">#1 0x7f42f2ba1b96 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x21b96)</span>
+    <span class="tok-c1">#2 0x55ba7988adb9 in _start (/home/damian/projects/boost/tools/build/example/sanitizers/bin/gcc-7.3.0/debug/address-sanitizer-norecover/undefined-sanitizer-on/main+0xdb9)</span>
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /home/damian/projects/boost/tools/build/example/sanitizers/main.cpp:6 in <span class="tok-nv">main</span>
+<span class="tok-o">==</span><span class="tok-nv">29767</span><span class="tok-o">==</span>ABORTING</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+The actual paths in the <code>bin</code> sub-directory will depend on your
+toolset and configuration. The presented output may vary depending on your compiler version.
 </td>
 </tr>
 </table>
