@@ -4103,7 +4103,8 @@ generator.</p>
 code that implements the build system. To do this, it searches for a
 file called <code>boost-build.jam</code>, first in the invocation directory, then
 in its parent and so forth up to the filesystem root, and finally in the
-directories specified by the environment variable BOOST_BUILD_PATH. When
+directories specified by the environment variable BOOST_BUILD_PATH. On
+Unix BOOST_BUILD_PATH defaults to <code>/usr/share/boost-build</code>. When
 found, the file is interpreted, and should specify the build system
 location by calling the boost-build rule:</p>
 </div>
