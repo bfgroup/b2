@@ -627,7 +627,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_miscellaneous_tools">9.2. Miscellaneous Tools</a>
 <ul class="sectlevel3">
-<li><a href="#_sass">9.2.1. Sass</a></li>
+<li><a href="#_pkg_config">9.2.1. pkg-config</a></li>
+<li><a href="#_sass">9.2.2. Sass</a></li>
 </ul>
 </li>
 </ul>
@@ -9907,7 +9908,256 @@ that the <code>asciidoctor</code> is available in the search <code>PATH</code>.<
 <div class="sect2">
 <h3 id="_miscellaneous_tools"><a class="anchor" href="#_miscellaneous_tools"></a>9.2. Miscellaneous Tools</h3>
 <div class="sect3">
-<h4 id="_sass"><a class="anchor" href="#_sass"></a>9.2.1. Sass</h4>
+<h4 id="_pkg_config"><a class="anchor" href="#_pkg_config"></a>9.2.1. pkg-config</h4>
+<div class="paragraph">
+<p>The <strong>pkg-config</strong> program is used to retrieve information about installed
+libraries in the system. It retrieves information about packages from special
+metadata files. These files are named after the package, and have a <code>.pc</code>
+extension. The package name specified to <strong>pkg-config</strong> is defined to be the name
+of the metadata file, minus the <code>.pc</code> extension.</p>
+</div>
+<div class="sect4">
+<h5 id="_feature_pkg_config"><a class="anchor" href="#_feature_pkg_config"></a>Feature: <code>pkg-config</code></h5>
+<div class="paragraph">
+<p>Selects one of the initialized <code>pkg-config</code> configurations. This feature is
+<code>propagated</code> to dependencies. Its use is dicussed in
+section <a href="#pkg-config-init">[pkg-config-init]</a>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_feature_pkg_config_define"><a class="anchor" href="#_feature_pkg_config_define"></a>Feature: <code>pkg-config-define</code></h5>
+<div class="paragraph">
+<p>This <code>free</code> feature adds a variable assignment to pkg-config invocation. For
+example,</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>pkg-config.import<span class="tok-w"> </span>mypackage<span class="tok-w"> </span>:<span class="tok-w"> </span>requirements<span class="tok-w"> </span><span class="tok-na">&lt;pkg-config-define&gt;</span>key=value<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>is equivalent to invoking on the comand line</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="shell"><span></span>pkg-config --define-variable<span class="tok-o">=</span><span class="tok-nv">key</span><span class="tok-o">=</span>value mypackage <span class="tok-p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_rule_import"><a class="anchor" href="#_rule_import"></a>Rule: <code>import</code></h5>
+<div class="paragraph">
+<p>Main target rule that imports a <strong>pkg-config</strong> package. When its consumer targets
+are built, <strong>pkg-config</strong> command will be invoked with arguments that depend on
+current property set. The features that have an effect are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;pkg-config-define&gt;</code>: adds a <code>--define-variable</code> argument;</p>
+</li>
+<li>
+<p><code>&lt;link&gt;</code>: adds <code>--static</code> argument when <code>&lt;link&gt;static</code>;</p>
+</li>
+<li>
+<p><code>&lt;link&gt;</code>: adds <code>--static</code> argument when <code>&lt;link&gt;static</code>;</p>
+</li>
+<li>
+<p><code>&lt;name&gt;</code>: specifies package name (target name is used instead if the property
+is not present);</p>
+</li>
+<li>
+<p><code>&lt;version&gt;</code>: specifies package version range, can be used multiple times and
+should be a dot-separated sequence of numbers optionally prefixed with <code>=</code>,
+<code>&lt;</code>, <code>&gt;</code>, <code>&#8656;</code> or <code>&gt;=</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>pkg-config.import<span class="tok-w"> </span>my-package<span class="tok-w"></span>
+<span class="tok-w">    </span>:<span class="tok-w"> </span>requirements<span class="tok-w"> </span><span class="tok-na">&lt;name&gt;</span>my_package<span class="tok-w"> </span><span class="tok-na">&lt;version&gt;&lt;4</span><span class="tok-err"> </span><span class="tok-na">&lt;version&gt;&gt;</span>=3.1<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_initialization_pkg_config_init"><a class="anchor" href="#_initialization_pkg_config_init"></a>Initialization [[ pkg-config-init ]]</h5>
+<div class="paragraph">
+<p>To use the <code>pkg-config</code> tool you need to declare it in a configuration file
+with the <code>using</code> rule:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-nb">using</span><span class="tok-w"> </span>pkg-config<span class="tok-w"> </span>:<span class="tok-w"> </span>[config]<span class="tok-w"> </span>:<span class="tok-w"> </span>[command]<span class="tok-w"> </span>...<span class="tok-w"> </span>:<span class="tok-w"> </span>[<span class="tok-w"> </span>options<span class="tok-w"> </span>]<span class="tok-w"> </span>...<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>config</code>: the name of initialized configuration. The name can be omitted, in
+which case the configuration will become the default one.</p>
+</li>
+<li>
+<p><code>command</code>: the command, with any extra arguments, to execute. If no command
+is given, first <code>PKG_CONFIG</code> environment variable is checked, and if its
+empty the string <code>pkg-config</code> is used.</p>
+</li>
+<li>
+<p><code>options</code>: options that modify <code>pkg-config</code> behavior. Allowed options are:</p>
+</li>
+<li>
+<p><code>&lt;path&gt;</code>: sets <code>PKG_CONFIG_PATH</code> environment variable;
+multiple occurences are allowed.</p>
+</li>
+<li>
+<p><code>&lt;libdir&gt;</code>: sets <code>PKG_CONFIG_LIBDIR</code> environment variable;
+multiple occurences are allowed.</p>
+</li>
+<li>
+<p><code>&lt;allow-system-cflags&gt;</code>: sets <code>PKG_CONFIG_ALLOW_SYSTEM_CFLAGS</code>
+environment variable; multiple occurences are allowed.</p>
+</li>
+<li>
+<p><code>&lt;allow-system-libs&gt;</code>: sets <code>PKG_CONFIG_ALLOW_SYSTEM_LIBS</code>
+environment variable; multiple occurences are allowed.</p>
+</li>
+<li>
+<p><code>&lt;sysroot&gt;</code>: sets <code>PKG_CONFIG_SYSROOT_DIR</code> environment variable;
+multiple occurences are allowed.</p>
+</li>
+<li>
+<p><code>&lt;variable&gt;</code>: adds a variable definition argument to command invocation;
+multiple occurences are allowed.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_class_pkg_config_target"><a class="anchor" href="#_class_pkg_config_target"></a>Class <code>pkg-config-target</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">class</span><span class="tok-w"> </span><span class="tok-nc">pkg-config-target</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nc">alias-target-class</span><span class="tok-w"> </span>{<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">construct</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">sources</span><span class="tok-w"> </span><span class="tok-p">*</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">property-set</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">version</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-w"> </span><span class="tok-nv">property-set</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">variable</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-w"> </span><span class="tok-nv">name</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">property-set</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-w"></span>
+}<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The class of objects returned by <code>import</code> rule. The objects themselves could be
+useful in situations that require more complicated logic for consuming a
+package. See <a href="#pkg-config-tips">Tips</a> for examples.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>rule construct ( name : sources * : property-set )</code>
+Overrides <code>alias-target.construct</code>.</p>
+</li>
+<li>
+<p><code>rule version ( property-set )</code>
+Returns the package&#8217;s version, in the context of <code>property-set</code>.</p>
+</li>
+<li>
+<p><code>rule variable ( name : property-set )</code>
+Returns the value of variable <code>name</code> in the package, in the context of
+<code>property-set</code>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="pkg-config-tips"><a class="anchor" href="#pkg-config-tips"></a>Tips</h5>
+<div class="sect5">
+<h6 id="_using_several_configurations"><a class="anchor" href="#_using_several_configurations"></a>Using several configurations</h6>
+<div class="paragraph">
+<p>Suppose, you have 2 collections of <code>.pc</code> files: one for platform A, and another
+for platform B. You can initialize 2 configurations of <code>pkg-config</code> tool each
+corresponding to specific collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-nb">using</span><span class="tok-w"> </span>pkg-config<span class="tok-w"> </span>:<span class="tok-w"> </span>A<span class="tok-w"> </span>:<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;libdir&gt;</span>path/to/collection/A<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">using</span><span class="tok-w"> </span>pkg-config<span class="tok-w"> </span>:<span class="tok-w"> </span>B<span class="tok-w"> </span>:<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;libdir&gt;</span>path/to/collection/B<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, you can specify that builds for platform A should use configuration A,
+while builds for B should use configuration B:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-nb">project</span><span class="tok-w"></span>
+<span class="tok-w">    </span>:<span class="tok-w"> </span>requirements<span class="tok-w"></span>
+<span class="tok-w">      </span><span class="tok-na">&lt;target-os&gt;</span>A-os,<span class="tok-na">&lt;architecture&gt;</span>A-arch:<span class="tok-na">&lt;pkg-config&gt;</span>A<span class="tok-w"></span>
+<span class="tok-w">      </span><span class="tok-na">&lt;target-os&gt;</span>B-os,<span class="tok-na">&lt;architecture&gt;</span>B-arch:<span class="tok-na">&lt;pkg-config&gt;</span>B<span class="tok-w"></span>
+<span class="tok-w">    </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Thanks to the fact, that <code>project-config</code>, <code>user-config</code> and <code>site-config</code>
+modules are parents of jamroot module, you can put it in any of those files.o</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_choosing_the_package_name_based_on_the_property_set"><a class="anchor" href="#_choosing_the_package_name_based_on_the_property_set"></a>Choosing the package name based on the property set</h6>
+<div class="paragraph">
+<p>Since a file for a package should be named after the package suffixed with
+<code>.pc</code>, some projects came up with naming schemes in order to allow simultaneous
+installation of several major versions or build variants. In order to pick the
+specific name corresponding to the build request you can use <code>&lt;conditional&gt;</code>
+property in requirements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>pkg-config.import<span class="tok-w"> </span>mypackage<span class="tok-w"> </span>:<span class="tok-w"> </span>requirements<span class="tok-w"> </span><span class="tok-na">&lt;conditional&gt;</span>@infer-name<span class="tok-w"> </span>;<span class="tok-w"></span>
+
+<span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">infer-name</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-w"> </span><span class="tok-nv">properties</span><span class="tok-w"> </span><span class="tok-p">*</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-w"></span>
+{<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">local</span><span class="tok-w"> </span>name<span class="tok-w"> </span>=<span class="tok-w"> </span>mypackage<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">local</span><span class="tok-w"> </span>variant<span class="tok-w"> </span>=<span class="tok-w"> </span>[<span class="tok-w"> </span>property.select<span class="tok-w"> </span><span class="tok-na">&lt;variant&gt;</span><span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(properties)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-si">$(variant)</span><span class="tok-w"> </span>=<span class="tok-w"> </span>debug<span class="tok-w"></span>
+<span class="tok-w">    </span>{<span class="tok-w"></span>
+<span class="tok-w">      </span>name<span class="tok-w"> </span>+=<span class="tok-w"> </span>-d<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-w">    </span>}<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-na">&lt;name&gt;</span><span class="tok-si">$(name)</span><span class="tok-w"> </span>;<span class="tok-w"></span>
+}<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>common.format-name</code> rule can be very useful in this situation.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_modify_usage_requirements_based_on_package_version_or_variable"><a class="anchor" href="#_modify_usage_requirements_based_on_package_version_or_variable"></a>Modify usage requirements based on package version or variable</h6>
+<div class="paragraph">
+<p>Sometimes you need to apply some logic based on package&#8217;s version or a
+variable that it defines. For that you can use <code>&lt;conditional&gt;</code> property in
+usage requirements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>mypackage<span class="tok-w"> </span>=<span class="tok-w"></span>
+<span class="tok-w">  </span>[<span class="tok-w"> </span>pkg-config.import<span class="tok-w"> </span>mypackage<span class="tok-w"> </span>:<span class="tok-w"> </span>usage-requirements<span class="tok-w"> </span><span class="tok-na">&lt;conditional&gt;</span>@define_ns<span class="tok-w"></span>
+<span class="tok-w">  </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+
+<span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">extra-props</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-w"> </span><span class="tok-nv">properties</span><span class="tok-w"> </span><span class="tok-p">*</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-w"></span>
+{<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">local</span><span class="tok-w"> </span>ps<span class="tok-w"> </span>=<span class="tok-w"> </span>[<span class="tok-w"> </span>property-set.create<span class="tok-w"> </span><span class="tok-si">$(properties)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">local</span><span class="tok-w"> </span>prefix<span class="tok-w"> </span>=<span class="tok-w"> </span>[<span class="tok-w"> </span><span class="tok-si">$(mypackage)</span>.variable<span class="tok-w"> </span>name_prefix<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(ps)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-w">    </span>prefix<span class="tok-w"> </span>+=<span class="tok-w"> </span>[<span class="tok-w"> </span><span class="tok-si">$(mypackage)</span>.version<span class="tok-w"> </span><span class="tok-si">$(ps)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-na">&lt;define&gt;</span><span class="tok-si">$(prefix:J=_)</span><span class="tok-w"> </span>;<span class="tok-w"></span>
+}<span class="tok-w"></span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sass"><a class="anchor" href="#_sass"></a>9.2.2. Sass</h4>
 <div class="paragraph">
 <p>This tool converts SASS and SCSS files into CSS. This tool explicitly supports
 both the version written in C (sassc) and the original Ruby implementation
