@@ -1990,6 +1990,22 @@ available to Boost.Build. For example,</p>
 <div class="paragraph">
 <p>will make the <a href="http://gcc.gnu.org">GCC</a> compiler available.</p>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">☀</div>
+</td>
+<td class="content">
+You can put <code>using &lt;tool&gt; ;</code> with no other argument in a Jamfile
+that needs the <code>tool</code>, provided that the <code>tool</code> supports this usage.
+In all other cases, the <code>using</code> rule should be in a configuration file.
+The general principle is that descriptions in Jamfile should be
+maintained as portable while configuration files are system specific.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>All the supported tools are documented in
 <a href="#bbv2.reference.tools">the section called “Builtin tools”</a>, including the
