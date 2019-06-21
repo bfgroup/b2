@@ -2280,7 +2280,10 @@ that don&#8217;t depend on the failed ones.</p>
 </dd>
 <dt class="hdlist1"><code>-j N</code></dt>
 <dd>
-<p>Run up to N commands in parallel. Default number of jobs is <code>1</code>.</p>
+<p>Run up to N commands in parallel. Default number of jobs is the number
+of detected available CPU threads. Note: There are circumstances when that
+default can be larger than the allocated cpu resources, for instance in some
+virtualized container installs.</p>
 </dd>
 <dt class="hdlist1"><code>--config=filename</code><a id="bbv2.reference.init.options.config"></a></dt>
 <dd>
@@ -13278,6 +13281,21 @@ with "update" in the name.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
 <p>Better stacks for sanitizers.&#8201;&#8212;&#8201;<em>James E. King III</em></p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">⚠</div>
+</td>
+<td class="content">
+The default number of parallel jobs has changed in this release from
+"1" to the number of cores. There are circumstances when that default can be
+larger than the allocated cpu resources, for instance in some virtualized
+container installs.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
