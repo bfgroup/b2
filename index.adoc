@@ -14,16 +14,16 @@ include::b2.css[]
 endif::[]
 
 [.menubar]
-image:website/boost_build.png[Boost.Build,198,30]
+image:website/boost_build.png[B2,198,30]
 [.menubar-item]#link:tutorial.html[Tutorial]#
-[.menubar-item]#link:manual/develop/index.html[Documentation]#
+[.menubar-item]#link:manual/master/index.html[Documentation]#
 [.menubar-item]#link:https://github.com/boostorg/build[GitHub]#
 
-== Boost.Build
+== B2 (Boost.Build)
 
-Boost.Build makes it easy to build C++ projects, everywhere.
+B2 makes it easy to build C++ projects, everywhere.
 
-You name your executables and libraries and list their sources. Boost.Build
+You name your executables and libraries and list their sources. B2
 takes care about compiling your sources with right options, creating static
 and shared libraries, making executables, and other chores — whether you're
 using gcc, msvc, or a dozen more supported C++ compilers — on Windows, OSX,
@@ -34,16 +34,16 @@ list of sources is all you need.
 
 *Portability.* Most important build properties have symbolic names that work
 everywhere. Why memorize compiler flags necessary for multi-threaded 64-bit
-shared library, if Boost.Build can do it for you?
+shared library, if B2 can do it for you?
 
 *Variant builds.* When you build the same project twice with different
 properties, all produced files are placed in different directories, so you
 can build with 2 versions of gcc, or both debug and release variants in one
 invocation.
 
-*Global dependencies.* No matter what directory you build in, Boost.Build
+*Global dependencies.* No matter what directory you build in, B2
 will always check all dependencies in your entire project, preventing
-inconsistent binaries. And it's easy to use one Boost.Build project in other,
+inconsistent binaries. And it's easy to use one B2 project in other,
 again with full dependency tracking.
 
 *Usage requirements.* A target can specify properties, like include paths and
