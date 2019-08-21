@@ -5385,7 +5385,7 @@ several versions of the compiler.</p>
 </div>
 <div class="paragraph">
 <p>If compiler command is not specified, then Boost.Build will look in PATH
-for an executable <code>icpc</code> (on Linux), or <code>icc.exe</code> (on Windows).</p>
+for an executable <code>icpc</code> (on Linux), or <code>icl.exe</code> (on Windows).</p>
 </div>
 <div class="paragraph">
 <p>The following options can be provided, using
@@ -5412,19 +5412,17 @@ and C++ sources.</p>
 <dd>
 <p>Specifies additional command line options that will be passed to the linker.</p>
 </dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>The Linux version supports the following additional options:</p>
-</div>
-<div class="dlist">
-<dl>
 <dt class="hdlist1"><code>root</code></dt>
 <dd>
-<p>Specifies root directory of the compiler installation. This option is
-necessary only if it is not possible to detect this information from the
-compiler command&#8201;&#8212;&#8201;for example if the specified compiler command is a user
-script.</p>
+<p>For the Linux version, specifies the root directory of the compiler installation.
+This option is necessary only if it is not possible to detect this information
+from the compiler command&#8201;&#8212;&#8201;for example if the specified compiler command is
+a user script. For the Windows version, specifies the directory where the
+<code>iclvars.bat</code> file for configuring the compiler exists. Specifying the <code>root</code>
+option without specifying the compiler command allows the end-user not to have
+to worry about whether he is compiling 32-bit or 64-bit code, as the toolset will
+automatically configure the compiler for the appropriate address model and compiler
+command using the <code>iclvars.bat</code> batch file.</p>
 </dd>
 </dl>
 </div>
