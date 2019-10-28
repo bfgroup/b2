@@ -4880,6 +4880,46 @@ as the <code>visibility</code> feature. By default, if <code>local-visibility</c
 for a target, the value of the <code>visibility</code> feature is used.</p>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.lto"></a><code>lto</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>on</code>.</p>
+<div class="paragraph">
+<p>Enables link time optimizations (also known as interprocedural optimizations or
+whole-program optimizations). Currently supported toolsets are <a href="#bbv2.reference.tools.compiler.gcc">GNU C++</a>,
+clang and <a href="#bbv2.reference.tools.compiler.msvc">Microsoft Visual C++</a>. The feature is optional.</p>
+</div>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.lto-mode"></a><code>lto-mode</code></dt>
+<dd>
+<p><strong>Subfeature of</strong> <code>lto</code></p>
+<div class="paragraph">
+<p><strong>Allowed values:</strong> <code>full</code>, <code>thin</code>, <code>fat</code>.</p>
+</div>
+<div class="paragraph">
+<p>Specifies the type of LTO to use.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>full</code></dt>
+<dd>
+<p>Use the monolithic LTO: on linking all input is merged into a single
+module.</p>
+</dd>
+<dt class="hdlist1"><code>thin</code></dt>
+<dd>
+<p>Use clang&#8217;s ThinLTO: each compiled file contains a summary of the
+module, these summaries are merged into a single index. This allows to avoid
+merging all modules together, which greatly reduces linking time.</p>
+</dd>
+<dt class="hdlist1"><code>fat</code></dt>
+<dd>
+<p>Produce gcc&#8217;s fat LTO objects: compiled files contain both the
+intermidiate language suitable for LTO and object code suitable for regular
+linking.</p>
+</dd>
+</dl>
+</div>
+</dd>
 </dl>
 </div>
 </div>
