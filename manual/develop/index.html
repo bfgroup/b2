@@ -4910,6 +4910,44 @@ conditionally include a source (using conditional requirements, see
 the section <a href="#bbv2.tutorial.conditions">Conditions and alternatives</a>.  See also the
 <a href="#bbv2.builtin.features.library"><code>&lt;library&gt;</code></a> feature.</p>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.stdlib"></a><code>stdlib</code></dt>
+<dd>
+<p><strong>Allowed values</strong>: <code>native</code>, <code>gnu</code>, <code>gnu11</code>, <code>libc++</code>, <code>sun-stlport</code>, <code>apache</code>.</p>
+<div class="paragraph">
+<p>Specifies C++ standard library to link to and in some cases the library ABI to
+use:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>native</code></dt>
+<dd>
+<p>Use compiler&#8217;s default.</p>
+</dd>
+<dt class="hdlist1"><code>gnu</code></dt>
+<dd>
+<p>Use GNU Standard Library (a.k.a. libstdc++) with the old ABI.</p>
+</dd>
+<dt class="hdlist1"><code>gnu11</code></dt>
+<dd>
+<p>Use GNU Standard Library with the new ABI.</p>
+</dd>
+<dt class="hdlist1"><code>libc++</code></dt>
+<dd>
+<p>Use LLVM libc++.</p>
+</dd>
+<dt class="hdlist1"><code>sun-stlport</code></dt>
+<dd>
+<p>Use the STLport implementation of the standard library
+provided with the Solaris Studio compiler.</p>
+</dd>
+<dt class="hdlist1"><code>apache</code></dt>
+<dd>
+<p>Use the Apache stdcxx version 4 C++ standard library provided with
+the Solaris Studio compiler.</p>
+</dd>
+</dl>
+</div>
+</dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.strip"></a><code>strip</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> <code>off</code>, <code>on</code>.</p>
