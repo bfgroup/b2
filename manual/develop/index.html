@@ -13641,7 +13641,14 @@ variants accepted as valid for an option:</p>
 <div class="sect2">
 <h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>12.1. Version 4.1.0</h3>
 <div class="paragraph">
-<p>Other changes in this release:</p>
+<p>Many small bug fixes in this release. But there are some new features also.
+There&#8217;s now an <code>lto</code> feature to specify the to use LTO, and what kind. The
+existing <code>stdlib</code> feature now has real values and corresponding options
+for some toolsets. But most importantly there&#8217;s new documentation for all
+the features.</p>
+</div>
+<div class="paragraph">
+<p>Thank to all the users that contributed to this release with these changes:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -13649,7 +13656,60 @@ variants accepted as valid for an option:</p>
 <p>Support for VS2019 for intel-vin 19.0.&#8201;&#8212;&#8201;<em>Edward Diener</em></p>
 </li>
 <li>
-<p>Fix compiler warnings about -std=gnu11 when building b2 on Cygwin.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
+<p>Fix compiler warnings about <code>-std=gnu11</code> when building <code>b2</code> on Cygwin.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
+</li>
+<li>
+<p>Add example of creating multiple PCHs for individual headers.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+</li>
+<li>
+<p>Add QNX threading flags for GCC toolset.&#8201;&#8212;&#8201;<em>Aurelien Chartier</em></p>
+</li>
+<li>
+<p>Fix version option for IBM and Sun compilers when building b2 engine&#8201;&#8212;&#8201;<em>Juan Alday</em></p>
+</li>
+<li>
+<p>Rename <code>strings.h</code> to <code>jam_strings.h</code> in <code>b2</code> engine to avoid clash with
+POSIX <code>strings.h</code> header.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
+</li>
+<li>
+<p>Add options for <code>cxxstd</code> feature for IBM compiler.&#8201;&#8212;&#8201;<em>Edward Diener</em></p>
+</li>
+<li>
+<p>Many fixes to intel-win toolset.&#8201;&#8212;&#8201;<em>Edwad Diener</em></p>
+</li>
+<li>
+<p>Add z15 instruction set for gcc based toolsets.&#8201;&#8212;&#8201;<em>Neale Ferguson</em></p>
+</li>
+<li>
+<p>Improve using MSVC from a Cygwin shell.&#8201;&#8212;&#8201;<em>Michael Haubenwallner</em></p>
+</li>
+<li>
+<p>Add LTO feature and corresponding support for gcc and clang toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix errors when a source doesn&#8217;t have a type.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
+</li>
+<li>
+<p>Add documentation for features.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Enhance <code>stdlib</code> feature, and corresponding documentation, for clang, gcc,
+and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Install rule now makes explicit only the immediate targets it creates.&#8201;&#8212;&#8201; <em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Add armasm (32 and 64) support for msvc toolset.&#8201;&#8212;&#8201;<em>Michał Janiszewski</em></p>
+</li>
+<li>
+<p>Fix errors with custom un-versioned gcc toolset specifications.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
+</li>
+<li>
+<p>Allow arflags override in gcc toolset specifications.&#8201;&#8212;&#8201;<em>hyc</em></p>
+</li>
+<li>
+<p>Fix founds libs not making it to the clang-win link command line.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
 </li>
 </ul>
 </div>
