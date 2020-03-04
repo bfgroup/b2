@@ -13641,7 +13641,41 @@ variants accepted as valid for an option:</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>12.1. Version 4.2.0</h3>
-
+<div class="paragraph">
+<p>This release is solely minor fixes and cleanup of the engine. In particular
+the bootstrap/build process now clearly communicates C++11 requirement.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add <code>saxonhe_dir</code> action.&#8201;&#8212;&#8201;<em>Richard Hodges</em></p>
+</li>
+<li>
+<p>Add CI testing for historical Boost versions on Windows MSVC.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+</li>
+<li>
+<p>Check for C++11 support when building engine. Including aninformative
+error message as to that fact.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+</li>
+<li>
+<p>Update Jam grammar parser with latest <code>bison</code> version.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+</li>
+<li>
+<p>Allow root <code>b2 b2</code> engine build to work even if <code>bison</code> grammar generator
+is not available.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+</li>
+<li>
+<p>Warning free engine build on at least Windows, macOS, and Linux.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+</li>
+<li>
+<p>Sanitize Windows engine build to consistently use ANSI Win32 API.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
+</li>
+<li>
+<p>Fix b2 engine not exiting, with error, early when it detects a Jam language
+error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>12.2. Version 4.1.0</h3>
