@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-  <title>Boost.Build tutorial</title>
+  <title>B2 tutorial</title>
 
   <link href="website/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="website/index.css" rel="stylesheet">
@@ -21,7 +21,7 @@
         <li><a href="manual/develop/index.html">Documentation</a>
         <li><a href="http://github.com/boostorg/build">GitHub</a>
       </ul>
-      <span><b>Boost.Build Tutorial</b></span>
+      <span><b>B2 Tutorial</b></span>
     </div>      
     
     <hr class="hrhead">
@@ -55,48 +55,48 @@
 
     <div>
 
-      <p>Boost.Build is a high-level build system which makes it as easy as
+      <p>B2 is a high-level build system which makes it as easy as
       possible to manage C++ projects. The idea is to specify in
       configuration files just as much as necessary to build a program. For
-      example it is not required to tell Boost.Build how to use a certain
-      compiler. Boost.Build supports many compilers out of the box and knows
+      example it is not required to tell B2 how to use a certain
+      compiler. B2 supports many compilers out of the box and knows
       how to use them. If you create a configuration file you just need to
-      tell Boost.Build where to find the source files, what the executable
-      should be called and which compiler Boost.Build should use. Boost.Build
+      tell B2 where to find the source files, what the executable
+      should be called and which compiler B2 should use. B2
       will then try to find the compiler and automatically build the
       program.</p>
 
-      <p>As Boost.Build supports many compilers configuration files never
+      <p>As B2 supports many compilers configuration files never
       contain any compiler-specific options. Configuration files are entirely
       compiler-independent. Of course it is possible to set options like
       whether code should be optimized. However these options are written in
-      a language only understood by Boost.Build. Once a compiler is picked to
-      build a program Boost.Build translates options in configuration files
+      a language only understood by B2. Once a compiler is picked to
+      build a program B2 translates options in configuration files
       to command line options expected by the selected compiler. This makes
       it possible to write configuration files once and build a program on
       different platforms with different compilers.</p>
 
-      <p>As nice as it sounds Boost.Build can only be used for C++ and C
-      projects. Boost.Build doesn't know how to use other compilers like a
-      Java compiler. Although Boost.Build is extensible it makes more sense
+      <p>As nice as it sounds B2 can only be used for C++ and C
+      projects. B2 doesn't know how to use other compilers like a
+      Java compiler. Although B2 is extensible it makes more sense
       to use a different build system for programs implemented in other
       programming languages.</p>
 
-      <p>Boost.Build was created to build and install the <a class="link"
+      <p>B2 was created to build and install the <a class="link"
       href="http://www.boost.org/" target="_top">Boost C++ libraries</a>
       easily with different compilers on different platforms. Although
-      Boost.Build is part of and shipped with the Boost C++ libraries it can
+      B2 is part of and shipped with the Boost C++ libraries it can
       be used separately for any C++ or C project. It's even possible to
       <a class="link" href="https://github.com/boostorg/build/archive/master.zip"
-      target="_top">download only Boost.Build</a> in case you don't want to
+      target="_top">download only B2</a> in case you don't want to
       use the Boost C++ libraries.</p>
 
-      <p>This article is an introduction to help you using Boost.Build for
+      <p>This article is an introduction to help you using B2 for
       your own C++ or C projects. It gives you a basic understanding of how
-      Boost.Build works and how you start using it. After reading the article
-      you should not only be able to use Boost.Build for your own projects,
+      B2 works and how you start using it. After reading the article
+      you should not only be able to use B2 for your own projects,
       it will also be easier to understand the <a class="link" href=
-      "manual/develop/index.html" target="_top">Boost.Build documentation</a>
+      "manual/develop/index.html" target="_top">B2 documentation</a>
       as you'll know the big picture.</p>
     </div>
     <hr>
@@ -107,7 +107,7 @@
 
     <div>
 
-      <p>The program you use to build a project managed by Boost.Build is
+      <p>The program you use to build a project managed by B2 is
       called <span class="command"><strong>b2</strong></span>. If you
       downloaded and built the Boost C++ libraries you have used <span class=
       "command"><strong>b2</strong></span> already. <span class=
@@ -121,15 +121,15 @@
       source code is distributed over many directories. Instead of creating
       one big configuration file for the entire project components typically
       get their own configuration files. This is no different with
-      Boost.Build: In a large project there will be many configuration files
+      B2: In a large project there will be many configuration files
       which have to be found and interpreted by <span class=
       "command"><strong>b2</strong></span>.</p>
 
-      <p>For Boost.Build every directory with a configuration file is a
+      <p>For B2 every directory with a configuration file is a
       project: If there is a configuration file in a directory something can
       be built. Whether it's a component in a subdirectory or a software
       consisting of many components doesn't make a difference for
-      Boost.Build.</p>
+      B2.</p>
 
       <p>When <span class="command"><strong>b2</strong></span> is started
       it doesn't run a search for configuration files on the entire file
@@ -176,7 +176,7 @@
       "command"><strong>b2</strong></span> doesn't complain that it can't
       find a Jamfile. It complains about not finding the build system.</p>
       <pre class="screen">
-Unable to load Boost.Build: could not find "boost-build.jam"
+Unable to load B2: could not find "boost-build.jam"
 ---------------------------------------------------------------
 Attempted search from C:\Users\Boris\Desktop up to the root
 
@@ -190,11 +190,11 @@ Please consult the documentation at 'http://www.boost.org'.
       <p><span class="command"><strong>b2</strong></span> is an
       interpreter. It doesn't really know how to build anything. What
       <span class="command"><strong>b2</strong></span> does is interpreting
-      Jamfiles. Boost.Build is really implemented in Jamfiles. And they
-      contain all the logic which makes Boost.Build such a powerful tool. As
+      Jamfiles. B2 is really implemented in Jamfiles. And they
+      contain all the logic which makes B2 such a powerful tool. As
       <span class="command"><strong>b2</strong></span> only does what it
       reads in Jamfiles it needs to know where to find the Jamfiles
-      Boost.Build is made of.</p>
+      B2 is made of.</p>
 
       <p>When <span class="command"><strong>b2</strong></span> is started
       it looks for a file <code class="filename">boost-build.jam</code> in
@@ -210,7 +210,7 @@ boost-build C:/boost_1_57_0/tools/build/src ;
       directory which contains a file called <code class=
       "filename">bootstrap.jam</code>. This is the file <span class=
       "command"><strong>b2</strong></span> needs to load the build system.
-      As the Boost C++ libraries ship Boost.Build you can refer to the
+      As the Boost C++ libraries ship B2 you can refer to the
       subdirectory <code class="filename">tools/build</code> of the root
       directory of the Boost C++ libraries. And you can always use a slash as
       a path separator - even if you are on Windows.</p>
@@ -224,7 +224,7 @@ boost-build C:/boost_1_57_0/tools/build/src ;
       <code class="filename">boost-build.jam</code> it uses the path within
       the file to load the build system. When the build system is loaded it
       also prepares itself to use a certain compiler, linker and maybe other
-      tools required to build a project. Boost.Build refers to these programs
+      tools required to build a project. B2 refers to these programs
       as a toolset. If no command line option is used to start <span class=
       "command"><strong>b2</strong></span> the build system tries to find a
       toolset it can use automatically. On Windows for example it searches
@@ -249,7 +249,7 @@ warning: http://boost.org/boost-build2/doc/html/bbv2/advanced/configuration.html
       <span class="command"><strong>b2 toolset=gcc</strong></span>.</p>
 
       <p>As of today there are more than 10 toolsets supported. There is a
-      good chance that Boost.Build will work with the compiler you use out of
+      good chance that B2 will work with the compiler you use out of
       the box.</p>
 
       <p>Once the build system has been found, loaded and knows which toolset
@@ -280,9 +280,9 @@ error: Did not find Jamfile.jam or Jamroot.jam in any parent directory.
       <p>If you create an empty file <code class=
       "filename">Jamroot.jam</code> and start <span class=
       "command"><strong>b2</strong></span> the error message is gone.
-      Obviously there is nothing done by Boost.Build. But now you know how
+      Obviously there is nothing done by B2. But now you know how
       <span class="command"><strong>b2</strong></span> proceeds to build a
-      program and what the minimum Boost.Build configuration looks like.</p>
+      program and what the minimum B2 configuration looks like.</p>
 
       <p>Please note that if you work on a small project and you need only
       one configuration file you can simply call it <code class=
@@ -303,26 +303,26 @@ error: Did not find Jamfile.jam or Jamroot.jam in any parent directory.
       keys. What is important to understand though is that Jamfiles are
       really script files. There is a programming language used to write
       Jamfiles. <span class="command"><strong>b2</strong></span> isn't the
-      core component of Boost.Build which knows how to build programs. The
-      logic of Boost.Build is in the Jamfiles which tell <span class=
+      core component of B2 which knows how to build programs. The
+      logic of B2 is in the Jamfiles which tell <span class=
       "command"><strong>b2</strong></span> how to build programs.</p>
 
-      <p>Even though Boost.Build is based on a programming language you don't
+      <p>Even though B2 is based on a programming language you don't
       need to think of programming when you create Jamfiles. The syntax of
-      the programming language used by Boost.Build tries to remind you more
+      the programming language used by B2 tries to remind you more
       of creating plain old configuration files. The idea is to have the best
       of two worlds: A powerful and flexible programming language but a
       simple syntax you might be familiar with from other build systems.</p>
 
       <p>This article doesn't introduce you into the programming language
-      Boost.Build is based on. The programming language is proprietary and
+      B2 is based on. The programming language is proprietary and
       not really a joy to use. It is no competitor to popular scripting
-      languages like Javascript or Python. The developers of Boost.Build
-      recognize it and work on another version of Boost.Build based on
+      languages like Javascript or Python. The developers of B2
+      recognize it and work on another version of B2 based on
       Python. However all of this shouldn't matter to developers who plan to
-      manage their projects with Boost.Build. It helps to understand the
+      manage their projects with B2. It helps to understand the
       syntax of Jamfiles better once one realizes that there is a programming
-      language inside Boost.Build. But it's not required to learn the details
+      language inside B2. But it's not required to learn the details
       of the programming language.</p>
 
       <p>Let's look at a simple Jamfile which can be used to build an
@@ -332,21 +332,21 @@ error: Did not find Jamfile.jam or Jamroot.jam in any parent directory.
 exe hello : hello.cpp ; 
 </pre>
 
-      <p>Boost.Build provides a lot of built-in rules and <code class=
+      <p>B2 provides a lot of built-in rules and <code class=
       "code">exe</code> is one of them. While the documentation of
-      Boost.Build refers to <code class="code">exe</code> as a rule you know
+      B2 refers to <code class="code">exe</code> as a rule you know
       already that the above Jamfile is actually built using a programming
       language. As it turns out rules are simply functions. And the Jamfile
       above contains a function call.</p>
 
       <p>For the majority of tasks which are typically required to build
-      programs Boost.Build provides predefined rules - or functions if you
+      programs B2 provides predefined rules - or functions if you
       like. As with functions in other programming languages it is possible
       to pass parameters. In the Jamfile above the function <code class=
       "code">exe</code> is called with the two parameters hello and
       hello.cpp.</p>
 
-      <p>The programming language Boost.Build is based on knows only one data
+      <p>The programming language B2 is based on knows only one data
       type: Everything is a list of strings. A list can be empty or contain
       one or more strings. In the Jamfile above the function <code class=
       "code">exe</code> is called with two parameters each one a list
@@ -364,7 +364,7 @@ exe "hello" : "hello.cpp" ;
       required to end a line with a semicolon just as you are used to from
       C++.</p>
 
-      <p>Please note that the programming language of Boost.Build requires
+      <p>Please note that the programming language of B2 requires
       that there is a space around all tokens. For example there must be a
       space on the left and on the right of the colon and there must be a
       space on the left of the semicolon. Without spaces around tokens
@@ -395,16 +395,16 @@ msvc.manifest bin\msvc-9.0\debug\hello.exe
       there is even the correct file extension <code class=
       "filename">exe</code> appended.</p>
 
-      <p>The main advantage of Boost.Build is that you specify just as much
+      <p>The main advantage of B2 is that you specify just as much
       as necessary for a build system to know how to build a program.
-      Anything Boost.Build can do automatically is done automatically. You
+      Anything B2 can do automatically is done automatically. You
       don't need to detect the platform a program is built on to decide if a
       file extension like <code class="filename">exe</code> should be
       appended or not. And you don't need to specify how a compiler like
       Visual C++ has actually to be invoked to compile source code.</p>
 
-      <p>Boost.Build supports a lot of toolsets out of the box. As a program
-      can be built using different toolsets Boost.Build uses toolset-specific
+      <p>B2 supports a lot of toolsets out of the box. As a program
+      can be built using different toolsets B2 uses toolset-specific
       directories. This way it is possible to build a program with different
       toolsets without a toolset constantly overwriting files produced by
       another toolset.</p>
@@ -438,7 +438,7 @@ msvc.manifest bin\msvc-9.0\release\hello.exe
 
       <p>Choosing a variant is something which is done so often that it's
       sufficient to enter <span class="command"><strong>b2
-      release</strong></span>. Boost.Build figures out that release is meant
+      release</strong></span>. B2 figures out that release is meant
       to choose the variant.</p>
 
       <p>If you don't want to specify the variant on the command line but
@@ -458,8 +458,8 @@ exe hello : hello.cpp : &lt;variant&gt;release ;
       be set to release just as it was done before on the command line. The
       syntax to set the variant in a Jamfile is different though.</p>
 
-      <p>Boost.Build defines features which look like XML tags. One of the
-      features supported by Boost.Build is <code class=
+      <p>B2 defines features which look like XML tags. One of the
+      features supported by B2 is <code class=
       "code">&lt;variant&gt;</code>. If a feature should be set to a value it
       has to be put next to it - without a space in between. Some features
       are free which means they can be set to any value you want.
@@ -497,7 +497,7 @@ exe hello : hello.cpp : : &lt;variant&gt;debug &lt;variant&gt;release ;
       requirements but only if values are not mutually exclusive. As a
       program can't be a debug and a release version at the same time
       <code class="code">&lt;variant&gt;</code> must be set in the default
-      values. Only then Boost.Build understands that two versions of
+      values. Only then B2 understands that two versions of
       <code class="filename">hello.exe</code> should be built.</p>
       <pre class="programlisting">
 exe hello : hello.cpp : &lt;define&gt;WIN32 &lt;define&gt;_WIN32 : &lt;variant&gt;debug &lt;variant&gt;release ; 
@@ -539,7 +539,7 @@ exe hello : hello.cpp : : &lt;variant&gt;debug &lt;variant&gt;release &lt;optimi
       automatically created.</p>
 
       <p>So far the only rule used was <code class="code">exe</code>. But of
-      course Boost.Build provides many more built-in rules. Another important
+      course B2 provides many more built-in rules. Another important
       rule is <code class="code">lib</code>. It is used to build a
       library.</p>
       <pre class="programlisting">
@@ -549,7 +549,7 @@ lib world : world.cpp ;
       <p>The above Jamfile builds a shared library from the source file
       <code class="filename">world.cpp</code>. On Windows a file <code class=
       "filename">world.dll</code> is created. The usual file extension is
-      again automatically appended by Boost.Build.</p>
+      again automatically appended by B2.</p>
 
       <p>By default a shared library is built. If you want a static library
       to be generated you set the <code class="code">&lt;link&gt;</code>
@@ -574,7 +574,7 @@ install "C:/Program Files/hello" : hello ;
 
       <p>Here concepts known from other build systems shine through: Instead
       of thinking of function calls every line defines a target. Dependencies
-      are created by referencing other targets. That's how Boost.Build knows
+      are created by referencing other targets. That's how B2 knows
       in what order it should build targets.</p>
 
       <p>Typically the rule <code class="code">install</code> is written
@@ -597,7 +597,7 @@ install install-bin : hello : &lt;location&gt;"C:/Program Files/hello" ;
       which might refer to install-bin have to be updated.</p>
 
       <p>There is another reason why it makes sense to use a feature.
-      Boost.Build supports conditional properties which make it possible to
+      B2 supports conditional properties which make it possible to
       use different installation directories depending on the platform a
       program is built on.</p>
       <pre class="programlisting">
@@ -611,14 +611,14 @@ install install-bin : hello : &lt;target-os&gt;windows:&lt;location&gt;"C:/Progr
 
       <p>The feature <code class="code">&lt;location&gt;</code> follows
       <code class="code">&lt;target-os&gt;</code> only delimited by a colon.
-      Such a construct is called conditional property: Boost.Build selects
+      Such a construct is called conditional property: B2 selects
       the installation directory depending on the operating system.</p>
 
       <p>Of course conditional properties can also be used with other rules.
       It is for example possible to define different preprocessor directives
       depending on the variant when building a program or a library.</p>
 
-      <p>Boost.Build provides many more built-in rules. Another useful rule
+      <p>B2 provides many more built-in rules. Another useful rule
       is <code class="code">glob</code> which makes it possible to use
       wildcards. In a big project with many source files it's then not
       required to list them all one by one but refer to all of them with
@@ -630,7 +630,7 @@ exe hello : [ glob *.cpp ] ;
       <p>The above Jamfile contains a nested function call: The result of the
       rule <code class="code">glob</code> is passed as the second parameter
       to <code class="code">exe</code>. Due to requirements of the
-      programming language Boost.Build is based on brackets must be used for
+      programming language B2 is based on brackets must be used for
       nested function calls.</p>
     </div>
     <hr>
@@ -712,7 +712,7 @@ build-project world ;
       default-build which was used in the previous sample: It can be
       overwritten.</p>
 
-      <p>When <code class="code">build-project</code> is used Boost.Build
+      <p>When <code class="code">build-project</code> is used B2
       assumes that the parameter is a reference to a subdirectory. We had
       seen another type of reference before.</p>
       <pre class="programlisting">
@@ -737,7 +737,7 @@ install install-bin : subdir//hello : &lt;location&gt;"C:/Program Files/hello" ;
       <p>Let's assume that the executable <span class=
       "command"><strong>hello</strong></span> depends on a library in another
       directory <code class="filename">world</code>. The library is also
-      built with Boost.Build using the rule <code class=
+      built with B2 using the rule <code class=
       "code">lib</code>.</p>
       <pre class="programlisting">
 lib world : world.cpp ; 
@@ -756,7 +756,7 @@ exe hello : hello.cpp world : : &lt;variant&gt;debug &lt;variant&gt;release ;
       <p>When the executable is built there are two versions generated - a
       debug and a release version. The Jamfile of the library however doesn't
       set the <code class="code">&lt;variant&gt;</code> feature. But
-      Boost.Build assumes that it should build two versions of the library,
+      B2 assumes that it should build two versions of the library,
       too. The feature <code class="code">&lt;variant&gt;</code> is said to
       be propagated.</p>
 
@@ -764,7 +764,7 @@ exe hello : hello.cpp world : : &lt;variant&gt;debug &lt;variant&gt;release ;
       to set the same features in various Jamfiles. However it also makes it
       a bit more complicated to understand how components are built as it all
       depends on what features are propagated. You can assume that
-      Boost.Build knows what it should do. But of course it doesn't mean that
+      B2 knows what it should do. But of course it doesn't mean that
       you easily understand what it does.</p>
 
       <p>Let's look at another example using the feature <code class=
@@ -872,11 +872,11 @@ exe hello : hello.cpp world filesystem : &lt;include&gt;C:/include ;
       source the second parameter must be empty. Instead in the third
       parameter the features <code class="code">&lt;name&gt;</code> and
       <code class="code">&lt;search&gt;</code> are used to specify the
-      library's name and a location where Boost.Build will find the
+      library's name and a location where B2 will find the
       library.</p>
 
       <p>It is important to specify the library's name in a
-      platform-independent way. For example for the Jamfile above Boost.Build
+      platform-independent way. For example for the Jamfile above B2
       will try to find a file <code class=
       "filename">libboost_filesystem.lib</code> on Windows. The usual file
       extension is again automatically appended.</p>
@@ -885,7 +885,7 @@ exe hello : hello.cpp world filesystem : &lt;include&gt;C:/include ;
       use the <code class="code">&lt;file&gt;</code> feature.</p>
 
       <p>If a system library should be referenced for which you can expect
-      Boost.Build to know where to find it the feature <code class=
+      B2 to know where to find it the feature <code class=
       "code">&lt;search&gt;</code> can be dropped.</p>
 
       <p>It is also possible to use the <code class="code">project</code>
@@ -922,12 +922,12 @@ lib world : world.cpp ;
     <hr>
 
     <h2 id="best_practices">Best practices<br>
-      <small>How Boost.Build is used by others</small>
+      <small>How B2 is used by others</small>
     </h2>
 
     <div>      
 
-      <p>As Boost.Build is a high-level build system you benefit most if you
+      <p>As B2 is a high-level build system you benefit most if you
       keep Jamfiles platform- and compiler-independent. After all the idea is
       to build your C++ or C projects on any platform with any compiler
       without being required to modify or maintain several Jamfiles.</p>
@@ -1018,7 +1018,7 @@ exe xmlparser : xmlparser.cpp : &lt;library&gt;/user-config//xml ;
       problem to use system-specific paths as after all configuration files
       are bound to a machine or to a user on a machine.</p>
 
-      <p>As Boost.Build has been created to build and install the Boost C++
+      <p>As B2 has been created to build and install the Boost C++
       libraries there is built-in support to use pre-built Boost C++
       libraries more easily.</p>
       <pre class="programlisting">
@@ -1072,7 +1072,7 @@ exe hello : hello.cpp : &lt;library&gt;/boost//thread ;
 
     <div>
 
-      <p>If you manage a project with Boost.Build and create Jamfiles you use
+      <p>If you manage a project with B2 and create Jamfiles you use
       rules all the time. Thus you should know which rules exist and how they
       are used. The following table gives you an overview about the most
       important rules.</p>
@@ -1210,10 +1210,10 @@ exe hello : hello.cpp : &lt;library&gt;/boost//thread ;
         </tbody>
       </table>
 
-      <p>Your Boost.Build version might support more rules than listed above.
+      <p>Your B2 version might support more rules than listed above.
       If you want to find out which rules are supported you should check out
       the files in the subdirectory <code class="filename">build</code> of
-      your Boost.Build installation.</p>
+      your B2 installation.</p>
     </div>
     <hr>
 
@@ -1501,9 +1501,9 @@ exe hello : hello.cpp : &lt;library&gt;/boost//thread ;
         </tbody>
       </table>
 
-      <p>For a complete and up-to-date reference of Boost.Build features look
+      <p>For a complete and up-to-date reference of B2 features look
       up the file <code class="filename">builtin.jam</code> in the
-      subdirectory <code class="filename">tools</code> of your Boost.Build
+      subdirectory <code class="filename">tools</code> of your B2
       installation. Search for lines starting with <code class=
       "code">feature.feature</code> - this is the internal rule used to
       define features.</p>
