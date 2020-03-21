@@ -5401,29 +5401,10 @@ and C++ sources.</p>
 <div class="sect4">
 <h5 id="bbv2.reference.tools.compiler.borland"><a class="anchor" href="#bbv2.reference.tools.compiler.borland"></a>Borland C++ Compiler</h5>
 <div class="paragraph">
-<p>The <code>borland</code> module supports the command line C compiler included in
-http://www.borland.com/us/products/cbuilder/index.html[C Builder 2006]
-product and earlier version of it, running on Microsoft Windows.</p>
-</div>
-<div class="paragraph">
-<p>The supported products are listed below. The version reported by the
-command lines tools is also listed for reference.:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>C++ Builder 2006&#8201;&#8212;&#8201;5.8.2</p>
-</li>
-<li>
-<p>CBuilderX&#8201;&#8212;&#8201;5.6.5, 5.6.4 (depending on release)</p>
-</li>
-<li>
-<p>CBuilder6&#8201;&#8212;&#8201;5.6.4</p>
-</li>
-<li>
-<p>Free command line tools&#8201;&#8212;&#8201;5.5.1</p>
-</li>
-</ul>
+<p>The <code>borland</code> module supports the 32-bit command line C compilers
+running on Microsoft Windows. This is the bcc32 executable for all
+versions of Borland C and C Builder, as well as the command line
+compatible compiler bcc32c on later versions of C Builder.</p>
 </div>
 <div class="paragraph">
 <p>The module is initialized using the following syntax:</p>
@@ -5438,7 +5419,7 @@ command lines tools is also listed for reference.:</p>
 several versions of the compiler.</p>
 </div>
 <div class="paragraph">
-<p>If the command is not specified, B2 will search for a binary
+<p>If the command is not specified, Boost.Build will search for a binary
 named <code>bcc32</code> in PATH.</p>
 </div>
 <div class="paragraph">
@@ -5465,6 +5446,11 @@ and C++ sources.</p>
 <dt class="hdlist1"><code>linkflags</code></dt>
 <dd>
 <p>Specifies additional command line options that will be passed to the linker.</p>
+</dd>
+<dt class="hdlist1"><code>user-interface</code></dt>
+<dd>
+<p>Specifies the user interface for applications. Valid choices are <code>console</code>
+for a console applicatiuon and <code>gui</code> for a Windows application.</p>
 </dd>
 </dl>
 </div>
