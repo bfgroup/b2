@@ -4662,6 +4662,18 @@ to disable that behavior</p>
 that are included by the sources of the target being declared. See the section
 <a href="#bbv2.reference.generated_headers">Generated headers</a> for more information.</p>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.force-include"></a><code>force-include</code></dt>
+<dd>
+<p>Specifies an include path that has to be included in a way like if
+<code>#include "file"</code> appeared as the first line of every target&#8217;s source file.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The include order is not guaranteed if used multiple times on a single target.</p>
+</div>
+<div class="dlist">
+<dl>
 <dt class="hdlist1"><a id="bbv2.builtin.features.include"></a><code>include</code></dt>
 <dd>
 <p>Specifies an additional include path that is to be passed to C and C++
