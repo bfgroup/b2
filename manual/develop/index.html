@@ -539,7 +539,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#bbv2.reference.modules.path">5.5.2. path</a></li>
 <li><a href="#bbv2.reference.modules.regex">5.5.3. regex</a></li>
 <li><a href="#bbv2.reference.modules.sequence">5.5.4. sequence</a></li>
-<li><a href="#bbv2.reference.modules.type">5.5.5. type</a></li>
+<li><a href="#bbv2.reference.modules.stage">5.5.5. stage</a></li>
+<li><a href="#bbv2.reference.modules.type">5.5.6. type</a></li>
 </ul>
 </li>
 <li><a href="#bbv2.reference.class">5.6. Builtin classes</a>
@@ -4687,6 +4688,98 @@ compilers.</p>
 <p>Enables inlining.</p>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.install-package"></a><code>install-package</code></dt>
+<dd>
+<p>Specifies the name of the package to which installed files belong.  This is
+used for default installation prefix on certain platforms.</p>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.install-prefix"></a><code>install-&lt;name&gt;</code></dt>
+<dd>
+<p>Specifies installation prefix for <a href="#bbv2.tasks.installing"><code>install</code></a> targets.
+These named installation prefixes are registered by default:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>prefix</code>: <code>C:\&lt;package name&gt;</code> if <code>&lt;target-os&gt;windows</code> is in the property set,
+<code>/usr/local</code> otherwise</p>
+</li>
+<li>
+<p><code>exec-prefix</code>: <code>(prefix)</code></p>
+</li>
+<li>
+<p><code>bindir</code>: <code>(exec-prefix)/bin</code></p>
+</li>
+<li>
+<p><code>sbindir</code>: <code>(exec-prefix)/sbin</code></p>
+</li>
+<li>
+<p><code>libexecdir</code>: <code>(exec-prefix)/libexec</code></p>
+</li>
+<li>
+<p><code>libdir</code>: <code>(exec-prefix)/lib</code></p>
+</li>
+<li>
+<p><code>datarootdir</code>: <code>(prefix)/share</code></p>
+</li>
+<li>
+<p><code>datadir</code>: <code>(datarootdir)</code></p>
+</li>
+<li>
+<p><code>sysconfdir</code>: <code>(prefix)/etc</code></p>
+</li>
+<li>
+<p><code>sharedstatedir</code>: <code>(prefix)/com</code></p>
+</li>
+<li>
+<p><code>localstatedir</code>: <code>(prefix)/var</code></p>
+</li>
+<li>
+<p><code>runstatedir</code>: <code>(localstatedir)/run</code></p>
+</li>
+<li>
+<p><code>includedir</code>: <code>(prefix)/include</code></p>
+</li>
+<li>
+<p><code>oldincludedir</code>: <code>/usr/include</code></p>
+</li>
+<li>
+<p><code>docdir</code>: <code>(datarootdir)/doc/&lt;package name&gt;</code></p>
+</li>
+<li>
+<p><code>infodir</code>: <code>(datarootdir)/info</code></p>
+</li>
+<li>
+<p><code>htmldir</code>: <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>dvidir</code> : <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>pdfdir</code> : <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>psdir</code> : <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>lispdir</code>: <code>(datarootdir)/emacs/site-lisp</code></p>
+</li>
+<li>
+<p><code>localedir</code>: <code>(datarootdir)/locale</code></p>
+</li>
+<li>
+<p><code>mandir</code>: <code>(datarootdir)/man</code></p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>If more are necessary, they could be added with
+<a href="#bbv2.reference.modules.stage.add-install-dir"><code>stage.add-install-dir</code></a>.</p>
+</div>
+<div class="dlist">
+<dl>
 <dt class="hdlist1"><a id="bbv2.builtin.features.instruction-set"></a><code>instruction-set</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> depends on the used toolset.</p>
@@ -4924,6 +5017,25 @@ all targets in the project (you can put <code>&lt;source&gt;</code> in requireme
 conditionally include a source (using conditional requirements, see
 the section <a href="#bbv2.tutorial.conditions">Conditions and alternatives</a>.  See also the
 <a href="#bbv2.builtin.features.library"><code>&lt;library&gt;</code></a> feature.</p>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.staging-prefix"></a><code>staging-prefix</code></dt>
+<dd>
+<p>Specifies staging prefix for <a href="#bbv2.tasks.installing"><code>install</code></a> targets.
+If present, it will be used instead of the path to named directory <code>prefix</code>.
+Example:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-nb">project</span><span class="tok-w"> </span>:<span class="tok-w"> </span>requirements<span class="tok-w"> </span><span class="tok-na">&lt;install-prefix&gt;</span>x/y/z<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">install</span><span class="tok-w"> </span>a1<span class="tok-w"> </span>:<span class="tok-w"> </span>a<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;location&gt;</span>(bindir)<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># installs into x/y/z/bin</span>
+<span class="tok-nb">install</span><span class="tok-w"> </span>a2<span class="tok-w"> </span>:<span class="tok-w"> </span>a<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;location&gt;</span>(bindir)<span class="tok-w"> </span><span class="tok-na">&lt;staging-prefix&gt;</span>q<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># installs into q/bin</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The feature is useful when you cannot (or don&#8217;t want to) put build artfiacts
+into their intented locations during the build (such as when cross-compiling),
+but still need to communicate those intended locations to the build system,
+e.g. to generate configuration files.</p>
+</div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.stdlib"></a><code>stdlib</code></dt>
 <dd>
@@ -7395,7 +7507,126 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>5.5.5. type</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>5.5.5. stage</h4>
+<div class="paragraph">
+<p>This module defines the <code>install</code> rule, used to copy a set of targets to a
+single location.</p>
+</div>
+<div id="bbv2.reference.modules.stage.add-install-dir" class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>rule add-install-dir ( name : suffix : parent ? : options * )</code></p>
+<div class="paragraph">
+<p>Defines a named installation directory.</p>
+</div>
+<div class="paragraph">
+<p>For example, <code>add-install-dir foo : bar : baz ;</code> creates feature
+<a href="#bbv2.builtin.features.install-prefix"><code>&lt;install-foo&gt;</code></a> and adds support for
+named directory <code>(foo)</code> to <code>install</code> rule. The rule will try to use the value
+of <code>&lt;install-foo&gt;</code> property if present, otherwise will fallback to <code>(baz)/bar</code>.</p>
+</div>
+<div class="paragraph">
+<p>Arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>name</code>: the name of the directory.</p>
+</li>
+<li>
+<p><code>suffix</code>: the path suffix appended to the parent named directory.</p>
+</li>
+<li>
+<p><code>parent</code>: the optional name of parent named directory.</p>
+</li>
+<li>
+<p><code>options</code>: special options that modify treatment of the directory.
+Allowed options:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>package-suffix</code>: append the package name to the default value. For example:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>add-install-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span>bar<span class="tok-w"> </span>:<span class="tok-w"> </span>baz<span class="tok-w"> </span>:<span class="tok-w"> </span>package-suffix<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">install</span><span class="tok-w"> </span>(foo)<span class="tok-w"> </span>:<span class="tok-w"> </span>a<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;install-package&gt;</span>xyz<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>installs <code>a</code> into <code>(baz)/bar/xyz</code>.</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>rule install-dir-names ( )</code></p>
+<div class="paragraph">
+<p>Returns names of all registered installation directories.</p>
+</div>
+</li>
+<li>
+<p><code>rule get-dir ( name : property-set : package-name : flags * )</code></p>
+<div class="paragraph">
+<p>Returns the path to a named installation directory. For a given <code>name=xyz</code> the
+rule uses the value of <code>&lt;install-xyz&gt;</code> property if it is present in
+<code>property-set</code>. Otherwise it tries to construct the default value of the path
+recursively getting the path to <code>name</code>'s registered base named directory and
+relative path. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>stage.add-install-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span>bar<span class="tok-w"> </span>:<span class="tok-w"> </span>baz<span class="tok-w"> </span>;<span class="tok-w"></span>
+
+<span class="tok-k">local</span><span class="tok-w"> </span>ps<span class="tok-w"> </span>=<span class="tok-w"> </span>[<span class="tok-w"> </span>property-set.create<span class="tok-w"> </span><span class="tok-na">&lt;install-foo&gt;</span>x/y/z<span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">echo</span><span class="tok-w"> </span>[<span class="tok-w"> </span>stage.get-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(ps)</span><span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(__name__)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># outputs x/y/z</span>
+
+ps<span class="tok-w"> </span>=<span class="tok-w"> </span>[<span class="tok-w"> </span>property-set.create<span class="tok-w"> </span><span class="tok-na">&lt;install-baz&gt;</span>a/b/c/d<span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">echo</span><span class="tok-w"> </span>[<span class="tok-w"> </span>stage.get-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(ps)</span><span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(__name__)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># outputs a/b/c/d/bar</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The argument <code>package-name</code> is used to construct the path for named directories
+that were registered with <code>package-suffix</code> option and also to construct
+<code>install-prefix</code> when targeting Windows.</p>
+</div>
+<div class="paragraph">
+<p>Available <code>flags</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>staged</code>: take <a href="#bbv2.builtin.features.staging-prefix"><code>staging-prefix</code></a> into
+account.</p>
+</li>
+<li>
+<p><code>relative</code>: return the path to <code>name</code> relative to its base directory.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>rule get-package-name ( property-set : project-module ? )</code></p>
+<div class="paragraph">
+<p>Returns the package name that will be used for <code>install</code> targets when
+constructing installation location. The rule uses the value of
+<a href="#bbv2.builtin.features.install-package"><code>&lt;install-package&gt;</code></a> property if it&#8217;s
+present in <code>property-set</code>. Otherwise it deduces the package name using
+<code>project-module</code>'s attributes. It traverses the project hierarchy up to the
+root searching for the first project with an id. If none is found, the base
+name of the root project&#8217;s location is used. If <code>project-module</code> is empty, the
+caller module is used (this allows invoking just <code>[ get-package-name $(ps) ]</code>
+in project jam files).</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>5.5.6. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
