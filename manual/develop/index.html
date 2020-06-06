@@ -5391,6 +5391,31 @@ visibility by default, unless the user overrides it with a different
 warning.</p>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.translate-path"></a><code>translate-path</code></dt>
+<dd>
+<p>Used to introduce custom path feature translation. The value should have the
+form:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>@rulename<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <em>rulename</em> should be a name of a rule with the following signature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">rulename</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-w"> </span><span class="tok-nv">feature</span><span class="tok-w"> </span><span class="tok-nv">value</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">properties</span><span class="tok-w"> </span><span class="tok-p">*</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">project-id</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">project-location</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The rule is called for each target with the <code>feature</code> of a path property,
+the path property value, target properties, the target project ID, and
+the target project location. It should return the translated path value.
+Or return nothing if it doesn&#8217;t do path translation. Leaving it do the
+default path translation.</p>
+</div>
+</dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.lto"></a><code>lto</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> <code>on</code>.</p>
