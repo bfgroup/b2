@@ -36,9 +36,6 @@ generators.override clang-linux.searched-lib-generator : searched-lib-generator 
 generators.override clang-linux.compile.c.pch   : pch.default-c-pch-generator   ;
 generators.override clang-linux.compile.c++.pch : pch.default-cpp-pch-generator ;
 
-type.set-generated-target-suffix PCH
-  : <toolset>clang <toolset-clang:platform>linux : pth ;
-
 toolset.inherit-rules clang-linux : gcc ;
 toolset.inherit-flags clang-linux : gcc
   : <inlining>full
