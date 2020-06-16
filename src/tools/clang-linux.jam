@@ -181,15 +181,9 @@ actions compile.c bind PCH_FILE
 ###############################################################################
 # PCH emission
 
-rule compile.c++.pch ( targets * : sources * : properties * ) {
-}
-
 actions compile.c++.pch
 {
   "$(CONFIG_COMMAND)" -c -x c++-header $(OPTIONS) $(USER_OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -include"$(FORCE_INCLUDES)" -Xclang -emit-pch -o "$(<)" "$(>)"
-}
-
-rule compile.c.pch ( targets * : sources * : properties * ) {
 }
 
 actions compile.c.pch
