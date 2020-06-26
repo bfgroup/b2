@@ -539,7 +539,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#bbv2.reference.modules.path">5.5.2. path</a></li>
 <li><a href="#bbv2.reference.modules.regex">5.5.3. regex</a></li>
 <li><a href="#bbv2.reference.modules.sequence">5.5.4. sequence</a></li>
-<li><a href="#bbv2.reference.modules.type">5.5.5. type</a></li>
+<li><a href="#bbv2.reference.modules.stage">5.5.5. stage</a></li>
+<li><a href="#bbv2.reference.modules.type">5.5.6. type</a></li>
 </ul>
 </li>
 <li><a href="#bbv2.reference.class">5.6. Builtin classes</a>
@@ -666,10 +667,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#b2.history">12. History</a>
 <ul class="sectlevel2">
-<li><a href="#_version_4_2_0">12.1. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">12.2. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_1">12.3. Version 4.0.1</a></li>
-<li><a href="#_version_4_0_0">12.4. Version 4.0.0</a></li>
+<li><a href="#_version_4_3_0">12.1. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">12.2. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">12.3. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_1">12.4. Version 4.0.1</a></li>
+<li><a href="#_version_4_0_0">12.5. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -3920,10 +3922,6 @@ header. This makes sure that your project will build even if precompiled
 headers are not supported.</p>
 </li>
 <li>
-<p>On the gcc compiler, the name of the header being precompiled must be
-equal to the name of the <code>cpp-pch</code> target. This is a gcc requirement.</p>
-</li>
-<li>
 <p>Prior to version 4.2, the gcc compiler did not allow anonymous
 namespaces in precompiled headers, which limits their utility. See the
 <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=29085">bug report</a> for
@@ -4461,7 +4459,7 @@ any additional properties. See also section <a href="#bbv2.overview.targets.requ
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.cxxstd"></a><code>cxxstd</code></dt>
 <dd>
-<p><strong>Allowed values</strong>: <code>98</code>, <code>03</code>, <code>0x</code>, <code>11</code>, <code>1y</code>, <code>14</code>, <code>1z</code>, <code>17</code>, <code>2a</code>,
+<p><strong>Allowed values</strong>: <code>98</code>, <code>03</code>, <code>0x</code>, <code>11</code>, <code>1y</code>, <code>14</code>, <code>1z</code>, <code>17</code>, <code>2a</code>, <code>20</code>,
 <code>latest</code>.</p>
 <div class="paragraph">
 <p>Specifies the version of the C++ Standard Language to build with. All the
@@ -4599,6 +4597,11 @@ shared libraries. This feature corresponds to the IDE option found in the
 project settings dialog, under Configuration Properties &#8594; Manifest Tool &#8594;
 Input and Output &#8594; Additional Manifest Files.</p>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.embed-manifest-via"></a><code>embed-manifest-via</code></dt>
+<dd>
+<p>This feature is specific to the <code>msvc</code> toolset (see <a href="#bbv2.reference.tools.compiler.msvc">Microsoft Visual C++</a>),
+and controls whether a manifest should be embedded via linker or manifest tool.</p>
+</dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.exception-handling"></a><code>exception-handling</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> <code>on</code>, <code>off</code>.</p>
@@ -4662,6 +4665,18 @@ to disable that behavior</p>
 that are included by the sources of the target being declared. See the section
 <a href="#bbv2.reference.generated_headers">Generated headers</a> for more information.</p>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.force-include"></a><code>force-include</code></dt>
+<dd>
+<p>Specifies an include path that has to be included in a way like if
+<code>#include "file"</code> appeared as the first line of every target&#8217;s source file.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The include order is not guaranteed if used multiple times on a single target.</p>
+</div>
+<div class="dlist">
+<dl>
 <dt class="hdlist1"><a id="bbv2.builtin.features.include"></a><code>include</code></dt>
 <dd>
 <p>Specifies an additional include path that is to be passed to C and C++
@@ -4674,6 +4689,98 @@ compilers.</p>
 <p>Enables inlining.</p>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.install-package"></a><code>install-package</code></dt>
+<dd>
+<p>Specifies the name of the package to which installed files belong.  This is
+used for default installation prefix on certain platforms.</p>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.install-prefix"></a><code>install-&lt;name&gt;</code></dt>
+<dd>
+<p>Specifies installation prefix for <a href="#bbv2.tasks.installing"><code>install</code></a> targets.
+These named installation prefixes are registered by default:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>prefix</code>: <code>C:\&lt;package name&gt;</code> if <code>&lt;target-os&gt;windows</code> is in the property set,
+<code>/usr/local</code> otherwise</p>
+</li>
+<li>
+<p><code>exec-prefix</code>: <code>(prefix)</code></p>
+</li>
+<li>
+<p><code>bindir</code>: <code>(exec-prefix)/bin</code></p>
+</li>
+<li>
+<p><code>sbindir</code>: <code>(exec-prefix)/sbin</code></p>
+</li>
+<li>
+<p><code>libexecdir</code>: <code>(exec-prefix)/libexec</code></p>
+</li>
+<li>
+<p><code>libdir</code>: <code>(exec-prefix)/lib</code></p>
+</li>
+<li>
+<p><code>datarootdir</code>: <code>(prefix)/share</code></p>
+</li>
+<li>
+<p><code>datadir</code>: <code>(datarootdir)</code></p>
+</li>
+<li>
+<p><code>sysconfdir</code>: <code>(prefix)/etc</code></p>
+</li>
+<li>
+<p><code>sharedstatedir</code>: <code>(prefix)/com</code></p>
+</li>
+<li>
+<p><code>localstatedir</code>: <code>(prefix)/var</code></p>
+</li>
+<li>
+<p><code>runstatedir</code>: <code>(localstatedir)/run</code></p>
+</li>
+<li>
+<p><code>includedir</code>: <code>(prefix)/include</code></p>
+</li>
+<li>
+<p><code>oldincludedir</code>: <code>/usr/include</code></p>
+</li>
+<li>
+<p><code>docdir</code>: <code>(datarootdir)/doc/&lt;package name&gt;</code></p>
+</li>
+<li>
+<p><code>infodir</code>: <code>(datarootdir)/info</code></p>
+</li>
+<li>
+<p><code>htmldir</code>: <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>dvidir</code> : <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>pdfdir</code> : <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>psdir</code> : <code>(docdir)</code></p>
+</li>
+<li>
+<p><code>lispdir</code>: <code>(datarootdir)/emacs/site-lisp</code></p>
+</li>
+<li>
+<p><code>localedir</code>: <code>(datarootdir)/locale</code></p>
+</li>
+<li>
+<p><code>mandir</code>: <code>(datarootdir)/man</code></p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>If more are necessary, they could be added with
+<a href="#bbv2.reference.modules.stage.add-install-dir"><code>stage.add-install-dir</code></a>.</p>
+</div>
+<div class="dlist">
+<dl>
 <dt class="hdlist1"><a id="bbv2.builtin.features.instruction-set"></a><code>instruction-set</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> depends on the used toolset.</p>
@@ -4911,6 +5018,25 @@ all targets in the project (you can put <code>&lt;source&gt;</code> in requireme
 conditionally include a source (using conditional requirements, see
 the section <a href="#bbv2.tutorial.conditions">Conditions and alternatives</a>.  See also the
 <a href="#bbv2.builtin.features.library"><code>&lt;library&gt;</code></a> feature.</p>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.staging-prefix"></a><code>staging-prefix</code></dt>
+<dd>
+<p>Specifies staging prefix for <a href="#bbv2.tasks.installing"><code>install</code></a> targets.
+If present, it will be used instead of the path to named directory <code>prefix</code>.
+Example:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-nb">project</span><span class="tok-w"> </span>:<span class="tok-w"> </span>requirements<span class="tok-w"> </span><span class="tok-na">&lt;install-prefix&gt;</span>x/y/z<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">install</span><span class="tok-w"> </span>a1<span class="tok-w"> </span>:<span class="tok-w"> </span>a<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;location&gt;</span>(bindir)<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># installs into x/y/z/bin</span>
+<span class="tok-nb">install</span><span class="tok-w"> </span>a2<span class="tok-w"> </span>:<span class="tok-w"> </span>a<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;location&gt;</span>(bindir)<span class="tok-w"> </span><span class="tok-na">&lt;staging-prefix&gt;</span>q<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># installs into q/bin</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The feature is useful when you cannot (or don&#8217;t want to) put build artfiacts
+into their intented locations during the build (such as when cross-compiling),
+but still need to communicate those intended locations to the build system,
+e.g. to generate configuration files.</p>
+</div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.stdlib"></a><code>stdlib</code></dt>
 <dd>
@@ -5266,6 +5392,31 @@ visibility by default, unless the user overrides it with a different
 warning.</p>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.translate-path"></a><code>translate-path</code></dt>
+<dd>
+<p>Used to introduce custom path feature translation. The value should have the
+form:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>@rulename<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <em>rulename</em> should be a name of a rule with the following signature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">rule</span><span class="tok-w"> </span><span class="tok-nf">rulename</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-w"> </span><span class="tok-nv">feature</span><span class="tok-w"> </span><span class="tok-nv">value</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">properties</span><span class="tok-w"> </span><span class="tok-p">*</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">project-id</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nv">project-location</span><span class="tok-w"> </span><span class="tok-p">)</span><span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The rule is called for each target with the <code>feature</code> of a path property,
+the path property value, target properties, the target project ID, and
+the target project location. It should return the translated path value.
+Or return nothing if it doesn&#8217;t do path translation. Leaving it do the
+default path translation.</p>
+</div>
+</dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.lto"></a><code>lto</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> <code>on</code>.</p>
@@ -5401,29 +5552,10 @@ and C++ sources.</p>
 <div class="sect4">
 <h5 id="bbv2.reference.tools.compiler.borland"><a class="anchor" href="#bbv2.reference.tools.compiler.borland"></a>Borland C++ Compiler</h5>
 <div class="paragraph">
-<p>The <code>borland</code> module supports the command line C compiler included in
-http://www.borland.com/us/products/cbuilder/index.html[C Builder 2006]
-product and earlier version of it, running on Microsoft Windows.</p>
-</div>
-<div class="paragraph">
-<p>The supported products are listed below. The version reported by the
-command lines tools is also listed for reference.:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>C++ Builder 2006&#8201;&#8212;&#8201;5.8.2</p>
-</li>
-<li>
-<p>CBuilderX&#8201;&#8212;&#8201;5.6.5, 5.6.4 (depending on release)</p>
-</li>
-<li>
-<p>CBuilder6&#8201;&#8212;&#8201;5.6.4</p>
-</li>
-<li>
-<p>Free command line tools&#8201;&#8212;&#8201;5.5.1</p>
-</li>
-</ul>
+<p>The <code>borland</code> module supports the 32-bit command line C compilers
+running on Microsoft Windows. This is the bcc32 executable for all
+versions of Borland C and C Builder, as well as the command line
+compatible compiler bcc32c on later versions of C Builder.</p>
 </div>
 <div class="paragraph">
 <p>The module is initialized using the following syntax:</p>
@@ -5438,7 +5570,7 @@ command lines tools is also listed for reference.:</p>
 several versions of the compiler.</p>
 </div>
 <div class="paragraph">
-<p>If the command is not specified, B2 will search for a binary
+<p>If the command is not specified, Boost.Build will search for a binary
 named <code>bcc32</code> in PATH.</p>
 </div>
 <div class="paragraph">
@@ -5465,6 +5597,11 @@ and C++ sources.</p>
 <dt class="hdlist1"><code>linkflags</code></dt>
 <dd>
 <p>Specifies additional command line options that will be passed to the linker.</p>
+</dd>
+<dt class="hdlist1"><code>user-interface</code></dt>
+<dd>
+<p>Specifies the user interface for applications. Valid choices are <code>console</code>
+for a console applicatiuon and <code>gui</code> for a Windows application.</p>
 </dd>
 </dl>
 </div>
@@ -5901,7 +6038,7 @@ command line tools are listed below:</p>
 <div class="paragraph">
 <p>The user would then call the boost build executable with the toolset set
 equal to <code>msvc-[version number]</code> for example to build with Visual Studio
-2017 one could run:</p>
+2019 one could run:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7396,7 +7533,126 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>5.5.5. type</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>5.5.5. stage</h4>
+<div class="paragraph">
+<p>This module defines the <code>install</code> rule, used to copy a set of targets to a
+single location.</p>
+</div>
+<div id="bbv2.reference.modules.stage.add-install-dir" class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>rule add-install-dir ( name : suffix ? : parent ? : options * )</code></p>
+<div class="paragraph">
+<p>Defines a named installation directory.</p>
+</div>
+<div class="paragraph">
+<p>For example, <code>add-install-dir foo : bar : baz ;</code> creates feature
+<a href="#bbv2.builtin.features.install-prefix"><code>&lt;install-foo&gt;</code></a> and adds support for
+named directory <code>(foo)</code> to <code>install</code> rule. The rule will try to use the value
+of <code>&lt;install-foo&gt;</code> property if present, otherwise will fallback to <code>(baz)/bar</code>.</p>
+</div>
+<div class="paragraph">
+<p>Arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>name</code>: the name of the directory.</p>
+</li>
+<li>
+<p><code>suffix</code>: the path suffix appended to the parent named directory.</p>
+</li>
+<li>
+<p><code>parent</code>: the optional name of parent named directory.</p>
+</li>
+<li>
+<p><code>options</code>: special options that modify treatment of the directory.
+Allowed options:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>package-suffix</code>: append the package name to the default value. For example:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>add-install-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span>bar<span class="tok-w"> </span>:<span class="tok-w"> </span>baz<span class="tok-w"> </span>:<span class="tok-w"> </span>package-suffix<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">install</span><span class="tok-w"> </span>(foo)<span class="tok-w"> </span>:<span class="tok-w"> </span>a<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-na">&lt;install-package&gt;</span>xyz<span class="tok-w"> </span>;<span class="tok-w"></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>installs <code>a</code> into <code>(baz)/bar/xyz</code>.</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>rule install-dir-names ( )</code></p>
+<div class="paragraph">
+<p>Returns names of all registered installation directories.</p>
+</div>
+</li>
+<li>
+<p><code>rule get-dir ( name : property-set : package-name : flags * )</code></p>
+<div class="paragraph">
+<p>Returns the path to a named installation directory. For a given <code>name=xyz</code> the
+rule uses the value of <code>&lt;install-xyz&gt;</code> property if it is present in
+<code>property-set</code>. Otherwise it tries to construct the default value of the path
+recursively getting the path to <code>name</code>'s registered base named directory and
+relative path. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="jam"><span></span>stage.add-install-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span>bar<span class="tok-w"> </span>:<span class="tok-w"> </span>baz<span class="tok-w"> </span>;<span class="tok-w"></span>
+
+<span class="tok-k">local</span><span class="tok-w"> </span>ps<span class="tok-w"> </span>=<span class="tok-w"> </span>[<span class="tok-w"> </span>property-set.create<span class="tok-w"> </span><span class="tok-na">&lt;install-foo&gt;</span>x/y/z<span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">echo</span><span class="tok-w"> </span>[<span class="tok-w"> </span>stage.get-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(ps)</span><span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(__name__)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># outputs x/y/z</span>
+
+ps<span class="tok-w"> </span>=<span class="tok-w"> </span>[<span class="tok-w"> </span>property-set.create<span class="tok-w"> </span><span class="tok-na">&lt;install-baz&gt;</span>a/b/c/d<span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"></span>
+<span class="tok-nb">echo</span><span class="tok-w"> </span>[<span class="tok-w"> </span>stage.get-dir<span class="tok-w"> </span>foo<span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(ps)</span><span class="tok-w"> </span>:<span class="tok-w"> </span><span class="tok-si">$(__name__)</span><span class="tok-w"> </span>]<span class="tok-w"> </span>;<span class="tok-w"> </span><span class="tok-c1"># outputs a/b/c/d/bar</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The argument <code>package-name</code> is used to construct the path for named directories
+that were registered with <code>package-suffix</code> option and also to construct
+<code>install-prefix</code> when targeting Windows.</p>
+</div>
+<div class="paragraph">
+<p>Available <code>flags</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>staged</code>: take <a href="#bbv2.builtin.features.staging-prefix"><code>staging-prefix</code></a> into
+account.</p>
+</li>
+<li>
+<p><code>relative</code>: return the path to <code>name</code> relative to its base directory.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>rule get-package-name ( property-set : project-module ? )</code></p>
+<div class="paragraph">
+<p>Returns the package name that will be used for <code>install</code> targets when
+constructing installation location. The rule uses the value of
+<a href="#bbv2.builtin.features.install-package"><code>&lt;install-package&gt;</code></a> property if it&#8217;s
+present in <code>property-set</code>. Otherwise it deduces the package name using
+<code>project-module</code>'s attributes. It traverses the project hierarchy up to the
+root searching for the first project with an id. If none is found, the base
+name of the root project&#8217;s location is used. If <code>project-module</code> is empty, the
+caller module is used (this allows invoking just <code>[ get-package-name $(ps) ]</code>
+in project jam files).</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>5.5.6. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
@@ -12595,13 +12851,14 @@ which case it refers to the element counting from the last leftward.</p>
 </dd>
 <dt class="hdlist1"><code>:B</code></dt>
 <dd>
-<p>+
-Select filename base.</p>
+<div class="paragraph">
+<p>Select filename base&#8201;&#8212;&#8201;a basename without extension.</p>
+</div>
 </dd>
 <dt class="hdlist1"><code>:S</code></dt>
 <dd>
 <div class="paragraph">
-<p>Select (last) filename suffix.</p>
+<p>Select file extension&#8201;&#8212;&#8201;a (last) filename suffix.</p>
 </div>
 </dd>
 <dt class="hdlist1"><code>:M</code></dt>
@@ -12693,6 +12950,9 @@ properly specify file paths in VMS-specific commands. For example</p>
 <dt class="hdlist1"><code>:chars</code></dt>
 <dd>
 <p>Select the components listed in <em>chars</em>.</p>
+<div class="paragraph">
+<p>For example, <code>:BS</code> selects filename (basename and extension).</p>
+</div>
 </dd>
 <dt class="hdlist1"><code>:G=grist</code></dt>
 <dd>
@@ -12935,7 +13195,7 @@ platform:</p>
 </dd>
 <dt class="hdlist1"><code>JAMVERSION</code></dt>
 <dd>
-<p><code>b2</code> version, currently "3.1.19"</p>
+<p><code>b2</code> version, as a sematic triplet "X.Y.Z".</p>
 </dd>
 <dt class="hdlist1"><code>JAM_VERSION</code></dt>
 <dd>
@@ -13641,7 +13901,107 @@ variants accepted as valid for an option:</p>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>12. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>12.1. Version 4.2.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>12.1. Version 4.3.0</h3>
+<div class="paragraph">
+<p>There are many invidual fixes in this release. Many thanks for the
+contributions. Special thanks to Nikita for the many improvements to msvc
+and general plugging of support holes in all the compilers.</p>
+</div>
+<div class="paragraph">
+<p>There are some notable new features from Dmitry, Edward, and Nkita:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New:</strong> Add <code>force-include</code> feature to include headers before all sources.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p><strong>New:</strong> Partial support for Embarcadero C++ compilers based on clang-5.&#8201;&#8212;&#8201;<em>Edward Diener</em></p>
+</li>
+<li>
+<p><strong>New:</strong> Implement configurable installation prefixes that use features.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p><strong>New:</strong> Add <code>translate-path</code> feature. The translate-path feature allows for
+custom path handling, with a provided rule, on a per target basis. This can
+be used to support custom path syntax.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New:</strong> Add portable B2 system install option. This allows the b2 executable
+and the build system files to live side by side. And hence to be (re)located
+anywhere on disk. Soon to be used to supports Windows and other installers.
+This removes the need for the <code>boost-build.jam</code> file for bootstrap. Making
+it easier for users to get started.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Unbreak building from VS Preview command prompt.&#8201;&#8212;&#8201;<em>Marcel Raad</em></p>
+</li>
+<li>
+<p>Fix compiler version check on macOS darwin toolset.&#8201;&#8212;&#8201;<em>Bo Anderson</em></p>
+</li>
+<li>
+<p>Remove pch target naming restriction on GCC.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Select appropriate QNX target platform.&#8201;&#8212;&#8201;<em>Alexander Karzhenkov</em></p>
+</li>
+<li>
+<p>Various space &amp; performance improvements to the b2 engine build on Windows.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fill extra and pedantic warning options for every compiler.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Include OS error reason for engine IO failures.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Use /Zc:inline and /Zc:throwingNew flags for better language conformance.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Add cxxstd value 20 for C++20.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
+</li>
+<li>
+<p>Parallel B2 engine compilation on MSVC.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Updated instruction-set feature with new x86 targets.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
+</li>
+<li>
+<p>Pass /nologo to rc on Windows compilers.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fixed negation in conditional properties.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Remove leftover manifest generation early exiting.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix timestamp delta calculation.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Add missing assembler options to clang-win.jam, to enable Context to build.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
+</li>
+<li>
+<p>Updated scarce <code>:chars</code> documentation with <code>:BS</code> example.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix link statically against boost-python on linux.&#8201;&#8212;&#8201;<em>Joris Carrier</em></p>
+</li>
+<li>
+<p>Ongoing cleanup of engine build warnings.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Allow self-testing of toolsets that use response files.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Port <code>Jambase</code> to native C++. Hence removing one of the oldest parts of the
+original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>12.2. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -13653,21 +14013,21 @@ requirement.</p>
 <p>Add <code>saxonhe_dir</code> action.&#8201;&#8212;&#8201;<em>Richard Hodges</em></p>
 </li>
 <li>
-<p>Add CI testing for historical Boost versions on Windows MSVC.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+<p>Add CI testing for historical Boost versions on Windows MSVC.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Check for C++11 support when building engine. Including an informative
-error message as to that fact.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+error message as to that fact.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
-<p>Update Jam grammar parser with latest <code>bison</code> version.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+<p>Update Jam grammar parser with latest <code>bison</code> version.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Allow root <code>b2 b2</code> engine build to work even if <code>bison</code> grammar generator
-is not available.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+is not available.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
-<p>Warning free engine build on at least Windows, macOS, and Linux.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+<p>Warning free engine build on at least Windows, macOS, and Linux.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Sanitize Windows engine build to consistently use ANSI Win32 API.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
@@ -13683,7 +14043,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>12.2. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>12.3. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -13703,7 +14063,7 @@ the features.</p>
 <p>Fix compiler warnings about <code>-std=gnu11</code> when building <code>b2</code> on Cygwin.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
 </li>
 <li>
-<p>Add example of creating multiple PCHs for individual headers.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+<p>Add example of creating multiple PCHs for individual headers.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Add QNX threading flags for GCC toolset.&#8201;&#8212;&#8201;<em>Aurelien Chartier</em></p>
@@ -13765,7 +14125,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>12.3. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>12.4. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -13775,7 +14135,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>12.4. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>12.5. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
@@ -13831,7 +14191,7 @@ with "update" in the name.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
 <p>Add <code>freertos</code> to <code>os</code> feature.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
 </li>
 <li>
-<p>Default parallel jobs (<code>-jX</code>) to the available CPU threads.&#8201;&#8212;&#8201;<em>Rene Rivera</em></p>
+<p>Default parallel jobs (<code>-jX</code>) to the available CPU threads.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Simpler coverage feature.&#8201;&#8212;&#8201;<em>Hans Dembinski</em></p>
