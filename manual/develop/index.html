@@ -14042,6 +14042,17 @@ command is expanded to include the options directly.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>New:</strong> Add <code>response-file</code> feature to control the kind of response file usage in
+toolset action.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New:</strong> Add <code>:O=value</code> variable modifier for <code>@()</code> expansion.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New:</strong> Add <code>:&#8656;value</code> and <code>:&gt;=value</code> variable modifiers for prefix and postfix
+values <strong>after</strong> the complete expansion of variable references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
 <p>Remove one at time linking limit. Once upon a time this was a performance
 tweak as hardware and software was not up to doing multiple links at once.
 Common setups are better equipped.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
@@ -14053,15 +14064,38 @@ Common setups are better equipped.&#8201;&#8212;&#8201;<em>René Ferdinand River
 <p>Support building engine as either 32 or 64 bit addressing model.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
-<p>Add <code>response-file</code> feature to control the kind of response file usage in
-toolset action.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+<p>Basic support for building b2 engine on GNU/Hurd.&#8201;&#8212;&#8201;<em>Pino Toscano</em></p>
 </li>
 <li>
-<p>Add <code>:O=value</code> variable modifier for <code>@()</code> expansion.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+<p>Update "borland" toolset to bcc32c for building B2.&#8201;&#8212;&#8201;<em>Tanzinul Islam</em></p>
 </li>
 <li>
-<p>Add <code>:&#8656;value</code> and <code>:&gt;=value</code> variable modifiers for prefix and postfix
-values <strong>after</strong> the complete expansion of variable references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+<p>Ensure Embarcadero toolset name is only "embtc".&#8201;&#8212;&#8201;<em>Tanzinul Islam</em></p>
+</li>
+<li>
+<p>Adapt for Emscripten 2.0 change of default behaviour for archives.&#8201;&#8212;&#8201;<em>Basil Fierz</em></p>
+</li>
+<li>
+<p>Fix path to bootstrap for back compat.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Add missing BOOST_ROOT to boot strap search.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix for engine compile on FreeBSD.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Default MSVC to a native platform, and remove ambiguous implicit
+address-model ARM/ARM64 values.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix detection of MIPS32 for b2 engine build.&#8201;&#8212;&#8201;<em>Ivan Melnikov</em></p>
+</li>
+<li>
+<p>Enable building b2 engine with clang on Windows.&#8201;&#8212;&#8201;<em>Gei0r</em></p>
+</li>
+<li>
+<p>Fix building b2 engine with Intel Linux icpc.&#8201;&#8212;&#8201;<em>Alain Miniussi</em></p>
 </li>
 </ul>
 </div>
