@@ -5530,6 +5530,23 @@ linking.</p>
 </dl>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.response-file"></a><code>response-file</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>auto</code>, <code>file</code>, <code>contents</code>.</p>
+<div class="paragraph">
+<p>Controls whether a response file is used, or not, during the build of the
+applicable target. For <code>file</code> a response file is created and the filename
+replaced in the action. For <code>contents</code> the contents (<code>:E=</code>) is replaced
+in the action and no response file is created. For <code>auto</code> either a response
+file is created, or the contents replaced, based on the length of the
+contents such that if the contents fits within the limits of the command
+execution line length limits the contents is replaced. Otherwise a
+response file is created and the filename is replaced in the actions.</p>
+</div>
+<div class="paragraph">
+<p>Supported for <code>clang-linux</code> and <code>msvc</code> toolsets.</p>
+</div>
+</dd>
 </dl>
 </div>
 </div>
@@ -13060,10 +13077,29 @@ properly specify file paths in VMS-specific commands. For example</p>
 <p>Concatenate list elements into single element, separated by
 <em>joinval</em>.</p>
 </dd>
+<dt class="hdlist1"><code>:O=value</code></dt>
+<dd>
+<p>Sets semantic options for the evaluation of the variable. The format of the
+<em>value</em> is specific to either variable or generated file expansion.</p>
+</dd>
 </dl>
 </div>
 <div class="paragraph">
 <p>On VMS, <code>$(var:P)</code> is the parent directory of <code>$(var:D)</code>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>:&#8656;value</code></dt>
+<dd>
+<p>After evaluating the expansion of the variable prefixes the given <em>value</em>
+to the elements of the expanded expression values.</p>
+</dd>
+<dt class="hdlist1"><code>:&gt;=value</code></dt>
+<dd>
+<p>After evaluating the expansion of the variable postfixes the given <em>value</em>
+to the elements of the expanded expression values.</p>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect4">
@@ -13093,7 +13129,29 @@ the form <code>@(filename:E=filecontents)</code> and replaces the expression wit
 <code>filecontents</code>. This is useful for creating compiler response files, and
 other "internal" files. The expansion works both during parsing and
 action execution. Hence it is possible to create files during any of the
-three build phases.</p>
+three build phases. This expansion follows the same modifiers as variable
+expansion. The generated file expansion accepts these (<code>:O=</code>) expansion
+option values:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>F</code></dt>
+<dd>
+<p>Always replace the <code>@()</code> reference with the name of the file generated.</p>
+</dd>
+<dt class="hdlist1"><code>C</code></dt>
+<dd>
+<p>Always replace the <code>@()</code> reference with the contents, i.e. the <em>value</em>
+in the <code>:E=value</code> expression.</p>
+</dd>
+<dt class="hdlist1"><code>FC</code> or <code>CF</code></dt>
+<dd>
+<p>Replace with either the file or contents depending on the length of the
+contents (<code>:E=value</code>). It will replace with the contents in an action
+if the length of the command is shorter than the allowed command length
+limit. Otherwise the reference is replaced with the filename.</p>
+</dd>
+</dl>
 </div>
 </div>
 <div class="sect4">
@@ -13975,6 +14033,12 @@ variants accepted as valid for an option:</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>12.1. Version 4.4.0</h3>
+<div class="paragraph">
+<p>Along with a variety of fixes this version introduces "dynamic" response file
+support for some toolsets. This means that under most circumtances, if
+supported by the toolset, response files are not generated. Instead the
+command is expanded to include the options directly.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -13987,6 +14051,17 @@ Common setups are better equipped.&#8201;&#8212;&#8201;<em>René Ferdinand River
 </li>
 <li>
 <p>Support building engine as either 32 or 64 bit addressing model.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Add <code>response-file</code> feature to control the kind of response file usage in
+toolset action.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Add <code>:O=value</code> variable modifier for <code>@()</code> expansion.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Add <code>:&#8656;value</code> and <code>:&gt;=value</code> variable modifiers for prefix and postfix
+values <strong>after</strong> the complete expansion of variable references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
