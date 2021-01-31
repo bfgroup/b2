@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.12">
-<meta name="author" content="Rene Rivera, Vladimir Prus, Steven Watanabe">
-<meta name="copyright" content="Copyright 2018 Rene Rivera; Copyright 2006, 2014 Vladimir Prus">
+<meta name="author" content="René Ferdinand Rivera Morell, Vladimir Prus, Steven Watanabe">
+<meta name="copyright" content="Copyright 2018-2021 René Ferdinand Rivera Morell; Copyright 2006, 2014 Vladimir Prus">
 <title>B2 User Manual</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -520,243 +520,129 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <div id="header">
 <h1>B2 User Manual</h1>
 <div class="details">
-<span id="author" class="author">Rene Rivera, Vladimir Prus, Steven Watanabe</span><br>
+<span id="author" class="author">René Ferdinand Rivera Morell, Vladimir Prus, Steven Watanabe</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#bbv2.installation">1. Installation</a></li>
-<li><a href="#bbv2.tutorial">2. Tutorial</a>
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#bbv2.installation">2. Installation</a></li>
+<li><a href="#bbv2.tutorial">3. Tutorial</a>
 <ul class="sectlevel2">
-<li><a href="#bbv2.tutorial.hello">2.1. Hello, world</a></li>
-<li><a href="#bbv2.tutorial.properties">2.2. Properties</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.tutorial.properties.requirements">2.2.1. Build Requests and Target Requirements</a></li>
-<li><a href="#bbv2.tutorial.properties.project_attributes">2.2.2. Project Attributes</a></li>
+<li><a href="#bbv2.tutorial.hello">3.1. Hello, world</a></li>
+<li><a href="#bbv2.tutorial.properties">3.2. Properties</a></li>
+<li><a href="#bbv2.tutorial.hierarchy">3.3. Project Hierarchies</a></li>
+<li><a href="#bbv2.tutorial.libs">3.4. Dependent Targets</a></li>
+<li><a href="#bbv2.tutorial.linkage">3.5. Static and shared libraries</a></li>
+<li><a href="#bbv2.tutorial.conditions">3.6. Conditions and alternatives</a></li>
+<li><a href="#bbv2.tutorial.prebuilt">3.7. Prebuilt targets</a></li>
 </ul>
 </li>
-<li><a href="#bbv2.tutorial.hierarchy">2.3. Project Hierarchies</a></li>
-<li><a href="#bbv2.tutorial.libs">2.4. Dependent Targets</a></li>
-<li><a href="#bbv2.tutorial.linkage">2.5. Static and shared libraries</a></li>
-<li><a href="#bbv2.tutorial.conditions">2.6. Conditions and alternatives</a></li>
-<li><a href="#bbv2.tutorial.prebuilt">2.7. Prebuilt targets</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.overview">3. Overview</a>
+<li><a href="#bbv2.overview">4. Overview</a>
 <ul class="sectlevel2">
-<li><a href="#bbv2.overview.concepts">3.1. Concepts</a></li>
-<li><a href="#bbv2.overview.jam_language">3.2. Boost.Jam Language</a></li>
-<li><a href="#bbv2.overview.configuration">3.3. Configuration</a></li>
-<li><a href="#bbv2.overview.invocation">3.4. Invocation</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.overview.invocation.examples">3.4.1. Examples</a></li>
-<li><a href="#bbv2.overview.invocation.options">3.4.2. Options</a></li>
-<li><a href="#bbv2.overview.invocation.properties">3.4.3. Properties</a></li>
-<li><a href="#bbv2.overview.invocation.targets">3.4.4. Targets</a></li>
+<li><a href="#bbv2.overview.concepts">4.1. Concepts</a></li>
+<li><a href="#bbv2.overview.jam_language">4.2. Boost.Jam Language</a></li>
+<li><a href="#bbv2.overview.configuration">4.3. Configuration</a></li>
+<li><a href="#bbv2.overview.invocation">4.4. Invocation</a></li>
+<li><a href="#bbv2.overview.targets">4.5. Declaring Targets</a></li>
+<li><a href="#bbv2.overview.projects">4.6. Projects</a></li>
+<li><a href="#bbv2.overview.build_process">4.7. The Build Process</a></li>
 </ul>
 </li>
-<li><a href="#bbv2.overview.targets">3.5. Declaring Targets</a>
-<ul class="sectlevel3">
-<li><a href="#_name">3.5.1. Name</a></li>
-<li><a href="#_sources">3.5.2. Sources</a></li>
-<li><a href="#bbv2.overview.targets.requirements">3.5.3. Requirements</a></li>
-<li><a href="#_default_build">3.5.4. Default Build</a></li>
-<li><a href="#_additional_information">3.5.5. Additional Information</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.overview.projects">3.6. Projects</a></li>
-<li><a href="#bbv2.overview.build_process">3.7. The Build Process</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.overview.build_request">3.7.1. Build Request</a></li>
-<li><a href="#_building_a_main_target">3.7.2. Building a main target</a></li>
-<li><a href="#_building_a_project">3.7.3. Building a Project</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#bbv2.tasks">4. Common tasks</a>
+<li><a href="#bbv2.tasks">5. Common tasks</a>
 <ul class="sectlevel2">
-<li><a href="#bbv2.tasks.programs">4.1. Programs</a></li>
-<li><a href="#bbv2.tasks.libraries">4.2. Libraries</a></li>
-<li><a href="#bbv2.tasks.alias">4.3. Alias</a></li>
-<li><a href="#bbv2.tasks.installing">4.4. Installing</a>
-<ul class="sectlevel3">
-<li><a href="#_basic_install">4.4.1. Basic install</a></li>
-<li><a href="#_installing_with_all_dependencies">4.4.2. Installing with all dependencies</a></li>
-<li><a href="#_preserving_directory_hierarchy">4.4.3. Preserving Directory Hierarchy</a></li>
-<li><a href="#_installing_into_several_directories">4.4.4. Installing into Several Directories</a></li>
+<li><a href="#bbv2.tasks.programs">5.1. Programs</a></li>
+<li><a href="#bbv2.tasks.libraries">5.2. Libraries</a></li>
+<li><a href="#bbv2.tasks.alias">5.3. Alias</a></li>
+<li><a href="#bbv2.tasks.installing">5.4. Installing</a></li>
+<li><a href="#bbv2.builtins.testing">5.5. Testing</a></li>
+<li><a href="#bbv2.builtins.raw">5.6. Custom commands</a></li>
+<li><a href="#bbv2.reference.precompiled_headers">5.7. Precompiled Headers</a></li>
+<li><a href="#bbv2.reference.generated_headers">5.8. Generated headers</a></li>
+<li><a href="#bbv2.tasks.crosscompile">5.9. Cross-compilation</a></li>
+<li><a href="#bbv2.tasks.packagemanagers">5.10. Package Managers</a></li>
 </ul>
 </li>
-<li><a href="#bbv2.builtins.testing">4.5. Testing</a></li>
-<li><a href="#bbv2.builtins.raw">4.6. Custom commands</a></li>
-<li><a href="#bbv2.reference.precompiled_headers">4.7. Precompiled Headers</a></li>
-<li><a href="#bbv2.reference.generated_headers">4.8. Generated headers</a></li>
-<li><a href="#bbv2.tasks.crosscompile">4.9. Cross-compilation</a></li>
-<li><a href="#bbv2.tasks.packagemanagers">4.10. Package Managers</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.reference">5. Reference</a>
+<li><a href="#bbv2.reference">6. Reference</a>
 <ul class="sectlevel2">
-<li><a href="#bbv2.reference.general">5.1. General information</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.reference.init">5.1.1. Initialization</a></li>
+<li><a href="#bbv2.reference.general">6.1. General information</a></li>
+<li><a href="#bbv2.reference.rules">6.2. Builtin rules</a></li>
+<li><a href="#bbv2.overview.builtins.features">6.3. Builtin features</a></li>
+<li><a href="#bbv2.reference.tools">6.4. Builtin tools</a></li>
+<li><a href="#bbv2.reference.modules">6.5. Builtin modules</a></li>
+<li><a href="#bbv2.reference.class">6.6. Builtin classes</a></li>
+<li><a href="#bbv2.reference.buildprocess">6.7. Build process</a></li>
+<li><a href="#bbv2.reference.definitions">6.8. Definitions</a></li>
 </ul>
 </li>
-<li><a href="#bbv2.reference.rules">5.2. Builtin rules</a></li>
-<li><a href="#bbv2.overview.builtins.features">5.3. Builtin features</a></li>
-<li><a href="#bbv2.reference.tools">5.4. Builtin tools</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.reference.tools.compilers">5.4.1. C++ Compilers</a></li>
-<li><a href="#_third_party_libraries">5.4.2. Third-party libraries</a></li>
-<li><a href="#_documentation_tools">5.4.3. Documentation tools</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.reference.modules">5.5. Builtin modules</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.reference.modules.modules">5.5.1. modules</a></li>
-<li><a href="#bbv2.reference.modules.path">5.5.2. path</a></li>
-<li><a href="#bbv2.reference.modules.regex">5.5.3. regex</a></li>
-<li><a href="#bbv2.reference.modules.sequence">5.5.4. sequence</a></li>
-<li><a href="#bbv2.reference.modules.stage">5.5.5. stage</a></li>
-<li><a href="#bbv2.reference.modules.type">5.5.6. type</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.reference.class">5.6. Builtin classes</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.reference.class.abstract-target">5.6.1. Class abstract-target</a></li>
-<li><a href="#bbv2.reference.class.project-target">5.6.2. Class project-target</a></li>
-<li><a href="#bbv2.reference.class.main-target">5.6.3. Class main-target</a></li>
-<li><a href="#bbv2.reference.class.basic-target">5.6.4. Class basic-target</a></li>
-<li><a href="#bbv2.reference.class.typed-target">5.6.5. Class typed-target</a></li>
-<li><a href="#bbv2.reference.class.property-set">5.6.6. Class property-set</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.reference.buildprocess">5.7. Build process</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.reference.buildprocess.alternatives">5.7.1. Alternative selection</a></li>
-<li><a href="#bbv2.reference.buildprocess.common">5.7.2. Determining common properties</a></li>
-<li><a href="#bbv2.reference.buildprocess.targetpath">5.7.3. Target Paths</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.reference.definitions">5.8. Definitions</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.reference.features">5.8.1. Features and properties</a></li>
-<li><a href="#bbv2.reference.features.validity">5.8.2. Property Validity</a></li>
-<li><a href="#bbv2.reference.features.attributes">5.8.3. Feature Attributes</a></li>
-<li><a href="#bbv2.reference.features.declaration">5.8.4. Feature Declaration</a></li>
-<li><a href="#bbv2.reference.variants.proprefine">5.8.5. Property refinement</a></li>
-<li><a href="#bbv2.reference.variants.propcond">5.8.6. Conditional properties</a></li>
-<li><a href="#bbv2.reference.ids">5.8.7. Target identifiers and references</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#bbv2.util">6. Utilities</a>
+<li><a href="#bbv2.util">7. Utilities</a>
 <ul class="sectlevel2">
-<li><a href="#bbv2.util.debugger">6.1. Debugger</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.util.debugger.overview">6.1.1. Overview</a></li>
-<li><a href="#bbv2.util.debugger.running">6.1.2. Running the Program</a></li>
-<li><a href="#bbv2.util.debugger.break">6.1.3. Breakpoints</a></li>
-<li><a href="#bbv2.util.debugger.stack">6.1.4. Examining the Stack</a></li>
-<li><a href="#bbv2.util.debugger.misc">6.1.5. Miscellaneous Commands</a></li>
+<li><a href="#bbv2.util.debugger">7.1. Debugger</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#bbv2.extender">7. Extender Manual</a>
+<li><a href="#bbv2.extender">8. Extender Manual</a>
 <ul class="sectlevel2">
-<li><a href="#bbv2.extender.intro">7.1. Introduction</a>
-<ul class="sectlevel3">
-<li><a href="#bbv2.extender.overview.metatargets">7.1.1. Metatargets</a></li>
-<li><a href="#bbv2.extender.overview.targets">7.1.2. Concrete targets</a></li>
-<li><a href="#bbv2.extender.overview.generators">7.1.3. Generators</a></li>
+<li><a href="#bbv2.extender.intro">8.1. Introduction</a></li>
+<li><a href="#bbv2.extender.example">8.2. Example: 1-to-1 generator</a></li>
+<li><a href="#bbv2.extending.targets">8.3. Target types</a></li>
+<li><a href="#bbv2.extending.scanners">8.4. Scanners</a></li>
+<li><a href="#bbv2.extending.tools">8.5. Tools and generators</a></li>
+<li><a href="#bbv2.extending.features">8.6. Features</a></li>
+<li><a href="#bbv2.extending.rules">8.7. Main target rules</a></li>
+<li><a href="#bbv2.extending.toolset_modules">8.8. Toolset modules</a></li>
 </ul>
 </li>
-<li><a href="#bbv2.extender.example">7.2. Example: 1-to-1 generator</a></li>
-<li><a href="#bbv2.extending.targets">7.3. Target types</a></li>
-<li><a href="#bbv2.extending.scanners">7.4. Scanners</a></li>
-<li><a href="#bbv2.extending.tools">7.5. Tools and generators</a></li>
-<li><a href="#bbv2.extending.features">7.6. Features</a></li>
-<li><a href="#bbv2.extending.rules">7.7. Main target rules</a></li>
-<li><a href="#bbv2.extending.toolset_modules">7.8. Toolset modules</a></li>
-</ul>
-</li>
-<li><a href="#bbv2.faq">8. Frequently Asked Questions</a>
+<li><a href="#bbv2.faq">9. Frequently Asked Questions</a>
 <ul class="sectlevel2">
-<li><a href="#bbv2.faq.featurevalue">8.1. How do I get the current value of feature in Jamfile?</a></li>
-<li><a href="#bbv2.faq.duplicate">8.2. I am getting a "Duplicate name of actual target" error. What does that mean?</a></li>
-<li><a href="#bbv2.faq.envar">8.3. Accessing environment variables</a></li>
-<li><a href="#bbv2.faq.proporder">8.4. How to control properties order?</a></li>
-<li><a href="#bbv2.faq.liborder">8.5. How to control the library linking order on Unix?</a></li>
-<li><a href="#bbv2.faq.external">8.6. Can I get capture external program output using a Boost.Jam variable?</a></li>
-<li><a href="#bbv2.faq.projectroot">8.7. How to get the project root (a.k.a. Jamroot) location?</a></li>
-<li><a href="#bbv2.faq.flags">8.8. How to change compilation flags for one file?</a></li>
-<li><a href="#bbv2.faq.dll-path">8.9. Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</a></li>
-<li><a href="#bbv2.recipes.site-config">8.10. Targets in site-config.jam</a></li>
-<li><a href="#bbv2.faq.header-only-libraries">8.11. Header-only libraries</a></li>
-<li><a href="#bbv2.faq.names">8.12. What is the difference between B2, <code>b2</code>, <code>bjam</code> and Perforce Jam?</a></li>
+<li><a href="#bbv2.faq.featurevalue">9.1. How do I get the current value of feature in Jamfile?</a></li>
+<li><a href="#bbv2.faq.duplicate">9.2. I am getting a "Duplicate name of actual target" error. What does that mean?</a></li>
+<li><a href="#bbv2.faq.envar">9.3. Accessing environment variables</a></li>
+<li><a href="#bbv2.faq.proporder">9.4. How to control properties order?</a></li>
+<li><a href="#bbv2.faq.liborder">9.5. How to control the library linking order on Unix?</a></li>
+<li><a href="#bbv2.faq.external">9.6. Can I get capture external program output using a Boost.Jam variable?</a></li>
+<li><a href="#bbv2.faq.projectroot">9.7. How to get the project root (a.k.a. Jamroot) location?</a></li>
+<li><a href="#bbv2.faq.flags">9.8. How to change compilation flags for one file?</a></li>
+<li><a href="#bbv2.faq.dll-path">9.9. Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</a></li>
+<li><a href="#bbv2.recipes.site-config">9.10. Targets in site-config.jam</a></li>
+<li><a href="#bbv2.faq.header-only-libraries">9.11. Header-only libraries</a></li>
+<li><a href="#bbv2.faq.names">9.12. What is the difference between B2, <code>b2</code>, <code>bjam</code> and Perforce Jam?</a></li>
 </ul>
 </li>
-<li><a href="#_extra_tools">9. Extra Tools</a>
+<li><a href="#_extra_tools">10. Extra Tools</a>
 <ul class="sectlevel2">
-<li><a href="#_documentation_tools_2">9.1. Documentation Tools</a>
-<ul class="sectlevel3">
-<li><a href="#_asciidoctor">9.1.1. Asciidoctor</a></li>
+<li><a href="#_documentation_tools_2">10.1. Documentation Tools</a></li>
+<li><a href="#_miscellaneous_tools">10.2. Miscellaneous Tools</a></li>
 </ul>
 </li>
-<li><a href="#_miscellaneous_tools">9.2. Miscellaneous Tools</a>
-<ul class="sectlevel3">
-<li><a href="#_pkg_config">9.2.1. pkg-config</a></li>
-<li><a href="#_sass">9.2.2. Sass</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_examples">10. Examples</a>
+<li><a href="#_examples">11. Examples</a>
 <ul class="sectlevel2">
-<li><a href="#_introduction">10.1. Introduction</a></li>
-<li><a href="#_hello">10.2. Hello</a></li>
-<li><a href="#_sanitizers">10.3. Sanitizers</a></li>
+<li><a href="#_introduction_2">11.1. Introduction</a></li>
+<li><a href="#_hello">11.2. Hello</a></li>
+<li><a href="#_sanitizers">11.3. Sanitizers</a></li>
 </ul>
 </li>
-<li><a href="#bbv2.jam">11. Boost.Jam Documentation</a>
+<li><a href="#bbv2.jam">12. Boost.Jam Documentation</a>
 <ul class="sectlevel2">
-<li><a href="#jam.building">11.1. Building B2</a></li>
-<li><a href="#jam.language">11.2. Language</a>
-<ul class="sectlevel3">
-<li><a href="#jam.language.lexical">11.2.1. Lexical Features</a></li>
-<li><a href="#jam.language.target">11.2.2. Targets</a></li>
-<li><a href="#jam.language.rules">11.2.3. Rules</a></li>
-<li><a href="#jam.language.rules.builtins">11.2.4. Built-in Rules</a></li>
-<li><a href="#jam.language.flow_of_control">11.2.5. Flow-of-Control</a></li>
-<li><a href="#jam.language.variables">11.2.6. Variables</a></li>
-<li><a href="#jam.language.modules">11.2.7. Modules</a></li>
+<li><a href="#jam.building">12.1. Building B2</a></li>
+<li><a href="#jam.language">12.2. Language</a></li>
+<li><a href="#jam.miscellaneous">12.3. Miscellaneous</a></li>
 </ul>
 </li>
-<li><a href="#jam.miscellaneous">11.3. Miscellaneous</a>
-<ul class="sectlevel3">
-<li><a href="#jam.miscellaneous.diagnostics">11.3.1. Diagnostics</a></li>
-<li><a href="#jam.miscellaneous.bugs__limitations">11.3.2. Bugs, Limitations</a></li>
-<li><a href="#jam.miscellaneous.fundamentals">11.3.3. Fundamentals</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#b2.history">12. History</a>
+<li><a href="#b2.history">13. History</a>
 <ul class="sectlevel2">
-<li><a href="#_version_4_4_0">12.1. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">12.2. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">12.3. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">12.4. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_0">12.5. Version 4.0.0</a></li>
+<li><a href="#_version_4_4_0">13.1. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">13.2. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">13.3. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">13.4. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_0">13.5. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a>1. Introduction</h2>
 <div class="sectionbody">
 <style>
 .admonitionblock .icon .title {
@@ -823,9 +709,10 @@ list (<a href="http://boost.org/more/mailing_lists.htm#jamboost" class="bare">ht
 <div class="sidebarblock">
 <div class="content">
 <div class="paragraph">
-<p>Copyright 2006, 2014 <a href="http://vladimirprus.com">Vladimir Prus</a>. Distributed
-under the Boost Software License, Version 1.0. (See accompanying file
-<code>LICENSE_1_0.txt</code> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" class="bare">http://www.boost.org/LICENSE_1_0.txt</a>)</p>
+<p>Copyright 2018-2021 René Ferdinand Rivera Morell;
+Copyright 2006, 2014 Vladimir Prus.
+Distributed under the Boost Software License, Version 1.0. (See accompanying
+file <code>LICENSE.txt</code> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" class="bare">http://www.boost.org/LICENSE_1_0.txt</a>)</p>
 </div>
 </div>
 </div>
@@ -833,7 +720,7 @@ under the Boost Software License, Version 1.0. (See accompanying file
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.installation"><a class="anchor" href="#bbv2.installation"></a>1. Installation</h2>
+<h2 id="bbv2.installation"><a class="anchor" href="#bbv2.installation"></a>2. Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To install B2 from an official release or a nightly build, as
@@ -887,7 +774,7 @@ then change to that directory and run:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.tutorial"><a class="anchor" href="#bbv2.tutorial"></a>2. Tutorial</h2>
+<h2 id="bbv2.tutorial"><a class="anchor" href="#bbv2.tutorial"></a>3. Tutorial</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This section will guide you though the most basic features of
@@ -895,7 +782,7 @@ B2. We will start with the “Hello, world” example, learn how to
 use libraries, and finish with testing and installing features.</p>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tutorial.hello"><a class="anchor" href="#bbv2.tutorial.hello"></a>2.1. Hello, world</h3>
+<h3 id="bbv2.tutorial.hello"><a class="anchor" href="#bbv2.tutorial.hello"></a>3.1. Hello, world</h3>
 <div class="paragraph">
 <p>The simplest project that B2 can construct is stored in
 <code>example/hello/</code> directory. The project is described by a file called
@@ -962,7 +849,7 @@ b2 --clean hello2</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tutorial.properties"><a class="anchor" href="#bbv2.tutorial.properties"></a>2.2. Properties</h3>
+<h3 id="bbv2.tutorial.properties"><a class="anchor" href="#bbv2.tutorial.properties"></a>3.2. Properties</h3>
 <div class="paragraph">
 <p>To represent aspects of target configuration such as debug and release
 variants, or single- and multi-threaded builds portably, B2
@@ -1012,7 +899,7 @@ name of one of its values.</p>
 <a href="#bbv2.reference.features">the section called “Features and properties”</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="bbv2.tutorial.properties.requirements"><a class="anchor" href="#bbv2.tutorial.properties.requirements"></a>2.2.1. Build Requests and Target Requirements</h4>
+<h4 id="bbv2.tutorial.properties.requirements"><a class="anchor" href="#bbv2.tutorial.properties.requirements"></a>3.2.1. Build Requests and Target Requirements</h4>
 <div class="paragraph">
 <p>The set of properties specified on the command line constitutes a <em>build
 request</em>—a description of the desired properties for building the
@@ -1060,7 +947,7 @@ The value of the <code>&lt;include&gt;</code> feature is relative to the locatio
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.tutorial.properties.project_attributes"><a class="anchor" href="#bbv2.tutorial.properties.project_attributes"></a>2.2.2. Project Attributes</h4>
+<h4 id="bbv2.tutorial.properties.project_attributes"><a class="anchor" href="#bbv2.tutorial.properties.project_attributes"></a>3.2.2. Project Attributes</h4>
 <div class="paragraph">
 <p>If we want the same requirements for our other target, <code>hello2</code>, we
 could simply duplicate them. However, as projects grow, that approach
@@ -1085,7 +972,7 @@ including requirements:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tutorial.hierarchy"><a class="anchor" href="#bbv2.tutorial.hierarchy"></a>2.3. Project Hierarchies</h3>
+<h3 id="bbv2.tutorial.hierarchy"><a class="anchor" href="#bbv2.tutorial.hierarchy"></a>3.3. Project Hierarchies</h3>
 <div class="paragraph">
 <p>So far we have only considered examples with one project, with one
 user-written <code>Jamfile</code> file. A typical large codebase would
@@ -1168,7 +1055,7 @@ built only if they are needed by targets in <code>top/</code> or <code>top/app/<
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tutorial.libs"><a class="anchor" href="#bbv2.tutorial.libs"></a>2.4. Dependent Targets</h3>
+<h3 id="bbv2.tutorial.libs"><a class="anchor" href="#bbv2.tutorial.libs"></a>3.4. Dependent Targets</h3>
 <div class="paragraph">
 <p>When building a target <code>X</code> that depends on first building another target
 <code>Y</code> (such as a library that must be linked with X), <code>Y</code> is called a
@@ -1230,9 +1117,9 @@ as-is to the compiler flags for <code>a.cpp</code>, but won&#8217;t affect <code
 <div class="paragraph">
 <p>Let&#8217;s improve this project further. The library probably has some
 headers that must be used when compiling <code>app.cpp</code>. We could manually
-add the necessary <code>#include</code> paths to <code>app&#8217;s requirements as values of
-the `&lt;include&gt;  ` feature, but then this work will be repeated for all
-programs that use `foo</code>. A better solution is to modify
+add the necessary <code>#include</code> paths to the <code>app</code> requirements as values of
+the <code>&lt;include&gt;</code> feature, but then this work will be repeated for all
+programs that use <code>foo</code>. A better solution is to modify
 <code>util/foo/Jamfile</code> in this way:</p>
 </div>
 <div class="listingblock">
@@ -1306,7 +1193,7 @@ requirements, like this:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tutorial.linkage"><a class="anchor" href="#bbv2.tutorial.linkage"></a>2.5. Static and shared libraries</h3>
+<h3 id="bbv2.tutorial.linkage"><a class="anchor" href="#bbv2.tutorial.linkage"></a>3.5. Static and shared libraries</h3>
 <div class="paragraph">
 <p>Libraries can be either <em>static</em>, which means they are included in
 executable files that use them, or <em>shared</em> (a.k.a. <em>dynamic</em>), which
@@ -1426,7 +1313,7 @@ running the executable.
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tutorial.conditions"><a class="anchor" href="#bbv2.tutorial.conditions"></a>2.6. Conditions and alternatives</h3>
+<h3 id="bbv2.tutorial.conditions"><a class="anchor" href="#bbv2.tutorial.conditions"></a>3.6. Conditions and alternatives</h3>
 <div class="paragraph">
 <p>Sometimes, particular relationships need to be maintained among a
 target&#8217;s build properties. For example, you might want to set specific
@@ -1472,7 +1359,7 @@ built.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tutorial.prebuilt"><a class="anchor" href="#bbv2.tutorial.prebuilt"></a>2.7. Prebuilt targets</h3>
+<h3 id="bbv2.tutorial.prebuilt"><a class="anchor" href="#bbv2.tutorial.prebuilt"></a>3.7. Prebuilt targets</h3>
 <div class="paragraph">
 <p>To link to libraries whose build instructions aren&#8217;t given in a Jamfile,
 you need to create <code>lib</code> targets with an appropriate <code>file</code> property.
@@ -1555,7 +1442,7 @@ site-config.jam”</a>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.overview"><a class="anchor" href="#bbv2.overview"></a>3. Overview</h2>
+<h2 id="bbv2.overview"><a class="anchor" href="#bbv2.overview"></a>4. Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This section will provide the information necessary to create your own
@@ -1616,7 +1503,7 @@ four things:</p>
 </ul>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.concepts"><a class="anchor" href="#bbv2.overview.concepts"></a>3.1. Concepts</h3>
+<h3 id="bbv2.overview.concepts"><a class="anchor" href="#bbv2.overview.concepts"></a>4.1. Concepts</h3>
 <div class="paragraph">
 <p>B2 has a few unique concepts that are introduced in this
 section. The best way to explain the concepts is by comparison with more
@@ -1719,7 +1606,7 @@ B2 article</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.jam_language"><a class="anchor" href="#bbv2.overview.jam_language"></a>3.2. Boost.Jam Language</h3>
+<h3 id="bbv2.overview.jam_language"><a class="anchor" href="#bbv2.overview.jam_language"></a>4.2. Boost.Jam Language</h3>
 <div class="paragraph">
 <p>This section will describe the basics of the Boost.Jam language—just
 enough for writing Jamfiles. For more information, please see the
@@ -1938,7 +1825,7 @@ actions would be impossible.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.configuration"><a class="anchor" href="#bbv2.overview.configuration"></a>3.3. Configuration</h3>
+<h3 id="bbv2.overview.configuration"><a class="anchor" href="#bbv2.overview.configuration"></a>4.3. Configuration</h3>
 <div class="paragraph">
 <p>On startup, B2 searches and reads three configuration files:
 <code>site-config.jam</code>, <code>user-config.jam</code>, and <code>project-config.jam</code>. The
@@ -2237,7 +2124,7 @@ toolset initialization.
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.invocation"><a class="anchor" href="#bbv2.overview.invocation"></a>3.4. Invocation</h3>
+<h3 id="bbv2.overview.invocation"><a class="anchor" href="#bbv2.overview.invocation"></a>4.4. Invocation</h3>
 <div class="paragraph">
 <p>To invoke B2, type <code>b2</code> on the command line. Three kinds of
 command-line tokens are accepted, in any order:</p>
@@ -2265,7 +2152,7 @@ you are building.</p>
 </dl>
 </div>
 <div class="sect3">
-<h4 id="bbv2.overview.invocation.examples"><a class="anchor" href="#bbv2.overview.invocation.examples"></a>3.4.1. Examples</h4>
+<h4 id="bbv2.overview.invocation.examples"><a class="anchor" href="#bbv2.overview.invocation.examples"></a>4.4.1. Examples</h4>
 <div class="paragraph">
 <p>To build all targets defined in the Jamfile in the current directory
 with the default properties, run:</p>
@@ -2294,7 +2181,7 @@ command line:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.overview.invocation.options"><a class="anchor" href="#bbv2.overview.invocation.options"></a>3.4.2. Options</h4>
+<h4 id="bbv2.overview.invocation.options"><a class="anchor" href="#bbv2.overview.invocation.options"></a>4.4.2. Options</h4>
 <div class="paragraph">
 <p>B2 recognizes the following command line options.</p>
 </div>
@@ -2472,7 +2359,7 @@ interpreter, overriding variables imported from the environment.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.overview.invocation.properties"><a class="anchor" href="#bbv2.overview.invocation.properties"></a>3.4.3. Properties</h4>
+<h4 id="bbv2.overview.invocation.properties"><a class="anchor" href="#bbv2.overview.invocation.properties"></a>4.4.3. Properties</h4>
 <div class="paragraph">
 <p>In the simplest case, the build is performed with a single set of
 properties, that you specify on the command line with elements in the
@@ -2631,7 +2518,7 @@ of values, so</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.overview.invocation.targets"><a class="anchor" href="#bbv2.overview.invocation.targets"></a>3.4.4. Targets</h4>
+<h4 id="bbv2.overview.invocation.targets"><a class="anchor" href="#bbv2.overview.invocation.targets"></a>4.4.4. Targets</h4>
 <div class="paragraph">
 <p>All command line elements that are neither options nor properties are
 the names of the targets to build. See <a href="#bbv2.reference.ids">the section
@@ -2641,7 +2528,7 @@ project in the current directory is built.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.targets"><a class="anchor" href="#bbv2.overview.targets"></a>3.5. Declaring Targets</h3>
+<h3 id="bbv2.overview.targets"><a class="anchor" href="#bbv2.overview.targets"></a>4.5. Declaring Targets</h3>
 <div id="bbv2.overview.targets.main" class="paragraph">
 <p>A Main target is a user-defined named entity that can be built, for
 example an executable file. Declaring a main target is usually done
@@ -2703,7 +2590,7 @@ usage-requirements. More details can be found in
 <a href="#bbv2.reference.variants.proprefine">the section called “Property refinement”</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="_name"><a class="anchor" href="#_name"></a>3.5.1. Name</h4>
+<h4 id="_name"><a class="anchor" href="#_name"></a>4.5.1. Name</h4>
 <div class="paragraph">
 <p>The name of main target has two purposes. First, it&#8217;s used to refer to
 this target from other targets and from command line. Second, it&#8217;s used
@@ -2729,7 +2616,7 @@ not two files named <code>test.release.obj</code> and <code>test.debug.obj</code
 </div>
 </div>
 <div class="sect3">
-<h4 id="_sources"><a class="anchor" href="#_sources"></a>3.5.2. Sources</h4>
+<h4 id="_sources"><a class="anchor" href="#_sources"></a>4.5.2. Sources</h4>
 <div class="paragraph">
 <p>The list of sources specifies what should be processed to get the
 resulting targets. Most of the time, it&#8217;s just a list of files.
@@ -2795,7 +2682,7 @@ information about target references can be found in
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.overview.targets.requirements"><a class="anchor" href="#bbv2.overview.targets.requirements"></a>3.5.3. Requirements</h4>
+<h4 id="bbv2.overview.targets.requirements"><a class="anchor" href="#bbv2.overview.targets.requirements"></a>4.5.3. Requirements</h4>
 <div class="paragraph">
 <p>Requirements are the properties that should always be present when
 building a target. Typically, they are includes and defines:</p>
@@ -2911,7 +2798,7 @@ specify exactly the same property to remove it.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_default_build"><a class="anchor" href="#_default_build"></a>3.5.4. Default Build</h4>
+<h4 id="_default_build"><a class="anchor" href="#_default_build"></a>4.5.4. Default Build</h4>
 <div class="paragraph">
 <p>The <code>default-build</code> parameter is a set of properties to be used if the
 build request does not otherwise specify a value for features in the
@@ -2930,7 +2817,7 @@ way.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_additional_information"><a class="anchor" href="#_additional_information"></a>3.5.5. Additional Information</h4>
+<h4 id="_additional_information"><a class="anchor" href="#_additional_information"></a>4.5.5. Additional Information</h4>
 <div class="paragraph">
 <p>The ways a target is built can be so different that describing them
 using conditional requirements would be hard. For example, imagine that
@@ -2979,7 +2866,7 @@ explicit request, this can be expressed by the
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.projects"><a class="anchor" href="#bbv2.overview.projects"></a>3.6. Projects</h3>
+<h3 id="bbv2.overview.projects"><a class="anchor" href="#bbv2.overview.projects"></a>4.6. Projects</h3>
 <div class="paragraph">
 <p>As mentioned before, targets are grouped into projects, and each Jamfile
 is a separate project. Projects are useful because they allow us to
@@ -3129,7 +3016,7 @@ just because the directory contains a Jamfile.
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.build_process"><a class="anchor" href="#bbv2.overview.build_process"></a>3.7. The Build Process</h3>
+<h3 id="bbv2.overview.build_process"><a class="anchor" href="#bbv2.overview.build_process"></a>4.7. The Build Process</h3>
 <div class="paragraph">
 <p>When you&#8217;ve described your targets, you want B2 to run the
 right tools and create the needed targets. This section will describe
@@ -3161,7 +3048,7 @@ user, and each target can be built with different properties.
 </table>
 </div>
 <div class="sect3">
-<h4 id="bbv2.overview.build_request"><a class="anchor" href="#bbv2.overview.build_request"></a>3.7.1. Build Request</h4>
+<h4 id="bbv2.overview.build_request"><a class="anchor" href="#bbv2.overview.build_request"></a>4.7.1. Build Request</h4>
 <div class="paragraph">
 <p>The command line specifies which targets to build and with which
 properties. For example:</p>
@@ -3189,7 +3076,7 @@ in <a href="#bbv2.overview.invocation">the section called “Invocation”</a>.<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_building_a_main_target"><a class="anchor" href="#_building_a_main_target"></a>3.7.2. Building a main target</h4>
+<h4 id="_building_a_main_target"><a class="anchor" href="#_building_a_main_target"></a>4.7.2. Building a main target</h4>
 <div class="paragraph">
 <p>When you request, directly or indirectly, a build of a main target with
 specific requirements, the following steps are done. Some brief
@@ -3251,7 +3138,7 @@ returned.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_building_a_project"><a class="anchor" href="#_building_a_project"></a>3.7.3. Building a Project</h4>
+<h4 id="_building_a_project"><a class="anchor" href="#_building_a_project"></a>4.7.3. Building a Project</h4>
 <div class="paragraph">
 <p>Often, a user builds a complete project, not just one main target. In
 fact, invoking <code>b2</code> without arguments builds the project defined in the
@@ -3281,7 +3168,7 @@ calls that specify additional projects to be built.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.tasks"><a class="anchor" href="#bbv2.tasks"></a>4. Common tasks</h2>
+<h2 id="bbv2.tasks"><a class="anchor" href="#bbv2.tasks"></a>5. Common tasks</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This section describes main targets types that B2 supports
@@ -3290,7 +3177,7 @@ have the common signature, described in
 <a href="#bbv2.overview.targets">the section called “Declaring Targets”</a>.</p>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tasks.programs"><a class="anchor" href="#bbv2.tasks.programs"></a>4.1. Programs</h3>
+<h3 id="bbv2.tasks.programs"><a class="anchor" href="#bbv2.tasks.programs"></a>5.1. Programs</h3>
 <div class="paragraph">
 <p>Programs are created using the <code>exe</code> rule, which follows the
 <a href="#bbv2.main-target-rule-syntax">common syntax</a>. For example:</p>
@@ -3330,7 +3217,7 @@ libraries into the same directory. See
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tasks.libraries"><a class="anchor" href="#bbv2.tasks.libraries"></a>4.2. Libraries</h3>
+<h3 id="bbv2.tasks.libraries"><a class="anchor" href="#bbv2.tasks.libraries"></a>5.2. Libraries</h3>
 <div class="paragraph">
 <p>Library targets are created using the <code>lib</code> rule, which follows the
 <a href="#bbv2.main-target-rule-syntax">common syntax</a>. For example:</p>
@@ -3505,7 +3392,7 @@ This feature greatly simplifies Jamfiles.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tasks.alias"><a class="anchor" href="#bbv2.tasks.alias"></a>4.3. Alias</h3>
+<h3 id="bbv2.tasks.alias"><a class="anchor" href="#bbv2.tasks.alias"></a>5.3. Alias</h3>
 <div class="paragraph">
 <p>The <code>alias</code> rule gives an alternative name to a group of targets. For
 example, to give the name <code>core</code> to a group of three other targets with
@@ -3561,13 +3448,13 @@ specified static libraries.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tasks.installing"><a class="anchor" href="#bbv2.tasks.installing"></a>4.4. Installing</h3>
+<h3 id="bbv2.tasks.installing"><a class="anchor" href="#bbv2.tasks.installing"></a>5.4. Installing</h3>
 <div class="paragraph">
 <p>This section describes various ways to install built targets and
 arbitrary files.</p>
 </div>
 <div class="sect3">
-<h4 id="_basic_install"><a class="anchor" href="#_basic_install"></a>4.4.1. Basic install</h4>
+<h4 id="_basic_install"><a class="anchor" href="#_basic_install"></a>5.4.1. Basic install</h4>
 <div class="paragraph">
 <p>For installing a built target you should use the <code>install</code> rule, which
 follows the <a href="#bbv2.main-target-rule-syntax">common syntax</a>. For
@@ -3611,7 +3498,7 @@ and <a href="#bbv2.faq.envar">environment variables</a></p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_installing_with_all_dependencies"><a class="anchor" href="#_installing_with_all_dependencies"></a>4.4.2. Installing with all dependencies</h4>
+<h4 id="_installing_with_all_dependencies"><a class="anchor" href="#_installing_with_all_dependencies"></a>5.4.2. Installing with all dependencies</h4>
 <div class="paragraph">
 <p>Specifying the names of all libraries to install can be boring. The
 <code>install</code> allows you to specify only the top-level executable targets to
@@ -3637,7 +3524,7 @@ type will be installed, otherwise, all found target will be installed.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_preserving_directory_hierarchy"><a class="anchor" href="#_preserving_directory_hierarchy"></a>4.4.3. Preserving Directory Hierarchy</h4>
+<h4 id="_preserving_directory_hierarchy"><a class="anchor" href="#_preserving_directory_hierarchy"></a>5.4.3. Preserving Directory Hierarchy</h4>
 <div class="paragraph">
 <p>By default, the <code>install</code> rule will strip paths from its sources. So, if
 sources include <code>a/b/c.hpp</code>, the <code>a/b</code> part will be ignored. To make the
@@ -3664,7 +3551,7 @@ directory tree.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_installing_into_several_directories"><a class="anchor" href="#_installing_into_several_directories"></a>4.4.4. Installing into Several Directories</h4>
+<h4 id="_installing_into_several_directories"><a class="anchor" href="#_installing_into_several_directories"></a>5.4.4. Installing into Several Directories</h4>
 <div class="paragraph">
 <p>The <a href="#bbv2.tasks.alias"><code>alias</code></a> rule can be used when targets need
 to be installed into several directories:</p>
@@ -3703,7 +3590,7 @@ executables using the <code>dll-path</code> feature.
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.builtins.testing"><a class="anchor" href="#bbv2.builtins.testing"></a>4.5. Testing</h3>
+<h3 id="bbv2.builtins.testing"><a class="anchor" href="#bbv2.builtins.testing"></a>5.5. Testing</h3>
 <div class="paragraph">
 <p>B2 has convenient support for running unit tests. The simplest
 way is the <code>unit-test</code> rule, which follows the
@@ -3848,7 +3735,7 @@ you write:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.builtins.raw"><a class="anchor" href="#bbv2.builtins.raw"></a>4.6. Custom commands</h3>
+<h3 id="bbv2.builtins.raw"><a class="anchor" href="#bbv2.builtins.raw"></a>5.6. Custom commands</h3>
 <div class="paragraph">
 <p>For most main target rules, B2 automatically figures out the
 commands to run. When you want to use new file types or support new
@@ -3936,7 +3823,7 @@ used.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.precompiled_headers"><a class="anchor" href="#bbv2.reference.precompiled_headers"></a>4.7. Precompiled Headers</h3>
+<h3 id="bbv2.reference.precompiled_headers"><a class="anchor" href="#bbv2.reference.precompiled_headers"></a>5.7. Precompiled Headers</h3>
 <div class="paragraph">
 <p>Precompiled headers is a mechanism to speed up compilation by creating a
 partially processed version of some header files, and then using that
@@ -4009,7 +3896,7 @@ details.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.generated_headers"><a class="anchor" href="#bbv2.reference.generated_headers"></a>4.8. Generated headers</h3>
+<h3 id="bbv2.reference.generated_headers"><a class="anchor" href="#bbv2.reference.generated_headers"></a>5.8. Generated headers</h3>
 <div class="paragraph">
 <p>Usually, B2 handles implicit dependencies completely
 automatically. For example, for C++ files, all <code>#include</code> statements are
@@ -4044,7 +3931,7 @@ of "app" for implicit-dependencies, it should consider targets from
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tasks.crosscompile"><a class="anchor" href="#bbv2.tasks.crosscompile"></a>4.9. Cross-compilation</h3>
+<h3 id="bbv2.tasks.crosscompile"><a class="anchor" href="#bbv2.tasks.crosscompile"></a>5.9. Cross-compilation</h3>
 <div class="paragraph">
 <p>B2 supports cross compilation with the gcc and msvc toolsets.</p>
 </div>
@@ -4094,7 +3981,7 @@ for details.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.tasks.packagemanagers"><a class="anchor" href="#bbv2.tasks.packagemanagers"></a>4.10. Package Managers</h3>
+<h3 id="bbv2.tasks.packagemanagers"><a class="anchor" href="#bbv2.tasks.packagemanagers"></a>5.10. Package Managers</h3>
 <div class="paragraph">
 <p>B2 support automatic, or manual, loading of generated build files
 from package managers. For example using the Conan package manager which
@@ -4183,12 +4070,12 @@ generator.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.reference"><a class="anchor" href="#bbv2.reference"></a>5. Reference</h2>
+<h2 id="bbv2.reference"><a class="anchor" href="#bbv2.reference"></a>6. Reference</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="bbv2.reference.general"><a class="anchor" href="#bbv2.reference.general"></a>5.1. General information</h3>
+<h3 id="bbv2.reference.general"><a class="anchor" href="#bbv2.reference.general"></a>6.1. General information</h3>
 <div class="sect3">
-<h4 id="bbv2.reference.init"><a class="anchor" href="#bbv2.reference.init"></a>5.1.1. Initialization</h4>
+<h4 id="bbv2.reference.init"><a class="anchor" href="#bbv2.reference.init"></a>6.1.1. Initialization</h4>
 <div class="paragraph">
 <p>Immediately upon starting, the B2 engine (<strong><code>b2</code></strong>) loads the Jam
 code that implements the build system. To do this, it searches for a
@@ -4231,7 +4118,7 @@ loads both <code>site-config.jam</code> and <code>user-config.jam</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.rules"><a class="anchor" href="#bbv2.reference.rules"></a>5.2. Builtin rules</h3>
+<h3 id="bbv2.reference.rules"><a class="anchor" href="#bbv2.reference.rules"></a>6.2. Builtin rules</h3>
 <div class="paragraph">
 <p>This section contains the list of all rules that can be used in
 Jamfile — both rules that define new targets and auxiliary rules.</p>
@@ -4427,7 +4314,7 @@ are not allowed.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.overview.builtins.features"><a class="anchor" href="#bbv2.overview.builtins.features"></a>5.3. Builtin features</h3>
+<h3 id="bbv2.overview.builtins.features"><a class="anchor" href="#bbv2.overview.builtins.features"></a>6.3. Builtin features</h3>
 <div class="paragraph">
 <p>This section documents the features that are built-in into B2.
 For features with a fixed set of values, that set is provided, with the
@@ -5556,7 +5443,7 @@ response file is created and the filename is replaced in the actions.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.tools"><a class="anchor" href="#bbv2.reference.tools"></a>5.4. Builtin tools</h3>
+<h3 id="bbv2.reference.tools"><a class="anchor" href="#bbv2.reference.tools"></a>6.4. Builtin tools</h3>
 <div class="paragraph">
 <p>B2 comes with support for a large number of C++ compilers, and
 other tools. This section documents how to use those tools.</p>
@@ -5586,7 +5473,7 @@ example:</p>
 subsequent sections.</p>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.tools.compilers"><a class="anchor" href="#bbv2.reference.tools.compilers"></a>5.4.1. C++ Compilers</h4>
+<h4 id="bbv2.reference.tools.compilers"><a class="anchor" href="#bbv2.reference.tools.compilers"></a>6.4.1. C++ Compilers</h4>
 <div class="paragraph">
 <p>This section lists all B2 modules that support C++ compilers
 and documents how each one can be initialized. The name of support
@@ -6458,7 +6345,7 @@ with the the <code>vacpp</code> module.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_third_party_libraries"><a class="anchor" href="#_third_party_libraries"></a>5.4.2. Third-party libraries</h4>
+<h4 id="_third_party_libraries"><a class="anchor" href="#_third_party_libraries"></a>6.4.2. Third-party libraries</h4>
 <div class="paragraph">
 <p>B2 provides special support for some third-party C++ libraries,
 documented below.</p>
@@ -6757,7 +6644,7 @@ and &lt;python-debugging&gt; is set).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_documentation_tools"><a class="anchor" href="#_documentation_tools"></a>5.4.3. Documentation tools</h4>
+<h4 id="_documentation_tools"><a class="anchor" href="#_documentation_tools"></a>6.4.3. Documentation tools</h4>
 <div class="paragraph">
 <p>B2 support for the Boost documentation tools is documented
 below.</p>
@@ -7036,14 +6923,14 @@ B2 will search for it in PATH and FOP_HOME.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.modules"><a class="anchor" href="#bbv2.reference.modules"></a>5.5. Builtin modules</h3>
+<h3 id="bbv2.reference.modules"><a class="anchor" href="#bbv2.reference.modules"></a>6.5. Builtin modules</h3>
 <div class="paragraph">
 <p>This section describes the modules that are provided by B2. The
 import rule allows rules from one module to be used in another module or
 Jamfile.</p>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.modules"><a class="anchor" href="#bbv2.reference.modules.modules"></a>5.5.1. modules</h4>
+<h4 id="bbv2.reference.modules.modules"><a class="anchor" href="#bbv2.reference.modules.modules"></a>6.5.1. modules</h4>
 <div class="paragraph">
 <p>The <code>modules</code> module defines basic functionality for handling modules.</p>
 </div>
@@ -7246,7 +7133,7 @@ originally in <code>$(target-module)</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>5.5.2. path</h4>
+<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.2. path</h4>
 <div class="paragraph">
 <p>Performs various path manipulations. Paths are always in a 'normalized'
 representation. In it, a path may be either:</p>
@@ -7429,7 +7316,7 @@ exist.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.regex"><a class="anchor" href="#bbv2.reference.modules.regex"></a>5.5.3. regex</h4>
+<h4 id="bbv2.reference.modules.regex"><a class="anchor" href="#bbv2.reference.modules.regex"></a>6.5.3. regex</h4>
 <div class="paragraph">
 <p>Contains rules for string processing using regular expressions.</p>
 </div>
@@ -7548,7 +7435,7 @@ expression.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>5.5.4. sequence</h4>
+<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.4. sequence</h4>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
@@ -7629,7 +7516,7 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>5.5.5. stage</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.5. stage</h4>
 <div class="paragraph">
 <p>This module defines the <code>install</code> rule, used to copy a set of targets to a
 single location.</p>
@@ -7748,7 +7635,7 @@ in project jam files).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>5.5.6. type</h4>
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.6. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
@@ -7900,9 +7787,9 @@ tries each suffix. E.g. for name of "file.so.1.2" suffixes "2", "1", and
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.class"><a class="anchor" href="#bbv2.reference.class"></a>5.6. Builtin classes</h3>
+<h3 id="bbv2.reference.class"><a class="anchor" href="#bbv2.reference.class"></a>6.6. Builtin classes</h3>
 <div class="sect3">
-<h4 id="bbv2.reference.class.abstract-target"><a class="anchor" href="#bbv2.reference.class.abstract-target"></a>5.6.1. Class abstract-target</h4>
+<h4 id="bbv2.reference.class.abstract-target"><a class="anchor" href="#bbv2.reference.class.abstract-target"></a>6.6.1. Class abstract-target</h4>
 <div class="paragraph">
 <p>Base class for all abstract targets.</p>
 </div>
@@ -8012,7 +7899,7 @@ in a way specific to the derived class.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.class.project-target"><a class="anchor" href="#bbv2.reference.class.project-target"></a>5.6.2. Class project-target</h4>
+<h4 id="bbv2.reference.class.project-target"><a class="anchor" href="#bbv2.reference.class.project-target"></a>6.6.2. Class project-target</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">class</span><span class="tok-w"> </span><span class="tok-nc">project-target</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nc">abstract-target</span><span class="tok-w"> </span>{<span class="tok-w"></span>
@@ -8102,7 +7989,7 @@ not found depending on the <code>no-error</code> parameter.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.class.main-target"><a class="anchor" href="#bbv2.reference.class.main-target"></a>5.6.3. Class main-target</h4>
+<h4 id="bbv2.reference.class.main-target"><a class="anchor" href="#bbv2.reference.class.main-target"></a>6.6.3. Class main-target</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">class</span><span class="tok-w"> </span><span class="tok-nc">main-target</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nc">abstract-target</span><span class="tok-w"> </span>{<span class="tok-w"></span>
@@ -8155,7 +8042,7 @@ alternative.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.class.basic-target"><a class="anchor" href="#bbv2.reference.class.basic-target"></a>5.6.4. Class basic-target</h4>
+<h4 id="bbv2.reference.class.basic-target"><a class="anchor" href="#bbv2.reference.class.basic-target"></a>6.6.4. Class basic-target</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">class</span><span class="tok-w"> </span><span class="tok-nc">basic-target</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nc">abstract-target</span><span class="tok-w"> </span>{<span class="tok-w"></span>
@@ -8233,7 +8120,7 @@ overridden in derived classes.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.class.typed-target"><a class="anchor" href="#bbv2.reference.class.typed-target"></a>5.6.5. Class typed-target</h4>
+<h4 id="bbv2.reference.class.typed-target"><a class="anchor" href="#bbv2.reference.class.typed-target"></a>6.6.5. Class typed-target</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="jam"><span></span><span class="tok-k">class</span><span class="tok-w"> </span><span class="tok-nc">typed-target</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nc">basic-target</span><span class="tok-w"> </span>{<span class="tok-w"></span>
@@ -8319,7 +8206,7 @@ and should not be called directly by users.
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.class.property-set"><a class="anchor" href="#bbv2.reference.class.property-set"></a>5.6.6. Class property-set</h4>
+<h4 id="bbv2.reference.class.property-set"><a class="anchor" href="#bbv2.reference.class.property-set"></a>6.6.6. Class property-set</h4>
 <div class="paragraph">
 <p>Class for storing a set of properties.</p>
 </div>
@@ -8419,7 +8306,7 @@ resulting <a href="#bbv2.reference.class.property-set">property-set</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.buildprocess"><a class="anchor" href="#bbv2.reference.buildprocess"></a>5.7. Build process</h3>
+<h3 id="bbv2.reference.buildprocess"><a class="anchor" href="#bbv2.reference.buildprocess"></a>6.7. Build process</h3>
 <div class="paragraph">
 <p>The general overview of the build process was given in the
 <a href="#bbv2.overview.build_process">user documentation</a>. This section
@@ -8457,7 +8344,7 @@ the "common" properties,</p>
 </ol>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.buildprocess.alternatives"><a class="anchor" href="#bbv2.reference.buildprocess.alternatives"></a>5.7.1. Alternative selection</h4>
+<h4 id="bbv2.reference.buildprocess.alternatives"><a class="anchor" href="#bbv2.reference.buildprocess.alternatives"></a>6.7.1. Alternative selection</h4>
 <div class="paragraph">
 <p>When a target has several alternatives, one of them must be selected.
 The process is as follows:</p>
@@ -8486,7 +8373,7 @@ error is reported.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.buildprocess.common"><a class="anchor" href="#bbv2.reference.buildprocess.common"></a>5.7.2. Determining common properties</h4>
+<h4 id="bbv2.reference.buildprocess.common"><a class="anchor" href="#bbv2.reference.buildprocess.common"></a>6.7.2. Determining common properties</h4>
 <div class="paragraph">
 <p>"Common" properties is a somewhat artificial term. This is the
 intermediate property set from which both the build request for
@@ -8546,7 +8433,7 @@ property. For example, the following example works as expected:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.buildprocess.targetpath"><a class="anchor" href="#bbv2.reference.buildprocess.targetpath"></a>5.7.3. Target Paths</h4>
+<h4 id="bbv2.reference.buildprocess.targetpath"><a class="anchor" href="#bbv2.reference.buildprocess.targetpath"></a>6.7.3. Target Paths</h4>
 <div class="paragraph">
 <p>Several factors determine the location of a concrete file target. All
 files in a project are built under the directory bin unless this is
@@ -8594,9 +8481,9 @@ project&#8217;s build directory. For example,</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.reference.definitions"><a class="anchor" href="#bbv2.reference.definitions"></a>5.8. Definitions</h3>
+<h3 id="bbv2.reference.definitions"><a class="anchor" href="#bbv2.reference.definitions"></a>6.8. Definitions</h3>
 <div class="sect3">
-<h4 id="bbv2.reference.features"><a class="anchor" href="#bbv2.reference.features"></a>5.8.1. Features and properties</h4>
+<h4 id="bbv2.reference.features"><a class="anchor" href="#bbv2.reference.features"></a>6.8.1. Features and properties</h4>
 <div class="paragraph">
 <p>A <em>feature</em> is a normalized (toolset-independent) aspect of a build
 configuration, such as whether inlining is enabled. Feature names may
@@ -8642,7 +8529,7 @@ of features used to build a target.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.features.validity"><a class="anchor" href="#bbv2.reference.features.validity"></a>5.8.2. Property Validity</h4>
+<h4 id="bbv2.reference.features.validity"><a class="anchor" href="#bbv2.reference.features.validity"></a>6.8.2. Property Validity</h4>
 <div class="paragraph">
 <p>For <a href="#bbv2.reference.features.attributes.free">free</a> features, all
 values are valid. For all other features, the valid values are
@@ -8655,7 +8542,7 @@ subproperties. For example, it is possible to specify that the
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.features.attributes"><a class="anchor" href="#bbv2.reference.features.attributes"></a>5.8.3. Feature Attributes</h4>
+<h4 id="bbv2.reference.features.attributes"><a class="anchor" href="#bbv2.reference.features.attributes"></a>6.8.3. Feature Attributes</h4>
 <div class="paragraph">
 <p>Each feature has a collection of zero or more of the following
 attributes. Feature attributes are low-level descriptions of how the
@@ -8782,7 +8669,7 @@ features.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.features.declaration"><a class="anchor" href="#bbv2.reference.features.declaration"></a>5.8.4. Feature Declaration</h4>
+<h4 id="bbv2.reference.features.declaration"><a class="anchor" href="#bbv2.reference.features.declaration"></a>6.8.4. Feature Declaration</h4>
 <div class="paragraph">
 <p>The low-level feature declaration interface is the <code>feature</code> rule from
 the <code>feature</code> module:</p>
@@ -8798,7 +8685,7 @@ rule.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.variants.proprefine"><a class="anchor" href="#bbv2.reference.variants.proprefine"></a>5.8.5. Property refinement</h4>
+<h4 id="bbv2.reference.variants.proprefine"><a class="anchor" href="#bbv2.reference.variants.proprefine"></a>6.8.5. Property refinement</h4>
 <div class="paragraph">
 <p>When a target with certain properties is requested, and that target
 requires some set of properties, it is needed to find the set of
@@ -8819,7 +8706,7 @@ value of non free feature, that property is removed.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.variants.propcond"><a class="anchor" href="#bbv2.reference.variants.propcond"></a>5.8.6. Conditional properties</h4>
+<h4 id="bbv2.reference.variants.propcond"><a class="anchor" href="#bbv2.reference.variants.propcond"></a>6.8.6. Conditional properties</h4>
 <div class="paragraph">
 <p>Sometime it&#8217;s desirable to apply certain requirements only for a
 specific combination of other properties. For example, one of compilers
@@ -8851,7 +8738,7 @@ that. Their syntax is:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.ids"><a class="anchor" href="#bbv2.reference.ids"></a>5.8.7. Target identifiers and references</h4>
+<h4 id="bbv2.reference.ids"><a class="anchor" href="#bbv2.reference.ids"></a>6.8.7. Target identifiers and references</h4>
 <div class="paragraph">
 <p><em>Target identifier</em> is used to denote a target. The syntax is:</p>
 </div>
@@ -8962,12 +8849,12 @@ for speed.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.util"><a class="anchor" href="#bbv2.util"></a>6. Utilities</h2>
+<h2 id="bbv2.util"><a class="anchor" href="#bbv2.util"></a>7. Utilities</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="bbv2.util.debugger"><a class="anchor" href="#bbv2.util.debugger"></a>6.1. Debugger</h3>
+<h3 id="bbv2.util.debugger"><a class="anchor" href="#bbv2.util.debugger"></a>7.1. Debugger</h3>
 <div class="sect3">
-<h4 id="bbv2.util.debugger.overview"><a class="anchor" href="#bbv2.util.debugger.overview"></a>6.1.1. Overview</h4>
+<h4 id="bbv2.util.debugger.overview"><a class="anchor" href="#bbv2.util.debugger.overview"></a>7.1.1. Overview</h4>
 <div class="paragraph">
 <p>B2 comes with a debugger for Jamfiles. To run the debugger,
 start B2 with <code>b2 -dconsole</code>.</p>
@@ -8986,7 +8873,7 @@ Breakpoint 1, gcc.init ( ) at /usr/share/boost-build/tools/gcc.jam:74
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.util.debugger.running"><a class="anchor" href="#bbv2.util.debugger.running"></a>6.1.2. Running the Program</h4>
+<h4 id="bbv2.util.debugger.running"><a class="anchor" href="#bbv2.util.debugger.running"></a>7.1.2. Running the Program</h4>
 <div class="paragraph">
 <p>The <code>run</code> command is used to start a new <code>b2</code> subprocess for debugging.
 The arguments to <code>run</code> are passed on the command line. If a child
@@ -9005,7 +8892,7 @@ until the current function returns.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.util.debugger.break"><a class="anchor" href="#bbv2.util.debugger.break"></a>6.1.3. Breakpoints</h4>
+<h4 id="bbv2.util.debugger.break"><a class="anchor" href="#bbv2.util.debugger.break"></a>7.1.3. Breakpoints</h4>
 <div class="paragraph">
 <p>Breakpoints are set using the <code>break</code> command. The location of the
 breakpoint can be specified as either the name of a function (including
@@ -9047,7 +8934,7 @@ Deleted breakpoint 1
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.util.debugger.stack"><a class="anchor" href="#bbv2.util.debugger.stack"></a>6.1.4. Examining the Stack</h4>
+<h4 id="bbv2.util.debugger.stack"><a class="anchor" href="#bbv2.util.debugger.stack"></a>7.1.4. Examining the Stack</h4>
 <div class="paragraph">
 <p>The <code>backtrace</code> command will print a summary of every frame on the
 stack.</p>
@@ -9065,7 +8952,7 @@ Jamfile.jam</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.util.debugger.misc"><a class="anchor" href="#bbv2.util.debugger.misc"></a>6.1.5. Miscellaneous Commands</h4>
+<h4 id="bbv2.util.debugger.misc"><a class="anchor" href="#bbv2.util.debugger.misc"></a>7.1.5. Miscellaneous Commands</h4>
 <div class="paragraph">
 <p><code>quit</code> exits the debugger. <code>help</code> describes the available commands.</p>
 </div>
@@ -9074,10 +8961,10 @@ Jamfile.jam</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.extender"><a class="anchor" href="#bbv2.extender"></a>7. Extender Manual</h2>
+<h2 id="bbv2.extender"><a class="anchor" href="#bbv2.extender"></a>8. Extender Manual</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="bbv2.extender.intro"><a class="anchor" href="#bbv2.extender.intro"></a>7.1. Introduction</h3>
+<h3 id="bbv2.extender.intro"><a class="anchor" href="#bbv2.extender.intro"></a>8.1. Introduction</h3>
 <div class="paragraph">
 <p>This section explains how to extend B2 to accommodate your local
 requirements&#8201;&#8212;&#8201;primarily to add support for non-standard tools you
@@ -9128,7 +9015,7 @@ concrete targets has no effect.
 </table>
 </div>
 <div class="sect3">
-<h4 id="bbv2.extender.overview.metatargets"><a class="anchor" href="#bbv2.extender.overview.metatargets"></a>7.1.1. Metatargets</h4>
+<h4 id="bbv2.extender.overview.metatargets"><a class="anchor" href="#bbv2.extender.overview.metatargets"></a>8.1.1. Metatargets</h4>
 <div class="paragraph">
 <p>Metatarget is an object that records information specified in Jamfile,
 such as metatarget kind, name, sources and properties, and can be called
@@ -9220,7 +9107,7 @@ that type.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.extender.overview.targets"><a class="anchor" href="#bbv2.extender.overview.targets"></a>7.1.2. Concrete targets</h4>
+<h4 id="bbv2.extender.overview.targets"><a class="anchor" href="#bbv2.extender.overview.targets"></a>8.1.2. Concrete targets</h4>
 <div class="paragraph">
 <p>Concrete targets are represented by instance of classes derived from
 <code>virtual-target</code>. The most commonly used subclass is <code>file-target</code>. A
@@ -9266,7 +9153,7 @@ necessary.<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.extender.overview.generators"><a class="anchor" href="#bbv2.extender.overview.generators"></a>7.1.3. Generators</h4>
+<h4 id="bbv2.extender.overview.generators"><a class="anchor" href="#bbv2.extender.overview.generators"></a>8.1.3. Generators</h4>
 <div class="paragraph">
 <p>In theory, every kind of metatarget in B2 (like <code>exe</code>, <code>lib</code> or
 <code>obj</code>) could be implemented by writing a new metatarget class that,
@@ -9297,7 +9184,7 @@ derived classes for custom scenarios.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.extender.example"><a class="anchor" href="#bbv2.extender.example"></a>7.2. Example: 1-to-1 generator</h3>
+<h3 id="bbv2.extender.example"><a class="anchor" href="#bbv2.extender.example"></a>8.2. Example: 1-to-1 generator</h3>
 <div class="paragraph">
 <p>Say you&#8217;re writing an application that generates C++ code. If you ever
 did this, you know that it&#8217;s not nice. Embedding large portions of C++
@@ -9393,7 +9280,7 @@ mechanisms in detail. The complete code is available in the
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.extending.targets"><a class="anchor" href="#bbv2.extending.targets"></a>7.3. Target types</h3>
+<h3 id="bbv2.extending.targets"><a class="anchor" href="#bbv2.extending.targets"></a>8.3. Target types</h3>
 <div class="paragraph">
 <p>The first thing we did in the <a href="#bbv2.extender.intro">introduction</a>
 was declaring a new target type:</p>
@@ -9455,7 +9342,7 @@ type. More details can be found
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.extending.scanners"><a class="anchor" href="#bbv2.extending.scanners"></a>7.4. Scanners</h3>
+<h3 id="bbv2.extending.scanners"><a class="anchor" href="#bbv2.extending.scanners"></a>8.4. Scanners</h3>
 <div class="paragraph">
 <p>Sometimes, a file can refer to other files via some include system. To
 make B2 track dependencies between included files, you need to
@@ -9512,7 +9399,7 @@ the included files.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.extending.tools"><a class="anchor" href="#bbv2.extending.tools"></a>7.5. Tools and generators</h3>
+<h3 id="bbv2.extending.tools"><a class="anchor" href="#bbv2.extending.tools"></a>8.5. Tools and generators</h3>
 <div class="paragraph">
 <p>This section will describe how B2 can be extended to support
 new tools.</p>
@@ -9724,7 +9611,7 @@ necessary.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.extending.features"><a class="anchor" href="#bbv2.extending.features"></a>7.6. Features</h3>
+<h3 id="bbv2.extending.features"><a class="anchor" href="#bbv2.extending.features"></a>8.6. Features</h3>
 <div class="paragraph">
 <p>Often, we need to control the options passed the invoked tools. This is
 done with features. Consider an example:</p>
@@ -9963,7 +9850,7 @@ will expand to link to the necessary library.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.extending.rules"><a class="anchor" href="#bbv2.extending.rules"></a>7.7. Main target rules</h3>
+<h3 id="bbv2.extending.rules"><a class="anchor" href="#bbv2.extending.rules"></a>8.7. Main target rules</h3>
 <div class="paragraph">
 <p>A main target rule (e.g “<a href="#bbv2.tasks.programs">exe</a>” Or
 “<a href="#bbv2.tasks.libraries">lib</a>”) creates a top-level target. It&#8217;s
@@ -10032,7 +9919,7 @@ rule is non-trivial.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.extending.toolset_modules"><a class="anchor" href="#bbv2.extending.toolset_modules"></a>7.8. Toolset modules</h3>
+<h3 id="bbv2.extending.toolset_modules"><a class="anchor" href="#bbv2.extending.toolset_modules"></a>8.8. Toolset modules</h3>
 <div class="paragraph">
 <p>If your extensions will be used only on one project, they can be placed
 in a separate <code>.jam</code> file and imported by your <code>Jamroot.jam</code>. If the
@@ -10116,10 +10003,10 @@ look at how <code>tools/gcc.jam</code> uses that module in the <code>init</code>
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.faq"><a class="anchor" href="#bbv2.faq"></a>8. Frequently Asked Questions</h2>
+<h2 id="bbv2.faq"><a class="anchor" href="#bbv2.faq"></a>9. Frequently Asked Questions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="bbv2.faq.featurevalue"><a class="anchor" href="#bbv2.faq.featurevalue"></a>8.1. How do I get the current value of feature in Jamfile?</h3>
+<h3 id="bbv2.faq.featurevalue"><a class="anchor" href="#bbv2.faq.featurevalue"></a>9.1. How do I get the current value of feature in Jamfile?</h3>
 <div class="paragraph">
 <p>This is not possible, since Jamfile does not have "current" value of any
 feature, be it toolset, build variant or anything else. For a single run
@@ -10149,7 +10036,7 @@ generator can do arbitrary processing or properties. See the
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.duplicate"><a class="anchor" href="#bbv2.faq.duplicate"></a>8.2. I am getting a "Duplicate name of actual target" error. What does that mean?</h3>
+<h3 id="bbv2.faq.duplicate"><a class="anchor" href="#bbv2.faq.duplicate"></a>9.2. I am getting a "Duplicate name of actual target" error. What does that mean?</h3>
 <div class="paragraph">
 <p>The most likely case is that you are trying to compile the same file
 twice, with almost the same, but differing properties. For example:</p>
@@ -10252,7 +10139,7 @@ intention in such cases.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.envar"><a class="anchor" href="#bbv2.faq.envar"></a>8.3. Accessing environment variables</h3>
+<h3 id="bbv2.faq.envar"><a class="anchor" href="#bbv2.faq.envar"></a>9.3. Accessing environment variables</h3>
 <div class="paragraph">
 <p>Many users would like to use environment variables in Jamfiles, for
 example, to control the location of external libraries. In many cases it
@@ -10287,7 +10174,7 @@ using the helper os.environ rule. For example:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.proporder"><a class="anchor" href="#bbv2.faq.proporder"></a>8.4. How to control properties order?</h3>
+<h3 id="bbv2.faq.proporder"><a class="anchor" href="#bbv2.faq.proporder"></a>9.4. How to control properties order?</h3>
 <div class="paragraph">
 <p>For internal reasons, B2 sorts all the properties
 alphabetically. This means that if you write:</p>
@@ -10317,7 +10204,7 @@ Using it everywhere might negatively affect performance.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.liborder"><a class="anchor" href="#bbv2.faq.liborder"></a>8.5. How to control the library linking order on Unix?</h3>
+<h3 id="bbv2.faq.liborder"><a class="anchor" href="#bbv2.faq.liborder"></a>9.5. How to control the library linking order on Unix?</h3>
 <div class="paragraph">
 <p>On Unix-like operating systems, the order in which static libraries are
 specified when invoking the linker is important, because by default, the
@@ -10353,7 +10240,7 @@ following lines will cause <code>a</code> to appear before <code>b</code> on the
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.external"><a class="anchor" href="#bbv2.faq.external"></a>8.6. Can I get capture external program output using a Boost.Jam variable?</h3>
+<h3 id="bbv2.faq.external"><a class="anchor" href="#bbv2.faq.external"></a>9.6. Can I get capture external program output using a Boost.Jam variable?</h3>
 <div class="paragraph">
 <p>The <code>SHELL</code> builtin rule may be used for this purpose:</p>
 </div>
@@ -10364,7 +10251,7 @@ following lines will cause <code>a</code> to appear before <code>b</code> on the
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.projectroot"><a class="anchor" href="#bbv2.faq.projectroot"></a>8.7. How to get the project root (a.k.a. Jamroot) location?</h3>
+<h3 id="bbv2.faq.projectroot"><a class="anchor" href="#bbv2.faq.projectroot"></a>9.7. How to get the project root (a.k.a. Jamroot) location?</h3>
 <div class="paragraph">
 <p>You might want to use your project&#8217;s root location in your Jamfiles. To
 access it just declare a path constant in your <code>Jamroot.jam</code> file using:</p>
@@ -10379,7 +10266,7 @@ access it just declare a path constant in your <code>Jamroot.jam</code> file usi
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.flags"><a class="anchor" href="#bbv2.faq.flags"></a>8.8. How to change compilation flags for one file?</h3>
+<h3 id="bbv2.faq.flags"><a class="anchor" href="#bbv2.faq.flags"></a>9.8. How to change compilation flags for one file?</h3>
 <div class="paragraph">
 <p>If one file must be compiled with special options, you need to
 explicitly declare an <code>obj</code> target for that file and then use that
@@ -10413,7 +10300,7 @@ for finer control:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.dll-path"><a class="anchor" href="#bbv2.faq.dll-path"></a>8.9. Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</h3>
+<h3 id="bbv2.faq.dll-path"><a class="anchor" href="#bbv2.faq.dll-path"></a>9.9. Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -10490,7 +10377,7 @@ that they should always be used.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.recipes.site-config"><a class="anchor" href="#bbv2.recipes.site-config"></a>8.10. Targets in site-config.jam</h3>
+<h3 id="bbv2.recipes.site-config"><a class="anchor" href="#bbv2.recipes.site-config"></a>9.10. Targets in site-config.jam</h3>
 <div class="paragraph">
 <p>It is desirable to declare standard libraries available on a given
 system. Putting target declaration in a specific project&#8217;s Jamfile is
@@ -10520,7 +10407,7 @@ well. So, you declare a project id and a target. Now, one can write:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.header-only-libraries"><a class="anchor" href="#bbv2.faq.header-only-libraries"></a>8.11. Header-only libraries</h3>
+<h3 id="bbv2.faq.header-only-libraries"><a class="anchor" href="#bbv2.faq.header-only-libraries"></a>9.11. Header-only libraries</h3>
 <div class="paragraph">
 <p>In modern C++, libraries often consist of just header files, without any
 source files to compile. To use such libraries, you need to add proper
@@ -10564,7 +10451,7 @@ them for the <code>alias</code> target:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.names"><a class="anchor" href="#bbv2.faq.names"></a>8.12. What is the difference between B2, <code>b2</code>, <code>bjam</code> and Perforce Jam?</h3>
+<h3 id="bbv2.faq.names"><a class="anchor" href="#bbv2.faq.names"></a>9.12. What is the difference between B2, <code>b2</code>, <code>bjam</code> and Perforce Jam?</h3>
 <div class="paragraph">
 <p>B2 is the name of the complete build system. The executable
 that runs it is <code>b2</code>. That executable is written in C and implements
@@ -10591,12 +10478,12 @@ of the interpreted language.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_extra_tools"><a class="anchor" href="#_extra_tools"></a>9. Extra Tools</h2>
+<h2 id="_extra_tools"><a class="anchor" href="#_extra_tools"></a>10. Extra Tools</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_documentation_tools_2"><a class="anchor" href="#_documentation_tools_2"></a>9.1. Documentation Tools</h3>
+<h3 id="_documentation_tools_2"><a class="anchor" href="#_documentation_tools_2"></a>10.1. Documentation Tools</h3>
 <div class="sect3">
-<h4 id="_asciidoctor"><a class="anchor" href="#_asciidoctor"></a>9.1.1. Asciidoctor</h4>
+<h4 id="_asciidoctor"><a class="anchor" href="#_asciidoctor"></a>10.1.1. Asciidoctor</h4>
 <div class="paragraph">
 <p>The asciidoctor tool converts the ascidoc documentation format to various
 backend formats for either viewing or further processing by documentation
@@ -10702,9 +10589,9 @@ that the <code>asciidoctor</code> is available in the search <code>PATH</code>.<
 </div>
 </div>
 <div class="sect2">
-<h3 id="_miscellaneous_tools"><a class="anchor" href="#_miscellaneous_tools"></a>9.2. Miscellaneous Tools</h3>
+<h3 id="_miscellaneous_tools"><a class="anchor" href="#_miscellaneous_tools"></a>10.2. Miscellaneous Tools</h3>
 <div class="sect3">
-<h4 id="_pkg_config"><a class="anchor" href="#_pkg_config"></a>9.2.1. pkg-config</h4>
+<h4 id="_pkg_config"><a class="anchor" href="#_pkg_config"></a>10.2.1. pkg-config</h4>
 <div class="paragraph">
 <p>The <strong>pkg-config</strong> program is used to retrieve information about installed
 libraries in the system. It retrieves information about packages from special
@@ -10953,7 +10840,7 @@ usage requirements:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_sass"><a class="anchor" href="#_sass"></a>9.2.2. Sass</h4>
+<h4 id="_sass"><a class="anchor" href="#_sass"></a>10.2.2. Sass</h4>
 <div class="paragraph">
 <p>This tool converts SASS and SCSS files into CSS. This tool explicitly supports
 both the version written in C (sassc) and the original Ruby implementation
@@ -11031,10 +10918,10 @@ for this feature is specified, then one is copied from the feature
 </div>
 </div>
 <div class="sect1">
-<h2 id="_examples"><a class="anchor" href="#_examples"></a>10. Examples</h2>
+<h2 id="_examples"><a class="anchor" href="#_examples"></a>11. Examples</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_introduction"><a class="anchor" href="#_introduction"></a>10.1. Introduction</h3>
+<h3 id="_introduction_2"><a class="anchor" href="#_introduction_2"></a>11.1. Introduction</h3>
 <div class="paragraph">
 <p>Here we include a collection of simple to complex fully working examples of
 using Boost Build v2 for various tasks. They show the gamut from simple
@@ -11045,7 +10932,7 @@ from.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_hello"><a class="anchor" href="#_hello"></a>10.2. Hello</h3>
+<h3 id="_hello"><a class="anchor" href="#_hello"></a>11.2. Hello</h3>
 <div class="paragraph">
 <p>This example shows a very basic Boost Build project set up so it compiles a
 single executable from a single source file:</p>
@@ -11105,7 +10992,7 @@ toolset.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sanitizers"><a class="anchor" href="#_sanitizers"></a>10.3. Sanitizers</h3>
+<h3 id="_sanitizers"><a class="anchor" href="#_sanitizers"></a>11.3. Sanitizers</h3>
 <div class="paragraph">
 <p>This example shows how to enable sanitizers when using a clang or gcc toolset</p>
 </div>
@@ -11185,7 +11072,7 @@ toolset and configuration. The presented output may vary depending on your compi
 </div>
 </div>
 <div class="sect1">
-<h2 id="bbv2.jam"><a class="anchor" href="#bbv2.jam"></a>11. Boost.Jam Documentation</h2>
+<h2 id="bbv2.jam"><a class="anchor" href="#bbv2.jam"></a>12. Boost.Jam Documentation</h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -11196,7 +11083,7 @@ complicated things manageable.</p>
 </blockquote>
 </div>
 <div class="sect2">
-<h3 id="jam.building"><a class="anchor" href="#jam.building"></a>11.1. Building B2</h3>
+<h3 id="jam.building"><a class="anchor" href="#jam.building"></a>12.1. Building B2</h3>
 <div class="paragraph">
 <p>Installing <code>B2</code> after building it is simply a matter of copying the
 generated executables someplace in your <code>PATH</code>. For building the
@@ -11727,14 +11614,14 @@ distribution in the platform, if possible.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="jam.language"><a class="anchor" href="#jam.language"></a>11.2. Language</h3>
+<h3 id="jam.language"><a class="anchor" href="#jam.language"></a>12.2. Language</h3>
 <div class="paragraph">
 <p><code>B2</code> has an interpreted, procedural language. Statements in <code>b2</code> are
 rule (procedure) definitions, rule invocations, flow-of-control
 structures, variable assignments, and sundry language support.</p>
 </div>
 <div class="sect3">
-<h4 id="jam.language.lexical"><a class="anchor" href="#jam.language.lexical"></a>11.2.1. Lexical Features</h4>
+<h4 id="jam.language.lexical"><a class="anchor" href="#jam.language.lexical"></a>12.2.1. Lexical Features</h4>
 <div class="paragraph">
 <p><code>B2</code> treats its input files as whitespace-separated tokens, with two
 exceptions: double quotes (") can enclose whitespace to embed it into a
@@ -11757,7 +11644,7 @@ And block comments start with <code>#|</code> and extend until the next <code>|#
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.language.target"><a class="anchor" href="#jam.language.target"></a>11.2.2. Targets</h4>
+<h4 id="jam.language.target"><a class="anchor" href="#jam.language.target"></a>12.2.2. Targets</h4>
 <div class="paragraph">
 <p>The essential <code>b2</code> data entity is a target. Build targets are files to
 be updated. Source targets are the files used in updating built targets.
@@ -11801,7 +11688,7 @@ used to make a record of that directory.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.language.rules"><a class="anchor" href="#jam.language.rules"></a>11.2.3. Rules</h4>
+<h4 id="jam.language.rules"><a class="anchor" href="#jam.language.rules"></a>12.2.3. Rules</h4>
 <div class="paragraph">
 <p>The basic <code>b2</code> language entity is called a rule. A rule is defined in
 two parts: the procedure and the actions. The procedure is a body of jam
@@ -12017,7 +11904,7 @@ any new Jam code you write.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.language.rules.builtins"><a class="anchor" href="#jam.language.rules.builtins"></a>11.2.4. Built-in Rules</h4>
+<h4 id="jam.language.rules.builtins"><a class="anchor" href="#jam.language.rules.builtins"></a>12.2.4. Built-in Rules</h4>
 <div class="paragraph">
 <p><code>B2</code> has a growing set of built-in rules, all of which are pure
 procedure rules without updating actions. They are in three groups: the
@@ -12630,7 +12517,7 @@ specified on the command line.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.language.flow_of_control"><a class="anchor" href="#jam.language.flow_of_control"></a>11.2.5. Flow-of-Control</h4>
+<h4 id="jam.language.flow_of_control"><a class="anchor" href="#jam.language.flow_of_control"></a>12.2.5. Flow-of-Control</h4>
 <div class="paragraph">
 <p><code>B2</code> has several simple flow-of-control statements:</p>
 </div>
@@ -12814,7 +12701,7 @@ values may include the following wildcards:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.language.variables"><a class="anchor" href="#jam.language.variables"></a>11.2.6. Variables</h4>
+<h4 id="jam.language.variables"><a class="anchor" href="#jam.language.variables"></a>12.2.6. Variables</h4>
 <div class="paragraph">
 <p><code>B2</code> variables are lists of zero or more elements, with each element
 being a string value. An undefined variable is indistinguishable from a
@@ -13482,7 +13369,7 @@ If both variables are set for a target both are called, first
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.language.modules"><a class="anchor" href="#jam.language.modules"></a>11.2.7. Modules</h4>
+<h4 id="jam.language.modules"><a class="anchor" href="#jam.language.modules"></a>12.2.7. Modules</h4>
 <div class="paragraph">
 <p>Boost Jam introduces support for modules, which provide some rudimentary
 namespace protection for rules and variables. A new keyword, <code>module</code>
@@ -13762,9 +13649,9 @@ be really unpredictable.
 </div>
 </div>
 <div class="sect2">
-<h3 id="jam.miscellaneous"><a class="anchor" href="#jam.miscellaneous"></a>11.3. Miscellaneous</h3>
+<h3 id="jam.miscellaneous"><a class="anchor" href="#jam.miscellaneous"></a>12.3. Miscellaneous</h3>
 <div class="sect3">
-<h4 id="jam.miscellaneous.diagnostics"><a class="anchor" href="#jam.miscellaneous.diagnostics"></a>11.3.1. Diagnostics</h4>
+<h4 id="jam.miscellaneous.diagnostics"><a class="anchor" href="#jam.miscellaneous.diagnostics"></a>12.3.1. Diagnostics</h4>
 <div class="paragraph">
 <p>In addition to generic error messages, <code>b2</code> may emit one of the
 following:</p>
@@ -13854,7 +13741,7 @@ referenced with <code>$(&lt;)</code> or <code>$(&gt;)</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.miscellaneous.bugs__limitations"><a class="anchor" href="#jam.miscellaneous.bugs__limitations"></a>11.3.2. Bugs, Limitations</h4>
+<h4 id="jam.miscellaneous.bugs__limitations"><a class="anchor" href="#jam.miscellaneous.bugs__limitations"></a>12.3.2. Bugs, Limitations</h4>
 <div class="paragraph">
 <p>For parallel building to be successful, the dependencies among files
 must be properly spelled out, as targets tend to get built in a
@@ -13866,7 +13753,7 @@ drop fixed-named files into the current directory, like <code>yacc(1)</code> doe
 </div>
 </div>
 <div class="sect3">
-<h4 id="jam.miscellaneous.fundamentals"><a class="anchor" href="#jam.miscellaneous.fundamentals"></a>11.3.3. Fundamentals</h4>
+<h4 id="jam.miscellaneous.fundamentals"><a class="anchor" href="#jam.miscellaneous.fundamentals"></a>12.3.3. Fundamentals</h4>
 <div class="paragraph">
 <p>This section is derived from the official Jam documentation and from
 experience using it and reading the Jambase rules. We repeat the
@@ -14035,10 +13922,10 @@ variants accepted as valid for an option:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="b2.history"><a class="anchor" href="#b2.history"></a>12. History</h2>
+<h2 id="b2.history"><a class="anchor" href="#b2.history"></a>13. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>12.1. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.1. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumtances, if
@@ -14103,11 +13990,14 @@ address-model ARM/ARM64 values.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
 <li>
 <p>Fix building b2 engine with Intel Linux icpc.&#8201;&#8212;&#8201;<em>Alain Miniussi</em></p>
 </li>
+<li>
+<p>Reword <code>build.sh</code> to fix many bugs and to avoid use of common env vars.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>12.2. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.2. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -14207,7 +14097,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>12.3. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.3. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -14249,7 +14139,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>12.4. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.4. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -14331,7 +14221,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>12.5. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.5. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
