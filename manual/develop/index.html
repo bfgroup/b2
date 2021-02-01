@@ -11163,7 +11163,7 @@ B2.
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>build.bat</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Windows NT, 2000, and XP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Windows</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.codegear.com/downloads/free/cppbuilder"><code>borland</code></a>,
 <a href="http://www.borland.com/">Borland</a> C++Builder (BCC 5.5)</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
@@ -11333,16 +11333,12 @@ are.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>build.sh</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unix, Linux, Cygwin, etc.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.hp.com/go/c++"><code>acc</code></a>,
-HP-UX aCC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unix, Linux, Cygwin, Windows Bash, etc.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gcc</code>, GNU GCC</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
-<p><code>aCC</code> in <code>PATH</code></p>
-</li>
-<li>
-<p><code>uname</code> is "HP-UX"</p>
+<p><code>g++</code> in <code>PATH</code></p>
 </li>
 </ul>
 </div></div></td>
@@ -11350,7 +11346,121 @@ HP-UX aCC</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.comeaucomputing.com/"><code>como</code></a>, Comeau Computing C/C++</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clang</code>, Clang LLVM</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>clang++</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>intel-linux</code>, Intel C++ (oneAPI) for Linux</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>icpx</code> in <code>PATH</code></p>
+</li>
+<li>
+<p><code>icc</code> in <code>PATH</code></p>
+</li>
+<li>
+<p><code>icpc</code> in <code>PATH</code></p>
+</li>
+<li>
+<p><code>setvars.sh</code> in common install locations: <code>$HOME/intel/oneapi</code>,
+<code>/opt/intel/oneapi</code>, <code>/opt/intel/inteloneapi</code></p>
+</li>
+<li>
+<p><code>iccvars.sh</code> in common install locations: <code>/opt/intel/cc/9.0/bin</code>,
+<code>/opt/intel_cc_80/bin</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mipspro</code>, SGI MIPSpro C++</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>uname</code> is "IRIX" or "IRIX64" and <code>CC</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true64cxx</code>, Compaq C++ Compiler for True64 UNIX</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>uname</code> is "OSF1" and <code>cc</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qcc</code>, QNX Neutrino</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>uname</code> is "QNX" and <code>QCC</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>xlcpp</code> and <code>vacpp</code>, IBM VisualAge C++</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>uname</code> is "Linux" and <code>xlC_r</code> in <code>PATH</code> (<code>xlcpp</code> or <code>vacpp</code> depending on
+machine endian)</p>
+</li>
+<li>
+<p><code>uname</code> is "AIX" and <code>xlC_r</code> in <code>PATH</code> (<code>vacpp</code>)</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pgi</code>, PGI Compilers</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>pgc++</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pathscale</code>, Pathscale C++</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>pathCC</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>como</code>, Comeau Computing C/C++</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
@@ -11362,11 +11472,11 @@ HP-UX aCC</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://gcc.gnu.org/"><code>gcc</code></a>, GNU GCC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kylix</code>, Borland C++</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
-<p><code>gcc</code> in <code>PATH</code></p>
+<p><code>bc++</code> in <code>PATH</code> (<code>kylix</code>)</p>
 </li>
 </ul>
 </div></div></td>
@@ -11374,54 +11484,11 @@ HP-UX aCC</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.intel.com/software/products/compilers/c60l/"><code>intel-linux</code></a>,
-Intel C++ for Linux</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>acc</code>, HP-UX aCC</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
-<p><code>icc</code> in <code>PATH</code></p>
-</li>
-<li>
-<p>Common install locations: <code>/opt/intel/cc/9.0</code>, <code>/opt/intel_cc_80</code>,
-<code>/opt/intel/compiler70</code>, <code>/opt/intel/compiler60</code>, <code>/opt/intel/compiler50</code></p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kcc</code>, Intel KAI C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>KCC</code> in <code>PATH</code></p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.codegear.com/downloads/free/cppbuilder"><code>kylix</code></a>,
-<a href="http://www.borland.com/">Borland</a> C++Builder</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>bc++</code> in <code>PATH</code></p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.sgi.com/developers/devtools/languages/mipspro.html"><code>mipspro</code></a>,
-SGI MIPSpro C</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>uname</code> is "IRIX" or "IRIX64"</p>
+<p><code>aCC</code> in <code>PATH</code></p>
 </li>
 </ul>
 </div></div></td>
@@ -11433,72 +11500,7 @@ SGI MIPSpro C</p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
-<p>Standard install location: <code>/opt/SUNWspro</code></p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qcc</code>, <a href="http://www.qnx.com/">QNX Neutrino</a></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>uname</code> is "QNX" and <code>qcc</code> in <code>PATH</code></p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.tru64unix.compaq.com/cplus/"><code>true64cxx</code></a>, Compaq C++
-Compiler for True64 UNIX</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>uname</code> is "OSF1"</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.ibm.com/software/awdtools/vacpp/"><code>vacpp</code></a>, IBM VisualAge
-C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>xlc</code> in <code>PATH</code></p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MacOS X</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://developer.apple.com/tools/compilers.html"><code>darwin</code></a>,
-Apple MacOS X GCC</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>uname</code> is "Darwin"</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Windows NT, 2000, and XP</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.mingw.org/"><code>mingw</code></a>, GNU
-<a href="http://gcc.gnu.org/">GCC</a> as the <a href="http://www.mingw.org/">MinGW</a>
-configuration with the MSYS shell</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Common install location: <code>/mingw</code></p>
+<p>Standard install location: <code>/opt/SUNWspro/bin/CC</code></p>
 </li>
 </ul>
 </div></div></td>
@@ -11506,109 +11508,45 @@ configuration with the MSYS shell</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>The built executables are placed in a subdirectory specific to your
-platform. For example, in Linux running on an Intel x86 compatible chip,
-the executables are placed in: <code>bin.linuxx86</code>. The <code>b2[.exe]</code>
-executable can be used to invoke B2.</p>
+<p>The built executables are placed in the <code>src/engine</code> directory.</p>
 </div>
 <div class="paragraph">
-<p>The build scripts support additional invocation arguments for use by
-developers of Boost.Jam and for additional setup of the toolset. The
-extra arguments come after the toolset:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Arguments not in the form of an option, before option arguments, are
-used for extra setup to toolset configuration scripts.</p>
-</li>
-<li>
-<p>Arguments of the form <code>--option</code>, which are passed to the
-<code>build.jam</code> build script.</p>
-</li>
-<li>
-<p>Arguments not in the form of an option, after the options, which are
-targets for the <code>build.jam</code> script.</p>
-</li>
-</ul>
+<p>The <code>build.sh</code> script supports additional invocation options used to
+control the the build and custom compilers:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="jam"><span></span>build<span class="tok-w"> </span>[toolset]<span class="tok-w"> </span>[setup*]<span class="tok-w"> </span>[--option+<span class="tok-w"> </span>target*]<span class="tok-w"></span></code></pre>
+<pre class="pygments highlight"><code data-lang="jam"><span></span>build.sh<span class="tok-w"> </span>[--option|--option=x]<span class="tok-w"> </span>[toolset]<span class="tok-w"></span></code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>The arguments immediately after the toolset are passed directly to the
-setup script of the toolset, if available and if it needs to be invoked.
-This allows one to configure the toolset ass needed to do non-default
-builds of <code>b2</code>. For example to build a Win64 version with <code>vc8</code>. See the
-toolset description above for when particular toolsets support this.</p>
-</div>
-<div class="paragraph">
-<p>The arguments starting with the <code>--option</code> forms are passed to the
-<code>build.jam</code> script and are used to further customize what gets built.
-Options and targets supported by the <code>build.jam</code> script:</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><code>---</code></dt>
+<dt class="hdlist1"><code>--help</code></dt>
 <dd>
-<p>Empty option when one wants to only specify a target.</p>
+<p>Shows some help information, including these options.</p>
 </dd>
-<dt class="hdlist1"><code>--release</code></dt>
+<dt class="hdlist1"><code>--verbose</code></dt>
 <dd>
-<p>The default, builds the optimized executable.</p>
+<p>Show messages about what this script is doing.</p>
 </dd>
 <dt class="hdlist1"><code>--debug</code></dt>
 <dd>
-<p>Builds debugging versions of the executable. When built they are
-placed in their own directory <code>bin./platform/.debug</code>.</p>
+<p>Builds debugging versions of the executable. The default is to build an
+optimized executable.</p>
 </dd>
-<dt class="hdlist1"><code>--grammar</code></dt>
+<dt class="hdlist1"><code>--guess-toolset</code></dt>
 <dd>
-<p>Normally the Jam language grammar parsing files are not regenerated.
-This forces building of the grammar, although it may not force the
-regeneration of the grammar parser. If the parser is out of date it
-will be regenerated and subsequently built.</p>
+<p>Print the toolset we can detect for building. This is used by external
+scripts, like the Boost Libraries main bootstrap script.</p>
 </dd>
-<dt class="hdlist1"><code>--with-python=path</code></dt>
+<dt class="hdlist1"><code>--cxx=CXX</code></dt>
 <dd>
-<p>Enables Python integration, given a path to the Python libraries.</p>
+<p>The compiler exec to use instead of the detected compiler exec.</p>
 </dd>
-<dt class="hdlist1"><code>--gc</code></dt>
+<dt class="hdlist1"><code>--cxxflags=CXXFLAGS</code></dt>
 <dd>
-<p>Enables use of the Boehm Garbage Collector. The build will look for
-the Boehm-GC source in a "boehm_gc" subdirectory from the <code>b2</code>
-sources.</p>
-</dd>
-<dt class="hdlist1"><code>--duma</code></dt>
-<dd>
-<p>Enables use of the DUMA (Detect Unintended Memory Access) debugging
-memory allocator. The build expects to find the DUMA source files in a
-"duma" subdirectory from the <code>b2</code> sources.</p>
-</dd>
-<dt class="hdlist1"><code>--toolset-root=path</code></dt>
-<dd>
-<p>Indicates where the toolset used to build is located. This option is
-passed in by the bootstrap (<code>build.bat</code> or <code>build.sh</code>) script.</p>
-</dd>
-<dt class="hdlist1"><code>--show-locate-target</code></dt>
-<dd>
-<p>For information, prints out where it will put the built executable.</p>
-</dd>
-<dt class="hdlist1"><code>--noassert</code></dt>
-<dd>
-<p>Disable debug assertions, even if building the debug version of the
-executable.</p>
-</dd>
-<dt class="hdlist1"><code>dist</code></dt>
-<dd>
-<p>Generate packages (compressed archives) as appropriate for
-distribution in the platform, if possible.</p>
-</dd>
-<dt class="hdlist1"><code>clean</code></dt>
-<dd>
-<p>Remove all the built executables and objects.</p>
+<p>The compiler flags to use in addition to the flags for the detected
+compiler.</p>
 </dd>
 </dl>
 </div>
