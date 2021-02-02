@@ -11162,17 +11162,20 @@ B2.
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>build.bat</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Windows</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.codegear.com/downloads/free/cppbuilder"><code>borland</code></a>,
-<a href="http://www.borland.com/">Borland</a> C++Builder (BCC 5.5)</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<th class="tableblock halign-left valign-top"><p class="tableblock"><code>build.bat</code></p></th>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Windows</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vc142</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Microsoft Visual Studio C++ 2019</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
-<p>Common install location: <code>C:\Borland\BCC55</code></p>
-</li>
-<li>
-<p><code>BCC32.EXE</code> in <code>PATH</code></p>
+<p>Uses <code>vswhere</code> utility.</p>
 </li>
 </ul>
 </div></div></td>
@@ -11180,30 +11183,23 @@ B2.
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.comeaucomputing.com/"><code>como</code></a>, Comeau Computing C/C++</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://gcc.gnu.org/"><code>gcc</code></a>, GNU GCC</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://gcc.gnu.org/"><code>gcc-nocygwin</code></a>, GNU GCC</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.intel.com/software/products/compilers/c60"><code>intel-win32</code></a>,
-Intel C++ Compiler for Windows</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vc141</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Microsoft Visual Studio C++ 2017</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
-<p><code>ICL.EXE</code> in <code>PATH</code></p>
+<p>Uses <code>vswhere</code> utility.</p>
+</li>
+<li>
+<p>Common install location: <code>%ProgramFiles%\Microsoft Visual Studio\2017\Enterprise\VC\</code></p>
+</li>
+<li>
+<p>Common install location: <code>%ProgramFiles%\Microsoft Visual Studio\2017\Professional\VC\</code></p>
+</li>
+<li>
+<p>Common install location: <code>%ProgramFiles%\Microsoft Visual Studio\2017\Community\VC\</code></p>
 </li>
 </ul>
 </div></div></td>
@@ -11211,15 +11207,17 @@ Intel C++ Compiler for Windows</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.metrowerks.com/"><code>metrowerks</code></a>, MetroWerks CodeWarrior
-C/C++ 7.x, 8.x, 9.x</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vc14</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Microsoft Visual Studio C++ 2015</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
-<p><code>CWFolder</code> variable configured</p>
+<p>Env var <code>%VS140COMNTOOLS%</code></p>
 </li>
 <li>
-<p><code>MWCC.EXE</code> in PATH</p>
+<p>Common install location: <code>%ProgramFiles%\Microsoft Visual Studio 14.0\VC\</code></p>
 </li>
 </ul>
 </div></div></td>
@@ -11227,9 +11225,59 @@ C/C++ 7.x, 8.x, 9.x</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.mingw.org/"><code>mingw</code></a>, GNU <a href="http://gcc.gnu.org/">GCC</a> as the
-<a href="http://www.mingw.org/">MinGW</a> configuration</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vc12</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Microsoft Visual Studio C++ 2013</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Env var <code>%VS120COMNTOOLS%</code></p>
+</li>
+<li>
+<p>Common install location: <code>%ProgramFiles%\Microsoft Visual Studio 12.0\VC\</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>borland</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Embarcadero C++Builder</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>bcc32c.exe</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>intel-win32</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Intel C++ Compiler for Windows</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>icl.exe</code> in <code>PATH</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mingw</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>GNU GCC as the MinGW configuration</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p>Common install location: <code>C:\MinGW</code></p>
@@ -11240,102 +11288,39 @@ C/C++ 7.x, 8.x, 9.x</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://msdn.microsoft.com/visualc/"><code>msvc</code></a>, Microsoft Visual C++
-6.x</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>VCVARS32.BAT</code> already configured</p>
-</li>
-<li>
-<p><code>%MSVCDir%</code> is present in environment</p>
-</li>
-<li>
-<p>Common install locations: <code>%ProgramFiles%\Microsoft Visual Studio</code>,
-<code>%ProgramFiles%\Microsoft Visual C++</code></p>
-</li>
-<li>
-<p><code>CL.EXE</code> in <code>PATH</code></p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>como</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comeau Computing C/C++</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://msdn.microsoft.com/visualc/"><code>vc7</code></a>, Microsoft Visual C++ 7.x</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p><code>VCVARS32.BAT</code> or <code>VSVARS32.BAT</code> already configured</p>
-</li>
-<li>
-<p><code>%VS71COMNTOOLS%</code> is present in environment</p>
-</li>
-<li>
-<p><code>%VCINSTALLDIR%</code> is present in environment</p>
-</li>
-<li>
-<p>Common install locations: <code>%ProgramFiles%\Microsoft Visual Studio .NET</code>,
-<code>%ProgramFiles%\Microsoft Visual Studio .NET 2003</code></p>
-</li>
-<li>
-<p><code>CL.EXE</code> in <code>PATH</code></p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gcc</code>,</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GNU GCC</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://msdn.microsoft.com/visualc/"><code>vc8</code> and <code>vc9</code></a>, Microsoft
-Visual C++ 8.x and 9.x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clang</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Clang LLVM</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gcc-nocygwin</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GNU GCC</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock"><code>build.sh</code></p></th>
+<th class="tableblock halign-left valign-top" colspan="3"><p class="tableblock">Unix, Linux, Cygwin, Windows Bash, etc.</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gcc</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Detection:</p>
+<p>GNU GCC</p>
 </div>
 <div class="ulist">
-<ul>
-<li>
-<p><code>VCVARSALL.BAT</code> already configured</p>
-</li>
-<li>
-<p><code>%VS90COMNTOOLS%</code> is present in environment</p>
-</li>
-<li>
-<p>Common install location: <code>%ProgramFiles%\Microsoft Visual Studio 9</code></p>
-</li>
-<li>
-<p><code>%VS80COMNTOOLS%</code> is present in environment</p>
-</li>
-<li>
-<p>Common install location: <code>%ProgramFiles%\Microsoft Visual Studio 8</code></p>
-</li>
-<li>
-<p><code>CL.EXE</code> in <code>PATH</code></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Notes:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>If <code>VCVARSALL.BAT</code>
-is called to set up the toolset, it is passed all the extra arguments,
-see below for what those arguments are. This can be used to build, for
-example, a Win64 specific version of <code>b2</code>. Consult the VisualStudio
-documentation for what the possible argument values to the <code>VCVARSALL.BAT</code>
-are.</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>build.sh</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unix, Linux, Cygwin, Windows Bash, etc.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gcc</code>, GNU GCC</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
 <ul>
 <li>
 <p><code>g++</code> in <code>PATH</code></p>
@@ -11346,8 +11331,11 @@ are.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clang</code>, Clang LLVM</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clang</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Clang LLVM</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>clang++</code> in <code>PATH</code></p>
@@ -11358,8 +11346,11 @@ are.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>intel-linux</code>, Intel C++ (oneAPI) for Linux</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>intel-linux</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Intel C++ (oneAPI) for Linux</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>icpx</code> in <code>PATH</code></p>
@@ -11384,8 +11375,11 @@ are.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mipspro</code>, SGI MIPSpro C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mipspro</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SGI MIPSpro C++</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>uname</code> is "IRIX" or "IRIX64" and <code>CC</code> in <code>PATH</code></p>
@@ -11396,8 +11390,11 @@ are.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true64cxx</code>, Compaq C++ Compiler for True64 UNIX</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true64cxx</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Compaq C++ Compiler for True64 UNIX</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>uname</code> is "OSF1" and <code>cc</code> in <code>PATH</code></p>
@@ -11408,8 +11405,11 @@ are.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qcc</code>, QNX Neutrino</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qcc</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>QNX Neutrino</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>uname</code> is "QNX" and <code>QCC</code> in <code>PATH</code></p>
@@ -11420,8 +11420,11 @@ are.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>xlcpp</code> and <code>vacpp</code>, IBM VisualAge C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>xlcpp</code> and <code>vacpp</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>IBM VisualAge C++</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>uname</code> is "Linux" and <code>xlC_r</code> in <code>PATH</code> (<code>xlcpp</code> or <code>vacpp</code> depending on
@@ -11436,8 +11439,11 @@ machine endian)</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pgi</code>, PGI Compilers</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pgi</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PGI Compilers</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>pgc++</code> in <code>PATH</code></p>
@@ -11448,8 +11454,11 @@ machine endian)</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pathscale</code>, Pathscale C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pathscale</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Pathscale C++</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>pathCC</code> in <code>PATH</code></p>
@@ -11460,8 +11469,11 @@ machine endian)</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>como</code>, Comeau Computing C/C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>como</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Comeau Computing C/C++</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>como</code> in <code>PATH</code></p>
@@ -11472,8 +11484,11 @@ machine endian)</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kylix</code>, Borland C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kylix</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Borland C++</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>bc++</code> in <code>PATH</code> (<code>kylix</code>)</p>
@@ -11484,8 +11499,11 @@ machine endian)</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>acc</code>, HP-UX aCC</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>acc</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>HP-UX aCC</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>aCC</code> in <code>PATH</code></p>
@@ -11496,8 +11514,11 @@ machine endian)</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sunpro</code>, Sun Workshop 6 C++</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sunpro</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Sun Workshop 6 C++</p>
+</div>
+<div class="ulist">
 <ul>
 <li>
 <p>Standard install location: <code>/opt/SUNWspro/bin/CC</code></p>
