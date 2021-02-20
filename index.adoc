@@ -1,3 +1,4 @@
+:stylesheet: amber.css
 :nofooter:
 :caution-caption: ⚑
 :important-caption: ‼
@@ -8,23 +9,24 @@
 ifdef::backend-html5[]
 ++++
 <style>
-include::b2.css[]
+body { padding-top: 60px; }
+.logo { float: right; margin: 0 0 2em 2em; }
 </style>
 ++++
 endif::[]
 
 [.menubar]
 [.menubar-item]#link:tutorial.html[Tutorial]#
-[.menubar-item]#link:manual/master/index.html[Documentation] link:manual/develop/index.html[(dev)]#
-[.menubar-item]#link:https://github.com/boostorg/build[GitHub]#
+[.menubar-item]#link:manual/release/index.html[Documentation] link:manual/main/index.html[(main)]#
+[.menubar-item]#link:https://github.com/bfgroup/build[GitHub]#
 [.menubar-item]#image:https://img.shields.io/badge/license-BSL%201.0-blue.svg["Boost Software License 1.0", link="LICENSE.txt"]#
-[.menubar-item]#image:https://img.shields.io/azure-devops/build/grafikrobot/200cb3a3-3fcf-4a47-85ad-3cc17f2bec9e/3/master.svg?label=master&logo=azuredevops["Linux/Windows/macOS: master", link="https://dev.azure.com/grafikrobot/B2"]#
-[.menubar-item]#image:https://img.shields.io/azure-devops/build/grafikrobot/200cb3a3-3fcf-4a47-85ad-3cc17f2bec9e/3/develop.svg?label=develop&logo=azuredevops["Linux/Windows/macOS: develop", link="https://dev.azure.com/grafikrobot/B2"]#
+[.menubar-item]#image:https://img.shields.io/azure-devops/build/bfgroup/3a4e7a7e-c1b4-4e2f-9199-f52918ea06c6/3/release.svg?label=release&logo=azuredevops["Linux/Windows/macOS: release", link="https://dev.azure.com/bfgroup/B2"]#
+[.menubar-item]#image:https://img.shields.io/azure-devops/build/bfgroup/3a4e7a7e-c1b4-4e2f-9199-f52918ea06c6/3/main.svg?label=main&logo=azuredevops["Linux/Windows/macOS: main", link="https://dev.azure.com/bfgroup/B2"]#
 
-== B2 (Boost.Build)
+== B2
 
 [.logo]
-image:logo/logo-color-light-bg-300x420.png[B2]
+image:logo/logo-color-dark-bg-300x420.png[B2]
 
 B2 makes it easy to build C++ projects, everywhere.
 
@@ -34,23 +36,23 @@ and shared libraries, making executables, and other chores — whether you're
 using gcc, msvc, or a dozen more supported C++ compilers — on Windows, OSX,
 Linux and commercial UNIX systems.
 
-*Simple and high level build description.* In most cases a name of target and
+*Simple and high level build description.*:: In most cases a name of target and
 list of sources is all you need.
 
-*Portability.* Most important build properties have symbolic names that work
+*Portability.*:: Most important build properties have symbolic names that work
 everywhere. Why memorize compiler flags necessary for multi-threaded 64-bit
 shared library, if B2 can do it for you?
 
-*Variant builds.* When you build the same project twice with different
+*Variant builds.*:: When you build the same project twice with different
 properties, all produced files are placed in different directories, so you
 can build with 2 versions of gcc, or both debug and release variants in one
-invocation.
+invocation across all cores.
 
-*Global dependencies.* No matter what directory you build in, B2
+*Global dependencies.*:: No matter what directory you build in, B2
 will always check all dependencies in your entire project, preventing
 inconsistent binaries. And it's easy to use one B2 project in other,
 again with full dependency tracking.
 
-*Usage requirements.* A target can specify properties, like include paths and
+*Usage requirements.*:: A target can specify properties, like include paths and
 preprocessor defines, that are necessary to use it. Those properties will be
 automatically applied whenever the target is used.
