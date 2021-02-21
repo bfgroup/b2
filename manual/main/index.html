@@ -988,9 +988,9 @@ and then read the <a href="#bbv2.overview.invocation">overview</a>.</p>
 </div>
 <div class="paragraph">
 <p>If there&#8217;s anything you find unclear in this documentation, report the
-problem directly in the <a href="https://github.com/boostorg/build/issues">issue
-tracker</a>. For more general questions, please post them to our mailing
-list (<a href="http://boost.org/more/mailing_lists.htm#jamboost" class="bare">http://boost.org/more/mailing_lists.htm#jamboost</a>).</p>
+problem directly in the <a href="https://github.com/bfgroup/b2/issues">issue
+tracker</a>. For more general questions, please post them to our discussion
+forums (<a href="https://github.com/bfgroup/b2/discussions" class="bare">https://github.com/bfgroup/b2/discussions</a>).</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -998,7 +998,7 @@ list (<a href="http://boost.org/more/mailing_lists.htm#jamboost" class="bare">ht
 <p>Copyright 2018-2021 René Ferdinand Rivera Morell;
 Copyright 2006, 2014 Vladimir Prus.
 Distributed under the Boost Software License, Version 1.0. (See accompanying
-file <code>LICENSE.txt</code> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" class="bare">http://www.boost.org/LICENSE_1_0.txt</a>)</p>
+file <code>LICENSE.txt</code> or copy at <a href="https://www.bfgroup.xyz/b2/LICENSE.txt" class="bare">https://www.bfgroup.xyz/b2/LICENSE.txt</a>)</p>
 </div>
 </div>
 </div>
@@ -1009,8 +1009,8 @@ file <code>LICENSE.txt</code> or copy at <a href="http://www.boost.org/LICENSE_1
 <h2 id="bbv2.installation"><a class="anchor" href="#bbv2.installation"></a>2. Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To install B2 from an official release or a nightly build, as
-available on the <a href="http://boost.org/boost-build2">official web site</a>,
+<p>To install B2 from an official release, as available on
+<a href="https://github.com/bfgroup/b2/releases">GitHub</a>,
 follow these steps:</p>
 </div>
 <div class="olist arabic">
@@ -1038,16 +1038,6 @@ other operating systems).</p>
 <p>Optionally, add <code>PREFIX/bin</code> to your PATH environment variable.</p>
 </li>
 </ol>
-</div>
-<div class="paragraph">
-<p>If you are not using a B2 package, but rather the version
-bundled with the Boost C++ Libraries, the above commands should be run
-in the <code>tools/build</code> directory.</p>
-</div>
-<div class="paragraph">
-<p>Now that B2 is installed, you can try some of the examples.
-Copy <code>PREFIX/share/boost-build/examples/hello</code> to a different directory,
-then change to that directory and run:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5665,7 +5655,7 @@ form:</p>
 the path property value, target properties, the target project ID, and
 the target project location. It should return the translated path value.
 Or return nothing if it doesn&#8217;t do path translation. Leaving it do the
-default path translation. </p>
+default path translation.</p>
 </div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.lto"></a><code>lto</code></dt>
@@ -6250,7 +6240,7 @@ This option is necessary only if it is not possible to detect this information
 from the compiler command&#8201;&#8212;&#8201;for example if the specified compiler command is
 a user script. For the Windows version, specifies the directory of the
 <code>iclvars.bat</code> file, for versions prior to 21 ( or 2021 ), or of the <code>setvars.bat</code>,
-for versions from 21 ( or 2021 ) on up, for configuring the compiler. 
+for versions from 21 ( or 2021 ) on up, for configuring the compiler.
 Specifying the <code>root</code> option without specifying the compiler command allows the
 end-user not to have to worry about whether they are compiling 32-bit or 64-bit code,
 as the toolset will automatically configure the compiler for the appropriate address
