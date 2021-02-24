@@ -1,3 +1,5 @@
+// Copyright 2021 René Ferdinand Rivera Morell
+
 :stylesheet: amber.css
 :nofooter:
 :caution-caption: ⚑
@@ -6,22 +8,7 @@
 :tip-caption: ☀
 :warning-caption: ⚠
 
-ifdef::backend-html5[]
-++++
-<style>
-body { padding-top: 60px; }
-.logo { float: right; margin: 0 0 2em 2em; }
-</style>
-++++
-endif::[]
-
-[.menubar]
-[.menubar-item]#link:tutorial.html[Tutorial]#
-[.menubar-item]#link:manual/release/index.html[Documentation] link:manual/main/index.html[(main)]#
-[.menubar-item]#link:https://github.com/bfgroup/b2[GitHub]#
-[.menubar-item]#image:https://img.shields.io/badge/license-BSL%201.0-blue.svg["Boost Software License 1.0", link="LICENSE.txt"]#
-[.menubar-item]#image:https://img.shields.io/azure-devops/build/bfgroup/3a4e7a7e-c1b4-4e2f-9199-f52918ea06c6/3/release.svg?label=release&logo=azuredevops["Linux/Windows/macOS: release", link="https://dev.azure.com/bfgroup/B2"]#
-[.menubar-item]#image:https://img.shields.io/azure-devops/build/bfgroup/3a4e7a7e-c1b4-4e2f-9199-f52918ea06c6/3/main.svg?label=main&logo=azuredevops["Linux/Windows/macOS: main", link="https://dev.azure.com/bfgroup/B2"]#
+include::menubar.part.adoc[]
 
 == B2
 

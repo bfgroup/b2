@@ -827,7 +827,7 @@ a { color: inherit; }
   #footer { background: none; }
   #footer-text { color: #aaa; font-size: 0.9em; } }
 @media amzn-kf8 { #header, #content, #footnotes, #footer { padding: 0; } }
-.menubar { position: fixed; display: block; top: 0px; left: 0px; right: 0px; background-color: black; border-bottom: 1px solid #2e1b00; padding: 10px; text-align: center; }
+.menubar { position: fixed; display: block; top: 0px; left: 0px; right: 0px; z-index: 99; background-color: black; border-bottom: 1px solid #2e1b00; padding: 10px; text-align: center; }
 
 .menubar p { margin: 0px; }
 
@@ -848,8 +848,8 @@ body { padding-top: 60px; }
 .logo { float: right; margin: 0 0 2em 2em; }
 </style>
 <div class="paragraph menubar">
-<p><span class="menubar-item"><a href="tutorial.html">Tutorial</a></span>
-<span class="menubar-item"><a href="manual/release/index.html">Documentation</a> <a href="manual/main/index.html">(main)</a></span>
+<p><span class="menubar-item"><a href="./tutorial.html">Tutorial</a></span>
+<span class="menubar-item"><a href="./manual/release/index.html">Documentation</a> <a href="./manual/main/index.html">(main)</a></span>
 <span class="menubar-item"><a href="https://github.com/bfgroup/b2">GitHub</a></span>
 <span class="menubar-item"><span class="image"><a class="image" href="LICENSE.txt"><img src="https://img.shields.io/badge/license-BSL%201.0-blue.svg" alt="Boost Software License 1.0"></a></span></span>
 <span class="menubar-item"><span class="image"><a class="image" href="https://dev.azure.com/bfgroup/B2"><img src="https://img.shields.io/azure-devops/build/bfgroup/3a4e7a7e-c1b4-4e2f-9199-f52918ea06c6/3/release.svg?label=release&amp;logo=azuredevops" alt="Linux/Windows/macOS: release"></a></span></span>

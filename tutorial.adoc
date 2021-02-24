@@ -1,0 +1,670 @@
+= B2 Tutorial
+:copyright: Copyright 2021 René Ferdinand Rivera Morell; Copyright 2009 Boris Schäling
+:author: René Ferdinand Rivera Morell, Boris Schäling
+:toc: inline
+:toclevels: 2
+:sectanchors:
+:sectnums:
+:nofooter:
+:stylesheet: amber.css
+:caution-caption: ⚑
+:important-caption: ‼
+:note-caption: ℹ
+:tip-caption: ☀
+:warning-caption: ⚠
+:CPP: {CPP}
+
+include::menubar.part.adoc[]
+
+== Introduction
+
+[.lead]
+Compiler- and platform-independent build system
+
+B2 is a high-level build system which makes it as easy as possible to manage {CPP} projects. The idea is to specify in configuration files just as much as necessary to build a program. For example it is not required to tell B2 how to use a certain compiler. B2 supports many compilers out of the box and knows how to use them. If you create a configuration file you just need to tell B2 where to find the source files, what the executable should be called and which compiler B2 should use. B2 will then try to find the compiler and automatically build the program.
+
+As B2 supports many compilers configuration files never contain any compiler-specific options. Configuration files are entirely compiler-independent. Of course it is possible to set options like whether code should be optimized. However these options are written in a language only understood by B2. Once a compiler is picked to build a program B2 translates options in configuration files to command line options expected by the selected compiler. This makes it possible to write configuration files once and build a program on different platforms with different compilers.
+
+As nice as it sounds B2 can only be used for {CPP} and C projects. B2 doesn't know how to use other compilers like a Java compiler. Although B2 is extensible it makes more sense to use a different build system for programs implemented in other programming languages.
+
+B2 was created to build and install the link:https://www.boost.org/[Boost {CPP} libraries^] easily with different compilers on different platforms.
+
+This article is an introduction to help you using B2 for your own {CPP} or C projects. It gives you a basic understanding of how B2 works and how you start using it. After reading the article you should not only be able to use B2 for your own projects, it will also be easier to understand the link:manual/release/index.html[B2 documentation] as you'll know the big picture.
+
+== Build process
+
+[.lead]
+Jamfiles and an interpreter called `b2`
+
+The program you use to build a project managed by B2 is called `b2`. If you downloaded and built the Boost {CPP} libraries you have used `b2` already. `b2` looks for configuration files, reads them and builds a project accordingly. It also accepts various command line options which can be useful for example to show all commands executed by `b2` to build a project.
+
+Projects can be large and can consist of many components whose source code is distributed over many directories. Instead of creating one big configuration file for the entire project components typically get their own configuration files. This is no different with B2: In a large project there will be many configuration files which have to be found and interpreted by `b2`.
+
+For B2 every directory with a configuration file is a project: If there is a configuration file in a directory something can be built. Whether it's a component in a subdirectory or a software consisting of many components doesn't make a difference for B2.
+
+When `b2` is started it doesn't run a search for configuration files on the entire file system. It searches for a configuration file in the current working directory only. If it doesn't find a configuration file it doesn't do anything. `b2` does not search for configuration files in any other directory if there is no configuration file in the current working directory.
+
+The configuration file `b2` is looking for is called `Jamfile.jam`. Files with the extension `jam` are called Jamfiles. If `b2` finds a Jamfile in the current working directory it searches for more Jamfiles in parent directories. `b2` climbs up parent directories until it finds a configuration file called `Jamroot.jam`. `Jamroot.jam` is no different from `Jamfile.jam`. It only indicates that `b2` doesn't need to look further.
+
+The reason why `b2` looks for Jamfiles in parent directories is that it makes it possible to group settings. If there are some components which should be built with similar settings they can be stored in a Jamfile in a parent directory which will be automatically used if a component in a subdirectory is built.
+
+Please note that `b2` must find a file called `Jamroot.jam`. It is an error if no `Jamroot.jam` exists. If `Jamroot.jam` is in the current working directory no other file `Jamfile.jam` is required. If `Jamroot.jam` is in a parent directory a file `Jamfile.jam` must exist in the current working directory - otherwise `b2` doesn't do anything.
+
+If you copy `b2` to a directory which contains no Jamfiles and start the program you get an error message. However `b2` doesn't complain that it can't find a Jamfile. It complains about not finding the build system.
+
+----
+Unable to load B2: could not find "boost-build.jam"
+---------------------------------------------------------------
+Attempted search from C:\Users\Boris\Desktop up to the root
+
+Please consult the documentation at 'http://www.boost.org'.
+----
+
+The first thing `b2` does is not looking for a Jamfile but loading the build system. But what exactly is the build system?
+
+`b2` is an interpreter. It doesn't really know how to build anything. What `b2` does is interpreting Jamfiles. B2 is really implemented in Jamfiles. And they contain all the logic which makes B2 such a powerful tool. As `b2` only does what it reads in Jamfiles it needs to know where to find the Jamfiles B2 is made of.
+
+When `b2` is started it looks for a file `boost-build.jam` in the current working directory. If it doesn't find the file it searches all parent directories. This file needs to contain only one line to tell `b2` where to find the build system.
+
+----
+boost-build C:/boost_1_57_0/tools/build/src ; 
+----
+
+The path after `boost-build` must refer to a directory which contains a file called `bootstrap.jam`. This is the file `b2` needs to load the build system. As the Boost {CPP} libraries ship B2 you can refer to the subdirectory `tools/build` of the root directory of the Boost {CPP} libraries. And you can always use a slash as a path separator - even if you are on Windows.
+
+Please note that there must be a space between the path and the semicolon at the end of the line. It is an error if the space is missing. You'll learn more about the syntax used in Jamfiles later in this article.
+
+If `b2` finds `boost-build.jam` it uses the path within the file to load the build system. When the build system is loaded it also prepares itself to use a certain compiler, linker and maybe other tools required to build a project. B2 refers to these programs as a toolset. If no command line option is used to start `b2` the build system tries to find a toolset it can use automatically. On Windows for example it searches for Visual {CPP}. And if it detects that Visual {CPP} is installed it uses the toolset msvc.
+
+----
+warning: No toolsets are configured.
+warning: Configuring default toolset "msvc".
+warning: If the default is wrong, your build may not work correctly.
+warning: Use the "toolset=xxxxx" option to override our guess.
+warning: For more configuration options, please consult
+warning: http://boost.org/boost-build2/doc/html/bbv2/advanced/configuration.html
+----
+
+If you start `b2` without specifying which toolset should be used you see a warning. `b2` tells you which toolset it detected and decided to use. If you want to suppress the warning you must specify the toolset yourself. For example you tell the build system to use Visual {CPP} with `b2 toolset=msvc`. If you want GCC to be used you enter `b2 toolset=gcc`.
+
+As of today there are more than 10 toolsets supported. There is a good chance that B2 will work with the compiler you use out of the box.
+
+Once the build system has been found, loaded and knows which toolset to use - either because you specified one or the build system detected one automatically - `b2` looks for a file `Jamfile.jam` in the current working directory. If it doesn't find a Jamfile an error message is printed.
+
+----
+error: error: no Jamfile in current directory found, and no target references specified.
+----
+
+If you create an empty file `Jamfile.jam` and start `b2` again another error message is printed.
+
+----
+error: Could not find parent for project at '.'
+error: Did not find `Jamfile.jam` or `Jamroot.jam` in any parent directory.
+----
+
+`b2` is ultimately looking for a Jamfile called `Jamroot.jam`. If it doesn't exist in the current working directory `b2` expects to find it in a parent directory.
+
+If you create an empty file `Jamroot.jam` and start `b2` the error message is gone. Obviously there is nothing done by B2. But now you know how `b2` proceeds to build a program and what the minimum B2 configuration looks like.
+
+Please note that if you work on a small project and you need only one configuration file you can simply call it `Jamroot.jam`. You don't need another file called `Jamfile.jam`.
+
+== Basic tasks
+
+[.lead]
+Rules and features
+
+If you look at Jamfiles the syntax might remind you of configuration files used by other build systems. Simple Jamfiles can look like plain old configuration files where for example values seem to be assigned to keys. What is important to understand though is that Jamfiles are really script files. There is a programming language used to write Jamfiles. `b2` isn't the core component of B2 which knows how to build programs. The logic of B2 is in the Jamfiles which tell `b2` how to build programs.
+
+Even though B2 is based on a programming language you don't need to think of programming when you create Jamfiles. The syntax of the programming language used by B2 tries to remind you more of creating plain old configuration files. The idea is to have the best of two worlds: A powerful and flexible programming language but a simple syntax you might be familiar with from other build systems.
+
+This article doesn't introduce you into the programming language B2 is based on. The programming language is proprietary and not really a joy to use. It is no competitor to popular scripting languages like Javascript or Python. The developers of B2 recognize it and work on another version of B2 based on Python. However all of this shouldn't matter to developers who plan to manage their projects with B2. It helps to understand the syntax of Jamfiles better once one realizes that there is a programming language inside B2. But it's not required to learn the details of the programming language.
+
+Let's look at a simple Jamfile which can be used to build an executable `hello` from a source file `hello.cpp`.
+
+----
+exe hello : hello.cpp ; 
+----
+
+B2 provides a lot of built-in rules and `exe` is one of them. While the documentation of B2 refers to `exe` as a rule you know already that the above Jamfile is actually built using a programming language. As it turns out rules are simply functions. And the Jamfile above contains a function call.
+
+For the majority of tasks which are typically required to build programs B2 provides predefined rules - or functions if you like. As with functions in other programming languages it is possible to pass parameters. In the Jamfile above the function `exe` is called with the two parameters `hello` and `hello.cpp`.
+
+The programming language B2 is based on knows only one data type: Everything is a list of strings. A list can be empty or contain one or more strings. In the Jamfile above the function `exe` is called with two parameters each one a list containing one string.
+
+----
+exe "hello" : "hello.cpp" ; 
+----
+
+It is possible to use quotes. It's not necessary though as after all every item in a list has the data type string anyway. Quotes are only used if parameters contain spaces.
+
+While there is no special delimiter between a rule and the first parameter a colon must be used to separate other parameters. It is also required to end a line with a semicolon just as you are used to from {CPP}.
+
+Please note that the programming language of B2 requires that there is a space around all tokens. For example there must be a space on the left and on the right of the colon and there must be a space on the left of the semicolon. Without spaces around tokens `b2` won't be able to parse Jamfiles correctly.
+
+If `b2` is run in a directory which contains the Jamfile above and a source file `hello.cpp`, and if the msvc toolset is used on Windows a subdirectory `bin\msvc-9.0\debug` is created to build an executable `hello.exe`.
+
+----
+...found 9 targets...
+...updating 5 targets...
+common.mkdir bin
+common.mkdir bin\msvc-9.0
+common.mkdir bin\msvc-9.0\debug
+compile-c-c++ bin\msvc-9.0\debug\hello.obj
+hello.cpp
+msvc.link bin\msvc-9.0\debug\hello.exe
+msvc.manifest bin\msvc-9.0\debug\hello.exe
+...updated 5 targets...
+----
+
+As you see it takes only one line in a Jamfile to build an executable from a source file. And if the program is built on Windows there is even the correct file extension `exe` appended.
+
+The main advantage of B2 is that you specify just as much as necessary for a build system to know how to build a program. Anything B2 can do automatically is done automatically. You don't need to detect the platform a program is built on to decide if a file extension like `exe` should be appended or not. And you don't need to specify how a compiler like Visual {CPP} has actually to be invoked to compile source code.
+
+B2 supports a lot of toolsets out of the box. As a program can be built using different toolsets B2 uses toolset-specific directories. This way it is possible to build a program with different toolsets without a toolset constantly overwriting files produced by another toolset.
+
+There are not only toolset-specific directories but also variant-specific directories. A variant is a debug or release version of a program. For each variant another directory is used to build a program - again for the reason not to overwrite files produced by another variant. By default the debug variant is used. That's why the subdirectory `bin\msvc-9.0\debug` was created. If you want a release version to be created you can specify the variant on the command line with `b2 variant=release` or, even simpler, `b2 release` .
+
+----
+...found 9 targets...
+...updating 5 targets...
+common.mkdir bin
+common.mkdir bin\msvc-9.0
+common.mkdir bin\msvc-9.0\release
+compile-c-c++ bin\msvc-9.0\release\hello.obj
+hello.cpp
+msvc.link bin\msvc-9.0\release\hello.exe
+msvc.manifest bin\msvc-9.0\release\hello.exe
+...updated 5 targets...
+----
+
+With the variant set to release the subdirectory `bin\msvc-9.0\release` is used to create the executable `hello.exe`.
+
+Choosing a variant is something which is done so often that it's sufficient to enter `b2 release`. B2 figures out that `release` is meant to choose the variant.
+
+If you don't want to specify the variant on the command line but want to build release versions of `hello.exe` by default the Jamfile has to be changed.
+
+----
+exe hello : hello.cpp : <variant>release ; 
+----
+
+The `exe` rule (or, if you prefer, function) accepts a few more parameters which are optional. The third parameter is a list of requirements. You can think of command line options which are always set and passed to commands run to build an executable.
+
+In order to force a release version to be built the variant has to be set to release just as it was done before on the command line. The syntax to set the variant in a Jamfile is different though.
+
+B2 defines features which look like XML tags. One of the features supported by B2 is `<variant>`. If a feature should be set to a value it has to be put next to it - without a space in between. Some features are free which means they can be set to any value you want. `<variant>` is a non-free feature as it can only be set to debug or release. No other value is allowed. If another value is set `b2` will report an error.
+
+If you run `b2 variant=debug` and try to build a debug version of `hello.exe` it won't work as the Jamfile contains the requirement that `hello.exe` is built as a release version. If you want to be able to overwrite the feature on the command line you have to pass the feature as the fourth parameter instead of the third.
+
+----
+exe hello : hello.cpp : : <variant>release ; 
+----
+
+The fourth parameter contains features which are used by default but which can be overwritten.
+
+If you want both a debug and a release version of hello.exe to be built by default the <variant> feature needs to be set twice to debug and release.
+
+----
+exe hello : hello.cpp : : <variant>debug <variant>release ; 
+----
+
+It is important that `<variant>` is set twice in the fourth parameter where default values are specified. If it was the third parameter where requirements are specified `b2` would report an error. It is possible to set a feature multiple times in the requirements but only if values are not mutually exclusive. As a program can't be a debug and a release version at the same time `<variant>` must be set in the default values. Only then B2 understands that two versions of `hello.exe` should be built.
+
+----
+exe hello : hello.cpp : <define>WIN32 <define>_WIN32 : <variant>debug <variant>release ; 
+----
+
+The above Jamfile is an example for setting a feature multiple times in the requirements. The feature `<define>` is used to define preprocessor directives. It is no problem to define several preprocessor directives. Thus there are now two versions of `hello.exe` built both with the two directives `WIN32` and `_WIN32` defined.
+
+----
+exe hello : hello.cpp : : <variant>debug <variant>release <define>WIN32 <define>_WIN32 ; 
+----
+
+If the definitions are moved to the fourth parameter and you run `b2` you get the same two versions of `hello.exe` built with the two directives `WIN32` and `_WIN32`. As `<define>` does not expect mutually exclusive values there is no other set of executables generated. The only difference between this Jamfile and the previous one is that directives passed in the fourth parameter are default values which can be dropped while anything passed as a third parameter is an immutable requirement.
+
+Here is another example of a feature whose values are mutually exclusive.
+
+----
+exe hello : hello.cpp : : <variant>debug <variant>release <optimization>speed <optimization>off ; 
+----
+
+`b2` creates four versions of `hello.exe`: A debug version optimized for speed, a debug version with no optimization, a release version optimized for speed and a release version with no optimization. All of these versions are built in separate directories which are automatically created.
+
+So far the only rule used was `exe`. But of course B2 provides many more built-in rules. Another important rule is `lib`. It is used to build a library.
+
+----
+lib world : world.cpp ; 
+----
+
+The above Jamfile builds a shared library from the source file `world.cpp`. On Windows a file `world.dll` is created. The usual file extension is again automatically appended by B2.
+
+By default a shared library is built. If you want a static library to be generated you set the `<link>` feature to static.
+
+----
+lib world : world.cpp : <link>static ; 
+----
+
+Another useful rule is `install`. After executables and libraries have been built this rule can be used to install them.
+
+----
+exe hello : hello.cpp ; 
+install "C:/Program Files/hello" : hello ; 
+----
+
+The above Jamfile installs the executable `hello.exe` to the directory `C:\Program Files\hello`. The second parameter hello is a reference to the target hello defined in the first line. Please note that the path has to be put in quotes as it contains a space.
+
+Here concepts known from other build systems shine through: Instead of thinking of function calls every line defines a target. Dependencies are created by referencing other targets. That's how B2 knows in what order it should build targets.
+
+Typically the rule `install` is written differently though. Instead of passing the installation directory as the first parameter a feature `<location>` is used to set the installation directory in the third parameter.
+
+----
+exe hello : hello.cpp ; 
+install install-bin : hello : <location>"C:/Program Files/hello" ; 
+----
+
+The main reason why it's better to use `<location>` is that the first parameter always defines a target. Other rules might refer to a target. That's why it is a good idea to use target names which don't have to be changed later. Imagine a program should be installed to a different directory. It's easier to change the installation directory if the `<location>` feature has been used as no other rules which might refer to install-bin have to be updated.
+
+There is another reason why it makes sense to use a feature. B2 supports conditional properties which make it possible to use different installation directories depending on the platform a program is built on.
+
+----
+exe hello : hello.cpp ; 
+install install-bin : hello : <target-os>windows:<location>"C:/Program Files/hello" <target-os>linux:<location>/usr/local/bin ; 
+----
+
+The feature `<target-os>` is another feature with mutually exclusive values. It can be set for example to windows or linux but not to both.
+
+The feature `<location>` follows `<target-os>` only delimited by a colon. Such a construct is called conditional property: B2 selects the installation directory depending on the operating system.
+
+Of course conditional properties can also be used with other rules. It is for example possible to define different preprocessor directives depending on the variant when building a program or a library.
+
+B2 provides many more built-in rules. Another useful rule is `glob` which makes it possible to use wildcards. In a big project with many source files it's then not required to list them all one by one but refer to all of them with `glob`.
+
+----
+exe hello : [ glob *.cpp ] ; 
+----
+
+The above Jamfile contains a nested function call: The result of the rule `glob` is passed as the second parameter to `exe`. Due to requirements of the programming language B2 is based on brackets must be used for nested function calls.
+
+== Project management
+
+[.lead]
+Multiple Jamfiles
+
+In large projects with many Jamfiles it's necessary to connect Jamfiles somehow. There is typically a `Jamroot.jam` file in the project's root directory and many `Jamfile.jam` files in subdirectories. If `b2` is run in the root directory developers probably expect that the entire project including all components in subdirectories is built. As `b2` looks for Jamfiles in parent directories but not in subdirectories Jamfiles need to refer to Jamfiles in subdirectories explicitly.
+
+----
+build-project hello ; 
+----
+
+If a Jamfile looks like the sample above it refers to a Jamfile in a subdirectory `hello`. `build-project` is a rule which expects a path as its sole parameter. The path is then used to lookup a Jamfile.
+
+----
+build-project hello ; 
+build-project world ; 
+----
+
+If you want several projects to be built you must use build-project multiple times.
+
+Apart from referring to Jamfiles in subdirectories it makes also sense to group options which should be used when building components in a project.
+
+----
+project : default-build release ; 
+build-project hello ; 
+build-project world ; 
+----
+
+The `project` rule accepts various parameters to set options for the Jamfile in the current working directory and in subdirectories.
+
+While other rules like `exe` and `lib` expect parameters to be passed in a certain order `project` uses named arguments. In the sample above the argument's name is `default-build`. That's why it is possible to pass the value release in a very different parameter.
+
+----
+project : : : : : : : : : default-build release ; 
+build-project hello ; 
+build-project world ; 
+----
+
+It doesn't make sense to pass `release` as the tenth parameter. But it works as project doesn't care about the order. As the tenth parameter is called `default-build` it is accepted.
+
+`project` supports only a few named arguments. Another one is requirements which can be used to set options which can't be overwritten.
+
+----
+project : requirements <variant>release ; 
+build-project hello ; 
+build-project world ; 
+----
+
+The Jamfile above builds only release versions. It is not possible to build a debug version anymore as requirements can not be overwritten. That's the difference to the named argument called default-build which was used in the previous sample: It can be overwritten.
+
+When `build-project` is used B2 assumes that the parameter is a reference to a subdirectory. We had seen another type of reference before.
+
+----
+exe hello : hello.cpp ; 
+install install-bin : hello : <location>"C:/Program Files/hello" ; 
+----
+
+In the above Jamfile the `install` rule refers to the target hello defined in the first line.
+
+In a large project it might be necessary to refer to targets which are defined in Jamfiles in other directories. It is possible to concatenate a path to a Jamfile and a target with a double slash.
+
+----
+install install-bin : subdir//hello : <location>"C:/Program Files/hello" ; 
+----
+
+Now the `install` rule refers to a target `hello` in a Jamfile in the subdirectory `subdir`.
+
+Let's assume that the executable `hello` depends on a library in another directory `world`. The library is also built with B2 using the rule `lib`.
+
+----
+lib world : world.cpp ; 
+----
+
+In the Jamfile to build the executable a reference is required to the Jamfile of the library. It's not necessary to refer to the target world directly as all targets in a Jamfile are built by default.
+
+----
+exe hello : hello.cpp world : : <variant>debug <variant>release ; 
+----
+
+The above Jamfile assumes that the library and its Jamfile are in a subdirectory `world`.
+
+When the executable is built there are two versions generated - a debug and a release version. The Jamfile of the library however doesn't set the `<variant>` feature. But B2 assumes that it should build two versions of the library, too. The feature `<variant>` is said to be propagated.
+
+Propagating features simplify project management as you don't need to set the same features in various Jamfiles. However it also makes it a bit more complicated to understand how components are built as it all depends on what features are propagated. You can assume that B2 knows what it should do. But of course it doesn't mean that you easily understand what it does.
+
+Let's look at another example using the feature `<define>`.
+
+----
+exe hello : hello.cpp world : <define>WIN32 : <variant>debug <variant>release ; 
+----
+
+The above Jamfile defines a preprocessor directive `WIN32` for the program hello. But will `WIN32` be defined for the library, too?
+
+It won't as `<define>` is not a propagating feature. If you wonder how you should know: The only way to find out which features are propagated is to lookup the documentation.
+
+If you installed the Boost {CPP} libraries you probably want to link against some of them. You somehow have to add a dependency to the respective Boost {CPP} library to your project's Jamfile. If you didn't delete the directories you had unzipped the source files of the Boost {CPP} libraries to you can refer to a target in a Jamfile in the root directory.
+
+----
+exe hello : hello.cpp world C:/boost_1_39_0//filesystem/ ; 
+----
+
+Now `hello` also depends on the Boost.Filesystem library. As the target filesystem is defined in a Jamfile in the root directory of the Boost {CPP} libraries the `exe` rule can refer to it. Not only will the appropriate Boost {CPP} libraries be linked - an include directory is also passed to the compiler to find the header files. If `hello.cpp` includes `boost/filesystem.hpp` the header file will be found.
+
+In the above Jamfile the path to the root directory of the Boost {CPP} libraries is hardcoded. Somehow `b2` needs to know where to find the Boost {CPP} libraries. But it would be better if the path was hardcoded only once in case several components in a project need to link against some Boost {CPP} libraries.
+
+----
+project : requirements <variant>release ; 
+use-project /boost : C:/boost_1_39_0 ; 
+build-project hello ; 
+build-project world ; 
+----
+
+The `use-project` rule is used to define an alias to a Jamfile in another directory. Jamfiles in subdirectories use then the alias to refer to a Boost {CPP} library.
+
+----
+exe hello : hello.cpp world /boost//filesystem ; 
+----
+
+`b2` figures out that `hello.cpp` is a source file, `world` a subdirectory and /boost//filesystem a reference to a target filesystem in a Jamfile in `C:\boost_1_39_0`.
+
+Please note that a reference must start with a slash if it should refer to a project.
+
+As libraries can be linked differently it is possible to set features relevant to the linker.
+
+----
+exe hello : hello.cpp world /boost//filesystem/<link>static ; 
+----
+
+By default libraries are linked dynamically. If libraries should be linked statically the feature `<link>` has to be set to static.
+
+Features can be appended with a slash. If more than one feature should be set it is appended with another slash to the previous feature.
+
+----
+exe hello : hello.cpp world /boost//filesystem/<link>static/<threading>multi ; 
+----
+
+`<threading>` is another feature which can be set to `single` or `multi`. If hello should be linked against the thread-safe version of Boost.Filesystem the feature can be set accordingly.
+
+Linking a Boost {CPP} library by referencing a Jamfile might not always work. If the Boost {CPP} libraries were installed differently because they weren't built from source for example there won't be any Jamfile to reference.
+
+----
+lib filesystem : : <name>libboost_filesystem <search>C:/libs ; 
+exe hello : hello.cpp world filesystem : <include>C:/include ; 
+----
+
+The `lib` rule can not only be used to build a library from source. It also has to be used to refer to an existing and pre-built library.
+
+If `lib` shouldn't build a library from source the second parameter must be empty. Instead in the third parameter the features `<name>` and `<search>` are used to specify the library's name and a location where B2 will find the library.
+
+It is important to specify the library's name in a platform-independent way. For example for the Jamfile above B2 will try to find a file `libboost_filesystem.lib` on Windows. The usual file extension is again automatically appended.
+
+If you want to reference a file by specifying its exact name you can use the `<file>` feature.
+
+If a system library should be referenced for which you can expect B2 to know where to find it the feature `<search>` can be dropped.
+
+It is also possible to use the `project` rule to make sure all targets in a project are automatically linked against a library.
+
+----
+lib filesystem : : <name>libboost_filesystem <search>C:/libs ; 
+explicit filesystem ; 
+project : requirements <include>C:/include <library>filesystem ; 
+lib world : world.cpp ; 
+----
+
+A feature called `<library>` must be used to add a library dependency to a `project` rule. `<library>` must refer to a `lib` rule which uses the already known features `<name>` and `<search>`.
+
+It is now very important to make the `lib` rule explicit. This is done by using the `explicit` rule. It is important as by default all targets in a Jamfile are built. As the `project` rule defines requirements for all targets in the Jamfile they are also requirements for the `lib` rule. Thus the `lib` rule refers to itself. If the lib rule is made explicit though it's not built and no recursive reference occurs.
+
+Please note that the order of rules in a Jamfile matters only if a rule refers to a target: Before a target can be referenced it must have been defined.
+
+== Best practices
+
+[.lead]
+How B2 is used by others
+
+As B2 is a high-level build system you benefit most if you keep Jamfiles platform- and compiler-independent. After all the idea is to build your {CPP} or C projects on any platform with any compiler without being required to modify or maintain several Jamfiles.
+
+A typical problem you'll run into is that third-party libraries you want to use will be installed in different directories. If you want to build your project on Windows and Unix platforms paths also look very different. Furthermore you might need to link against some system libraries on a platform but not on another.
+
+Instead of trying to put paths for various platforms in a project's Jamfiles it is better to rely on configuration files on every system for system-specific settings. As it turns out `b2` does indeed look for two more configuration files when it starts.
+
+The file `site-config.jam` should be used to set options for an entire system. As it is machine-dependent `b2` expects to find it in `C:\Windows` on Windows platforms and in `/etc` on Unix systems. As `site-config.jam` is machine-dependent paths to local libraries are no problem.
+
+Users might not be able to create or change `site-config.jam` though. They would either need to wait for system administrators to update the file or be forced again to add system-specific paths to their own Jamfiles. As neither is a good solution, `b2` also looks for a file `user-config.jam` in a user's home directory. On Windows it is a subdirectory of `C:\Users`, on Unix a subdirecory of `/home`. As the file `user-config.jam` can be maintained by users it is probably used more often than `site-config.jam`.
+
+You use `site-config.jam` and `user-config.jam` just like any other Jamfile. As these configuration files do not belong to a project but to a machine or a user on a machine they are allowed to contain machine-specific options. For example they could contain a `using` rule.
+
+----
+using msvc ; 
+----
+
+The `using` rule above tells `b2` to use the msvc toolset. If you know that there is only Visual {CPP} installed on a system it makes sense to put this line into a configuration file. Then `b2` doesn't need to guess anymore which toolset to use and won't omit a warning.
+
+If you define targets in `site-config.jam` or `user-config.jam` and want to refer to these targets in Jamfiles the `project` rule must be used to set a name.
+
+----
+using msvc ; 
+project user-config ; 
+lib xml : : <name>libxml <search>C:/lib : : <include>C:/include ; 
+----
+
+The `lib` rule is used to refer to a pre-built library whose basename is libxml and can be found in `C:\lib`. A program which uses this XML library probably needs to include header files from this library. That's why in the usage requirements - this is the fifth parameter - the feature `<include>` is set to `C:\include`: Whoever uses this rule will inherit the `<include>` feature.
+
+As the `project` rule has been used to set the name user-config a Jamfile can refer to the XML library via /user-config//xml.
+
+----
+exe xmlparser : xmlparser.cpp : <library>/user-config//xml ; 
+----
+
+In order to build `xmlparser` the program must be linked against the XML library. Even though the location of the library and its header files might vary the Jamfile does not contain any system-specific paths. The Jamfile expects to find the target xml in the project user-config. If this is a configuration file it's no problem to use system-specific paths as after all configuration files are bound to a machine or to a user on a machine.
+
+As B2 has been created to build and install the Boost {CPP} libraries there is built-in support to use pre-built Boost {CPP} libraries more easily.
+
+----
+using msvc ; 
+project user-config ; 
+using boost : 1.39 : <include>C:/include/boost-1_39 <library>C:/lib ; 
+----
+
+The `using` rule must be used to refer to a toolset called boost. This toolset is different from toolsets like msvc which you've read about so far: It doesn't contain any programs which will be run later. As support for pre-built Boost {CPP} libraries has been implemented in a toolset though it's required to use the `using` rule.
+
+Just as with other libraries the location of the Boost {CPP} libraries might vary. Thus it makes sense to put the `using` rule into one of the two configuration files.
+
+It is possible to pass parameters to the `using` rule: The first one is the version number, the second a list of options. In the Jamfile above the Boost {CPP} libraries 1.39 are used which can be found in the directories passed as options.
+
+Once the boost toolset is used it is possible to use Boost {CPP} libraries without defining targets yourself.
+
+----
+import boost ; 
+boost.use-project 1.39 ; 
+exe hello : hello.cpp : <library>/boost//thread ; 
+----
+
+If a program uses a Boost {CPP} library it can refer to targets in a project called boost. In order to recognize the project boost though the boost module must be imported and the rule `boost.use-project` used: Importing the boost module makes the `boost.use-project` rule available. This rule expects a version number as its sole argument. As it is possible to use the `using` rule to refer to various versions of the Boost {CPP} libraries a project can specify which version it wants to use. In the Jamfile above the program hello uses Boost.Thread from version 1.39.
+
+== Rule reference
+
+[.lead]
+Building blocks for Jamfiles
+
+If you manage a project with B2 and create Jamfiles you use rules all the time. Thus you should know which rules exist and how they are used. The following table gives you an overview about the most important rules.
+
+There is a star, plus sign or question mark behind some parameters. The star means there can be arbitrary many values, the plus sign there must be at least one value and the question mark there must be zero or exactly one value.
+
+.Rules
+[%autowidth.stretch]
+|===
+| Name | Parameters | Description
+
+| `alias`
+| `name : sources * : requirements * : default-build * : usage-requirements *``
+| Refer to sources or any other targets via a new name.
+
+| `build-project`
+| `dir`
+| Refer to a Jamfile in another directory to build a project.
+
+| `conditional`
+| `condition + : requirements *`
+| Create conditional requirements without using conditional properties.
+
+| `exe`
+| `name : sources * : requirements * : default-build * : usage-requirements *`
+| Build an executable.
+
+| `explicit`
+| `target-names *`
+| Make targets explicit.
+
+| `glob`
+| `wildcards + : excludes *`
+| Reference files in a directory via wildcards.
+
+| `glob-tree`
+| `wildcards + : excludes *`
+| Reference files in a directory and all subdirectories via wildcards.
+
+| `install`
+| `name-and-dir : sources * : requirements * : default-build *`
+| Install files to a directory.
+
+| `lib`
+| `names + : sources * : requirements * : default-build * : usage-requirements *`
+| Build a library.
+
+| `project`
+| `id ? : options * : *`
+| Set project options.
+
+| `unit-test`
+| `target : source : properties *`
+| Build and run an executable.
+
+| `use-project`
+| `id : where`
+| Reference a Jamfile in another directory to use the project id as a target.
+
+| `using`
+| `toolset-module : *`
+| Select a toolset.
+
+|===
+
+Your B2 version might support more rules than listed above. If you want to find out which rules are supported you should check out the files in the subdirectory `build` of your B2 installation.
+
+== Feature reference
+
+[.lead]
+Configuration options for the build process
+
+Features allow you to specify exactly how binaries are built. As there are many configuration options available the list of features is pretty long. The following table introduces you to the most important features.
+
+.Features
+[%autowidth.stretch]
+|===
+| Name | Values | Description
+
+| `<address-model>` | 16, 32, 64, 32_64
+	| Generate 16-, 32- or 64-bit code.
+| `<architecture>` | x86, ia64, sparc, power, mips1, mips2, mips3, mips4, mips32, mips32r2, mips64, parisc, arm, combined, combined-x86-power
+	| Set processor family to generate code for.
+| `<c++-template-depth>` | 1, 2, 3, ...
+	| Set maximum template depth.
+| `<cflags>` | ...
+	| Pass flags to C compiler.
+| `<cxxflags>` | ...
+	| Pass flags to {CPP} compiler
+| `<debug-symbols>` | on, off
+	| Create debug symbols.
+| `<def-file>` | ...
+	| Set path to `def` file (specific to Windows DLLs).
+| `<define>` | ...
+	| Define preprocessor directives.
+| `<embed-manifest>` | on, off
+	| Embed manifest (specific to msvc toolset).
+| `<host-os>` | aix, bsd, cygwin, darwin, freebsd, hpux, iphone, linux, netbsd, openbsd, osf, qnx, qnxnto, sgi, solaris, unix, unixware, windows
+	| Use in conditional properties if features depend on host operating systems.
+| `<include>` | ...
+	| Set include directories.
+| `<inlining>` | off, on, full
+	| Inline functions.
+| `<library>` | ...
+	| Link to a library (use in `project` rule).
+| `<link>` | shared, static
+	| Link to shared or static version of a library.
+| `<linkflags>` | ...
+	| Pass flags to linker.
+| `<location>` | ...
+	| Set directory (use in `install` rule).
+| `<name>` | ...
+	| Set basename of a library (use in `lib` rule).
+| `<optimization>` | off, speed, space
+	| Generate optimized code.
+| `<profiling>` | off, on
+	| Generate profiled code.
+| `<runtime-link>` | shared, static
+	| Link to single-threaded or thread-safe runtime library.
+| `<search>` | ...
+	| Set directory to search for libraries (use in `lib` rule together with `<name>`).
+| `<source>` | ...
+	| Set source in requirements parameter of project rule or in conditional properties.
+| `<target-os>` | aix, appletv, bsd, cygwin, darwin, freebsd, hpux, iphone, linux, netbsd, openbsd, osf, qnx, qnxnto, sgi, solaris, unix, unixware, windows
+	| Use in conditional properties if features depend on target operating systems.
+| `<threading>` | single, multi
+	| Build singlethreaded or thread-safe version.
+| `<toolset>` | gcc, msvc, intel-linux, intel-win, acc, borland, como-linux, cw, dmc, hp_cxx, sun
+	| Use in conditional properties if features depend on toolsets.
+| `<undef>` | ...
+	| Undefine preprocessor directives.
+| `<use>` | ...
+	| Take over only usage requirements of a referenced target but don't do anything else.
+| `<variant>` | debug, release, profile
+	| Build debug, release or profile version.
+| `<warnings>` | on, all, off
+	| Switch off warnings.
+| `<warnings-as-errors>` | off, on
+	| Treat warnings as errors.
+|===
+
+For a complete and up-to-date reference of B2 features look up the file `builtin.jam` in the subdirectory `tools` of your B2 installation. Search for lines starting with `feature.feature` - this is the internal rule used to define features.
+
+****
+Copyright 2021 René Ferdinand Rivera Morell; Copyright Boris Schäling 2009. Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE.txt or copy at https://www.bfgroup.xyz/b2/LICENSE.txt)
+****

@@ -10,8 +10,10 @@ project website
     : requirements
         # <flags>--trace
         # <flags>--verbose
+        <dependency>amber.css
     ;
 
 html index : index.adoc ; explicit index ;
+html tutorial : tutorial.adoc ; explicit tutorial ;
 
-install html : index : <location>. ;
+install html : index tutorial : <location>. ;

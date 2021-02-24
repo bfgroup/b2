@@ -818,7 +818,7 @@ a { color: inherit; }
   #footer { background: none; }
   #footer-text { color: #aaa; font-size: 0.9em; } }
 @media amzn-kf8 { #header, #content, #footnotes, #footer { padding: 0; } }
-.menubar { position: fixed; display: block; top: 0px; left: 0px; right: 0px; background-color: black; border-bottom: 1px solid #2e1b00; padding: 10px; text-align: center; }
+.menubar { position: fixed; display: block; top: 0px; left: 0px; right: 0px; z-index: 99; background-color: black; border-bottom: 1px solid #2e1b00; padding: 10px; text-align: center; }
 
 .menubar p { margin: 0px; }
 
