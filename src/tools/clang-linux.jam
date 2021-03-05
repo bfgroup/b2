@@ -51,15 +51,10 @@ if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ] {
 }
 
 rule init ( version ? :  command * : options * ) {
-  command = [ common.get-invocation-command clang-linux : clang++
-    : $(command) ] ;
-
-  # Determine the version
-  if $(command) {
-    local command-string = \"$(command)\" ;
-    command-string = $(command-string:J=" ") ;
-    version ?= [ MATCH "version ([0-9.]+)"
-      : [ SHELL "$(command-string) --version" ] ] ;
+  command = [ common.find-compiler clang-linux : clang++ : $(version) : $(command) ] ;
+  local command-string = [ common.make-command-string $(command) ] ;
+  if ! $(version) { # ?= operator does not short-circuit
+  version ?= [ get-short-version $(command-string) ] ;
   }
 
   local condition = [ common.check-init-parameters clang-linux
@@ -108,6 +103,16 @@ rule init ( version ? :  command * : options * ) {
     archiver = $(root)/bin/ar ;
     }
   toolset.flags clang-linux.archive .AR $(condition) : $(archiver[1]) ;
+}
+
+rule get-full-version ( command-string )
+{
+    return [ gcc.get-full-version $(command-string) ] ;
+}
+
+rule get-short-version ( command-string )
+{
+    return [ gcc.get-short-version $(command-string) : 4 ] ;
 }
 
 ###############################################################################
