@@ -1,3 +1,4 @@
+# Copyright 2021 Nikita Kniazev
 # Copyright 2002, 2003, 2004, 2006 Vladimir Prus
 # Copyright 2008, 2012 Jurko Gospodnetic
 # Distributed under the Boost Software License, Version 1.0.
@@ -100,6 +101,8 @@ rule version-less ( lhs + : rhs + )
 }
 
 # Returns "true" if the required version is compatible with the having one.
+# This uses sematic versioning where (major.x.y) is compatible with
+# (major.n.m) and (major.x.z). And is incompatible for other values.
 #
 rule version-compatible ( req + : has + )
 {
