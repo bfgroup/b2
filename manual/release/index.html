@@ -955,14 +955,15 @@ a { color: inherit; }
 </li>
 <li><a href="#b2.history">13. History</a>
 <ul class="sectlevel2">
-<li><a href="#_version_4_4_2">13.1. Version 4.4.2</a></li>
-<li><a href="#_version_4_4_1">13.2. Version 4.4.1</a></li>
-<li><a href="#_version_4_4_0">13.3. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">13.4. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">13.5. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">13.6. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_1">13.7. Version 4.0.1</a></li>
-<li><a href="#_version_4_0_0">13.8. Version 4.0.0</a></li>
+<li><a href="#_version_4_5_0">13.1. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">13.2. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">13.3. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">13.4. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">13.5. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">13.6. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">13.7. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_1">13.8. Version 4.0.1</a></li>
+<li><a href="#_version_4_0_0">13.9. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -4352,8 +4353,7 @@ managers. Currently the supported ones are:</p>
 <ul>
 <li>
 <p>Conan (<code>conan</code>): currently supports the
-<a href="https://bintray.com/bfgroup/public-conan/b2gen%3Abfgroup"><code>b2gen</code></a>
-generator.</p>
+<a href="https://docs.conan.io/en/latest/reference/generators/b2.html"><code>b2 generator</code></a>.</p>
 </li>
 </ul>
 </div>
@@ -10895,7 +10895,7 @@ of the metadata file, minus the <code>.pc</code> extension.</p>
 <div class="paragraph">
 <p>Selects one of the initialized <code>pkg-config</code> configurations. This feature is
 <code>propagated</code> to dependencies. Its use is dicussed in
-section <a href="#pkg-config-init">[pkg-config-init]</a>.</p>
+section <a href="#pkg-config-init">Initialization</a>.</p>
 </div>
 </div>
 <div class="sect4">
@@ -10958,7 +10958,7 @@ should be a dot-separated sequence of numbers optionally prefixed with <code>=</
 </div>
 </div>
 <div class="sect4">
-<h5 id="_initialization_pkg_config_init"><a class="anchor" href="#_initialization_pkg_config_init"></a>Initialization [[ pkg-config-init ]]</h5>
+<h5 id="pkg-config-init"><a class="anchor" href="#pkg-config-init"></a>Initialization</h5>
 <div class="paragraph">
 <p>To use the <code>pkg-config</code> tool you need to declare it in a configuration file
 with the <code>using</code> rule:</p>
@@ -11236,7 +11236,6 @@ single executable from a single source file:</p>
 int main()
 {
     std::cout &lt;&lt; "Hello!\n";
-    return 1;
 }</code></pre>
 </div>
 </div>
@@ -14175,7 +14174,29 @@ variants accepted as valid for an option:</p>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>13. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.1. Version 4.4.2</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.1. Version 4.5.0</h3>
+<div class="paragraph">
+<p>Some minor fixes to improve some old issues.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Reenable ability of generators to return <code>property-set</code> as first item.&#8201;&#8212;&#8201;<em>Andrew McCann</em></p>
+</li>
+<li>
+<p>Fix examples to return 0 on success.&#8201;&#8212;&#8201;<em>Mateusz Łoskot</em></p>
+</li>
+<li>
+<p>Handle spaces in CXX path in <code>config_toolset.bat</code>.</p>
+</li>
+<li>
+<p>Fix Conan b2 generator link, and pkg-config doc build error.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.2. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -14192,23 +14213,23 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.2. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.3. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Fix engine build defaulting to gcc instead of clang on macOX/Xcode.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+<p>Fix engine build defaulting to gcc instead of clang on macOS/Xcode.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.3. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.4. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
-support for some toolsets. This means that under most circumtances, if
+support for some toolsets. This means that under most circumstances, if
 supported by the toolset, response files are not generated. Instead the
 command is expanded to include the options directly.</p>
 </div>
@@ -14255,7 +14276,7 @@ Common setups are better equipped.&#8201;&#8212;&#8201;<em>René Ferdinand River
 <p>Ensure Embarcadero toolset name is only "embtc".&#8201;&#8212;&#8201;<em>Tanzinul Islam</em></p>
 </li>
 <li>
-<p>Adapt for Emscripten 2.0 change of default behaviour for archives.&#8201;&#8212;&#8201;<em>Basil Fierz</em></p>
+<p>Adapt for Emscripten 2.0 change of default behavior for archives.&#8201;&#8212;&#8201;<em>Basil Fierz</em></p>
 </li>
 <li>
 <p>Fix path to bootstrap for back compat.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
@@ -14296,7 +14317,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.4. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.5. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -14396,7 +14417,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.5. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.6. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -14438,7 +14459,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.6. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.7. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -14520,7 +14541,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>13.7. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>13.8. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -14530,7 +14551,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.8. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.9. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
