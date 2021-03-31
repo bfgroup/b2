@@ -4352,8 +4352,7 @@ managers. Currently the supported ones are:</p>
 <ul>
 <li>
 <p>Conan (<code>conan</code>): currently supports the
-<a href="https://bintray.com/bfgroup/public-conan/b2gen%3Abfgroup"><code>b2gen</code></a>
-generator.</p>
+<a href="https://docs.conan.io/en/latest/reference/generators/b2.html"><code>b2 generator</code></a>.</p>
 </li>
 </ul>
 </div>
@@ -10895,7 +10894,7 @@ of the metadata file, minus the <code>.pc</code> extension.</p>
 <div class="paragraph">
 <p>Selects one of the initialized <code>pkg-config</code> configurations. This feature is
 <code>propagated</code> to dependencies. Its use is dicussed in
-section <a href="#pkg-config-init">[pkg-config-init]</a>.</p>
+section <a href="#pkg-config-init">Initialization</a>.</p>
 </div>
 </div>
 <div class="sect4">
@@ -10958,7 +10957,7 @@ should be a dot-separated sequence of numbers optionally prefixed with <code>=</
 </div>
 </div>
 <div class="sect4">
-<h5 id="_initialization_pkg_config_init"><a class="anchor" href="#_initialization_pkg_config_init"></a>Initialization [[ pkg-config-init ]]</h5>
+<h5 id="pkg-config-init"><a class="anchor" href="#pkg-config-init"></a>Initialization</h5>
 <div class="paragraph">
 <p>To use the <code>pkg-config</code> tool you need to declare it in a configuration file
 with the <code>using</code> rule:</p>
@@ -14175,7 +14174,25 @@ variants accepted as valid for an option:</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.1. Version 4.5.0</h3>
-
+<div class="paragraph">
+<p>Some minor fixes to improve some old issues.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Reenable ability of generators to return <code>property-set</code> as first item.&#8201;&#8212;&#8201;<em>Andrew McCann</em></p>
+</li>
+<li>
+<p>Fix examples to return 0 on success.&#8201;&#8212;&#8201;<em>Mateusz Łoskot</em></p>
+</li>
+<li>
+<p>Handle spaces in CXX path in <code>config_toolset.bat</code>.</p>
+</li>
+<li>
+<p>Fix Conan b2 generator link, and pkg-config doc build error.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.2. Version 4.4.2</h3>
