@@ -289,36 +289,40 @@ if [ os.name ] = NT
     JAMSHELL = % ;
 }
 
+local rule get-version ( command-string )
+{
+    local output = [ SHELL $(command-string) : exit-status ] ;
+    if 0 != $(output[2])
+    {
+        errors.error '$(command-string)'
+                     exited with error code $(output[2]) ;
+    }
+
+    local version = [ MATCH "^([0-9.]+)" : $(output[1]) ] ;
+    if ! $(version)
+    {
+        errors.error '$(command-string)'
+                     returned an invalid version string '$(output[1])' ;
+    }
+
+    return $(version) ;
+}
+
 rule get-full-version ( command-string )
 {
     # -dumpfullversion is only supported for gcc 7+.
     # Passing both options works, as the first one that's
     # recognized will be used.
-    local version = [ MATCH "^([0-9.]+)" :
-        [ SHELL "$(command-string) -dumpfullversion -dumpversion" ] ] ;
-    if ! $(version)
-    {
-        errors.error '$(command-string) -dumpfullversion -dumpversion'
-                     returned an empty or invalid version string ;
-    }
-    return $(version) ;
+    return [ get-version "$(command-string) -dumpfullversion -dumpversion" ] ;
 }
 
 rule get-short-version ( command-string : single-digit-since ? )
 {
-    local version = [ MATCH "^([0-9.]+)" :
-        [ SHELL "$(command-string) -dumpversion" ] ] ;
-    if ! $(version)
-    {
-        errors.error '$(command-string) -dumpversion'
-                     returned an empty or invalid version string ;
-    }
+    local version = [ get-version "$(command-string) -dumpversion" ] ;
+    version = [ SPLIT_BY_CHARACTERS $(version) : . ] ;
 
-    local version = [ SPLIT_BY_CHARACTERS $(version) : . ] ;
-
-    single-digit-since ?= 5 ;
     import version ;
-    if [ version.version-less $(version) : $(single-digit-since) ]
+    if [ version.version-less $(version) : $(single-digit-since:E=5) ]
     {
         return $(version[1-2]:J=.) ;
     }
