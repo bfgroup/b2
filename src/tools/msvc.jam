@@ -996,14 +996,14 @@ class msvc-pch-generator : pch-generator
 
         # If we do not have the PCH source - that is fine. We will just create a
         # temporary .cpp file in the action.
-
+        local pch-header-dir = [ $(pch-header).path ] ;
         local generated = [ generator.run $(project) $(name)
             : [ property-set.create
                 # Passing of <pch-source> is a dirty trick, needed because
                 # non-composing generators with multiple inputs are subtly
                 # broken. For more detailed information see:
                 # https://zigzag.cs.msu.su:7813/boost.build/ticket/111
-                <pch-source>$(pch-source)
+                <pch-source>$(pch-source) "<include>$(pch-header-dir)"
                 [ $(property-set).raw ] ]
             : $(pch-header) ] ;
 

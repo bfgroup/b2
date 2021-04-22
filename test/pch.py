@@ -15,8 +15,8 @@ t = BoostBuild.Tester()
 t.write("jamroot.jam", """
 import pch ;
 project : requirements <warnings-as-errors>on ;
-cpp-pch pch : pch.hpp : <toolset>msvc:<source>pch.cpp <include>. ;
-cpp-pch pch-afx : pch.hpp : <define>HELLO <toolset>msvc:<source>pch.cpp <include>. ;
+cpp-pch pch : pch.hpp : <toolset>msvc:<source>pch.cpp ;
+cpp-pch pch-afx : pch.hpp : <define>HELLO <toolset>msvc:<source>pch.cpp ;
 exe hello : hello.cpp pch : <include>. ;
 exe hello-afx : hello-afx.cpp pch-afx : <define>HELLO <include>. ;
 """)
