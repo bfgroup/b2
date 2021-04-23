@@ -55,10 +55,10 @@ t.expect_addition("bin/$toolset/debug*/hello-afx.exe")
 # B2 will not recreate PCH, and compiler will happily use pre-compiled
 # header, not noticing that the real header is bad.
 
+t.rename("pch.hpp", "pch.hpp.orig")
 s = "THIS WILL NOT COMPILE. "
-t.write("pch.hpp.bad", s + (len(pch_content) - len(s)) * 'x')
-t.copy_timestamp("pch.hpp", "pch.hpp.bad")
-t.copy_preserving_timestamp("pch.hpp.bad", "pch.hpp")
+t.write("pch.hpp", s + (len(pch_content) - len(s)) * 'x')
+t.copy_timestamp("pch.hpp.orig", "pch.hpp")
 
 t.rm("bin/$toolset/debug*/hello.obj")
 t.rm("bin/$toolset/debug*/hello-afx.obj")
