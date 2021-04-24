@@ -18,9 +18,9 @@ project : requirements <warnings-as-errors>on ;
 cpp-pch pch : pch.hpp ;
 cpp-pch pch-afx : pch.hpp : <define>HELLO ;
 cpp-pch pch-msvc-source : pch.hpp : <toolset>msvc:<source>pch.cpp ;
-exe hello : hello.cpp pch : <include>. ;
-exe hello-afx : hello-afx.cpp pch-afx : <define>HELLO <include>. ;
-exe hello-msvc-source : hello-msvc-source.cpp pch-msvc-source : <include>. ;
+exe hello : hello.cpp pch ;
+exe hello-afx : hello-afx.cpp pch-afx : <define>HELLO ;
+exe hello-msvc-source : hello-msvc-source.cpp pch-msvc-source ;
 """)
 
 pch_content = """\
@@ -37,14 +37,8 @@ t.write("pch.cpp", """#include <pch.hpp>
 """)
 
 toolset = BoostBuild.get_toolset()
-# Clang with posix interface always include everything in source files
-if not toolset.startswith('clang') or toolset.startswith('clang-win'):
-    include = '#include <pch.hpp>'
-else:
-    include = ''
 for name in ("hello.cpp", "hello-afx.cpp", "hello-msvc-source.cpp"):
-    t.write(name, include + """
-int main() { TestClass c(1, 2); }
+    t.write(name, """int main() { TestClass c(1, 2); }
 """)
 
 t.run_build_system()

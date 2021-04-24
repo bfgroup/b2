@@ -735,14 +735,14 @@ toolset.flags msvc YLOPTION : "-Yl" ;
 #    for each source file by rule archive, as in this case compiler must be used
 #    to create a single PDB for our library.
 #
-actions compile-c-c++ bind PDB_NAME
+actions compile-c-c++ bind PDB_NAME PCH_HEADER
 {
-    $(.SETUP) $(.CC) @($(<[1]:W).rsp:O=FC:<=@":>=":E="$(>[1]:W)" -Fo"$(<[1]:W)" $(PDB_CFLAG)"$(PDB_NAME)" -Yu"$(>[3]:D=)" -Fp"$(>[2]:W)" $(CC_RSPLINE)) $(.CC.FILTER)
+    $(.SETUP) $(.CC) @($(<[1]:W).rsp:O=FC:<=@":>=":E="$(>[1]:W)" -Fo"$(<[1]:W)" $(PDB_CFLAG)"$(PDB_NAME)" -FI"$(PCH_HEADER)" -Yu"$(>[3]:D=)" -Fp"$(>[2]:W)" $(CC_RSPLINE)) $(.CC.FILTER)
 }
 
-actions preprocess-c-c++ bind PDB_NAME
+actions preprocess-c-c++ bind PDB_NAME PCH_HEADER
 {
-    $(.SETUP) $(.CC) @($(<[1]:W).rsp:O=FC:<=@":>=":E="$(>[1]:W)" -E $(PDB_CFLAG)"$(PDB_NAME)" -Yu"$(>[3]:D=)" -Fp"$(>[2]:W)" $(CC_RSPLINE))" >"$(<[1]:W)"
+    $(.SETUP) $(.CC) @($(<[1]:W).rsp:O=FC:<=@":>=":E="$(>[1]:W)" -E $(PDB_CFLAG)"$(PDB_NAME)" -FI"$(PCH_HEADER)" -Yu"$(>[3]:D=)" -Fp"$(>[2]:W)" $(CC_RSPLINE))" >"$(<[1]:W)"
 }
 
 rule compile-c-c++ ( targets + : sources * )
