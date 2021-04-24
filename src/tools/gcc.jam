@@ -591,12 +591,6 @@ class gcc-pch-generator : pch-generator
             }
         }
 
-        local path-prefix = [ path.join $(name)
-                                        [ feature.get-values location-prefix
-                                          : $(property-set).raw ] ] ;
-        property-set = [ $(property-set).add-raw
-                         <location-prefix>$(path-prefix) ] ;
-
         local pch-file = [ generator.run $(project) $(name) : $(property-set)
             : $(header) ] ;
 
@@ -606,16 +600,6 @@ class gcc-pch-generator : pch-generator
             [ $(pch-file[1]).add-raw <pch-file>$(pch-file[2-]) <cflags>-Winvalid-pch ]
             $(pch-file[2-])
           ;
-    }
-
-    # Calls the base version specifying source's name as the name of the created
-    # target. As a result, the PCH will be named whatever.hpp.gch, and not
-    # whatever.gch.
-    rule generated-targets ( sources + : property-set : project name ? )
-    {
-        name = [ $(sources[1]).name ] ;
-        return [ generator.generated-targets $(sources)
-          : $(property-set) : $(project) $(name) ] ;
     }
 }
 
