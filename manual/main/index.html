@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.14">
+<meta name="generator" content="Asciidoctor 2.0.15">
 <meta name="author" content="René Ferdinand Rivera Morell, Vladimir Prus, Steven Watanabe">
 <meta name="copyright" content="Copyright 2018-2021 René Ferdinand Rivera Morell; Copyright 2006, 2014 Vladimir Prus">
 <title>B2 User Manual</title>
@@ -4131,9 +4131,7 @@ toolsets.</p>
 <p>Create a header that includes headers used by your project that you
 want precompiled. It is better to include only headers that are
 sufficiently stable&#8201;&#8212;&#8201;like headers from the compiler and external
-libraries. Please wrap the header in <code>#ifdef BOOST_BUILD_PCH_ENABLED</code>, so
-that the potentially expensive inclusion of headers is not done when PCH is
-not enabled. Include the new header at the top of your source files.</p>
+libraries. B2 will include the header automatically and on-demand.</p>
 </li>
 <li>
 <p>Declare a new B2 target for the precompiled header and add
@@ -4161,10 +4159,6 @@ in C programs.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The inclusion of the precompiled header must be the first thing in a
-source file, before any code or preprocessor directives.</p>
-</li>
-<li>
 <p>The build properties used to compile the source files and the
 precompiled header must be the same. Consider using project requirements
 to assure this.</p>
@@ -4182,6 +4176,11 @@ headers are not supported.</p>
 namespaces in precompiled headers, which limits their utility. See the
 <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=29085">bug report</a> for
 details.</p>
+</li>
+<li>
+<p>Previosuly B2 had not been automatically inluding the header, a user
+was required to include the header at the top of every source file
+the precompiled header will be used with.</p>
 </li>
 </ul>
 </div>
