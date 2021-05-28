@@ -284,13 +284,9 @@ fi
 
 # If we have B2_TOOLSET=cxx but no B2_CXX_OPT nor B2_CXXFLAGS_OPT specified by the user
 # we assume they meant $CXX and $CXXFLAGS.
-if test "${B2_TOOLSET}" = "cxx" ; then
-    if test "${B2_CXX_OPT}" = "" ; then
-        B2_CXX_OPT="${CXX}"
-    fi
-    if test "${B2_CXXFLAGS_OPT}" = "" ; then
-        B2_CXXFLAGS_OPT="${CXXFLAGS}"
-    fi
+if test "${B2_TOOLSET}" = "cxx" -a "${B2_CXX_OPT}" = "" -a "${B2_CXXFLAGS_OPT}" = "" ; then
+    B2_CXX_OPT="${CXX}"
+    B2_CXXFLAGS_OPT="${CXXFLAGS}"
 fi
 
 # Guess toolset, or toolset commands.
