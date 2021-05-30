@@ -14214,11 +14214,15 @@ specific properties.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
 </li>
 <li>
 <p>Add default value for cxx and cxxflags from env vars <code>CXX</code> and <code>CXXFLAGS</code>
-when using the custom <code>cxx</code> toolset to build the engine.&#8201;&#8212;&#8201;<em>_Samuel Debionne</em> and <em>René Ferdinand Rivera Morell</em></p>
+when using the custom <code>cxx</code> toolset to build the engine.&#8201;&#8212;&#8201;<em>Samuel Debionne</em> and <em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Fix detection of <code>intel-linux</code> toolset installation when only the compiler
 executable is in the <code>PATH</code>.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix <code>b2</code> executable path determination for platforms that don&#8217;t have a
+native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
