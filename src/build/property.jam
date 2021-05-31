@@ -969,6 +969,10 @@ rule __test__ ( )
     $(pm).insert <toolset>gcc <os>NT : obj ;
     $(pm).insert <toolset>gcc <os>CYGWIN : obj ;
 
+    try ;
+        $(pm).find [ new property-set <toolset>gcc <os>NT <os>CYGWIN ] ;
+    catch "Ambiguous key <toolset>gcc <os>NT <os>CYGWIN" ;
+
     assert.equal o : [ $(pm).find-replace <toolset>gcc ] ;
 
     assert.equal obj : [ $(pm).find-replace <toolset>gcc <os>NT ] ;
