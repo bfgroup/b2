@@ -808,7 +808,7 @@ class property-map
         if $(best[2])
         {
             import errors : error : errors.error ;
-	    properties = [ $(property-set).raw ] ;
+	        properties = [ $(property-set).raw ] ;
             errors.error "Ambiguous key $(properties:J= :E=)" ;
         }
         return $(best) ;
