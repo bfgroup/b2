@@ -65,8 +65,8 @@ You can specify the toolset as the argument, i.e.:
     ./build.sh [options] gcc
 
 Toolsets supported by this script are:
-    acc, clang, como, gcc, intel-darwin, intel-linux, kcc, kylix, mipspro,
-    pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
+    acc, circle, clang, como, gcc, intel-darwin, intel-linux, kcc, kylix,
+    mipspro, pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
 
 For any toolset you can override the path to the compiler with the '--cxx'
 option. You can also use additional flags for the compiler with the
@@ -247,6 +247,8 @@ check_toolset ()
     if test_toolset acc && test_compiler aCC -AA ; then B2_TOOLSET=acc ; return ${TRUE} ; fi
     # Sun Pro C++ (sunpro)
     if test_toolset sunpro && test_compiler /opt/SUNWspro/bin/CC -std=c++11 ; then B2_TOOLSET=sunpro ; return ${TRUE} ; fi
+    # Circle..
+    if test_toolset circle && test_compiler circle ; then B2_TOOLSET=circle ; return ${TRUE} ; fi
     # Generic (cxx)
     if test_toolset cxx && test_compiler cxx ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
     if test_toolset cxx && test_compiler cpp ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
@@ -413,6 +415,12 @@ case "${B2_TOOLSET}" in
 
     cxx)
         CXX_VERSION_OPT=${CXX_VERSION_OPT:---version}
+    ;;
+
+    circle|circle-*)
+        CXX_VERSION_OPT=${CXX_VERSION_OPT:---version}
+        B2_CXXFLAGS_RELEASE="-O2"
+        B2_CXXFLAGS_DEBUG="-O0 -g"
     ;;
 
     *)
