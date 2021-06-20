@@ -1,0 +1,122 @@
+#  Copyright 2020-2021 Rene Rivera
+#
+#  Use, modification and distribution is subject to the Boost Software
+#  License Version 1.0. (See accompanying file LICENSE.txt or
+#  https://www.bfgroup.xyz/b2/LICENSE.txt)
+
+import common ;
+import feature ;
+import gcc ;
+import generators ;
+import set ;
+import toolset ;
+
+if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ]
+{
+    .debug-configuration = true ;
+}
+
+feature.extend toolset : circle ;
+
+toolset.inherit-generators circle
+    :   gcc
+    :   gcc.mingw.link gcc.mingw.link.dll gcc.cygwin.link gcc.cygwin.link.dll ;
+generators.override circle.prebuilt : builtin.lib-generator ;
+generators.override circle.prebuilt : builtin.prebuilt ;
+generators.override circle.searched-lib-generator : searched-lib-generator ;
+toolset.inherit-rules circle
+    :   gcc ;
+toolset.inherit-flags circle
+    :   gcc
+    :   <inlining>off <inlining>on <inlining>full
+        <warnings>off <warnings>on <warnings>all <warnings>extra <warnings>pedantic
+         <warnings-as-errors>on
+    ;
+
+rule init ( version ? :  command * : options * )
+{
+    command = [ common.find-compiler circle : circle : $(version) : $(command) ] ;
+    local command-string = [ common.make-command-string $(command) ] ;
+    if ! $(version)
+    {
+        version ?= [ get-short-version $(command-string) ] ;
+    }
+
+    local condition = [ common.check-init-parameters circle
+        : version $(version) ] ;
+
+    common.handle-options circle : $(condition) : $(command) : $(options) ;
+
+    # - Ranlib.
+    local ranlib = [ feature.get-values <ranlib> : $(options) ] ;
+    toolset.flags circle.archive .RANLIB $(condition) : $(ranlib[1]) ;
+
+    # - Archive builder.
+    local archiver = [ feature.get-values <archiver> : $(options) ] ;
+    toolset.flags circle.archive .AR $(condition) : $(archiver[1]) ;
+}
+
+rule get-full-version ( command-string )
+{
+    return [ common.match-command-output version
+        : "circle version ([0-9.]+)"
+        : "$(command-string) --version" ] ;
+}
+
+rule get-short-version ( command-string : single-digit-since ? )
+{
+    local version = [ get-full-version $(command-string) ] ;
+    version = [ SPLIT_BY_CHARACTERS $(version) : . ] ;
+
+    import version ;
+    if [ version.version-less $(version) : $(single-digit-since:E=4) ]
+    {
+        return $(version[1-2]:J=.) ;
+    }
+
+    return $(version[1]) ;
+}
+
+###############################################################################
+# Flags
+
+local all-os = [ feature.values <target-os> ] ;
+
+# Enable response file control
+toolset.flags circle RESPONSE_FILE_SUB <response-file>auto : a ;
+toolset.flags circle RESPONSE_FILE_SUB <response-file>file : f ;
+toolset.flags circle RESPONSE_FILE_SUB <response-file>contents : c ;
+
+###############################################################################
+# C and C++ compilation
+
+actions compile.c++
+{
+    "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -include"$(FORCE_INCLUDES)" -o "$(<)" "$(>)"
+}
+
+###############################################################################
+# Linking
+
+local soname-os = [ set.difference $(all-os) : windows ] ;
+toolset.flags circle.link SONAME_OPT <target-os>$(soname-os) : "-Wl,-soname -Wl," ;
+
+rule link ( targets * : sources * : properties * )
+{
+    _ on $(targets) = " " ;
+}
+
+rule link.dll ( targets * : sources * : properties * )
+{
+    _ on $(targets) = " " ;
+}
+
+actions link bind LIBRARIES
+{
+    "$(CONFIG_COMMAND)" -L"$(LINKPATH)" -o "$(<)" @($(<[1]:T).rsp:O=FC:<=@":>=":E=-Wl,-R$(_)-Wl,"$(RPATH)" -Wl,-rpath-link$(_)-Wl,"$(RPATH_LINK)" $(START-GROUP) "$(>:T)" "$(LIBRARIES:T)" $(FINDLIBS-ST-PFX:T) -l$(FINDLIBS-ST:T) $(FINDLIBS-SA-PFX:T) -l$(FINDLIBS-SA:T) $(END-GROUP)) $(OPTIONS) $(USER_OPTIONS)
+}
+
+actions link.dll bind LIBRARIES
+{
+    "$(CONFIG_COMMAND)" -L"$(LINKPATH)" -o "$(<)" @($(<[1]:T).rsp:O=FC:<=@":>=":E=-Wl,-R$(_)-Wl,"$(RPATH)" $(SONAME_OPT)$(<[1]:D=) -shared $(START-GROUP) "$(>:T)" "$(LIBRARIES:T)" $(FINDLIBS-ST-PFX:T) -l$(FINDLIBS-ST:T) $(FINDLIBS-SA-PFX:T) -l$(FINDLIBS-SA:T) $(END-GROUP)) $(OPTIONS) $(USER_OPTIONS)
+}
