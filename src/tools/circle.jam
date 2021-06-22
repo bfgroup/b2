@@ -20,7 +20,10 @@ feature.extend toolset : circle ;
 
 toolset.inherit-generators circle
     :   gcc
-    :   gcc.mingw.link gcc.mingw.link.dll gcc.cygwin.link gcc.cygwin.link.dll ;
+    :   gcc.mingw.link gcc.mingw.link.dll gcc.cygwin.link gcc.cygwin.link.dll
+        # Circle doesn't do PCH.
+        gcc.compile.c.pch gcc.compile.c++.pch
+    ;
 generators.override circle.prebuilt : builtin.lib-generator ;
 generators.override circle.prebuilt : builtin.prebuilt ;
 generators.override circle.searched-lib-generator : searched-lib-generator ;
