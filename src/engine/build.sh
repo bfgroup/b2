@@ -248,7 +248,7 @@ check_toolset ()
     # Sun Pro C++ (sunpro)
     if test_toolset sunpro && test_compiler /opt/SUNWspro/bin/CC -std=c++11 ; then B2_TOOLSET=sunpro ; return ${TRUE} ; fi
     # Circle..
-    if test_toolset circle && test_compiler circle ; then B2_TOOLSET=circle ; return ${TRUE} ; fi
+    if test_toolset circle && test_compiler circle -x c++ -std=c++11 ; then B2_TOOLSET=circle ; return ${TRUE} ; fi
     # Generic (cxx)
     if test_toolset cxx && test_compiler cxx ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
     if test_toolset cxx && test_compiler cpp ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
