@@ -28,7 +28,9 @@ generators.override circle.prebuilt : builtin.lib-generator ;
 generators.override circle.prebuilt : builtin.prebuilt ;
 generators.override circle.searched-lib-generator : searched-lib-generator ;
 toolset.inherit-rules circle
-    :   gcc ;
+    :   gcc
+    :   gcc.compile.c
+    ;
 toolset.inherit-flags circle
     :   gcc
     :   <inlining>off <inlining>on <inlining>full
@@ -57,6 +59,11 @@ rule init ( version ? :  command * : options * )
     # - Archive builder.
     local archiver = [ feature.get-values <archiver> : $(options) ] ;
     toolset.flags circle.archive .AR $(condition) : $(archiver[1]) ;
+
+    # - C compiler.
+    local cc = [ feature.get-values <cc> : $(options) ] ;
+    cc ?= gcc ;
+    toolset.flags circle.compile.c .CC $(condition) : $(cc[1]) ;
 }
 
 rule get-full-version ( command-string )
@@ -96,6 +103,11 @@ toolset.flags circle RESPONSE_FILE_SUB <response-file>contents : c ;
 actions compile.c++
 {
     "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -D$(DEFINES) -I"$(INCLUDES)" -include"$(FORCE_INCLUDES)" -o "$(<)" "$(>)"
+}
+
+rule compile.c ( targets * : sources * : properties * )
+{
+    CONFIG_COMMAND on $(targets) = [ on $(targets[1]) return $(.CC) ] ;
 }
 
 ###############################################################################
