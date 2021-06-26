@@ -157,6 +157,8 @@ toolset.flags clang-linux RESPONSE_FILE_SUB <response-file>auto : a ;
 toolset.flags clang-linux RESPONSE_FILE_SUB <response-file>file : f ;
 toolset.flags clang-linux RESPONSE_FILE_SUB <response-file>contents : c ;
 
+# Used in actions for multi argument options
+_ = " " ;
 ###############################################################################
 # C and C++ compilation
 
@@ -229,14 +231,6 @@ actions compile.c.pch
 
 local soname-os = [ set.difference $(all-os) : windows ] ;
 toolset.flags clang-linux.link SONAME_OPT <target-os>$(soname-os) : "-Wl,-soname -Wl," ;
-
-rule link ( targets * : sources * : properties * ) {
-  _ on $(targets) = " " ;
-}
-
-rule link.dll ( targets * : sources * : properties * ) {
-  _ on $(targets) = " " ;
-}
 
 actions link bind LIBRARIES {
     "$(CONFIG_COMMAND)" -L"$(LINKPATH)" -o "$(<)" @($(<[1]:T).rsp:O=FC:<=@":>=":E=-Wl,-R$(_)-Wl,"$(RPATH)" -Wl,-rpath-link$(_)-Wl,"$(RPATH_LINK)" $(START-GROUP) "$(>:T)" "$(LIBRARIES:T)" $(FINDLIBS-ST-PFX:T) -l$(FINDLIBS-ST:T) $(FINDLIBS-SA-PFX:T) -l$(FINDLIBS-SA:T) $(END-GROUP)) $(OPTIONS) $(USER_OPTIONS)
