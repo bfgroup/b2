@@ -38,5 +38,5 @@ int main(int argc, char ** argv)
     args.insert(args.end(), argv + 1, argv + argc);
     args.push_back(NULL);
     execv(python_cmd, &args[0]);
-    perror("exec");
+    err_puts/printf("exec");
 }

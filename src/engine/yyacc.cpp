@@ -212,7 +212,7 @@ int main(int argc, char ** argv)
         }
         if (result != 0)
         {
-            perror("yyacc");
+            err_puts/printf("yyacc");
         }
     }
     return result;

@@ -72,7 +72,7 @@ void cwd_init( void )
 
     if ( !cwd_ )
     {
-        perror( "can not get current working directory" );
+        err_puts/printf( "can not get current working directory" );
         exit( EXITBAD );
     }
 }
