@@ -30,37 +30,38 @@
 #include "output.h"
 
 #include <ctype.h>
-#include <stdlib.h>
 
 #ifdef OS_NT
-#include <windows.h>
-#ifndef FSCTL_GET_REPARSE_POINT
-/* MinGW's version of windows.h is missing this, so we need
- * to include winioctl.h directly
- */
-#include <winioctl.h>
-#endif
+    #include <windows.h>
+    #ifndef FSCTL_GET_REPARSE_POINT
+        /* MinGW's version of windows.h is missing this, so we need
+         * to include winioctl.h directly
+         */
+        #include <winioctl.h>
+    #endif
 
-/* With VC8 (VS2005) these are not defined:
- *   FSCTL_GET_REPARSE_POINT  (expects WINVER >= 0x0500 _WIN32_WINNT >= 0x0500 )
- *   IO_REPARSE_TAG_SYMLINK   (is part of a separate Driver SDK)
- * So define them explicitly to their expected values.
- */
-#ifndef FSCTL_GET_REPARSE_POINT
-# define FSCTL_GET_REPARSE_POINT 0x000900a8
-#endif
-#ifndef IO_REPARSE_TAG_SYMLINK
-# define IO_REPARSE_TAG_SYMLINK	(0xA000000CL)
-#endif
+    /* With VC8 (VS2005) these are not defined:
+     *   FSCTL_GET_REPARSE_POINT  (expects WINVER >= 0x0500 _WIN32_WINNT >= 0x0500 )
+     *   IO_REPARSE_TAG_SYMLINK   (is part of a separate Driver SDK)
+     * So define them explicitly to their expected values.
+     */
+    #ifndef FSCTL_GET_REPARSE_POINT
+        #define FSCTL_GET_REPARSE_POINT 0x000900a8
+    #endif
+    #ifndef IO_REPARSE_TAG_SYMLINK
+        #define IO_REPARSE_TAG_SYMLINK	(0xA000000CL)
+    #endif
 
-#include <io.h>
-#if !defined(__BORLANDC__)
-#define dup _dup
-#define dup2 _dup2
-#define open _open
-#define close _close
-#endif /* __BORLANDC__ */
-#endif /* OS_NT */
+    #include <io.h>
+    #if !defined(__BORLANDC__)
+        #define dup   _dup
+        #define dup2  _dup2
+        #define open  _open
+        #define close _close
+    #endif
+#else
+    #include <unistd.h>
+#endif
 
 #if defined(USE_EXECUNIX)
 # include <sys/types.h>
@@ -2401,7 +2402,7 @@ LIST * builtin_shell( FRAME * frame, int flags )
     LIST   * command = lol_get( frame->args, 0 );
     LIST   * result = L0;
     string   s;
-    int32_t ret;
+    int32_t  ret;
     char     buffer[ 1024 ];
     FILE   * p = NULL;
     int      exit_status = -1;
