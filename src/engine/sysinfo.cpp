@@ -16,9 +16,11 @@
 
 #if !defined(OS_NT)
 #include <unistd.h>
+#else
+#include <windows.h>
 #endif
 
-#if defined(OS_LINUX) || defined(__GLIBC__)
+#if defined(OS_LINUX)
 // Need to define this in case it's not as that's the only way to get the
 // sched_* APIs.
 #ifndef _GNU_SOURCE
@@ -90,7 +92,24 @@ namespace
 
     unsigned int std_thread_hardware_concurrency()
     {
+        // [2020-08-19]
+        //   Mingw-w64 (e.g. i686-w64-mingw-32-g++ from Cygwin, g++-mingw-w64-i686-win32) does not have std::thread etc.
+        //   But we should still allow building the engine with this (important) toolset:
+        //     - It is free, lightweight, standards-conforming.
+        //     - It might be the only C++11 toolset for Windows XP.
+        //         (Please see http://www.crouchingtigerhiddenfruitbat.org/Cygwin/timemachine.html !)
+        //     - It is powerful enough even without std::thread etc. For example, it can build-and-use Boost.Thread.
+        //     - The only thing currently used from std::thread is this call to hardware_concurrency !
+        #if defined (_WIN32)
+            SYSTEM_INFO si;
+            {
+                GetSystemInfo (&si);
+            }
+
+            return si.dwNumberOfProcessors;
+        #else
         return std::thread::hardware_concurrency();
+        #endif
     }
 }
 
