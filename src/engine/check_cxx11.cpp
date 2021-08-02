@@ -10,12 +10,20 @@ available. This is used by the build script to guess and check the
 compiler to build the engine with.
 */
 
-// Some headers we depend on..
+// Some headers we test...
 #include <thread>
+#include <memory>
 
 
 int main()
 {
     // Check for basic thread calls.
+    // [2020-08-19]
+    //   Mingw-w64 with win32 threading model (as opposed to posix threading model) does not really have std::thread etc.
+    //   Please see comments in sysinfo.cpp.
+    #ifndef _WIN32
     { auto _ = std::thread::hardware_concurrency(); }
+    #endif
+
+    const std::unique_ptr <float> pf {new float {3.14159f}};
 }
