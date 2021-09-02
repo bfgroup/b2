@@ -24,11 +24,28 @@ call :Clear_Error
 setlocal
 set test=%~$PATH:1
 endlocal
-if not errorlevel 1 set FOUND_PATH=%~dp$PATH:1
+if not "%test%" == "" set FOUND_PATH=%~dp$PATH:1
 goto :eof
 
 
 :Guess
+REM Check the PATH for non-MSVC compilers before calling up vswhere.
+call :Test_Path bcc32c.exe
+if not "%FOUND_PATH%" == "" (
+    set "B2_TOOLSET=borland"
+    set "B2_TOOLSET_ROOT=%FOUND_PATH%..\"
+    echo %FOUND_PATH%
+    exit /b 0)
+call :Test_Path icl.exe
+if not "%FOUND_PATH%" == "" (
+    set "B2_TOOLSET=intel-win32"
+    set "B2_TOOLSET_ROOT=%FOUND_PATH%..\"
+    exit /b 0)
+call :Test_Path gcc.exe
+if not "%FOUND_PATH%" == "" (
+    set "B2_TOOLSET=gcc"
+    set "B2_TOOLSET_ROOT=%FOUND_PATH%..\"
+    exit /b 0)
 REM Let vswhere tell us where msvc is at, if available.
 call :Clear_Error
 call vswhere_usability_wrapper.cmd
@@ -88,20 +105,6 @@ if not errorlevel 1 (
     set "B2_TOOLSET=msvc"
     call "%FOUND_PATH%VCVARS32.BAT"
     set "B2_TOOLSET_ROOT=%MSVCDir%\"
-    exit /b 0)
-call :Test_Path bcc32c.exe
-if not errorlevel 1 (
-    set "B2_TOOLSET=borland"
-    set "B2_TOOLSET_ROOT=%FOUND_PATH%..\"
-    exit /b 0)
-call :Test_Path icl.exe
-if not errorlevel 1 (
-    set "B2_TOOLSET=intel-win32"
-    set "B2_TOOLSET_ROOT=%FOUND_PATH%..\"
-    exit /b 0)
-if EXIST "C:\MinGW\bin\gcc.exe" (
-    set "B2_TOOLSET=mingw"
-    set "B2_TOOLSET_ROOT=C:\MinGW\"
     exit /b 0)
 REM Could not find a suitable toolset
 exit /b 1
