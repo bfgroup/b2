@@ -393,7 +393,7 @@ local rule compile-link-flags ( * )
     local bsd = [ MATCH ^(.*bsd)$ : $(all-os) ] ;
     threading-flags <target-os>$(bsd) : -pthread ;
 
-    local no-threading = android beos haiku sgi darwin vxworks iphone ;
+    local no-threading = android beos haiku sgi darwin vxworks iphone appletv ;
     local threading-generic-os = [ set.difference $(all-os) : $(no-threading) $(bsd) windows cygwin solaris qnx ] ;
     threading-flags <target-os>$(threading-generic-os) : -pthread : rt ;
 }
@@ -880,7 +880,7 @@ toolset.flags gcc.link.dll .IMPLIB-COMMAND <target-os>cygwin : "-Wl,--out-implib
 
     # default
 
-    local generic-os = [ set.difference $(all-os) : aix darwin vxworks solaris osf hpux iphone ] ;
+    local generic-os = [ set.difference $(all-os) : aix darwin vxworks solaris osf hpux iphone appletv ] ;
     # Strip the binary when no debugging is needed. We use --strip-all flag
     # as opposed to -s since icc (intel's compiler) is generally
     # option-compatible with and inherits from the gcc toolset, but does not
