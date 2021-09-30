@@ -1719,9 +1719,9 @@ local rule default-path ( version )
             local prop = "-property installationPath" ;
             local limit ;
 
-            if $(version) = 14.3 || $(version) = "default"
+            if $(version) = 14.3
             {
-                limit = "-version \"[17.0,18.0)\"" ;
+                limit = "-version \"[17.0,18.0)\" -prerelease" ;
             }
             else if $(version) = 14.2 || $(version) = "default"
             {
