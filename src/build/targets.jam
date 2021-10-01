@@ -1436,10 +1436,9 @@ class basic-target : abstract-target
                 # requirements. In the latter case we do not want any
                 # diagnostic. In the former case, we need diagnostics. FIXME
 
-                # If this target fails to build, add <build>no to properties to
-                # cause any parent target to fail to build.
-                self.generated.$(property-set) = [ property-set.create <build>no
-                    ] ;
+                # If this target fails to build, make its usage requirements
+                # empty
+                self.generated.$(property-set) = [ property-set.empty ] ;
             }
         }
         else
