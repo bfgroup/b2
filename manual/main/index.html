@@ -14188,7 +14188,58 @@ variants accepted as valid for an option:</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>13.1. Version 4.7.0</h3>
-
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New:</strong> Add vc143, aka VS2022, aka cl.exe 17.x toolset support. Includes
+building engine and automatic detection of the prerelease toolset.&#8201;&#8212;&#8201;<em>Sergei Krivonos</em></p>
+</li>
+<li>
+<p>Fix use of <code>JAMSHELL</code> in gcc toolset.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix compiling b2 enging such that it rowks when run in cross-architecture
+emulation context. I.e. when running arm binaries in QEMU 64 bit host.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Default to 64bit msvc on 64 bit hosts.&#8201;&#8212;&#8201;<em>Matt Chambers</em></p>
+</li>
+<li>
+<p>Remove <code>/NOENTRY</code> option for resource only DLLs to allow correct linking.&#8201;&#8212;&#8201;<em>gnaggnoyil</em></p>
+</li>
+<li>
+<p>Fix redefinition error of <code>unix</code> when compiling engine on OpenBSD.&#8201;&#8212;&#8201;<em>Brad Smith</em></p>
+</li>
+<li>
+<p>Fix building with clang on iOS and AppltTV having extra unrecognized
+compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
+</li>
+<li>
+<p>Add missing Boost.JSON to <code>boost</code> support module.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Add arm/arm64 target support in clang-win toolset.&#8201;&#8212;&#8201;<em>Volo Zyko</em></p>
+</li>
+<li>
+<p>Avoid warnings about threading model for qt5.&#8201;&#8212;&#8201;<em>psandana</em></p>
+</li>
+<li>
+<p>Unify Clang and GCC PCH creation.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Move Objective-C support to GCC toolset.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Support values for instruction-set feature for Xilinx ZYNQ.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
+</li>
+<li>
+<p>MIPS: add generic mips architecture.&#8201;&#8212;&#8201;<em>YunQiang Su</em></p>
+</li>
+<li>
+<p>Fix preprocessing on MSVC compiler.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.2. Version 4.6.1</h3>
