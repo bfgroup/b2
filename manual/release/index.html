@@ -955,17 +955,18 @@ a { color: inherit; }
 </li>
 <li><a href="#b2.history">13. History</a>
 <ul class="sectlevel2">
-<li><a href="#_version_4_6_1">13.1. Version 4.6.1</a></li>
-<li><a href="#_version_4_6_0">13.2. Version 4.6.0</a></li>
-<li><a href="#_version_4_5_0">13.3. Version 4.5.0</a></li>
-<li><a href="#_version_4_4_2">13.4. Version 4.4.2</a></li>
-<li><a href="#_version_4_4_1">13.5. Version 4.4.1</a></li>
-<li><a href="#_version_4_4_0">13.6. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">13.7. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">13.8. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">13.9. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_1">13.10. Version 4.0.1</a></li>
-<li><a href="#_version_4_0_0">13.11. Version 4.0.0</a></li>
+<li><a href="#_version_4_7_0">13.1. Version 4.7.0</a></li>
+<li><a href="#_version_4_6_1">13.2. Version 4.6.1</a></li>
+<li><a href="#_version_4_6_0">13.3. Version 4.6.0</a></li>
+<li><a href="#_version_4_5_0">13.4. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">13.5. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">13.6. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">13.7. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">13.8. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">13.9. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">13.10. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_1">13.11. Version 4.0.1</a></li>
+<li><a href="#_version_4_0_0">13.12. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -4640,9 +4641,9 @@ in usage requirement of the library.</p>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.architecture"></a><code>architecture</code></dt>
 <dd>
-<p><strong>Allowed values:</strong> <code>x86</code>, <code>ia64</code>, <code>sparc</code>, <code>power</code>, <code>mips1</code>, <code>mips2</code>,
+<p><strong>Allowed values:</strong> <code>x86</code>, <code>ia64</code>, <code>sparc</code>, <code>power</code>, <code>mips</code>, <code>mips1</code>, <code>mips2</code>,
 <code>mips3</code>, <code>mips4</code>, <code>mips32</code>, <code>mips32r2</code>, <code>mips64</code>, <code>parisc</code>, <code>arm</code>,
-<code>s390x</code>, <code>combined</code>, <code>combined-x86-power</code>.</p>
+<code>s390x</code>.</p>
 <div class="paragraph">
 <p>Specifies the general processor family to generate code for.</p>
 </div>
@@ -6088,6 +6089,11 @@ not specified, the <code>g++</code> binary will be searched in PATH.</p>
 </div>
 <div class="dlist">
 <dl>
+<dt class="hdlist1"><code>asmflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling assembler
+sources.</p>
+</dd>
 <dt class="hdlist1"><code>cflags</code></dt>
 <dd>
 <p>Specifies additional compiler flags that will be used when compiling C
@@ -6098,10 +6104,25 @@ sources.</p>
 <p>Specifies additional compiler flags that will be used when compiling C++
 sources.</p>
 </dd>
+<dt class="hdlist1"><code>fflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling Fortran
+sources.</p>
+</dd>
+<dt class="hdlist1"><code>mflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling
+Objective-C sources.</p>
+</dd>
+<dt class="hdlist1"><code>mmflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling
+Objective-C++ sources.</p>
+</dd>
 <dt class="hdlist1"><code>compileflags</code></dt>
 <dd>
-<p>Specifies additional compiler flags that will be used when compiling both C
-and C++ sources.</p>
+<p>Specifies additional compiler flags that will be used when compiling any
+language sources.</p>
 </dd>
 <dt class="hdlist1"><code>linkflags</code></dt>
 <dd>
@@ -6121,14 +6142,6 @@ libraries. Normally, it is autodetected using gcc <code>-print-prog-name</code>
 option or defaulted to <code>ar</code>, but in some cases you might want to
 override it, for example to explicitly use a system version instead of
 one included with gcc.</p>
-</dd>
-<dt class="hdlist1"><code>ranlib</code></dt>
-<dd>
-<p>Specifies the ranlib command that is used to generated symbol table
-for static libraries. Normally, it is autodetected using gcc
-<code>-print-prog-name</code> option or defaulted to <code>ranlib</code>, but in some cases
-you might want to override it, for example to explicitly use a system
-version instead of one included with gcc.</p>
 </dd>
 <dt class="hdlist1"><code>rc</code></dt>
 <dd>
@@ -14175,7 +14188,71 @@ variants accepted as valid for an option:</p>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>13. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.1. Version 4.6.1</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>13.1. Version 4.7.0</h3>
+<div class="paragraph">
+<p>Many, many fixes and internal cleanups in this release. But also adding
+auto-detection and bootstrap for VS 2022 preview toolset.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New:</strong> Add vc143, aka VS2022, aka cl.exe 17.x toolset support. Includes
+building engine and automatic detection of the prerelease toolset.&#8201;&#8212;&#8201;<em>Sergei Krivonos</em></p>
+</li>
+<li>
+<p>Allow alias targets to continue even if <code>&lt;build&gt;no</code> is in the usage
+requirement. Which allows composition of alias targets that may contain
+optional targets, like tests.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix use of <code>JAMSHELL</code> in gcc toolset.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix compiling b2 enging such that it works when run in cross-architecture
+emulation context. I.e. when running arm binaries in QEMU 64 bit host.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Default to 64bit MSVC on 64 bit hosts.&#8201;&#8212;&#8201;<em>Matt Chambers</em></p>
+</li>
+<li>
+<p>Remove <code>/NOENTRY</code> option for resource only DLLs to allow correct linking.&#8201;&#8212;&#8201;<em>gnaggnoyil</em></p>
+</li>
+<li>
+<p>Fix redefinition error of <code>unix</code> when compiling engine on OpenBSD.&#8201;&#8212;&#8201;<em>Brad Smith</em></p>
+</li>
+<li>
+<p>Fix building with clang on iOS and AppleTV having extra unrecognized
+compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
+</li>
+<li>
+<p>Add missing Boost.JSON to <code>boost</code> support module.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Add arm/arm64 target support in clang-win toolset.&#8201;&#8212;&#8201;<em>Volo Zyko</em></p>
+</li>
+<li>
+<p>Avoid warnings about threading model for qt5.&#8201;&#8212;&#8201;<em>psandana</em></p>
+</li>
+<li>
+<p>Unify Clang and GCC PCH creation.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Move Objective-C support to GCC toolset.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Support values for instruction-set feature for Xilinx ZYNQ.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
+</li>
+<li>
+<p>MIPS: add generic mips architecture.&#8201;&#8212;&#8201;<em>YunQiang Su</em></p>
+</li>
+<li>
+<p>Fix preprocessing on MSVC compiler.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.2. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14188,7 +14265,7 @@ variants accepted as valid for an option:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>13.2. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>13.3. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -14251,7 +14328,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.3. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.4. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -14273,7 +14350,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.4. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.5. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -14290,7 +14367,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.5. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.6. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -14303,7 +14380,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.6. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.7. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -14394,7 +14471,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.7. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.8. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -14494,7 +14571,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.8. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.9. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -14536,7 +14613,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.9. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.10. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -14618,7 +14695,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>13.10. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>13.11. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -14628,7 +14705,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.11. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.12. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
