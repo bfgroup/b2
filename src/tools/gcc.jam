@@ -395,7 +395,11 @@ local rule compile-link-flags ( * )
 
     # iOS doesn't need pthread flag according to the https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/pthread.3.html
     # The default system libraries include pthread functions.  No additional libraries or CFLAGS are necessary to use this API.
-    local no-threading = android beos haiku sgi darwin vxworks iphone appletv ;
+    #
+    # Emscripten uses different incompatible runtimes for single and multi-threaded assemblies and <threading>single doesn't
+    # really disable -pthread argument for it. Hence, disable threading alltogether leaving it to the user to provide -pthread
+    # with <cxxflags> when it's necessary.
+    local no-threading = android beos haiku sgi darwin vxworks iphone appletv web ;
     local threading-generic-os = [ set.difference $(all-os) : $(no-threading) $(bsd) windows cygwin solaris qnx ] ;
     threading-flags <target-os>$(threading-generic-os) : -pthread : rt ;
 }

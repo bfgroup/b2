@@ -6,13 +6,14 @@
 import feature ;
 import os ;
 import toolset ;
+import generators ;
 import common ;
 import gcc ;
 import type ;
 
 feature.feature embind : off on : propagated ;
 feature.feature closure : off on full : propagated ;
-feature.feature link-optimization : off on full : propagated ;
+feature.feature link-optimization : off on : propagated ;
 
 rule init ( version ? :  command * : options * )
 {
@@ -33,6 +34,27 @@ rule init ( version ? :  command * : options * )
         : version $(version) ] ;
 
     common.handle-options emscripten : $(condition) : $(command) : $(options) ;
+
+    # - Ranlib.
+    local ranlib = [ feature.get-values <ranlib> : $(options) ] ;
+    toolset.flags emscripten.archive .RANLIB $(condition) : $(ranlib[1]) ;
+
+    # - Archive builder.
+    local archiver = [ feature.get-values <archiver> : $(options) ] ;
+    toolset.flags emscripten.archive .AR $(condition) : $(archiver[1]) ;
+
+    if [ modules.peek : NODEJS ]
+    {
+        NODEJS =  [ modules.peek : NODEJS ] ;
+    }
+    else
+    {
+        NODEJS = [ common.find-tool node ] ;
+    }
+    if ! $(NODEJS)
+    {
+        ECHO "warning: [emscripten] could not find NodeJS executable" ;
+    }
 }
 
 feature.extend toolset : emscripten ;
@@ -49,10 +71,14 @@ toolset.inherit-flags emscripten : gcc
         <debug-symbols>off <debug-symbols>on
         <rtti>off <rtti>on
         ;
+generators.override builtin.lib-generator : emscripten.prebuilt ;
+generators.override emscripten.searched-lib-generator : searched-lib-generator ;
+
+toolset.add-requirements <toolset>emscripten:<testing.launcher>"$(NODEJS)" ;
 
 type.set-generated-target-suffix EXE : <toolset>emscripten : "js" ;
 type.set-generated-target-suffix OBJ : <toolset>emscripten : "bc" ;
-type.set-generated-target-suffix STATIC_LIB : <toolset>emscripten : "bc" ;
+type.set-generated-target-suffix STATIC_LIB : <toolset>emscripten : "a" ;
 
 toolset.flags emscripten.compile OPTIONS <flags> ;
 toolset.flags emscripten.compile OPTIONS <cflags> ;
@@ -72,15 +98,15 @@ toolset.flags emscripten.compile OPTIONS <inlining>on : -Wno-inline ;
 toolset.flags emscripten.compile OPTIONS <inlining>full : -Wno-inline ;
 
 toolset.flags emscripten OPTIONS <debug-symbols>off : -g0 ;
-toolset.flags emscripten OPTIONS <debug-symbols>on : -g4 -s DEMANGLE_SUPPORT=1 ;
+# Currently the highest supported level is -g3. DEMANGLE_SUPPORT, which is, BTW, not supported for JS
+# code generator, should be provided seperately along with --source-map-base when it's needed.
+toolset.flags emscripten OPTIONS <debug-symbols>on : -g3 ;
 toolset.flags emscripten OPTIONS <rtti>off : -fno-rtti ;
 
 toolset.flags emscripten.link OPTIONS <embind>on : --bind ;
 toolset.flags emscripten.link OPTIONS <closure>on : --closure 1 ;
 toolset.flags emscripten.link OPTIONS <closure>full : --closure 2 ;
-toolset.flags emscripten.link OPTIONS <link-optimization>off : --llvm-lto 0 ;
-toolset.flags emscripten.link OPTIONS <link-optimization>on : --llvm-lto 1 ;
-toolset.flags emscripten.link OPTIONS <link-optimization>full : --llvm-lto 3 ;
+toolset.flags emscripten.link OPTIONS <link-optimization>on : -flto ;
 
 actions compile.c
 {
@@ -94,12 +120,13 @@ actions compile.c++
 
 actions archive
 {
-    "$(CONFIG_COMMAND)" $(AROPTIONS) -r -o "$(<)" "$(>)"
+    "$(.AR)" $(AROPTIONS) rc "$(<)" "$(>)"
+    "$(.RANLIB)" "$(<)"
 }
 
 toolset.flags emscripten.link USER_OPTIONS <linkflags> ;
 
 actions link bind LIBRARIES
 {
-    "$(CONFIG_COMMAND)" $(USER_OPTIONS) -L"$(LINKPATH)" -o "$(<)" "$(>)" "$(LIBRARIES)" $(START-GROUP) $(FINDLIBS-ST-PFX) -l$(FINDLIBS-ST) $(FINDLIBS-SA-PFX) -l$(FINDLIBS-SA) $(END-GROUP) $(OPTIONS)
+    "$(CONFIG_COMMAND)" $(USER_OPTIONS) -L"$(LINKPATH)" -o "$(<)" "$(>)" "$(LIBRARIES)" $(START-GROUP) -l$(FINDLIBS-ST) -l$(FINDLIBS-SA) $(END-GROUP) $(OPTIONS)
 }
