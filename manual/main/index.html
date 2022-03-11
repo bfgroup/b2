@@ -14191,7 +14191,46 @@ variants accepted as valid for an option:</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>13.1. Version 4.8.0</h3>
-
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New:</strong> Add support for LoongArch.&#8201;&#8212;&#8201;<em>Zhang Na</em></p>
+</li>
+<li>
+<p>Change engine build to use static Intel libs if available instead of C++
+runtime static libs to fix systems where the static C++} runtime is not
+available.&#8201;&#8212;&#8201;<em>Alain Miniussi</em></p>
+</li>
+<li>
+<p>Reorder msvc <code>cflags</code> and <code>cxxflags</code>, and add <code>compileflags</code>, to fix inability
+to override flags by users.&#8201;&#8212;&#8201;<em>Peter Dimov</em></p>
+</li>
+<li>
+<p>Don&#8217;t quote <code>RPATH</code> on <code>clang-linux</code> to fix use of double-quotes to make it
+possible to use <code>$ORIGIN</code>.&#8201;&#8212;&#8201;<em>Dimitry Andric</em></p>
+</li>
+<li>
+<p>Fix <code>b2</code> executable detection on kFreeBSD.&#8201;&#8212;&#8201;<em>Laurent Bigonville</em></p>
+</li>
+<li>
+<p>Add <code>.ipp</code> extension to header scanning and a valid C++ file.&#8201;&#8212;&#8201;<em>Jim King</em></p>
+</li>
+<li>
+<p>Fix missing install targets when <code>build=no</code> is in source target usage
+requirements.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Add some future versions of C++ to <code>cxxstd</code> feature.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix many memory leaks in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Change <code>abort</code>/<code>exit</code> calls to clean exception handling to allow for memory
+cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>13.2. Version 4.7.2</h3>
