@@ -5139,7 +5139,7 @@ target file.</p>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.optimization"></a><code>optimization</code></dt>
 <dd>
-<p><strong>Allowed values:</strong> <code>off</code>, <code>speed</code>, <code>space</code>.</p>
+<p><strong>Allowed values:</strong> <code>off</code>, <code>speed</code>, <code>space</code>, 'minimal', 'debug'.</p>
 <div class="paragraph">
 <p>Enables optimization. <code>speed</code> optimizes for faster code, <code>space</code> optimizes for
 smaller binary.</p>
@@ -14194,7 +14194,19 @@ variants accepted as valid for an option:</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>13.1. Version 4.9.0</h3>
-
+<div class="ulist">
+<ul>
+<li>
+<p>Add <code>minimal</code> and <code>debug</code> options for <code>optimization</code> feature.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Add Rocket Lake, Alder Lake, Sapphire Rapids and Zen 3 instruction sets.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
+</li>
+<li>
+<p>Remove all, on-exit, memory leaks and fix all ASAN errors.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>13.2. Version 4.8.2</h3>
