@@ -7,11 +7,13 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
 
+set -e
+set -u
+
 # Build b2
 echo "Building the B2 engine.."
 pwd=`pwd`
-"${pwd}/src/engine/build.sh" "$@"
-if [ $? -ne 0 ]; then
+if ! "${pwd}/src/engine/build.sh" "$@" ; then
     echo
     echo "Failed to build the B2 engine." 1>&2
     exit 1

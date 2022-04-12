@@ -5,6 +5,9 @@
 # LLVM_VER: The LLVM toolset version to point the repo at.
 # PACKAGES: Compiler packages to install.
 
+set -e
+set -u
+
 if command -v sudo ; then
     SUDO="sudo -E"
 fi
