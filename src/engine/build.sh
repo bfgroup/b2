@@ -25,13 +25,7 @@ B2_CXXFLAGS_OPT=
 
 # We need to calculate and set SCRIPT_PATH and SCRIPT_DIR to reference this
 # script so that we can refer to file relative to it.
-SCRIPT_PATH=""
-if test "${BASH_SOURCE}" ; then
-    SCRIPT_PATH=${BASH_SOURCE}
-fi
-if test "${SCRIPT_PATH}" = "" ; then
-    SCRIPT_PATH=$0
-fi
+SCRIPT_PATH=$0
 SCRIPT_DIR="$( cd "$( dirname "${SCRIPT_PATH}" )" && pwd )"
 
 # This script needs to operate at engine source directory.
