@@ -4376,42 +4376,30 @@ managers. Currently the supported ones are:</p>
 <h4 id="bbv2.reference.init"><a class="anchor" href="#bbv2.reference.init"></a>6.1.1. Initialization</h4>
 <div class="paragraph">
 <p>Immediately upon starting, the B2 engine (<strong><code>b2</code></strong>) loads the Jam
-code that implements the build system. To do this, it searches for a
-file called <code>boost-build.jam</code>, first in the invocation directory, then
-in its parent and so forth up to the filesystem root, and finally in the
-directories specified by the environment variable BOOST_BUILD_PATH. On
-Unix BOOST_BUILD_PATH defaults to <code>/usr/share/boost-build</code>. When
-found, the file is interpreted, and should specify the build system
-location by calling the boost-build rule:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule boost-build ( location ? )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If location is a relative path, it is treated as relative to the
-directory of <code>boost-build.jam</code>. The directory specified by that location
-and the directories in BOOST_BUILD_PATH are then searched for a file
-called <code>bootstrap.jam</code>, which is expected to bootstrap the build system.
-This arrangement allows the build system to work without any
-command-line or environment variable settings. For example, if the build
-system files were located in a directory "build-system/" at your project
-root, you might place a <code>boost-build.jam</code> at the project root
-containing:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">boost-build build-system ;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this case, running <strong><code>b2</code></strong> anywhere in the project tree will
-automatically find the build system.</p>
+code that implements the build system. To do this, it searches for the
+build system <code>bootstrap.jam</code> file in specific installation locations.
+The search is based on the location of the <code>b2(.exe)</code> executable
+location.</p>
 </div>
 <div class="paragraph">
 <p>The default <code>bootstrap.jam</code>, after loading some standard definitions,
 loads both <code>site-config.jam</code> and <code>user-config.jam</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+To maintain backward compatibility the file called
+<code>boost-build.jam</code>, is loaded if present. The search starts first in the
+invocation directory, then in its parent and so forth up to the filesystem
+root, and finally in the directories specified by the environment variable
+BOOST_BUILD_PATH. On Unix BOOST_BUILD_PATH defaults to <code>/usr/share/b2</code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -9176,7 +9164,7 @@ start B2 with <code>b2 -dconsole</code>.</p>
 Breakpoint 1 set at gcc.init
 (b2db) run
 Starting program: /usr/bin/b2
-Breakpoint 1, gcc.init ( ) at /usr/share/boost-build/tools/gcc.jam:74
+Breakpoint 1, gcc.init ( ) at /usr/share/b2/tools/gcc.jam:74
 74      local tool-command = ;
 (b2db) quit</pre>
 </div>
@@ -14194,6 +14182,12 @@ variants accepted as valid for an option:</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>13.1. Version 4.9.0</h3>
+<div class="paragraph">
+<p>This release has mostly internal cleanups and restructuring. The most
+significant being: fixing all memory leaks, automatic build system
+startup with the <code>boost-build</code> rule, the Jam Python interfaces, and
+the unmaintained Python build system port.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -14205,7 +14199,29 @@ variants accepted as valid for an option:</p>
 <li>
 <p>Remove all, on-exit, memory leaks and fix all ASAN errors.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
+<li>
+<p>Remove use of <code>boost-build.jam</code> as a initialization configuration file.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Remove the incomplete build system port and Jam engine Python support
+extensions.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
 </ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">⚠</div>
+</td>
+<td class="content">
+This release removes the use of <code>boost-build.jam</code> and the
+<code>boost-build</code> rule for initialization. The <code>boost-build.jam</code> is still
+searched for and loaded to not break existing operations. But is considered
+deprecated and will be removed in a future release.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
