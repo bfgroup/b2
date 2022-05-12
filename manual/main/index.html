@@ -12749,9 +12749,10 @@ characters on the right, and returns the result. Otherwise, returns
 </div>
 <div class="paragraph">
 <p>The <code>FILE_OPEN</code> rule opens the specified file and returns a file
-descriptor. The <em>mode</em> parameter can be either "w" or "r". Note that at
+descriptor if the <em>mode</em> parameter is either "w" or "r". Note that at
 present, only the <code>UPDATE_NOW</code> rule can use the resulting file
-descriptor number.</p>
+descriptor number. If the <em>mode</em> parameter is "t" this opens the file as a
+text file and returns the contents as a single string.</p>
 </div>
 </div>
 <div class="sect5">
@@ -14226,6 +14227,10 @@ into a static archive for <code>gcc</code> and <code>clang</code> toolsets.&#820
 <li>
 <p>Fix possible command line length limit exceeded error with msvc toolset for
 link actions.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add a "t" mode to <code>FILE_OPEN</code> built-in rule that gives one the
+contents of a file when evaluated.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
