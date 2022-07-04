@@ -955,24 +955,25 @@ a { color: inherit; }
 </li>
 <li><a href="#b2.history">13. History</a>
 <ul class="sectlevel2">
-<li><a href="#_version_4_9_1">13.1. Version 4.9.1</a></li>
-<li><a href="#_version_4_9_0">13.2. Version 4.9.0</a></li>
-<li><a href="#_version_4_8_2">13.3. Version 4.8.2</a></li>
-<li><a href="#_version_4_8_1">13.4. Version 4.8.1</a></li>
-<li><a href="#_version_4_8_0">13.5. Version 4.8.0</a></li>
-<li><a href="#_version_4_7_2">13.6. Version 4.7.2</a></li>
-<li><a href="#_version_4_7_1">13.7. Version 4.7.1</a></li>
-<li><a href="#_version_4_7_0">13.8. Version 4.7.0</a></li>
-<li><a href="#_version_4_6_1">13.9. Version 4.6.1</a></li>
-<li><a href="#_version_4_6_0">13.10. Version 4.6.0</a></li>
-<li><a href="#_version_4_5_0">13.11. Version 4.5.0</a></li>
-<li><a href="#_version_4_4_2">13.12. Version 4.4.2</a></li>
-<li><a href="#_version_4_4_1">13.13. Version 4.4.1</a></li>
-<li><a href="#_version_4_4_0">13.14. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">13.15. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">13.16. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">13.17. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_0">13.18. Version 4.0.0</a></li>
+<li><a href="#_version_5_0_0">13.1. Version 5.0.0</a></li>
+<li><a href="#_version_4_9_1">13.2. Version 4.9.1</a></li>
+<li><a href="#_version_4_9_0">13.3. Version 4.9.0</a></li>
+<li><a href="#_version_4_8_2">13.4. Version 4.8.2</a></li>
+<li><a href="#_version_4_8_1">13.5. Version 4.8.1</a></li>
+<li><a href="#_version_4_8_0">13.6. Version 4.8.0</a></li>
+<li><a href="#_version_4_7_2">13.7. Version 4.7.2</a></li>
+<li><a href="#_version_4_7_1">13.8. Version 4.7.1</a></li>
+<li><a href="#_version_4_7_0">13.9. Version 4.7.0</a></li>
+<li><a href="#_version_4_6_1">13.10. Version 4.6.1</a></li>
+<li><a href="#_version_4_6_0">13.11. Version 4.6.0</a></li>
+<li><a href="#_version_4_5_0">13.12. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">13.13. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">13.14. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">13.15. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">13.16. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">13.17. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">13.18. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_0">13.19. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -7432,7 +7433,704 @@ originally in <code>$(target-module)</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.2. path</h4>
+<h4 id="b2.reference.modules.regex"><a class="anchor" href="#b2.reference.modules.regex"></a>6.5.2. <code>regex</code> module.</h4>
+<div class="paragraph">
+<p>Contains rules for string processing using regular expressions.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>"x*"</code> matches the pattern <code>"x"</code> zero or more times.</p>
+</li>
+<li>
+<p><code>"x+"</code> matches <code>"x"</code> one or more times.</p>
+</li>
+<li>
+<p><code>"x?"</code> matches <code>"x"</code> zero or one time.</p>
+</li>
+<li>
+<p><code>"[abcd]"</code> matches any of the characters, <code>"a"</code>, <code>"b"</code>, <code>"c"</code>, and
+<code>"d"</code>. A character range such as <code>"[a-z]"</code> matches any character between
+<code>"a"</code> and <code>"z"</code>. <code>"[^abc]"</code> matches any character which is not <code>"a"</code>,
+<code>"b"</code>, or <code>"c"</code>.</p>
+</li>
+<li>
+<p><code>"x|y"</code> matches either pattern <code>"x"</code> or pattern <code>"y"</code></p>
+</li>
+<li>
+<p><code>(x)</code> matches <code>"x"</code> and captures it.</p>
+</li>
+<li>
+<p><code>"^"</code> matches the beginning of the string.</p>
+</li>
+<li>
+<p><code>"$"</code> matches the end of the string.</p>
+</li>
+<li>
+<p>"\&lt;" matches the beginning of a word.</p>
+</li>
+<li>
+<p>"\&gt;" matches the end of a word.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>See also: <a href="#jam.language.rules.builtins.utility._match__">MATCH</a></p>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_split"><a class="anchor" href="#_b2regex_split"></a><code>b2::regex_split</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule split ( string separator )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref rb2::egex_split(const std::tuple&lt;b2::value_ref,
+b2::value_ref&gt; &amp; string_separator);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns a list of the following substrings:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>from beginning till the first occurrence of 'separator' or till the end,</p>
+</li>
+<li>
+<p>between each occurrence of 'separator' and the next occurrence,</p>
+</li>
+<li>
+<p>from the last occurrence of 'separator' till the end.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>If no separator is present, the result will contain only one element.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_split_each"><a class="anchor" href="#_b2regex_split_each"></a><code>b2::regex_split_each</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule split-list ( list * : separator )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref b2::regex_split_each(b2::list_cref to_split, b2::value_ref
+separator);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the concatenated results of Applying regex.split to every element of
+the list using the separator pattern.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_match"><a class="anchor" href="#_b2regex_match"></a><code>b2::regex_match</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule match ( pattern : string : indices * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref regex_match(b2::value_ref pattern, b2::value_ref string,
+const std::vector&lt;int_t&gt; &amp; indices);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Match <code>string</code> against <code>pattern</code>, and return the elements indicated by
+<code>indices</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_transform"><a class="anchor" href="#_b2regex_transform"></a><code>b2::regex_transform</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule transform ( list * : pattern : indices * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref regex_transform(b2::list_cref list, b2::value_ref pattern,
+const std::vector&lt;int_t&gt; &amp; indices);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Matches all elements of <code>list</code> against the <code>pattern</code> and returns a list of
+elements indicated by indices of all successful matches. If <code>indices</code> is
+omitted returns a list of first parenthesized groups of all successful
+matches.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_escape"><a class="anchor" href="#_b2regex_escape"></a><code>b2::regex_escape</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule escape ( string : symbols : escape-symbol )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::value_ref regex_escape(b2::value_ref string,b2:: value_ref symbols,
+b2::value_ref escape_symbol);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Escapes all of the characters in <code>symbols</code> using the escape symbol
+<code>escape-symbol</code> for the given string, and returns the escaped string.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_replace"><a class="anchor" href="#_b2regex_replace"></a><code>b2::regex_replace</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule replace ( string match replacement )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::value_ref regex_replace(const std::tuple&lt;b2::value_ref,
+b2::value_ref, b2::value_ref&gt; &amp; string_match_replacement);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Replaces occurrences of a match string in a given string and returns the new
+string. The match string can be a regex expression.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>string</code>&#8201;&#8212;&#8201;The string to modify.</p>
+</li>
+<li>
+<p><code>match</code>&#8201;&#8212;&#8201;The characters to replace.</p>
+</li>
+<li>
+<p><code>replacement</code>&#8201;&#8212;&#8201;The string to replace with.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_replace_each"><a class="anchor" href="#_b2regex_replace_each"></a><code>b2::regex_replace_each</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule replace-list ( list * : match : replacement )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref regex_replace_each(b2::list_cref list, b2::value_ref
+match, b2::value_ref replacement);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Replaces occurrences of a match string in a given list of strings and returns
+a list of new strings. The match string can be a regex expression.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>list</code>&#8201;&#8212;&#8201;The list of strings to modify.</p>
+</li>
+<li>
+<p><code>match</code>&#8201;&#8212;&#8201;The search expression.</p>
+</li>
+<li>
+<p><code>replacement</code>&#8201;&#8212;&#8201;The string to replace with.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_set_module"><a class="anchor" href="#_set_module"></a>6.5.3. <code>set</code> module.</h4>
+<div class="paragraph">
+<p>Classes and functions to manipulate sets of unique values.</p>
+</div>
+<div class="sect4">
+<h5 id="_b2set"><a class="anchor" href="#_b2set"></a><code>b2::set</code></h5>
+<div class="paragraph">
+<p>Set class contains unique values.</p>
+</div>
+<div class="sect5">
+<h6 id="_b2setadd"><a class="anchor" href="#_b2setadd"></a><code>b2::set::add</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule add ( elements * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void b2::set::add(b2::list_cref elements);</code>, <code>void b2::set::add(const
+b2::set &amp; elements);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Add the <code>elements</code> to the set.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2setcontains"><a class="anchor" href="#_b2setcontains"></a><code>b2::set::contains</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule contains ( element )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>bool b2::set::contains(b2::value_ref element) const;</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Does the set contain the given <code>element</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2setto_list"><a class="anchor" href="#_b2setto_list"></a><code>b2::set::to_list</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule list ( )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref b2::set::to_list() const;</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Return a list with all the elements of the set.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2setdifference"><a class="anchor" href="#_b2setdifference"></a><code>b2::set::difference</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule difference ( set1 * : set2 * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>static b2::list_ref b2::set::difference(b2::list_cref set1,
+b2::list_cref set2);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the elements of <code>set1</code> that are not in <code>set2</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2setintersection"><a class="anchor" href="#_b2setintersection"></a><code>b2::set::intersection</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule intersection ( set1 * : set2 * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>static b2::list_ref b2::set::intersection(b2::list_cref set1,
+b2::list_cref set2);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Removes all the items appearing in both <code>set1</code> &amp; <code>set2</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2setequal"><a class="anchor" href="#_b2setequal"></a><code>b2::set::equal</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule equal ( set1 * : set2 * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>static bool b2::set::equal(b2::list_cref set1, b2::list_cref set2);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns whether <code>set1</code> &amp; <code>set2</code> contain the same elements. Note that this
+ignores any element ordering differences as well as any element
+duplication.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="b2.reference.modules.string"><a class="anchor" href="#b2.reference.modules.string"></a>6.5.4. <code>string</code> module.</h4>
+<div class="sect4">
+<h5 id="_b2string_whitespace"><a class="anchor" href="#_b2string_whitespace"></a><code>b2::string_whitespace</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule whitespace ( )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::value_ref string_whitespace();</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the canonical set of whitespace characters, as a single string.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2string_chars"><a class="anchor" href="#_b2string_chars"></a><code>b2::string_chars</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule chars ( string )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref string_chars(b2::value_ref s);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Splits the given <code>string</code> into a list of strings composed of each character of
+the <code>string</code> in sequence.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2string_abbreviate"><a class="anchor" href="#_b2string_abbreviate"></a><code>b2::string_abbreviate</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule abbreviate ( string )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::value_ref string_abbreviate(b2::value_ref s);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Apply a set of standard transformations to string to produce an abbreviation
+no more than 5 characters long.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2string_join"><a class="anchor" href="#_b2string_join"></a><code>b2::string_join</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule join ( strings * : separator ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::value_ref string_join(b2::list_cref strings, b2::value_ref
+separator);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Concatenates the given <code>strings</code>, inserting the given <code>separator</code> between each
+string.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2string_words"><a class="anchor" href="#_b2string_words"></a><code>b2::string_words</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule words ( string : whitespace * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref string_words(std::string s, b2::list_cref whitespace);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Split a string into whitespace separated words.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2string_is_whitespace"><a class="anchor" href="#_b2string_is_whitespace"></a><code>b2::string_is_whitespace</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule is-whitespace ( string ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>bool string_is_whitespace(b2::value_ref s);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Check that the given <code>string</code> is composed entirely of whitespace.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.5. path</h4>
 <div class="paragraph">
 <p>Performs various path manipulations. Paths are always in a 'normalized'
 representation. In it, a path may be either:</p>
@@ -7615,126 +8313,7 @@ exist.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.regex"><a class="anchor" href="#bbv2.reference.modules.regex"></a>6.5.3. regex</h4>
-<div class="paragraph">
-<p>Contains rules for string processing using regular expressions.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>"x*"</code> matches the pattern <code>"x"</code> zero or more times.</p>
-</li>
-<li>
-<p><code>"x+"</code> matches <code>"x"</code> one or more times.</p>
-</li>
-<li>
-<p><code>"x?"</code> matches <code>"x"</code> zero or one time.</p>
-</li>
-<li>
-<p><code>"[abcd]"</code> matches any of the characters, <code>"a"</code>, <code>"b"</code>, <code>"c"</code>, and
-<code>"d"</code>. A character range such as <code>"[a-z]"</code> matches any character between
-<code>"a"</code> and <code>"z"</code>. <code>"[^abc]"</code> matches any character which is not <code>"a"</code>,
-<code>"b"</code>, or <code>"c"</code>.</p>
-</li>
-<li>
-<p><code>"x|y"</code> matches either pattern <code>"x"</code> or pattern <code>"y"</code></p>
-</li>
-<li>
-<p><code>(x)</code> matches <code>"x"</code> and captures it.</p>
-</li>
-<li>
-<p><code>"^"</code> matches the beginning of the string.</p>
-</li>
-<li>
-<p><code>"$"</code> matches the end of the string.</p>
-</li>
-<li>
-<p>"\&lt;" matches the beginning of a word.</p>
-</li>
-<li>
-<p>"\&gt;" matches the end of a word.</p>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><a id="bbv2.reference.modules.regex.split"></a> <code>rule split ( string separator )</code></p>
-<div class="paragraph">
-<p>Returns a list of the following substrings:</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>from beginning till the first occurrence of <code>separator</code> or till the
-end,</p>
-</li>
-<li>
-<p>between each occurrence of <code>separator</code> and the next occurrence,</p>
-</li>
-<li>
-<p>from the last occurrence of <code>separator</code> till the end.</p>
-<div class="paragraph">
-<p>If no separator is present, the result will contain only one element.</p>
-</div>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><a id="bbv2.reference.modules.regex.split-list"></a> <code>rule split-list ( list * : separator )</code></p>
-<div class="paragraph">
-<p>Returns the concatenated results of applying
-<a href="#bbv2.reference.modules.regex.split">regex.split</a> to every element
-of the list using the separator pattern.</p>
-</div>
-</li>
-<li>
-<p><a id="bbv2.reference.modules.regex.match"></a> <code>rule match ( pattern : string : indices * )</code></p>
-<div class="paragraph">
-<p>Match <code>string</code> against <code>pattern</code>, and return the elements indicated by
-<code>indices</code>.</p>
-</div>
-</li>
-<li>
-<p><a id="bbv2.reference.modules.regex.transform"></a> <code>rule transform ( list * : pattern : indices * )</code></p>
-<div class="paragraph">
-<p>Matches all elements of <code>list</code> against the <code>pattern</code> and returns a list
-of elements indicated by <code>indices</code> of all successful matches. If
-<code>indices</code> is omitted returns a list of first parenthesized groups of all
-successful matches.</p>
-</div>
-</li>
-<li>
-<p><a id="bbv2.reference.modules.regex.escape"></a> <code>rule escape ( string : symbols : escape-symbol )</code></p>
-<div class="paragraph">
-<p>Escapes all of the characters in <code>symbols</code> using the escape symbol
-<code>escape-symbol</code> for the given string, and returns the escaped string.</p>
-</div>
-</li>
-<li>
-<p><a id="bbv2.reference.modules.regex.replace"></a> <code>rule replace ( string match replacement )</code></p>
-<div class="paragraph">
-<p>Replaces occurrences of a match string in a given string and returns the
-new string. The match string can be a regex expression.</p>
-</div>
-</li>
-<li>
-<p><a id="bbv2.reference.modules.regex.replace-list"></a> <code>rule replace-list ( list * : match : replacement )</code></p>
-<div class="paragraph">
-<p>Replaces occurrences of a match string in a given list of strings and
-returns a list of new strings. The match string can be a regex
-expression.</p>
-</div>
-</li>
-</ol>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>See also: <a href="#jam.language.rules.builtins.utility._match__">MATCH</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.4. sequence</h4>
+<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.6. sequence</h4>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
@@ -7815,7 +8394,7 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.5. stage</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.7. stage</h4>
 <div class="paragraph">
 <p>This module defines the <code>install</code> rule, used to copy a set of targets to a
 single location.</p>
@@ -7934,7 +8513,7 @@ in project jam files).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.6. type</h4>
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.8. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
@@ -14183,7 +14762,34 @@ variants accepted as valid for an option:</p>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>13. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>13.1. Version 4.9.1</h3>
+<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>13.1. Version 5.0.0</h3>
+<div class="paragraph">
+<p>This is a new era in B2. The drive of this new major version is to move the
+core build system from being implemented in Jam to C++. This initial release
+does is only a start in this move by having some minimal aspects implemented
+in C++ using a new Jam/C++ native binding system. Even though this is a
+major release, the goal is to still have backward compatibility for existing
+project build files. But that backward compatibility is not guaranteed for
+other Jam files.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New</strong>: Support for Jam native variant values of string (original Jam value
+type), number (floating point numbers), and object (instances of classes).</p>
+</li>
+<li>
+<p><strong>New</strong>: Port modules <code>regex</code>, <code>set</code>, <code>string</code>, <code>sysinfo</code>, and <code>version</code> to
+C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix consistent use of <code>OPT_SEMAPHORE</code> and documentation of <code>JAM_SEMAPHORE</code>.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>13.2. Version 4.9.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14198,7 +14804,7 @@ path specified in boost-build rule.&#8201;&#8212;&#8201;<em>René Ferdinand Rive
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>13.2. Version 4.9.0</h3>
+<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>13.3. Version 4.9.0</h3>
 <div class="paragraph">
 <p>This release has mostly internal cleanups and restructuring. The most
 significant being: fixing all memory leaks, automatic build system
@@ -14267,7 +14873,7 @@ deprecated and will be removed in a future release.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>13.3. Version 4.8.2</h3>
+<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>13.4. Version 4.8.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14278,7 +14884,7 @@ and incorrect target list pop unlinking.&#8201;&#8212;&#8201;<em>René Ferdinand
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>13.4. Version 4.8.1</h3>
+<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>13.5. Version 4.8.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14289,7 +14895,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>13.5. Version 4.8.0</h3>
+<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>13.6. Version 4.8.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14297,7 +14903,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </li>
 <li>
 <p>Change engine build to use static Intel libs if available instead of C++
-runtime static libs to fix systems where the static C++} runtime is not
+runtime static libs to fix systems where the static C++ runtime is not
 available.&#8201;&#8212;&#8201;<em>Alain Miniussi</em></p>
 </li>
 <li>
@@ -14332,7 +14938,7 @@ cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>13.6. Version 4.7.2</h3>
+<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>13.7. Version 4.7.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14346,7 +14952,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>13.7. Version 4.7.1</h3>
+<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>13.8. Version 4.7.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14356,7 +14962,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>13.8. Version 4.7.0</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>13.9. Version 4.7.0</h3>
 <div class="paragraph">
 <p>Many, many fixes and internal cleanups in this release. But also adding
 auto-detection and bootstrap for VS 2022 preview toolset.</p>
@@ -14420,7 +15026,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.9. Version 4.6.1</h3>
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.10. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14433,7 +15039,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>13.10. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>13.11. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -14445,16 +15051,16 @@ contributed to this release.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>New:</strong> Allow clang toolset to be auto-configured to a specific version by using
-<code>toolset=clang-xx</code> on the command line.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+<p><strong>New:</strong> Allow clang toolset to be auto-configured to a specific version by
+using <code>toolset=clang-xx</code> on the command line.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
 </li>
 <li>
-<p><strong>New:</strong> Include pch header automatically and on-demand on gcc and msvc toolset to
-mirror clang functionality.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+<p><strong>New:</strong> Include pch header automatically and on-demand on gcc and msvc toolset
+to mirror clang functionality.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
 </li>
 <li>
-<p><strong>New:</strong> Features that are narked as 'free' and 'optional' will now be ignored when
-the value specified on the command line is empty. Hence once can specify
+<p><strong>New:</strong> Features that are narked as 'free' and 'optional' will now be ignored
+when the value specified on the command line is empty. Hence once can specify
 <code>cxxflags=</code> on the command line without errors.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
@@ -14496,7 +15102,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.11. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.12. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -14518,7 +15124,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.12. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.13. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -14535,7 +15141,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.13. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.14. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -14548,7 +15154,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.14. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.15. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -14558,8 +15164,8 @@ command is expanded to include the options directly.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>New:</strong> Add <code>response-file</code> feature to control the kind of response file usage in
-toolset action.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+<p><strong>New:</strong> Add <code>response-file</code> feature to control the kind of response file usage
+in toolset action.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p><strong>New:</strong> Add <code>:O=value</code> variable modifier for <code>@()</code> expansion.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
@@ -14639,7 +15245,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.15. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.16. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -14739,7 +15345,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.16. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.17. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -14781,7 +15387,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.17. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.18. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -14863,7 +15469,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.18. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.19. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
