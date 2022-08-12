@@ -7500,10 +7500,7 @@ C++
 </td>
 <td class="hdlist2">
 <p><code>list_ref call_in(value_ref module_name, std::tuple&lt;value_ref, list_ref&gt;
-rule_name_a1, list_cref a2, list_cref a3, list_cref a4, list_cref a5, list_cref
-a6, list_cref a7, list_cref a8, list_cref a9, list_cref a10, list_cref a11,
-list_cref a12, list_cref a13, list_cref a14, list_cref a15, list_cref a16,
-list_cref a17, bind::context_ref_ context_ref);</code></p>
+const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
 </td>
 </tr>
 </table>
@@ -7557,10 +7554,7 @@ C++
 </td>
 <td class="hdlist2">
 <p><code>list_ref call_locally(std::tuple&lt;value_ref, list_ref&gt; rule_name_a1,
-list_cref a2, list_cref a3, list_cref a4, list_cref a5, list_cref a6, list_cref
-a7, list_cref a8, list_cref a9, list_cref a10, list_cref a11, list_cref a12,
-list_cref a13, list_cref a14, list_cref a15, list_cref a16, list_cref a17, const
-bind::context_ref_ &amp; context_ref);</code></p>
+const lists &amp; rest, const bind::context_ref_ &amp; context_ref);</code></p>
 </td>
 </tr>
 </table>
@@ -15435,6 +15429,8 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 	lists &amp; operator|(LIST * l);
 	lists &amp; operator|(list_ref &amp;&amp; l);
 	lists &amp; operator|=(list_ref &amp;&amp; l);
+	lists &amp; append(const lists &amp; lol);
+	lists &amp; operator|(const lists &amp; lol);
 
 	// display
 	void print() const;
