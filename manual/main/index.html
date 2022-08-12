@@ -953,27 +953,34 @@ a { color: inherit; }
 <li><a href="#jam.miscellaneous">12.3. Miscellaneous</a></li>
 </ul>
 </li>
-<li><a href="#b2.history">13. History</a>
+<li><a href="#b2.reference.code">13. Implementation Reference</a>
 <ul class="sectlevel2">
-<li><a href="#_version_5_0_0">13.1. Version 5.0.0</a></li>
-<li><a href="#_version_4_9_1">13.2. Version 4.9.1</a></li>
-<li><a href="#_version_4_9_0">13.3. Version 4.9.0</a></li>
-<li><a href="#_version_4_8_2">13.4. Version 4.8.2</a></li>
-<li><a href="#_version_4_8_1">13.5. Version 4.8.1</a></li>
-<li><a href="#_version_4_8_0">13.6. Version 4.8.0</a></li>
-<li><a href="#_version_4_7_2">13.7. Version 4.7.2</a></li>
-<li><a href="#_version_4_7_1">13.8. Version 4.7.1</a></li>
-<li><a href="#_version_4_7_0">13.9. Version 4.7.0</a></li>
-<li><a href="#_version_4_6_1">13.10. Version 4.6.1</a></li>
-<li><a href="#_version_4_6_0">13.11. Version 4.6.0</a></li>
-<li><a href="#_version_4_5_0">13.12. Version 4.5.0</a></li>
-<li><a href="#_version_4_4_2">13.13. Version 4.4.2</a></li>
-<li><a href="#_version_4_4_1">13.14. Version 4.4.1</a></li>
-<li><a href="#_version_4_4_0">13.15. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">13.16. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">13.17. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">13.18. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_0">13.19. Version 4.0.0</a></li>
+<li><a href="#_b2list_cref">13.1. <code>b2::list_cref</code></a></li>
+<li><a href="#_b2list_ref">13.2. <code>b2::list_ref</code></a></li>
+<li><a href="#_b2lists">13.3. <code>b2::lists</code></a></li>
+</ul>
+</li>
+<li><a href="#b2.history">14. History</a>
+<ul class="sectlevel2">
+<li><a href="#_version_5_0_0">14.1. Version 5.0.0</a></li>
+<li><a href="#_version_4_9_1">14.2. Version 4.9.1</a></li>
+<li><a href="#_version_4_9_0">14.3. Version 4.9.0</a></li>
+<li><a href="#_version_4_8_2">14.4. Version 4.8.2</a></li>
+<li><a href="#_version_4_8_1">14.5. Version 4.8.1</a></li>
+<li><a href="#_version_4_8_0">14.6. Version 4.8.0</a></li>
+<li><a href="#_version_4_7_2">14.7. Version 4.7.2</a></li>
+<li><a href="#_version_4_7_1">14.8. Version 4.7.1</a></li>
+<li><a href="#_version_4_7_0">14.9. Version 4.7.0</a></li>
+<li><a href="#_version_4_6_1">14.10. Version 4.6.1</a></li>
+<li><a href="#_version_4_6_0">14.11. Version 4.6.0</a></li>
+<li><a href="#_version_4_5_0">14.12. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">14.13. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">14.14. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">14.15. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">14.16. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">14.17. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">14.18. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_0">14.19. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -15035,10 +15042,505 @@ variants accepted as valid for an option:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="b2.history"><a class="anchor" href="#b2.history"></a>13. History</h2>
+<h2 id="b2.reference.code"><a class="anchor" href="#b2.reference.code"></a>13. Implementation Reference</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This includes reference documentation for the internals of the B2 engine code.
+Even though the Jam facing build system interfaces are also implemented in the
+engine, they are documented in the general reference section. This goes deeper
+and includes parts of engine mechanism and data structures. It is meant for
+those making changes to the engine itself.</p>
+</div>
+<div class="sect2">
+<h3 id="_b2list_cref"><a class="anchor" href="#_b2list_cref"></a>13.1. <code>b2::list_cref</code></h3>
+<div class="paragraph">
+<p>Container of b2 values, that is a non-owning reference to the <code>LIST</code>. Mostly
+follows random access container behavior.</p>
+</div>
+<div class="sect3">
+<h4 id="_b2list_cref_overview"><a class="anchor" href="#_b2list_cref_overview"></a>13.1.1. <code>b2::list_cref</code> Overview</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">struct list_cref
+{
+	// types
+	struct iterator;
+	using size_type = int32_t;
+	using value_type = OBJECT *;
+
+	// construct/copy/destroy
+	list_cref() = default;
+	list_cref(const list_cref &amp;) = default;
+	list_cref(list_cref &amp;&amp; other);
+	explicit list_cref(LIST * l);
+	list_cref &amp; operator=(const list_cref &amp;) = default;
+
+	// iterators
+	iterator begin() const;
+	iterator end() const;
+
+	// capacity
+	bool empty() const noexcept;
+	size_type length() const noexcept;
+	size_type size() const noexcept;
+
+	// element access
+	value_type &amp; operator[](size_type i) const;
+
+	// list operations
+	bool contains(value_ref a) const;
+	list_ref slice(size_type i, size_type j = -1) const;
+	bool operator==(const list_cref &amp; b) const;
+	bool operator==(const list_ref &amp; b) const;
+
+	// data access
+	LIST * data() const noexcept;
+	LIST * operator*() const noexcept;
+
+	protected:
+	friend struct iterator;
+	LIST * list_obj = nullptr;
+};</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2list_cref_constructcopydestroy"><a class="anchor" href="#_b2list_cref_constructcopydestroy"></a>13.1.2. <code>b2::list_cref</code> Construct/Copy/Destroy</h4>
+<div class="sect4">
+<h5 id="_b2list_creflist_cref"><a class="anchor" href="#_b2list_creflist_cref"></a><code>b2::list_cref::list_cref</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref::list_cref(list_cref &amp;&amp; other)
+inline list_cref::list_cref(LIST * l)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2list_cref_iterators"><a class="anchor" href="#_b2list_cref_iterators"></a>13.1.3. <code>b2::list_cref</code> Iterators</h4>
+<div class="sect4">
+<h5 id="_b2list_crefbegin"><a class="anchor" href="#_b2list_crefbegin"></a><code>b2::list_cref::begin</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref::iterator list_cref::begin() const</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2list_crefend"><a class="anchor" href="#_b2list_crefend"></a><code>b2::list_cref::end</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref::iterator list_cref::end() const</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2list_cref_capacity"><a class="anchor" href="#_b2list_cref_capacity"></a>13.1.4. <code>b2::list_cref</code> Capacity</h4>
+<div class="sect4">
+<h5 id="_b2list_crefempty"><a class="anchor" href="#_b2list_crefempty"></a><code>b2::list_cref::empty</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline bool list_cref::empty() const noexcept</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2list_creflength"><a class="anchor" href="#_b2list_creflength"></a><code>b2::list_cref::length</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref::size_type list_cref::length() const noexcept
+inline list_cref::size_type list_cref::size() const noexcept</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2list_cref_element_access"><a class="anchor" href="#_b2list_cref_element_access"></a>13.1.5. <code>b2::list_cref</code> Element Access</h4>
+<div class="sect4">
+<h5 id="_b2list_crefoperator"><a class="anchor" href="#_b2list_crefoperator"></a><code>b2::list_cref::operator[]</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref::value_type &amp; list_cref::operator[](
+	list_cref::size_type i) const</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2list_cref_list_operations"><a class="anchor" href="#_b2list_cref_list_operations"></a>13.1.6. <code>b2::list_cref</code> List Operations</h4>
+<div class="sect4">
+<h5 id="_b2list_crefcontains"><a class="anchor" href="#_b2list_crefcontains"></a><code>b2::list_cref::contains</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline bool list_cref::contains(value_ref a) const</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2list_crefslice"><a class="anchor" href="#_b2list_crefslice"></a><code>b2::list_cref::slice</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref list_cref::slice(
+	list_cref::size_type i, list_cref::size_type j) const</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2list_crefoperator_2"><a class="anchor" href="#_b2list_crefoperator_2"></a><code>b2::list_cref::operator==</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline bool list_cref::operator==(const list_cref &amp; b) const
+inline bool list_cref::operator==(const list_ref &amp; b) const</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2list_cref_data_access"><a class="anchor" href="#_b2list_cref_data_access"></a>13.1.7. <code>b2::list_cref</code> Data Access</h4>
+<div class="sect4">
+<h5 id="_b2list_crefoperator_3"><a class="anchor" href="#_b2list_crefoperator_3"></a><code>b2::list_cref::operator==</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LIST * list_cref::data() const noexcept
+inline LIST * list_cref::operator*() const noexcept</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_b2list_ref"><a class="anchor" href="#_b2list_ref"></a>13.2. <code>b2::list_ref</code></h3>
+<div class="paragraph">
+<p>Container of b2 values, that is an owning reference to the <code>LIST</code>. Mostly
+follows random access container behavior. And as an owning reference will
+allocate, copy, move <code>LIST</code> objects as needed.</p>
+</div>
+<div class="sect3">
+<h4 id="_b2list_ref_overview"><a class="anchor" href="#_b2list_ref_overview"></a>13.2.1. <code>b2::list_ref</code> Overview</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">struct list_ref : private list_cref
+{
+	// types
+	using list_cref::iterator;
+	using list_cref::size_type;
+	using list_cref::value_type;
+
+	using list_cref::begin;
+	using list_cref::end;
+	using list_cref::empty;
+	using list_cref::length;
+	using list_cref::size;
+	using list_cref::operator[];
+	using list_cref::contains;
+	using list_cref::operator==;
+	using list_cref::data;
+	using list_cref::operator*;
+
+	// construct/copy/destroy
+	list_ref() = default;
+	list_ref(list_ref &amp;&amp; other);
+	list_ref(const list_cref &amp; other);
+	list_ref(const list_ref &amp; other);
+	explicit list_ref(value_ref o);
+	explicit list_ref(LIST * l, bool own = false);
+	list_ref(iterator i, const iterator &amp; e);
+	~list_ref();
+
+	// modifiers
+	LIST * release();
+	void reset(LIST * new_list = nullptr);
+	list_ref &amp; append(const list_ref &amp; other);
+	list_ref &amp; append(list_cref other);
+	list_ref &amp; operator+(const list_ref &amp; other);
+	list_ref &amp; operator+(const list_cref &amp; other);
+	list_ref &amp; push_back(OBJECT * value);
+	template &lt;typename... T&gt;
+	list_ref &amp; push_back(T... value);
+	template &lt;typename T&gt;
+	list_ref &amp; operator+(T value);
+	list_ref &amp; pop_front();
+	list_ref &amp; operator=(list_ref &amp;&amp; other);
+
+	// list operations
+	inline list_ref &amp; slice(size_type i, size_type j = -1);
+};</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2list_ref_constructcopydestroy"><a class="anchor" href="#_b2list_ref_constructcopydestroy"></a>13.2.2. <code>b2::list_ref</code> Construct/Copy/Destroy</h4>
+<div class="sect4">
+<h5 id="_b2list_reflist_cref"><a class="anchor" href="#_b2list_reflist_cref"></a><code>b2::list_ref::list_cref</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref::list_ref(list_ref &amp;&amp; other) // <b class="conum">(1)</b>
+inline list_ref::list_ref(const list_cref &amp; other) // <b class="conum">(2)</b>
+inline list_ref::list_ref(const list_ref &amp; other) // <b class="conum">(2)</b>
+inline list_ref::list_ref(value_ref o) // <b class="conum">(3)</b>
+inline list_ref::list_ref(LIST * l, bool own) // <b class="conum">(4)</b>
+inline list_ref::list_ref(iterator i, const iterator &amp; e) // <b class="conum">(5)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>The data for the list is moved from <code>other</code>.</p>
+</li>
+<li>
+<p>Makes a copy of the list from <code>other</code>.</p>
+</li>
+<li>
+<p>Makes a new list with the initial given element value.</p>
+</li>
+<li>
+<p>If <code>own == true</code> takes ownership of the data <code>l</code>, otherwise makes a copy of
+it.</p>
+</li>
+<li>
+<p>Fills the new list with the elements from the <code>[i,e)</code> range.
+== <code>b2::list_ref</code> Modifiers
+=== <code>b2::list_ref::release</code></p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LIST * list_ref::release()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the list data relinquishing ownership of it. This list is left in an
+empty valid state.
+=== <code>b2::list_ref::reset</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline void list_ref::reset(LIST * new_list)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replaces the list data with the given <code>new_list</code>. The current list is freed
+along with the elements in the list.
+=== <code>b2::list_ref::append</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref &amp; list_ref::append(const list_ref &amp; other)
+inline list_ref &amp; list_ref::append(list_cref other)
+inline list_ref &amp; list_ref::operator+(const list_ref &amp; other)
+inline list_ref &amp; list_ref::operator+(const list_cref &amp; other)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Adds the elements from the <code>other</code> list, making copies, to the end of this list.
+All the functions return a reference to the list to allow for chaining. For
+example: <code>list_ref() + "one" + "two"</code>.
+=== <code>b2::list_ref::push_back</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref &amp; list_ref::push_back(OBJECT * value)
+template &lt;typename... T&gt;
+inline list_ref &amp; list_ref::push_back(T... value) // <b class="conum">(1)</b>
+template &lt;typename... T&gt;
+inline list_ref &amp; list_ref::operator+(T value) // <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Adds a value constructed from the given arguments. I.e. by calling
+<code>value::make(value&#8230;&#8203;)</code>.</p>
+</li>
+<li>
+<p>Adds the <code>value</code> that is convertible to <code>value_type</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Adds a single value to the end of the list. The list is returned to allow for
+chaining.
+=== <code>b2::list_ref::pop_front</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref &amp; list_ref::pop_front()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2list_refoperator_assign"><a class="anchor" href="#_b2list_refoperator_assign"></a><code>b2::list_ref::operator=</code>, assign</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref &amp; list_ref::operator=(list_ref &amp;&amp; other) // <b class="conum">(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Moves the data from <code>other</code> to this list.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2list_refslice"><a class="anchor" href="#_b2list_refslice"></a><code>b2::list_ref::slice</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref &amp; list_ref::slice(size_type i, size_type j)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replaces, in-place, the list with the indicated subrange slice <code>[i,j]</code>. Negative
+values of <code>j</code> index from the <code>end()</code> position.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_b2lists"><a class="anchor" href="#_b2lists"></a>13.3. <code>b2::lists</code></h3>
+<div class="paragraph">
+<p>Container of a "list of list" that is owning an instance of <code>LOL</code> object. The
+interface allows for inline composition of the <code>LOL</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_b2lists_overview"><a class="anchor" href="#_b2lists_overview"></a>13.3.1. <code>b2::lists</code> Overview</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">struct lists
+{
+	// types
+	using size_type = int32_t;
+
+	// construct/copy/destroy
+	lists();
+	~lists();
+
+	// capacity
+	bool empty() const noexcept;
+	size_type size() const noexcept;
+	size_type length() const noexcept;
+	size_type max_size() const noexcept;
+	size_type capacity() const noexcept;
+
+	// element access
+	list_cref operator[](size_type i) const;
+
+	// modifiers
+	void push_back(const list_cref &amp; l);
+	void push_back(list_ref &amp;&amp; l);
+	lists &amp; operator|(const list_cref &amp; l);
+	lists &amp; operator|(LIST * l);
+	lists &amp; operator|(list_ref &amp;&amp; l);
+	lists &amp; operator|=(list_ref &amp;&amp; l);
+
+	// display
+	void print() const;
+
+	// data access
+	LOL * data() const noexcept;
+	operator LOL *() const noexcept;
+
+	private:
+	mutable LOL lol;
+};</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2lists_constructcopydestroy"><a class="anchor" href="#_b2lists_constructcopydestroy"></a>13.3.2. <code>b2::lists</code> Construct/Copy/Destroy</h4>
+<div class="sect4">
+<h5 id="_b2listslists"><a class="anchor" href="#_b2listslists"></a><code>b2::lists::lists</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline lists::lists()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2listslists_2"><a class="anchor" href="#_b2listslists_2"></a><code>b2::lists::~lists</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline lists::~lists()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_b2lists_capacity"><a class="anchor" href="#_b2lists_capacity"></a>13.3.3. <code>b2::lists</code> Capacity</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_b2lists_element_access"><a class="anchor" href="#_b2lists_element_access"></a>13.3.4. <code>b2::lists</code> Element Access</h4>
+<div class="sect4">
+<h5 id="_b2listsoperator"><a class="anchor" href="#_b2listsoperator"></a><code>b2::lists::operator[]</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref lists::operator[](int32_t i) const</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns a constant reference, i.e. <code>list_cref</code>, of the list at the given <code>i</code>
+index.
+== <code>b2::lists</code> Modifiers
+=== <code>b2::lists::push_back</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline void lists::push_back(const list_cref &amp; l)
+inline void lists::push_back(list_ref &amp;&amp; l)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Adds the given list to the end of the <code>LOL</code>.
+=== <code>b2::lists::operator|</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline lists &amp; lists::operator|(const list_cref &amp; l)
+inline lists &amp; lists::operator|(LIST * l)
+inline lists &amp; lists::operator|(list_ref &amp;&amp; l)
+inline lists &amp; lists::operator|=(list_ref &amp;&amp; l)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Adds the given list to the end of the <code>LOL</code>. This returns this object making it
+possible to chain additions into a single statement.
+== <code>b2::lists</code> Element Access
+=== <code>b2::lists::print</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline void lists::print() const</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Outputs, to cout, the lists as colon (<code>:</code>) separated and space separated
+elements.
+== <code>b2::lists</code> Data Access
+=== <code>b2::lists::data</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LOL * lists::data() const noexcept
+inline lists::operator LOL *() const noexcept</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the underlying <code>LOL</code> object.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="b2.history"><a class="anchor" href="#b2.history"></a>14. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>13.1. Version 5.0.0</h3>
+<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>14.1. Version 5.0.0</h3>
 <div class="paragraph">
 <p>This is a new era in B2. The drive of this new major version is to move the
 core build system from being implemented in Jam to C++. This initial release
@@ -15052,10 +15554,10 @@ other Jam files.</p>
 <ul>
 <li>
 <p><strong>New</strong>: Support for Jam native variant values of string (original Jam value
-type), number (floating point numbers), and object (instances of classes).</p>
+type), number (floating point numbers), and object (instances of classes).&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
-<p><strong>New</strong>: Port modules <code>regex</code>, <code>set</code>, <code>string</code>, <code>sysinfo</code>, and <code>version</code> to
+<p><strong>New</strong>: Port modules <code>modules</code>, <code>regex</code>, <code>set</code>, <code>string</code>, and <code>sysinfo</code> to
 C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
@@ -15065,7 +15567,7 @@ C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>13.2. Version 4.9.1</h3>
+<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.2. Version 4.9.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -15080,7 +15582,7 @@ path specified in boost-build rule.&#8201;&#8212;&#8201;<em>René Ferdinand Rive
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>13.3. Version 4.9.0</h3>
+<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.3. Version 4.9.0</h3>
 <div class="paragraph">
 <p>This release has mostly internal cleanups and restructuring. The most
 significant being: fixing all memory leaks, automatic build system
@@ -15149,7 +15651,7 @@ deprecated and will be removed in a future release.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>13.4. Version 4.8.2</h3>
+<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.4. Version 4.8.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -15160,7 +15662,7 @@ and incorrect target list pop unlinking.&#8201;&#8212;&#8201;<em>René Ferdinand
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>13.5. Version 4.8.1</h3>
+<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.5. Version 4.8.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -15171,7 +15673,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>13.6. Version 4.8.0</h3>
+<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.6. Version 4.8.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -15214,7 +15716,7 @@ cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>13.7. Version 4.7.2</h3>
+<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.7. Version 4.7.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -15228,7 +15730,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>13.8. Version 4.7.1</h3>
+<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.8. Version 4.7.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -15238,7 +15740,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>13.9. Version 4.7.0</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.9. Version 4.7.0</h3>
 <div class="paragraph">
 <p>Many, many fixes and internal cleanups in this release. But also adding
 auto-detection and bootstrap for VS 2022 preview toolset.</p>
@@ -15302,7 +15804,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.10. Version 4.6.1</h3>
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.10. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -15315,7 +15817,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>13.11. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.11. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -15378,7 +15880,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.12. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.12. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -15400,7 +15902,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.13. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.13. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -15417,7 +15919,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.14. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.14. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -15430,7 +15932,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.15. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.15. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -15521,7 +16023,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.16. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.16. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -15621,7 +16123,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.17. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.17. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -15663,7 +16165,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.18. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.18. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -15745,7 +16247,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.19. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.19. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
