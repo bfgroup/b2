@@ -15410,6 +15410,7 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 
 	// construct/copy/destroy
 	lists();
+	lists(lists &amp;&amp; other);
 	~lists();
 
 	// capacity
@@ -15431,6 +15432,7 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 	lists &amp; operator|=(list_ref &amp;&amp; l);
 	lists &amp; append(const lists &amp; lol);
 	lists &amp; operator|(const lists &amp; lol);
+	void swap(LOL &amp; other);
 
 	// display
 	void print() const;
@@ -15451,7 +15453,8 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 <h5 id="_b2listslists"><a class="anchor" href="#_b2listslists"></a><code>b2::lists::lists</code></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline lists::lists()</code></pre>
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline lists::lists()
+inline lists::lists(lists &amp;&amp; other)</code></pre>
 </div>
 </div>
 </div>
@@ -15504,6 +15507,15 @@ inline lists &amp; lists::operator|=(list_ref &amp;&amp; l)</code></pre>
 <div class="paragraph">
 <p>Adds the given list to the end of the <code>LOL</code>. This returns this object making it
 possible to chain additions into a single statement.
+=== <code>b2::lists::swap</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline void lists::swap(LOL &amp; other)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Swaps the data from <code>other</code> with this.
 == <code>b2::lists</code> Element Access
 === <code>b2::lists::print</code></p>
 </div>
@@ -15553,8 +15565,8 @@ other Jam files.</p>
 type), number (floating point numbers), and object (instances of classes).&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
-<p><strong>New</strong>: Port modules <code>modules</code>, <code>regex</code>, <code>set</code>, <code>string</code>, and <code>sysinfo</code> to
-C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+<p><strong>New</strong>: Port modules <code>class</code>, <code>modules</code>, <code>regex</code>, <code>set</code>, <code>string</code>, and
+<code>sysinfo</code> to C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Fix consistent use of <code>OPT_SEMAPHORE</code> and documentation of <code>JAM_SEMAPHORE</code>.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
