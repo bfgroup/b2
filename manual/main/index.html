@@ -15074,9 +15074,9 @@ follows random access container behavior.</p>
 	iterator end() const;
 
 	// capacity
-	bool empty() const noexcept;
-	size_type length() const noexcept;
-	size_type size() const noexcept;
+	bool empty() const B2_NOEXCEPT;
+	size_type length() const B2_NOEXCEPT;
+	size_type size() const B2_NOEXCEPT;
 
 	// element access
 	value_type &amp; operator[](size_type i) const;
@@ -15088,8 +15088,8 @@ follows random access container behavior.</p>
 	bool operator==(const list_ref &amp; b) const;
 
 	// data access
-	LIST * data() const noexcept;
-	LIST * operator*() const noexcept;
+	LIST * data() const B2_NOEXCEPT;
+	LIST * operator*() const B2_NOEXCEPT;
 
 	protected:
 	friend struct iterator;
@@ -15135,7 +15135,7 @@ inline list_cref::list_cref(LIST * l)</code></pre>
 <h5 id="_b2list_crefempty"><a class="anchor" href="#_b2list_crefempty"></a><code>b2::list_cref::empty</code></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline bool list_cref::empty() const noexcept</code></pre>
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline bool list_cref::empty() const B2_NOEXCEPT</code></pre>
 </div>
 </div>
 </div>
@@ -15143,8 +15143,8 @@ inline list_cref::list_cref(LIST * l)</code></pre>
 <h5 id="_b2list_creflength"><a class="anchor" href="#_b2list_creflength"></a><code>b2::list_cref::length</code></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref::size_type list_cref::length() const noexcept
-inline list_cref::size_type list_cref::size() const noexcept</code></pre>
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_cref::size_type list_cref::length() const B2_NOEXCEPT
+inline list_cref::size_type list_cref::size() const B2_NOEXCEPT</code></pre>
 </div>
 </div>
 </div>
@@ -15196,8 +15196,8 @@ inline bool list_cref::operator==(const list_ref &amp; b) const</code></pre>
 <h5 id="_b2list_crefoperator_3"><a class="anchor" href="#_b2list_crefoperator_3"></a><code>b2::list_cref::operator==</code></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LIST * list_cref::data() const noexcept
-inline LIST * list_cref::operator*() const noexcept</code></pre>
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LIST * list_cref::data() const B2_NOEXCEPT
+inline LIST * list_cref::operator*() const B2_NOEXCEPT</code></pre>
 </div>
 </div>
 </div>
@@ -15414,11 +15414,11 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 	~lists();
 
 	// capacity
-	bool empty() const noexcept;
-	size_type size() const noexcept;
-	size_type length() const noexcept;
-	size_type max_size() const noexcept;
-	size_type capacity() const noexcept;
+	bool empty() const B2_NOEXCEPT;
+	size_type size() const B2_NOEXCEPT;
+	size_type length() const B2_NOEXCEPT;
+	size_type max_size() const B2_NOEXCEPT;
+	size_type capacity() const B2_NOEXCEPT;
 
 	// element access
 	list_cref operator[](size_type i) const;
@@ -15438,8 +15438,8 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 	void print() const;
 
 	// data access
-	LOL * data() const noexcept;
-	operator LOL *() const noexcept;
+	LOL * data() const B2_NOEXCEPT;
+	operator LOL *() const B2_NOEXCEPT;
 
 	private:
 	mutable LOL lol;
@@ -15532,8 +15532,8 @@ elements.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LOL * lists::data() const noexcept
-inline lists::operator LOL *() const noexcept</code></pre>
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LOL * lists::data() const B2_NOEXCEPT
+inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 </div>
 </div>
 <div class="paragraph">
