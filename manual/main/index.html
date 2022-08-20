@@ -7710,7 +7710,314 @@ import path : native make : native-path make-path ;</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.regex"><a class="anchor" href="#b2.reference.modules.regex"></a>6.5.2. <code>regex</code> module.</h4>
+<h4 id="b2.reference.modules.errors"><a class="anchor" href="#b2.reference.modules.errors"></a>6.5.2. <code>errors</code> module.</h4>
+<div class="sect4">
+<h5 id="_b2jamerrorsbacktrace"><a class="anchor" href="#_b2jamerrorsbacktrace"></a><code>b2::jam::errors::backtrace</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule backtrace ( skip-frames prefix messages * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void backtrace(std::tuple&lt;int, std::string, list_ref&gt;
+skip_prefix_messages, const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Print a stack backtrace leading to this rule&#8217;s caller. Each argument
+represents a line of output to be printed after the first line of the
+backtrace.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2jamerrorserror_skip_frames"><a class="anchor" href="#_b2jamerrorserror_skip_frames"></a><code>b2::jam::errors::error_skip_frames</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule error-skip-frames ( skip-frames messages * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void error_skip_frames(std::tuple&lt;int, list_ref&gt; skip_messages, const
+lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2jamerrorstry_catch"><a class="anchor" href="#_b2jamerrorstry_catch"></a><code>b2::jam::errors::try-catch</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule error-skip-frames ( skip-frames messages * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void error_skip_frames(std::tuple&lt;int, list_ref&gt; skip_messages, const
+lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This is not really an exception-handling mechanism, but it does allow us to
+perform some error-checking on our error-checking. Errors are suppressed
+after a try, and the first one is recorded. Use catch to check that the
+error message matched expectations.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule try ( )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void error_try();</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Begin looking for error messages.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule catch ( messages * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void error_catch(const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Stop looking for error messages; generate an error if an argument of
+messages is not found in the corresponding argument in the error call.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2jamerrorserror"><a class="anchor" href="#_b2jamerrorserror"></a><code>b2::jam::errors::error</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule error ( messages * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void error(const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Print an error message with a stack backtrace and exit.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2jamerrorsuser_error"><a class="anchor" href="#_b2jamerrorsuser_error"></a><code>b2::jam::errors::user_error</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule user-error ( messages * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void user_error(const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Same as 'error', but the generated backtrace will include only user files.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2jamerrorswarning"><a class="anchor" href="#_b2jamerrorswarning"></a><code>b2::jam::errors::warning</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule warning ( messages * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void warning(const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Print a warning message with a stack backtrace and exit.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2jamerrorslol_to_list"><a class="anchor" href="#_b2jamerrorslol_to_list"></a><code>b2::jam::errors::lol_to_list</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule lol&#8594;list ( * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>list_ref lol_to_list(const lists &amp; rest);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Convert an arbitrary argument list into a list with ":" separators and quoted
+elements representing the same information. This is mostly useful for
+formatting descriptions of arguments with which a rule was called when
+reporting an error.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2jamerrorsnearest_user_location"><a class="anchor" href="#_b2jamerrorsnearest_user_location"></a><code>b2::jam::errors::nearest_user_location</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule nearest-user-location ( )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>list_ref nearest_user_location(bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Return the file:line for the nearest entry in backtrace which correspond to a
+user module.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="b2.reference.modules.regex"><a class="anchor" href="#b2.reference.modules.regex"></a>6.5.3. <code>regex</code> module.</h4>
 <div class="paragraph">
 <p>Contains rules for string processing using regular expressions.</p>
 </div>
@@ -8023,7 +8330,7 @@ a list of new strings. The match string can be a regex expression.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_set_module"><a class="anchor" href="#_set_module"></a>6.5.3. <code>set</code> module.</h4>
+<h4 id="_set_module"><a class="anchor" href="#_set_module"></a>6.5.4. <code>set</code> module.</h4>
 <div class="paragraph">
 <p>Classes and functions to manipulate sets of unique values.</p>
 </div>
@@ -8220,7 +8527,7 @@ duplication.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.string"><a class="anchor" href="#b2.reference.modules.string"></a>6.5.4. <code>string</code> module.</h4>
+<h4 id="b2.reference.modules.string"><a class="anchor" href="#b2.reference.modules.string"></a>6.5.5. <code>string</code> module.</h4>
 <div class="sect4">
 <h5 id="_b2string_whitespace"><a class="anchor" href="#_b2string_whitespace"></a><code>b2::string_whitespace</code></h5>
 <div class="exampleblock">
@@ -8407,7 +8714,7 @@ C++
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.5. path</h4>
+<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.6. path</h4>
 <div class="paragraph">
 <p>Performs various path manipulations. Paths are always in a 'normalized'
 representation. In it, a path may be either:</p>
@@ -8590,7 +8897,7 @@ exist.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.6. sequence</h4>
+<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.7. sequence</h4>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
@@ -8671,7 +8978,7 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.7. stage</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.8. stage</h4>
 <div class="paragraph">
 <p>This module defines the <code>install</code> rule, used to copy a set of targets to a
 single location.</p>
@@ -8790,7 +9097,7 @@ in project jam files).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.8. type</h4>
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.9. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
@@ -15433,6 +15740,7 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 	lists &amp; append(const lists &amp; lol);
 	lists &amp; operator|(const lists &amp; lol);
 	void swap(LOL &amp; other);
+	void clear();
 
 	// display
 	void print() const;
@@ -15516,6 +15824,15 @@ possible to chain additions into a single statement.
 </div>
 <div class="paragraph">
 <p>Swaps the data from <code>other</code> with this.
+=== <code>b2::lists::clear</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline void lists::clear()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Deallocate any list items and resets the length to zero.
 == <code>b2::lists</code> Element Access
 === <code>b2::lists::print</code></p>
 </div>
@@ -15565,8 +15882,8 @@ other Jam files.</p>
 type), number (floating point numbers), and object (instances of classes).&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
-<p><strong>New</strong>: Port modules <code>class</code>, <code>modules</code>, <code>regex</code>, <code>set</code>, <code>string</code>, and
-<code>sysinfo</code> to C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+<p><strong>New</strong>: Port modules <code>class</code>, <code>errors</code>, <code>modules</code>, <code>regex</code>, <code>set</code>, <code>string</code>,
+and <code>sysinfo</code> to C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Fix consistent use of <code>OPT_SEMAPHORE</code> and documentation of <code>JAM_SEMAPHORE</code>.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
