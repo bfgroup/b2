@@ -7712,7 +7712,162 @@ import path : native make : native-path make-path ;</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.errors"><a class="anchor" href="#b2.reference.modules.errors"></a>6.5.2. <code>errors</code> module.</h4>
+<h4 id="b2.reference.modules.class"><a class="anchor" href="#b2.reference.modules.class"></a>6.5.2. <code>class</code> module.</h4>
+<div class="sect4">
+<h5 id="_b2classmake"><a class="anchor" href="#_b2classmake"></a><code>b2::class::make</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule new ( class args * : * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>std::string make(std::tuple&lt;value_ref, list_ref&gt; name_arg1, const lists
+&amp; rest, bind::context_ref_ context_ref)</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Instantiates a new instance of the given class and calls the <code><em>init</em></code> with
+the given arguments. Returns the instance ID.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2classbases"><a class="anchor" href="#_b2classbases"></a><code>b2::class::bases</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule bases ( class )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>list_ref bases(std::string class_name);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the base classes of the given class.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2classis_derived"><a class="anchor" href="#_b2classis_derived"></a><code>b2::class::is_derived</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule is-derived ( class : bases + )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>bool is_derived(value_ref class_name, list_cref class_bases);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns true when the given class is derived from the given bases.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2classis_instance"><a class="anchor" href="#_b2classis_instance"></a><code>b2::class::is_instance</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule is-instance ( value )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>bool is_instance(std::string value);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns true if the given value is an instance of any class.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2classis_a"><a class="anchor" href="#_b2classis_a"></a><code>b2::class::is_a</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule is-as ( instance : type )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>bool is_a(std::string instance, value_ref type);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns true if the given instance is of the given type.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="b2.reference.modules.errors"><a class="anchor" href="#b2.reference.modules.errors"></a>6.5.3. <code>errors</code> module.</h4>
 <div class="sect4">
 <h5 id="_b2jamerrorsbacktrace"><a class="anchor" href="#_b2jamerrorsbacktrace"></a><code>b2::jam::errors::backtrace</code></h5>
 <div class="exampleblock">
@@ -8019,7 +8174,7 @@ user module.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.regex"><a class="anchor" href="#b2.reference.modules.regex"></a>6.5.3. <code>regex</code> module.</h4>
+<h4 id="b2.reference.modules.regex"><a class="anchor" href="#b2.reference.modules.regex"></a>6.5.4. <code>regex</code> module.</h4>
 <div class="paragraph">
 <p>Contains rules for string processing using regular expressions.</p>
 </div>
@@ -8332,7 +8487,7 @@ a list of new strings. The match string can be a regex expression.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_set_module"><a class="anchor" href="#_set_module"></a>6.5.4. <code>set</code> module.</h4>
+<h4 id="_set_module"><a class="anchor" href="#_set_module"></a>6.5.5. <code>set</code> module.</h4>
 <div class="paragraph">
 <p>Classes and functions to manipulate sets of unique values.</p>
 </div>
@@ -8529,7 +8684,7 @@ duplication.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.string"><a class="anchor" href="#b2.reference.modules.string"></a>6.5.5. <code>string</code> module.</h4>
+<h4 id="b2.reference.modules.string"><a class="anchor" href="#b2.reference.modules.string"></a>6.5.6. <code>string</code> module.</h4>
 <div class="sect4">
 <h5 id="_b2string_whitespace"><a class="anchor" href="#_b2string_whitespace"></a><code>b2::string_whitespace</code></h5>
 <div class="exampleblock">
@@ -8716,7 +8871,42 @@ C++
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.6. path</h4>
+<h4 id="b2.reference.modules.version"><a class="anchor" href="#b2.reference.modules.version"></a>6.5.7. <code>version</code> module.</h4>
+<div class="sect4">
+<h5 id="_b2version_less"><a class="anchor" href="#_b2version_less"></a><code>b2::version_less</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule version-less ( lhs + : rhs + )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>bool version_less(const std::vector&lt;int&gt; &amp; lhs, const std::vector&lt;int&gt;
+&amp; rhs);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns <code>true</code> if the first version, <code>lhs</code>, is semantically less than the
+second version, <code>rhs</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.8. path</h4>
 <div class="paragraph">
 <p>Performs various path manipulations. Paths are always in a 'normalized'
 representation. In it, a path may be either:</p>
@@ -8899,7 +9089,7 @@ exist.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.7. sequence</h4>
+<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.9. sequence</h4>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
@@ -8980,7 +9170,7 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.8. stage</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.10. stage</h4>
 <div class="paragraph">
 <p>This module defines the <code>install</code> rule, used to copy a set of targets to a
 single location.</p>
@@ -9099,7 +9289,7 @@ in project jam files).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.9. type</h4>
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.11. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
