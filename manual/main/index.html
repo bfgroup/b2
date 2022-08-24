@@ -4609,6 +4609,40 @@ are not allowed.</p>
 </dd>
 </dl>
 </div>
+<div class="sect3">
+<h4 id="_b2require_b2"><a class="anchor" href="#_b2require_b2"></a>6.2.1. <code>b2::require_b2</code></h4>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule require-b2 ( minimum : maximum ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void require_b2(value_ref minimum, value_ref maximum,
+bind::context_ref_ context_ref);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Checks that the b2 engine version is at least <code>minimum</code> and strictly less than
+<code>maximum</code>. If no <code>maximum</code> is given the version is matched to be at least
+the <code>minimum</code>. If the check fails b2 will exit with an error message and
+failure.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="bbv2.overview.builtins.features"><a class="anchor" href="#bbv2.overview.builtins.features"></a>6.3. Builtin features</h3>
@@ -16080,6 +16114,10 @@ and <code>sysinfo</code> to C++.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 <li>
 <p><strong>New</strong>: Port <code>bootstrap.jam</code> to C++ and instead use <code>build-system.jam</code> as
 key file to find build files.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add <code>require-b2</code> builtin rule to verify the B2 version a particular
+Jam file needs.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Fix consistent use of <code>OPT_SEMAPHORE</code> and documentation of <code>JAM_SEMAPHORE</code>.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
