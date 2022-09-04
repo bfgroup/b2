@@ -503,7 +503,7 @@ mod_version.cpp \
     if test_true ${B2_DEBUG_OPT} ; then B2_CXXFLAGS="${B2_CXXFLAGS_DEBUG}"
     else B2_CXXFLAGS="${B2_CXXFLAGS_RELEASE} -DNDEBUG"
     fi
-    ( B2_VERBOSE_OPT=${TRUE} echo_run ${B2_CXX} ${B2_CXXFLAGS} ${B2_SOURCES} -o b2 )
+    ( B2_VERBOSE_OPT=${TRUE} echo_run ${B2_CXX} ${CPPFLAGS} ${B2_CXXFLAGS} ${LDFLAGS} ${B2_SOURCES} -o b2 )
 }
 
 if test_true ${B2_VERBOSE_OPT} ; then
