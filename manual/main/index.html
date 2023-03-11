@@ -963,27 +963,29 @@ a { color: inherit; }
 <li><a href="#b2.history">14. History</a>
 <ul class="sectlevel2">
 <li><a href="#_version_5_0_0">14.1. Version 5.0.0</a></li>
-<li><a href="#_version_4_9_3">14.2. Version 4.9.3</a></li>
-<li><a href="#_version_4_9_2">14.3. Version 4.9.2</a></li>
-<li><a href="#_version_4_9_1">14.4. Version 4.9.1</a></li>
-<li><a href="#_version_4_9_0">14.5. Version 4.9.0</a></li>
-<li><a href="#_version_4_8_2">14.6. Version 4.8.2</a></li>
-<li><a href="#_version_4_8_1">14.7. Version 4.8.1</a></li>
-<li><a href="#_version_4_8_0">14.8. Version 4.8.0</a></li>
-<li><a href="#_version_4_7_2">14.9. Version 4.7.2</a></li>
-<li><a href="#_version_4_7_1">14.10. Version 4.7.1</a></li>
-<li><a href="#_version_4_7_0">14.11. Version 4.7.0</a></li>
-<li><a href="#_version_4_6_1">14.12. Version 4.6.1</a></li>
-<li><a href="#_version_4_6_0">14.13. Version 4.6.0</a></li>
-<li><a href="#_version_4_5_0">14.14. Version 4.5.0</a></li>
-<li><a href="#_version_4_4_2">14.15. Version 4.4.2</a></li>
-<li><a href="#_version_4_4_1">14.16. Version 4.4.1</a></li>
-<li><a href="#_version_4_4_0">14.17. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">14.18. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">14.19. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">14.20. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_1">14.21. Version 4.0.1</a></li>
-<li><a href="#_version_4_0_0">14.22. Version 4.0.0</a></li>
+<li><a href="#_version_4_9_5">14.2. Version 4.9.5</a></li>
+<li><a href="#_version_4_9_4">14.3. Version 4.9.4</a></li>
+<li><a href="#_version_4_9_3">14.4. Version 4.9.3</a></li>
+<li><a href="#_version_4_9_2">14.5. Version 4.9.2</a></li>
+<li><a href="#_version_4_9_1">14.6. Version 4.9.1</a></li>
+<li><a href="#_version_4_9_0">14.7. Version 4.9.0</a></li>
+<li><a href="#_version_4_8_2">14.8. Version 4.8.2</a></li>
+<li><a href="#_version_4_8_1">14.9. Version 4.8.1</a></li>
+<li><a href="#_version_4_8_0">14.10. Version 4.8.0</a></li>
+<li><a href="#_version_4_7_2">14.11. Version 4.7.2</a></li>
+<li><a href="#_version_4_7_1">14.12. Version 4.7.1</a></li>
+<li><a href="#_version_4_7_0">14.13. Version 4.7.0</a></li>
+<li><a href="#_version_4_6_1">14.14. Version 4.6.1</a></li>
+<li><a href="#_version_4_6_0">14.15. Version 4.6.0</a></li>
+<li><a href="#_version_4_5_0">14.16. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">14.17. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">14.18. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">14.19. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">14.20. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">14.21. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">14.22. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_1">14.23. Version 4.0.1</a></li>
+<li><a href="#_version_4_0_0">14.24. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -16131,7 +16133,66 @@ Jam file needs.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.2. Version 4.9.3</h3>
+<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>14.2. Version 4.9.5</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Improve alternative match error message to include more context.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix errors when doing <code>use-project</code> inside projects that get included from
+another <code>use-project</code>.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Support native msvc compilers on ARM64.&#8201;&#8212;&#8201;<em>Stephen Just</em></p>
+</li>
+<li>
+<p>PCH fixes: fix msvc pch include dir; fix msvc pch header name; fix missing
+gcc <code>-ftemplate-depth</code> when building pch.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p><strong>New</strong>: <code>clang-win</code> search for compiler executable in default install locations
+when it is not on found in <code>PATH</code>.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix <code>clang-win</code> to support versioned winsdk bin location.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>14.3. Version 4.9.4</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Fix crash on some platforms/compilers from invalid garbage reads of varargs
+end marker being an <code>int</code> instead of a <code>nullptr</code>.</p>
+</li>
+<li>
+<p>Don&#8217;t force Windows path separators for GCC when on Windows. As it confuses
+Cygwin GCC&#8217;s relative include path handling.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Added <code>common-requirements</code> to project declaration to shorthand as declaring
+the same for both <code>requirements</code> and <code>usage-requirements</code>.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Add to pass in targets to project <code>explicit</code> rule to reduce duplication of
+<code>explicit</code> targets when there are many.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Make coverage feature non-incidental and link-incompatible.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
+</li>
+<li>
+<p>Use PATH-based lookup for <code>sh</code>. For things such as Gentoo Prefix, we want to
+use the Bourne shell from the prefix and not the potentially ancient version
+from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.4. Version 4.9.3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16141,7 +16202,7 @@ Jam file needs.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.3. Version 4.9.2</h3>
+<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.5. Version 4.9.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16151,7 +16212,7 @@ Jam file needs.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.4. Version 4.9.1</h3>
+<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.6. Version 4.9.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16166,7 +16227,7 @@ path specified in boost-build rule.&#8201;&#8212;&#8201;<em>René Ferdinand Rive
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.5. Version 4.9.0</h3>
+<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.7. Version 4.9.0</h3>
 <div class="paragraph">
 <p>This release has mostly internal cleanups and restructuring. The most
 significant being: fixing all memory leaks, automatic build system
@@ -16235,7 +16296,7 @@ deprecated and will be removed in a future release.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.6. Version 4.8.2</h3>
+<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.8. Version 4.8.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16246,7 +16307,7 @@ and incorrect target list pop unlinking.&#8201;&#8212;&#8201;<em>René Ferdinand
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.7. Version 4.8.1</h3>
+<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.9. Version 4.8.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16257,7 +16318,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.8. Version 4.8.0</h3>
+<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.10. Version 4.8.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16300,7 +16361,7 @@ cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.9. Version 4.7.2</h3>
+<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.11. Version 4.7.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16314,7 +16375,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.10. Version 4.7.1</h3>
+<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.12. Version 4.7.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16324,7 +16385,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.11. Version 4.7.0</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.13. Version 4.7.0</h3>
 <div class="paragraph">
 <p>Many, many fixes and internal cleanups in this release. But also adding
 auto-detection and bootstrap for VS 2022 preview toolset.</p>
@@ -16388,7 +16449,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.12. Version 4.6.1</h3>
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.14. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16401,7 +16462,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.13. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.15. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -16464,7 +16525,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.14. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.16. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -16486,7 +16547,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.15. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.17. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -16503,7 +16564,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.16. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.18. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -16516,7 +16577,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.17. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.19. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -16607,7 +16668,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.18. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.20. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -16707,7 +16768,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.19. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.21. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -16749,7 +16810,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.20. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.22. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -16831,7 +16892,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.21. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.23. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -16841,7 +16902,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.22. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.24. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
