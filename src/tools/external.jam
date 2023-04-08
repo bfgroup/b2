@@ -38,6 +38,11 @@ targets inside projects it created. This allows seamless integration with
 package managers, if certain care is taken. In particular, it has become a
 convention to call the sole target in a header-only library project `libs`.
 
+The module interoperates with <<bbv2.tasks.packagemanagers.vcpkg,`vcpkg`>>
+module. If configuration for some build request does not set include or library
+directories, but there is a fitting vcpkg configuration, the module will
+attempt to use it.
+
 [[bbv2.tools.external.configure]]
 == Rule `configure`
 
@@ -401,9 +406,17 @@ class external-library : ac-library
         proj = $(proj:B) ;
 
         local use-environment ;
+        local vcpkg-ps ;
+        local used-vcpkg ;
         if ! $(self.library-name) && ! $(self.include-path)
         {
             use-environment = true ;
+            local vcpkg-proj = [ project.target vcpkg : allow-missing ] ;
+            if $(vcpkg-proj)
+            {
+                vcpkg-ps = [ targets.generate-from-reference
+                    /vcpkg//prefix : $(vcpkg-proj) : $(property-set) ] ;
+            }
         }
 
         local libnames = $(self.library-name) ;
@@ -415,6 +428,11 @@ class external-library : ac-library
         libnames ?= $(self.default-names) ;
 
         local include-path = $(self.include-path) ;
+        if ! $(include-path) && $(vcpkg-ps)
+        {
+            include-path = [ $(vcpkg-ps).get <include> ] ;
+            used-vcpkg = true ;
+        }
         if ! $(include-path) && $(use-environment)
         {
             include-path = [ os.environ $(proj:U)_$(name:U)_INCLUDE ] ;
@@ -422,14 +440,29 @@ class external-library : ac-library
         }
 
         local library-path = $(self.library-path) ;
+        if ! $(library-path) && $(vcpkg-ps)
+        {
+            library-path = [ $(vcpkg-ps).get <search> ] ;
+            used-vcpkg = true ;
+        }
         if ! $(library-path) && $(use-environment)
         {
             library-path = [ os.environ $(proj:U)_$(name:U)_LIBRARY_PATH ] ;
             library-path ?= [ os.environ $(name:U)_LIBRARY_PATH ] ;
         }
 
-        local relevant = [
-            configure.get-relevant-features [ $(self.requirements).raw ] ] ;
+        local relevant = [ $(self.requirements).raw ] ;
+        if $(used-vcpkg)
+        {
+            local vcpkg-proj = [ project.target vcpkg ] ;
+            local vcpkg-main = [ $(vcpkg-proj).main-target prefix ] ;
+            local vcpkg-alt = [
+                $(vcpkg-main).select-alternatives $(property-set) ] ;
+            local vcpkg-condition = [ $(vcpkg-alt).requirements ] ;
+            relevant += [ $(vcpkg-condition).raw ] ;
+        }
+
+        relevant = [ configure.get-relevant-features $(relevant) ] ;
         relevant = $(relevant:G) ;
         relevant = [ sequence.unique [ SORT $(relevant) ] ] ;
         relevant = [ property.select $(relevant) : [ $(property-set).raw ] ] ;
