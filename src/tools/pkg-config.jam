@@ -74,10 +74,9 @@ feature.feature pkg-config-define : : free ;
 
 Main target rule that imports a *pkg-config* package. When its consumer targets
 are built, *pkg-config* command will be invoked with arguments that depend on
-current property set. The features that have an effect are:
+the current property set. The features that have an effect are:
 
 * `<pkg-config-define>`: adds a `--define-variable` argument;
-* `<link>`: adds `--static` argument when `<link>static`;
 * `<link>`: adds `--static` argument when `<link>static`;
 * `<name>`: specifies package name (target name is used instead if the property
     is not present);
@@ -137,17 +136,17 @@ using pkg-config : [config] : [command] ... : [ options ] ... ;
     is given, first `PKG_CONFIG` environment variable is checked, and if its
     empty the string `pkg-config` is used.
 * `options`: options that modify `pkg-config` behavior. Allowed options are:
-    * `<path>`: sets `PKG_CONFIG_PATH` environment variable;
+    ** `<path>`: sets `PKG_CONFIG_PATH` environment variable;
         multiple occurences are allowed.
-    * `<libdir>`: sets `PKG_CONFIG_LIBDIR` environment variable;
+    ** `<libdir>`: sets `PKG_CONFIG_LIBDIR` environment variable;
         multiple occurences are allowed.
-    * `<allow-system-cflags>`: sets `PKG_CONFIG_ALLOW_SYSTEM_CFLAGS`
+    ** `<allow-system-cflags>`: sets `PKG_CONFIG_ALLOW_SYSTEM_CFLAGS`
         environment variable; multiple occurences are allowed.
-    * `<allow-system-libs>`: sets `PKG_CONFIG_ALLOW_SYSTEM_LIBS`
+    ** `<allow-system-libs>`: sets `PKG_CONFIG_ALLOW_SYSTEM_LIBS`
         environment variable; multiple occurences are allowed.
-    * `<sysroot>`: sets `PKG_CONFIG_SYSROOT_DIR` environment variable;
+    ** `<sysroot>`: sets `PKG_CONFIG_SYSROOT_DIR` environment variable;
         multiple occurences are allowed.
-    * `<variable>`: adds a variable definition argument to command invocation;
+    ** `<variable>`: adds a variable definition argument to command invocation;
         multiple occurences are allowed.
 
 |# # end::doc[]
@@ -441,7 +440,7 @@ project
 ----
 
 Thanks to the fact, that `project-config`, `user-config` and `site-config`
-modules are parents of jamroot module, you can put it in any of those files.o
+modules are parents of jamroot module, you can put it in any of those files.
 
 
 === Choosing the package name based on the property set
@@ -468,7 +467,7 @@ rule infer-name ( properties * )
 }
 ----
 
-The `common.format-name` rule can be very useful in this situation.
+The rule `common.format-name` can be very useful in such situations.
 
 
 === Modify usage requirements based on package version or variable
