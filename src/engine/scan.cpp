@@ -782,11 +782,19 @@ static char * symdump( YYSTYPE * s )
     static char buf[ BIGGEST_TOKEN + 20 ];
     switch ( s->type )
     {
+#ifndef OS_NT
+        case EOF   : snprintf( buf, sizeof(buf),  "EOF"                                        ); break;
+        case 0     : snprintf( buf, sizeof(buf),  "unknown symbol %s", object_str( s->string ) ); break;
+        case ARG   : snprintf( buf, sizeof(buf),  "argument %s"      , object_str( s->string ) ); break;
+        case STRING: snprintf( buf, sizeof(buf),  "string \"%s\""    , object_str( s->string ) ); break;
+        default    : snprintf( buf, sizeof(buf),  "keyword %s"       , s->keyword              ); break;
+#else
         case EOF   : sprintf( buf, "EOF"                                        ); break;
         case 0     : sprintf( buf, "unknown symbol %s", object_str( s->string ) ); break;
         case ARG   : sprintf( buf, "argument %s"      , object_str( s->string ) ); break;
         case STRING: sprintf( buf, "string \"%s\""    , object_str( s->string ) ); break;
         default    : sprintf( buf, "keyword %s"       , s->keyword              ); break;
+#endif
     }
     return buf;
 }

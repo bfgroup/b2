@@ -391,6 +391,15 @@ void hcache_done()
         else if ( c->age > maxage )
             continue;
 
+#ifndef OS_NT
+        snprintf( includes_count_str, sizeof( includes_count_str ), "%lu", (long unsigned)list_length(
+            c->includes ) );
+        snprintf( hdrscan_count_str, sizeof( hdrscan_count_str ), "%lu", (long unsigned)list_length(
+            c->hdrscan ) );
+        snprintf( time_secs_str, sizeof( time_secs_str ), "%lu", (long unsigned)c->time.secs );
+        snprintf( time_nsecs_str, sizeof( time_nsecs_str ), "%lu", (long unsigned)c->time.nsecs );
+        snprintf( age_str, sizeof( age_str ), "%lu", (long unsigned)c->age );
+#else
         sprintf( includes_count_str, "%lu", (long unsigned)list_length(
             c->includes ) );
         sprintf( hdrscan_count_str, "%lu", (long unsigned)list_length(
@@ -398,6 +407,7 @@ void hcache_done()
         sprintf( time_secs_str, "%lu", (long unsigned)c->time.secs );
         sprintf( time_nsecs_str, "%lu", (long unsigned)c->time.nsecs );
         sprintf( age_str, "%lu", (long unsigned)c->age );
+#endif
 
         write_netstring( f, CACHE_RECORD_HEADER );
         write_netstring( f, object_str( c->boundname ) );

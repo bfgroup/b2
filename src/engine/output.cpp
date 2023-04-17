@@ -173,7 +173,11 @@ void errno_printf(char const * const f, ...)
 OBJECT * outf_int( int const value )
 {
     char buffer[ 50 ];
+#ifndef OS_NT
+    snprintf( buffer, sizeof( buffer ), "%i", value );
+#else
     sprintf( buffer, "%i", value );
+#endif
     return object_new( buffer );
 }
 
@@ -181,7 +185,11 @@ OBJECT * outf_int( int const value )
 OBJECT * outf_double( double const value )
 {
     char buffer[ 50 ];
+#ifndef OS_NT
+    snprintf( buffer, sizeof( buffer ), "%f", value );
+#else
     sprintf( buffer, "%f", value );
+#endif
     return object_new( buffer );
 }
 

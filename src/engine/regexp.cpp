@@ -1264,7 +1264,11 @@ regprop( char *op )
     case OPEN+7:
     case OPEN+8:
     case OPEN+9:
+#ifndef OS_NT
+        snprintf(buf+strlen(buf), sizeof(buf) - strlen(buf), "OPEN%d", OP(op)-OPEN);
+#else
         sprintf(buf+strlen(buf), "OPEN%d", OP(op)-OPEN);
+#endif
         p = NULL;
         break;
     case CLOSE+1:
@@ -1276,7 +1280,11 @@ regprop( char *op )
     case CLOSE+7:
     case CLOSE+8:
     case CLOSE+9:
+#ifndef OS_NT
+        snprintf(buf+strlen(buf), sizeof(buf) - strlen(buf), "CLOSE%d", OP(op)-CLOSE);
+#else
         sprintf(buf+strlen(buf), "CLOSE%d", OP(op)-CLOSE);
+#endif
         p = NULL;
         break;
     case STAR:

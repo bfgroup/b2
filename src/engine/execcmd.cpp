@@ -52,7 +52,11 @@ void argv_from_shell( char const * * argv, LIST * shell, char const * command,
 
     assert( 0 <= slot );
     assert( slot < 999 );
+#ifndef OS_NT
+    snprintf( jobno, sizeof( jobno ), "%d", slot + 1 );
+#else
     sprintf( jobno, "%d", slot + 1 );
+#endif
 
     for ( i = 0; iter != end && i < MAXARGC; ++i, iter = list_next( iter ) )
     {

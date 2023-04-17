@@ -418,9 +418,15 @@ static void file_archivescan_impl( OBJECT * path, archive_scanback func, void * 
 
             /* Construct member path: 'archive-path(member-name)'
              */
+#ifndef OS_NT
+            snprintf( buf, sizeof( buf ), "%s(%s)",
+                object_str( archive->file->name ),
+                object_str( member_file->name ) );
+#else
             sprintf( buf, "%s(%s)",
                 object_str( archive->file->name ),
                 object_str( member_file->name ) );
+#endif
 
             {
                 OBJECT * member = object_new( buf );

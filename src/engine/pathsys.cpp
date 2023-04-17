@@ -267,7 +267,11 @@ OBJECT * path_tmpnam( void )
     static unsigned long t;
     if ( !t ) t = time( 0 ) & 0xffff;
     t += 1;
+#ifndef OS_NT
+    snprintf( name_buffer, sizeof( name_buffer ), "jam%lx%lx.000", pid, t );
+#else
     sprintf( name_buffer, "jam%lx%lx.000", pid, t );
+#endif
     return object_new( name_buffer );
 }
 

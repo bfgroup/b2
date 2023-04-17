@@ -375,9 +375,15 @@ void file_archscan( char const * arch, scanback func, void * closure )
 
             /* Construct member path: 'archive-path(member-name)'
              */
+#ifndef OS_NT
+            snprintf( buf, sizeof( buf ), "%s(%s)",
+                object_str( archive->file->name ),
+                object_str( member_file->name ) );
+#else
             sprintf( buf, "%s(%s)",
                 object_str( archive->file->name ),
                 object_str( member_file->name ) );
+#endif
             {
                 OBJECT * member = object_new( buf );
                 (*func)( closure, member, 1 /* time valid */, &member_file->time );
@@ -486,7 +492,11 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
                 name = c + 1;
         }
 
+#ifndef OS_NT
+        snprintf( buf, sizeof( buf ), "%.*s", int(endname - name), name );
+#else
         sprintf( buf, "%.*s", int(endname - name), name );
+#endif
 
         if ( strcmp( buf, "") != 0 )
         {

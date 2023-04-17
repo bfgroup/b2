@@ -310,7 +310,11 @@ static unsigned int set_archive_member( struct dsc$descriptor_s *module,
         file_info_t * member = 0;
 
         /* Construct member's filename as lowercase "module.obj" */
+#ifndef OS_NT
+        snprintf( buf, sizeof( buf ),  "%s.obj", filename );
+#else
         sprintf( buf, "%s.obj", filename );
+#endif
         downcase_inplace( buf );
         archive->members = filelist_push_back( archive->members, object_new( buf ) );
 
@@ -359,9 +363,15 @@ void file_archscan( char const * arch, scanback func, void * closure )
 
             /* Construct member path: 'archive-path(member-name)'
              */
+#ifndef OS_NT
+            snprintf( buf, sizeof( buf ),  "%s(%s)",
+                object_str( archive->file->name ),
+                object_str( member_file->name ) );
+#else
             sprintf( buf, "%s(%s)",
                 object_str( archive->file->name ),
                 object_str( member_file->name ) );
+#endif
             {
                 OBJECT * member = object_new( buf );
                 (*func)( closure, member, 1 /* time valid */, &member_file->time );

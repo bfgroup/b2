@@ -773,7 +773,11 @@ static char const * target_name( TARGET * t )
     static char buf[ 1000 ];
     if ( t->flags & T_FLAG_INTERNAL )
     {
+#ifndef OS_NT
+        snprintf( buf, sizeof( buf ), "%s (internal node)", object_str( t->name ) );
+#else
         sprintf( buf, "%s (internal node)", object_str( t->name ) );
+#endif
         return buf;
     }
     return object_str( t->name );

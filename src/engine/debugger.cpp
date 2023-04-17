@@ -1143,11 +1143,19 @@ static void debug_start_child( int argc, const char * * argv )
     string_copy( command_line, "b2 " );
     /* Pass the handles as the first and second arguments. */
     string_append( command_line, debugger_opt );
+#ifndef OS_NT
+    snprintf( buf, sizeof( buf ), "%p", pipe1[ 0 ] );
+#else
     sprintf( buf, "%p", pipe1[ 0 ] );
+#endif
     string_append( command_line, buf );
     string_push_back( command_line, ' ' );
     string_append( command_line, debugger_opt );
+#ifndef OS_NT
+    snprintf( buf, sizeof( buf ), "%p", pipe2[ 1 ] );
+#else
     sprintf( buf, "%p", pipe2[ 1 ] );
+#endif
     string_append( command_line, buf );
     /* Pass the rest of the command line. */
 	{
@@ -1520,7 +1528,11 @@ static void debug_parent_clear( int argc, const char * * argv )
         printf( "Deleted breakpoint %d\n", id );
     }
 
+#ifndef OS_NT
+    snprintf( buf, sizeof( buf ), "%d", id );
+#else
     sprintf( buf, "%d", id );
+#endif
     new_args[ 0 ] = "delete";
     new_args[ 1 ] = buf;
     debug_parent_delete( 2, new_args );
@@ -1578,7 +1590,11 @@ static void debug_parent_backtrace( int argc, const char * * argv )
     {
         FRAME_INFO frame;
         char buf[ 16 ];
+#ifndef OS_NT
+        snprintf( buf, sizeof( buf ), "%d", i );
+#else
         sprintf( buf, "%d", i );
+#endif
         new_args[ 2 ] = buf;
         debug_parent_forward_nowait( 3, new_args, 0, 0 );
         debug_frame_read( command_child, &frame );
@@ -1938,7 +1954,11 @@ static void debug_mi_break_insert( int argc, const char * * argv )
     if ( disabled )
     {
         char buf[ 80 ];
+#ifndef OS_NT
+        snprintf( buf, sizeof( buf ), "%d", num_breakpoints );
+#else
         sprintf( buf, "%d", num_breakpoints );
+#endif
         inner_argv[ 0 ] = "disable";
         inner_argv[ 1 ] = buf;
         debug_child_disable( 2, inner_argv );

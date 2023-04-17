@@ -237,7 +237,7 @@ void file_archscan( char const * arch, scanback func, void * closure )
 
             /* Construct member path: 'archive-path(member-name)'
              */
-            sprintf( buf, "%s(%s)",
+            snprintf( buf, sizeof( buf ),  "%s(%s)",
                 object_str( archive->file->name ),
                 object_str( member_file->name ) );
             {
@@ -354,7 +354,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
         if ( DEBUG_BINDSCAN )
             out_printf( "archive name %s found\n", lar_name );
 
-        sprintf( buf, "%s", lar_name );
+        snprintf( buf, sizeof(buf),  "%s", lar_name );
 
         if ( strcmp( buf, "") != 0 )
         {
@@ -419,7 +419,7 @@ static void collect_archive_content_small( int fd, file_archive_info_t * const a
 
         ar_hdr.hdr._ar_name.ar_name[ lar_namlen ] = '\0';
 
-        sprintf( buf, "%s", ar_hdr.hdr._ar_name.ar_name );
+        snprintf( buf, sizeof(buf),  "%s", ar_hdr.hdr._ar_name.ar_name );
 
         if ( strcmp( buf, "") != 0 )
         {
@@ -474,7 +474,7 @@ static void collect_archive_content_big( int fd, file_archive_info_t * const arc
 
         ar_hdr.hdr._ar_name.ar_name[ lar_namlen ] = '\0';
 
-        sprintf( buf, "%s", ar_hdr.hdr._ar_name.ar_name );
+        snprintf( buf, sizeof(buf),  "%s", ar_hdr.hdr._ar_name.ar_name );
 
         if ( strcmp( buf, "") != 0 )
         {

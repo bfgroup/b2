@@ -1220,8 +1220,13 @@ static FILE * open_command_file( int32_t const slot )
         string const * const tmpdir = path_tmpdir();
         string_new( command_file );
         string_reserve( command_file, tmpdir->size + 64 );
+#ifndef OS_NT
+        command_file->size = snprintf( command_file->value, sizeof( command_file->value ),
+            "%s\\jam%lu-%02d-##.bat", tmpdir->value, procID, slot );
+#else
         command_file->size = sprintf( command_file->value,
             "%s\\jam%lu-%02d-##.bat", tmpdir->value, procID, slot );
+#endif
     }
 
     /* For some reason opening a command file can fail intermittently. But doing

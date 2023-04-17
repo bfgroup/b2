@@ -518,7 +518,11 @@ LIST * builtin_calc( FRAME * frame, int flags )
     else
         return L0;
 
+#ifndef OS_NT
+    snprintf( buffer, sizeof( buffer ), "%ld", result_value );
+#else
     sprintf( buffer, "%ld", result_value );
+#endif
     result = list_push_back( result, object_new( buffer ) );
     return result;
 }
@@ -1369,7 +1373,11 @@ LIST * builtin_backtrace( FRAME * frame, int flags )
         char buf[ 32 ];
         string module_name[ 1 ];
         get_source_line( frame, &file, &line );
+#ifndef OS_NT
+        snprintf( buf, sizeof( buf ), "%d", line );
+#else
         sprintf( buf, "%d", line );
+#endif
         string_new( module_name );
         if ( frame->module->name )
         {
@@ -1656,7 +1664,11 @@ LIST * builtin_nearest_user_location( FRAME * frame, int flags )
         char buf[ 32 ];
 
         get_source_line( nearest_user_frame, &file, &line );
+#ifndef OS_NT
+        snprintf( buf, sizeof( buf ), "%d", line );
+#else
         sprintf( buf, "%d", line );
+#endif
         result = list_push_back( result, object_new( file ) );
         result = list_push_back( result, object_new( buf ) );
         return result;
@@ -1689,7 +1701,13 @@ LIST * builtin_md5( FRAME * frame, int flags )
     md5_finish( &state, digest );
 
     for ( di = 0; di < 16; ++di )
+    {
+#ifndef OS_NT
+        snprintf( hex_output + di * 2, sizeof( hex_output ), "%02x", digest[ di ] );
+#else
         sprintf( hex_output + di * 2, "%02x", digest[ di ] );
+#endif
+    }
 
     return list_new( object_new( hex_output ) );
 }
@@ -1730,7 +1748,11 @@ LIST * builtin_file_open( FRAME * frame, int flags )
 
     if ( fd != -1 )
     {
+#ifndef OS_NT
+        snprintf( buffer, sizeof( buffer ), "%d", fd );
+#else
         sprintf( buffer, "%d", fd );
+#endif
         return list_new( object_new( buffer ) );
     }
     return L0;
@@ -2072,7 +2094,12 @@ LIST * builtin_shell( FRAME * frame, int flags )
         /* Harmonize VMS success status with POSIX */
         if ( exit_status == 1 ) exit_status = EXIT_SUCCESS;
 #endif
+
+#ifndef OS_NT
+        snprintf( buffer, sizeof(buffer), "%d", exit_status );
+#else
         sprintf( buffer, "%d", exit_status );
+#endif
         result = list_push_back( result, object_new( buffer ) );
     }
 

@@ -182,7 +182,11 @@ static char const * timestamp_formatstr( timestamp const * const time,
     static char result2[ 500 ];
     strftime( result1, sizeof( result1 ) / sizeof( *result1 ), format, gmtime(
         &time->secs ) );
+#ifndef OS_NT
+    snprintf( result2, sizeof( result2 ), result1, time->nsecs );
+#else
     sprintf( result2, result1, time->nsecs );
+#endif
     return result2;
 }
 
