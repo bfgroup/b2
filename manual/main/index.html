@@ -4724,6 +4724,12 @@ is the C++ compiler, and for <code>linkflags</code> that is the linker. The feat
 handy when you are trying to do something special that cannot be achieved by a
 higher-level feature in B2.</p>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.compileflags"></a><code>compileflags</code></dt>
+<dd>
+<p>The value of this feature is passed without modification to the corresponding
+tools. The values from the <code>compileflags</code> is applied to all compilation of any
+language for the tools.</p>
+</dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.conditional"></a><code>conditional</code></dt>
 <dd>
 <p>Used to introduce indirect conditional requirements. The value should have the
@@ -5117,6 +5123,17 @@ libraries.</p>
 sanitizer. The feature is optional, thus no sanitizer is enabled by default.</p>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.linemarkers"></a><code>linemarkers</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>off</code>.</p>
+<div class="paragraph">
+<p>On preprocessing targets changes behavior to emit/omit line directives
+like <code>#line</code> and <code>#<em>linenum</em></code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>NOTE:</strong> The value doesn&#8217;t propagate.</p>
+</div>
+</dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.link"></a><code>link</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> <code>shared</code>, <code>static</code></p>
@@ -5447,6 +5464,14 @@ controls if import libraries are produced for shared libraries or not.</p>
 </div>
 <div class="paragraph">
 <p>See the section <a href="#bbv2.tasks.crosscompile">Cross-compilation</a> for details of cross-compilation.</p>
+</div>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.threadapi"></a><code>threadapi</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>pthread</code>, <code>win32</code>.</p>
+<div class="paragraph">
+<p>Selects threading implementation. The default is <code>win32</code> if <code>&lt;target-os&gt;</code> is
+<code>windows</code> and <code>pthread</code> otherwise.</p>
 </div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.threading"></a><code>threading</code></dt>
@@ -6099,6 +6124,157 @@ and C++ sources.</p>
 <p>Specifies additional command line options that will be passed to the linker.</p>
 </dd>
 </dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="bbv2.reference.tools.compiler.borland"><a class="anchor" href="#bbv2.reference.tools.compiler.borland"></a>Embarcadero C++ Compiler</h5>
+<div class="paragraph">
+<p>The <code>embarcadero</code> module supports the 32-bit command line C compiler
+bcc32x and the 64-bit command line C compiler bcc64, both clang-based,
+running on Microsoft Windows. These are the clang-based Windows compilers
+for all versions of Embarcadero C++.</p>
+</div>
+<div class="paragraph">
+<p>The module is initialized using the following syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">using embarcadero : [version] : [c++-compile-command] : [compiler options] ;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This statement may be repeated several times, if you want to configure
+several versions of the compiler.</p>
+</div>
+<div class="paragraph">
+<p><code>version</code>:</p>
+</div>
+<div class="paragraph">
+<p>The version should be the compiler version if specified. if the
+version is not specified Boost Build will find the latest installed
+version of Embarcadero C and use that for the version. If the version
+is specified Boost Build does not check if this matches any particular
+version of Embarcadero C, so you may use the version as a mnemonic to
+configure separate 'versions'.</p>
+</div>
+<div class="paragraph">
+<p><code>c++-compile-command</code>:</p>
+</div>
+<div class="paragraph">
+<p>If the c-compile-command is not specified, Boost.Build will default to the
+bcc64 compiler. If you specify a compiler option of &lt;address-model&gt;32 the
+default compiler will be bcc32x. In either case when the command is not given
+Boost Build will assume the compiler is in the PATH. So it is not necessary
+to specify a command if you accept the default compiler and the Embarcadero
+C binary directory is in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>If the command is specified it will be used as is to invoke the compiler.
+If the command has either 'bcc32x(.exe)' or 'bcc64(.exe)' in it Boost Build
+will use the appropriate compiler to configure the toolset. If the command
+does not have either 'bcc32x(.exe)' or 'bcc64(.exe)' in it, Boost Build
+will use the default compiler to configure the toolset. If you have your
+own command, which does not have 'bcc32x(.exe)' in it but invokes the
+'bcc32x(.exe)' compiler, specify the &lt;address-model&gt;32 compiler option.</p>
+</div>
+<div class="paragraph">
+<p><code>compiler options</code>:</p>
+</div>
+<div class="paragraph">
+<p>The following options can be provided, using
+<em>`&lt;option-name&gt;option-value syntax`</em>:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>cflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling C
+and C++ sources.</p>
+</dd>
+<dt class="hdlist1"><code>cxxflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling C++
+sources.</p>
+</dd>
+<dt class="hdlist1"><code>linkflags</code></dt>
+<dd>
+<p>Specifies additional command line options that will be passed to the linker.</p>
+</dd>
+<dt class="hdlist1"><code>asmflags</code></dt>
+<dd>
+<p>Specifies additional command line options that will be passed to the assembler.</p>
+</dd>
+<dt class="hdlist1"><code>archiveflags</code></dt>
+<dd>
+<p>Specifies additional command line options that will be passed to the archiver,
+which creates a static library.</p>
+</dd>
+<dt class="hdlist1"><code>address-model</code></dt>
+<dd>
+<p>This option can be used to specify the default compiler as specified in the
+dicsussion above of the c++-compile-command. Otherwise the address model
+is not used to initialize the toolset.</p>
+</dd>
+<dt class="hdlist1"><code>user-interface</code></dt>
+<dd>
+<p>Specifies the user interface for applications. Valid choices are <code>console</code>
+for a console applicatiuon and <code>gui</code> for a Windows application.</p>
+</dd>
+<dt class="hdlist1"><code>root</code></dt>
+<dd>
+<p>Normallly Boost Build will automatically be able to determine the root of
+the Embarcadero C installation. It does this in various ways, but primarily
+by checking a registry entry. If you specify the root it will use that
+path, and the root you specify should be the full path to the Embarcadero
+C installation on your machine ( without a trailing \ or / ). You should
+not need to specify this option unless Boost Build can not find the
+Embarcadero C++ root directory.</p>
+</dd>
+<dt class="hdlist1">Examples</dt>
+<dd>
+<p>using embarcadero ;</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with bcc64 as the compiler.
+The bcc64 compiler must be in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : 7.40 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the 7.40 version, with bcc64 as the compiler.
+The bcc64 compiler must be in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : 7.40 : bcc32x ;
+using embarcadero : 7.40 : : &lt;address-model&gt;32 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the 7.40 version, with bcc32x as the compiler.
+The bcc32x compiler must be in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : : c:/some_path/bcc64 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with full command specified.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : : full_command : &lt;address-model&gt;32 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with full command specified
+and bcc32x as the compiler.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : : : &lt;root&gt;c:/root_path ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with bcc64 as the compiler
+and the root directory of the installation specified. The bcc64 compiler must
+be in the PATH.</p>
 </div>
 </div>
 <div class="sect4">
