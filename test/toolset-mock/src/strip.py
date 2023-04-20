@@ -8,6 +8,6 @@
 
 from MockProgram import *
 
-command('strip', '-S', '-x', input_file('bin/darwin-4.2.1/release/target-os-darwin/test'))
+command('strip', '-S', '-x', input_file('test'))
 
 main()
