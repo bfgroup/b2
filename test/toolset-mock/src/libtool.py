@@ -8,7 +8,7 @@
 
 from MockProgram import *
 
-command('libtool', '-static', '-o', output_file('bin/darwin-4.2.1/debug/link-static/target-os-darwin/libl1.a'), input_file('bin/darwin-4.2.1/debug/link-static/target-os-darwin/lib.o'))
-command('libtool', '-static', '-o', output_file('bin/darwin-4.2.1/debug/link-static/runtime-link-static/target-os-darwin/libl1.a'), input_file('bin/darwin-4.2.1/debug/link-static/runtime-link-static/target-os-darwin/lib.o'))
+command('libtool', '-static', '-o', output_file('libl1.a'), input_file('lib.o'))
+command('libtool', '-static', '-o', output_file('libl1.a'), input_file('lib.o'))
 
 main()
