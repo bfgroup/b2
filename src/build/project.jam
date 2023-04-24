@@ -510,6 +510,8 @@ rule initialize (
         ECHO "Initializing project '$(module-name)'" ;
     }
 
+    .init-stack = $(module-name) $(.init-stack) ;
+
     local jamroot ;
 
     local parent-module ;
@@ -642,6 +644,7 @@ rule initialize (
     }
 
     .current-project = [ target $(module-name) ] ;
+    .init-stack = $(.init-stack[2-]) ;
 }
 
 
