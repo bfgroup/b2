@@ -172,14 +172,8 @@ add-install-dir b2bindir-portable : : b2prefix-portable ;
 add-install-dir b2coredir-portable : .b2 : b2prefix-portable ;
 add-install-dir b2examplesdir-portable : .b2/examples : b2prefix-portable ;
 
-local ext = "" ;
-if [ os.on-windows ] || [ os.on-vms ]
-{
-    ext = ".exe" ;
-}
-
 install b2-engine
-    :   $(SELF)/src/engine/b2$(ext)
+    :   b2
     :   <b2-install-layout>standard:<location>(b2bindir-standard)
         <b2-install-layout>portable:<location>(b2bindir-portable)
     ;
