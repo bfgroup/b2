@@ -157,8 +157,6 @@ using pkg-config : [config] : [command] ... : [ options ] ... : [condition] ... 
 
 rule init ( config ? : command * : options * : condition * )
 {
-    echo using pkg-config $(config) ":" $(command) ":" $(options) ;
-
     if ! $(.initialized)
     {
         .initialized = true ;

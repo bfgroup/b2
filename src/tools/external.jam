@@ -61,6 +61,12 @@ Allowed options:
 * `<name>`: should be in the form `LIBRARY=NAME`; overrides the searched name
     for library `LIBRARY` with the name `NAME`. Multiple instances (even for
     the same library) are allowed.
+* `<target>` should be in the form `LIBRARY=TARGET`, where `TARGET` should be a
+    target reference,  or `LIBRARY`, in which case the current project should
+    contain a target called `LIBRARY`; target to use instead of creating a new
+    target for `LIBRARY`. This can be useful if the user wants a non-standard
+    method of locating the library (e.g. <<_pkg_config>>), or wants to build
+    the library manually. One instance per `LIBRARY` is allowed.
 
 The rule supports keyword arguments.
 
@@ -200,6 +206,18 @@ rule init ( options * : condition * )
 }
 ----
 
+[[bbv2.tools.external.target_override]]
+== Overriding with other targets
+
+`configure` rule can be used to override the created target with another
+target. One particular use case is overriding with a target created by
+`pkg-config` module.
+
+[source,jam]
+----
+pkg-config.import sqlite3 ;
+external.configure sqlite3 : <target>sqlite3 ;
+----
 |# # end::doc[]
 
 local rule declare-target ( tgt-id : sources * : options * : header-only ? )
@@ -271,7 +289,16 @@ local rule declare-target ( tgt-id : sources * : options * : header-only ? )
                 : $(user-options) ] ;
         }
 
+        local target-ref = [ get-target $(tgt-name) : $(user-options) ] ;
+        if $(target-ref)
+        {
+            $(lib-tgt).set-target $(target-ref) ;
+            $(lib-tgt).set-caller [ $(configs).get $(config) : caller ] ;
+        }
+
         targets.main-target-alternative $(lib-tgt) ;
+
+        $(configs).set $(config) : $(registered-targets) $(tgt-name) ;
     }
 }
 
@@ -288,6 +315,23 @@ local rule lib-name ( lib-name : options * : user-options * )
         result = [ feature.get-values <name> : $(options) ] ;
     }
     result ?= $(lib-name) ;
+    return $(result) ;
+}
+
+local rule get-target ( lib-name : user-options * )
+{
+    local result ;
+    for local opt in $(user-options)
+    {
+        if $(opt:G) != <target> { continue ; }
+        if $(opt:G=) = $(lib-name)
+        {
+            result += $(lib-name) ;
+        }
+
+        result += [ MATCH ^$(lib-name)=(.*) : $(opt:G=) ]
+            [ MATCH ^$(lib-name)$ : $(opt:G=) ] ;
+    }
     return $(result) ;
 }
 
@@ -316,6 +360,7 @@ local rule register-config ( proj-name : configs : options * : condition )
     $(configs).register $(condition) ;
     $(configs).set $(condition) : options : $(options) ;
     $(configs).set $(condition) : condition : $(condition) ;
+    $(configs).set $(condition) : caller : [ project.current ] ;
     $(configs).set $(condition) : targets ;
 
     $(configs).use $(condition) ;
@@ -388,6 +433,11 @@ class external-library : ac-library
         self.sources = $(sources) ;
     }
 
+    rule set-caller ( caller )
+    {
+        self.caller = $(caller) ;
+    }
+
     rule compute-usage-requirements ( subvariant )
     {
         local base = [ basic-target.compute-usage-requirements $(subvariant) ] ;
@@ -398,7 +448,8 @@ class external-library : ac-library
     {
         if $(self.target)
         {
-            return [ $(self.target).generate $(property-set) ] $(sources) ;
+            return [ targets.generate-from-reference $(self.target)
+                : $(self.caller) : $(property-set) ] ;
         }
 
         local proj = [ project ] ;
