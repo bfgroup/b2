@@ -13,6 +13,7 @@ import feature ;
 import os ;
 import param ;
 import project ;
+import property-set ;
 import regex ;
 import sequence ;
 import string ;
@@ -96,7 +97,8 @@ pkg-config.import my-package
 |# # end::doc[]
 
 
-rule import
+# will be re-exported as 'import'
+local rule do-import
     ( target-name
     : sources *
     : requirements *
@@ -127,7 +129,7 @@ with the `using` rule:
 
 [source, jam]
 ----
-using pkg-config : [config] : [command] ... : [ options ] ... ;
+using pkg-config : [config] : [command] ... : [ options ] ... : [condition] ... ;
 ----
 
 
@@ -149,20 +151,57 @@ using pkg-config : [config] : [command] ... : [ options ] ... ;
         multiple occurences are allowed.
     * `<variable>`: adds a variable definition argument to command invocation;
         multiple occurences are allowed.
+* `condition`: properties that distinguish this configuration.
 
 |# # end::doc[]
 
-rule init ( config ? : command * : options * )
+rule init ( config ? : command * : options * : condition * )
 {
-    config ?= [ default-config ] ;
+    echo using pkg-config $(config) ":" $(command) ":" $(options) ;
+
+    if ! $(.initialized)
+    {
+        .initialized = true ;
+
+        project.initialize $(__name__) ;
+        project $(__name__) ;
+
+        # project.initialize replaces import rule in this module, so we
+        # put it back
+        IMPORT $(__name__) : do-import : $(__name__) : import ;
+        EXPORT $(__name__) : import ;
+    }
+
+    if ! $(config)
+    {
+        config = [ default-config ] ;
+        if $(config) in [ $(.configs).used ]
+        {
+            config = ;
+        }
+    }
+    if ! $(config) && ! $(condition)
+    {
+        return ;
+    }
 
     local tool = [ os.environ PKG_CONFIG ] ;
     tool ?= pkg-config ;
-    command =
-        [ common.get-invocation-command pkg-config : $(tool) : $(command) ] ;
+    command = [ common.get-invocation-command pkg-config : $(tool)
+        : $(command) ] ;
 
     configure $(config) : $(command) : $(options) ;
     $(.configs).use $(config) ;
+
+    local project = [ project.target $(__name__) ] ;
+    targets.main-target-alternative
+        [ new alias-target-class prefix
+        : $(project)
+        :
+        : [ property-set.create $(condition) ]
+        :
+        : [ property-set.create <pkg-config>$(config) ]
+        ] ;
 }
 
 
@@ -223,7 +262,7 @@ class pkg-config-target : alias-target-class
 
     rule construct ( name : sources * : property-set )
     {
-        local config = [ $(property-set).get <pkg-config> ] ;
+        local config = [ get-config $(property-set) ] ;
         local args = [ common-arguments $(name) : $(property-set) ] ;
         return
             [ property-set.create
@@ -234,7 +273,7 @@ class pkg-config-target : alias-target-class
 
     rule version ( property-set )
     {
-        local config = [ $(property-set).get <pkg-config> ] ;
+        local config = [ get-config $(property-set) ] ;
         local args = [ common-arguments [ name ] : $(property-set) ] ;
         local version = [ pkg-config.run $(config) : --modversion $(args) ] ;
         return [ regex.split $(version) "\\." ] ;
@@ -299,6 +338,21 @@ class pkg-config-target : alias-target-class
     {
         local flags = [ pkg-config.run $(config) : --cflags $(args) ] ;
         return <cflags>$(flags) ;
+    }
+
+    local rule get-config ( property-set )
+    {
+        local result = [ $(property-set).get <pkg-config> ] ;
+        if $(result)
+        {
+            return $(result) ;
+        }
+
+
+        local project = [ project.target pkg-config ] ;
+        property-set = [ targets.generate-from-reference /pkg-config//prefix
+            : $(project) : $(property-set) ] ;
+        return [ $(property-set[1]).get <pkg-config> ] ;
     }
 }
 

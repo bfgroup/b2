@@ -334,6 +334,9 @@ local rule declare-target ( project : incdir : libdir : condition * )
         :
         : [ property-set.create <include>$(incdir) <search>$(libdir) ]
         ] ;
+    local pkg-config-libdir = [ path.join $(libdir) pkgconfig ] ;
+    using pkg-config : [ property-set.create $(condition) ] :
+        : <libdir>$(pkg-config-libdir) ;
 }
 
 local rule deduce-prefix ( root ? : triplet ? )
