@@ -741,11 +741,11 @@ package/config style loading of single jam files.
 
 To control which and where projects are found one can use different methods:
 
-* `B2_PROJECT_SEARCH` environment variable.
+* `B2_PROJECT_PATH` environment variable.
 * `--project-search` command line argument.
 * `rule project-search` project rule.
 
-The search path in both `B2_PROJECT_SEARCH` and `--project-search` specifies a
+The search path in both `B2_PROJECT_PATH` and `--project-search` specifies a
 key-value list of _project-id_ and _path_. The parts of that key-value list, as
 the name indicates, is a path delimiter separated list. For example if we had
 these two projects we wanted to find: `/zlib` and `/boost/asio` the search paths
