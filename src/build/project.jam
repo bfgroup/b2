@@ -144,6 +144,7 @@ rule load-parent ( location )
 #
 rule find ( name : current-location )
 {
+    name = [ path.normalize-all $(name) ] ;
     local project-module ;
 
     # Try interpreting name as project id.
@@ -152,6 +153,8 @@ rule find ( name : current-location )
         project-module = $($(name).jamfile-module) ;
         if ! $(project-module)
         {
+            # Not immediately found as a project. Try and search for a project
+            # we can import.
             local root-and-jamfile = [ search $(name) ] ;
             local root = $(root-and-jamfile[1]) ;
             local jamfile = $(root-and-jamfile[2]) ;
@@ -215,7 +218,7 @@ B2_PROJECT_PATH = [ modules.peek : B2_PROJECT_PATH ]
     while $(B2_PROJECT_PATH)
     {
         local root = $(B2_PROJECT_PATH[1]) ;
-        local path = $(B2_PROJECT_PATH[2]) ;
+        local path = [ path.make $(B2_PROJECT_PATH[2]) ] ;
         B2_PROJECT_PATH = $(B2_PROJECT_PATH[3-]) ;
         if $(root) && $(path)
         {
