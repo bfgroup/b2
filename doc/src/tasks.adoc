@@ -726,3 +726,7 @@ managers. Currently the supported ones are:
 
 * Conan (`conan`): currently supports the
   link:https://docs.conan.io/en/latest/reference/generators/b2.html[`b2 generator`].
+
+:leveloffset: +1
+include::../../src/tools/vcpkg.jam[tag=doc]
+:leveloffset: -1

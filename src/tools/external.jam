@@ -1,0 +1,610 @@
+#|
+Copyright 2023 Dmitry Arkhipov (grisumbras@yandex.ru)
+Distributed under the Boost Software License, Version 1.0. (See
+accompanying file LICENSE.txt or copy at
+https://www.bfgroup.xyz/b2/LICENSE.txt)
+|#
+
+
+import ac ;
+import errors ;
+import feature ;
+import param ;
+import path ;
+import project ;
+import property-set ;
+import targets ;
+
+import "class" : new ;
+
+if --debug-configuration in [ modules.peek : ARGV ]
+{
+    .debug =  true ;
+}
+
+#| tag::doc[]
+
+[[bbv2.tools.external]]
+= external
+The module allows simple declaration of targets for external dependencies. This
+can be used to create <<bbv2.extending.toolset_modules, toolset modules>>, but
+rules from this module can also be used directly. In the latter case, rules
+`lib` and `alias` are intended for project authors (i.e. should be used in
+jamfiles), while rule `configure`, is intended for project users (i.e. should
+be used in config files).
+
+The module only creates projects if they do not exist yet, and only creates
+targets inside projects it created. This allows seamless integration with
+package managers, if certain care is taken. In particular, it has become a
+convention to call the sole target in a header-only library project `libs`.
+
+The module interoperates with <<bbv2.tasks.packagemanagers.vcpkg,`vcpkg`>>
+module. If configuration for some build request does not set include or library
+directories, but there is a fitting vcpkg configuration, the module will
+attempt to use it.
+
+[[bbv2.tools.external.configure]]
+== Rule `configure`
+
+[source, jam]
+----
+rule configure ( project : options * : condition * )
+----
+
+The rule registers a configuration of `project` for the given `condition`.
+Using free or incidental features in `condition` is not supported.
+
+Allowed options:
+
+* `<include>`: the directory containing project's headers.
+* `<search>`: the directory containing project's library files.
+* `<name>`: should be in the form `LIBRARY=NAME`; overrides the searched name
+    for library `LIBRARY` with the name `NAME`. Multiple instances (even for
+    the same library) are allowed.
+* `<target>` should be in the form `LIBRARY=TARGET`, where `TARGET` should be a
+    target reference,  or `LIBRARY`, in which case the current project should
+    contain a target called `LIBRARY`; target to use instead of creating a new
+    target for `LIBRARY`. This can be useful if the user wants a non-standard
+    method of locating the library (e.g. <<_pkg_config>>), or wants to build
+    the library manually. One instance per `LIBRARY` is allowed.
+
+The rule supports keyword arguments.
+
+Example:
+
+[source, jam]
+----
+external.configure sqlite3
+    : <include>/opt/sqlite3/include <search>/opt/sqlite3/lib
+    : <link>static
+    ;
+----
+
+|# # end::doc[]
+rule configure ( proj-name : options * : condition * )
+{
+    param.handle-named-params options condition ;
+
+    local ps = [ property-set.create $(condition) ] ;
+    local base = [ property-set.create [ $(ps).base ] ] ;
+    if $(ps) != $(base)
+    {
+        errors.user-error "Condition for external project '$(proj-name)'"
+            "contains free or incidental features:" [ $(ps).free ]
+            [ $(ps).incidental ] ;
+    }
+
+    local configs = [ get-configs $(proj-name) ] ;
+    register-config $(proj-name) : $(configs) : $(options) : $(ps) ;
+}
+
+#| tag::doc[]
+
+[[bbv2.tools.external.lib]]
+== Rule `lib`
+
+[source, jam]
+----
+rule lib ( target : sources * : options * )
+----
+
+The rule declares a target for external searched library. `target` argument
+should take the form `/PROJECT//LIBRARY`, which results in creation of target
+`LIBRARY` in project `PROJECT`. The `sources` argument can be used to
+represent transitive dependencies.
+
+Allowed options:
+
+* `<header>`: the header file (relative to include directory) that will be
+    used for include directory search. *This argument is required*.
+* `<header-test>`: {CPP} code that tests if the header can be included. This
+    option may become relevant, if the build system can't find the header's
+    file, but it can still be included (e.g. it is located in a compiler's
+    hard-coded include directory). If omitted, `#include <HEADER>` is used,
+    where `HEADER` is the valiue of option `<header>`.
+* `<name>`: provides alternative names for the searched library; multiple
+    instances are allowed. If omitted, the target name will be used.
+
+The rule supports keyword arguments.
+
+Example:
+
+[source, jam]
+----
+external.lib /sqlite3//sqlite3 : options <header>sqlite3.h ;
+exe myapp : /sqlite3//sqlite3 main.cpp ;
+----
+
+|# # end::doc[]
+rule lib ( tgt-id : sources * : options * )
+{
+    param.handle-named-params sources options ;
+    declare-target $(tgt-id) : $(sources) : $(options) ;
+}
+
+#| tag::doc[]
+
+[[bbv2.tools.external.alias]]
+== Rule `alias`
+
+[source, jam]
+----
+rule alias ( target : sources * : options * )
+----
+
+The rule declares a target for external header-only library. `target` argument
+should take the form `/PROJECT//LIBRARY`, which results in creation of target
+`LIBRARY` in project `PROJECT`. The `sources` argument can be used to
+represent transitive dependencies.
+
+Allowed options:
+
+* `<header>`: the header file (relative to include directory) that will be
+    used for include directory search. *This argument is required*.
+* `<header-test>`: {CPP} code that tests if the header can be included. This
+    option may become relevant, if the build system can't find the header's
+    file, but it can still be included (e.g. it is located in a compiler's
+    hard-coded include directory). If omitted, `#include <HEADER>` is used,
+    where `HEADER` is the valiue of option `<header>`.
+
+The rule supports keyword arguments.
+
+Example:
+
+[source, jam]
+----
+external.alias /catch2//libs : options <header>catch2/catch_version.hpp ;
+exe myapp : /catch2//libs main.cpp ;
+----
+
+|# # end::doc[]
+rule alias ( tgt-id : sources * : options * )
+{
+    param.handle-named-params sources options ;
+    declare-target $(tgt-id) : $(sources) : $(options) : header-only ;
+}
+
+#| tag::doc[]
+
+[[bbv2.tools.external.toolset_modules]]
+== Implementing toolset modules
+
+Implementing <<bbv2.extending.toolset_modules, toolset modules>> using this
+module is done simply by using `configure`, followed by invocations of
+`lib` and `alias` for each library in the project. For example:
+
+[source,jam]
+----
+# sqlite3.jam
+
+import external ;
+
+rule init ( options * : condition * )
+{
+    external.configure sqlite3 : $(options) : $(condition) ;
+    external.alias /sqlite3//sqlite3 : options <header>sqlite3.h ;
+}
+----
+
+[[bbv2.tools.external.target_override]]
+== Overriding with other targets
+
+`configure` rule can be used to override the created target with another
+target. One particular use case is overriding with a target created by
+`pkg-config` module.
+
+[source,jam]
+----
+pkg-config.import sqlite3 ;
+external.configure sqlite3 : <target>sqlite3 ;
+----
+|# # end::doc[]
+
+local rule declare-target ( tgt-id : sources * : options * : header-only ? )
+{
+    local tgt-name = [ MATCH ^/(.*)//(.*) : $(tgt-id) ] ;
+    local proj-name = $(tgt-name[1]) ;
+    tgt-name = $(tgt-name[2-]) ;
+
+    local proj-tgt = [ get-project $(proj-name) ] ;
+    if ! $(proj-tgt)
+    {
+        return ;
+    }
+
+    local configs = [ get-configs $(proj-name) ] ;
+    local registered-configs = [ $(configs).all ] ;
+    if ! $(registered-configs)
+    {
+        local ps = [ property-set.empty ] ;
+        register-config $(proj-name) : $(configs) : : $(ps) ;
+        registered-configs = [ $(configs).all ] ;
+    }
+
+    if $(.debug)
+    {
+        local kind = searched ;
+        if $(header-only)
+        {
+            kind = header-only ;
+        }
+
+        echo "notice: [$(proj-name)] declaring $(kind) library $(tgt-name)" ;
+    }
+
+    for local config in $(registered-configs)
+    {
+        local registered-targets = [ $(configs).get $(config) : targets ] ;
+        if $(tgt-name) in $(registered-targets)
+        {
+            continue ;
+        }
+
+        local user-options = [ $(configs).get $(config) : options ] ;
+        local condition = [ $(configs).get $(config) : condition ] ;
+
+        local lib-tgt = [ new external-library $(tgt-name)
+            : $(proj-tgt)
+            : $(sources)
+            : $(condition)
+            : [ feature.get-values <include> : $(user-options) ]
+            : [ feature.get-values <search> : $(user-options) ]
+            ] ;
+
+        local header = [ feature.get-values <header> : $(options) ] ;
+        if $(header)
+        {
+            $(lib-tgt).set-header $(header) ;
+        }
+
+        local header-test = [ feature.get-values <header-test> : $(options) ] ;
+        if $(header-test)
+        {
+            $(lib-tgt).set-header-test $(header-test) ;
+        }
+
+        if ! $(header-only)
+        {
+            $(lib-tgt).set-default-names [ lib-name $(tgt-name) : $(options)
+                : $(user-options) ] ;
+        }
+
+        local target-ref = [ get-target $(tgt-name) : $(user-options) ] ;
+        if $(target-ref)
+        {
+            $(lib-tgt).set-target $(target-ref) ;
+            $(lib-tgt).set-caller [ $(configs).get $(config) : caller ] ;
+        }
+
+        targets.main-target-alternative $(lib-tgt) ;
+
+        $(configs).set $(config) : $(registered-targets) $(tgt-name) ;
+    }
+}
+
+local rule lib-name ( lib-name : options * : user-options * )
+{
+    local result ;
+    for local opt in $(user-options)
+    {
+        if $(opt:G) != <name> { continue ; }
+        result += [ MATCH ^$(lib-name)=(.*) : $(opt:G=) ] ;
+    }
+    if ! $(result)
+    {
+        result = [ feature.get-values <name> : $(options) ] ;
+    }
+    result ?= $(lib-name) ;
+    return $(result) ;
+}
+
+local rule get-target ( lib-name : user-options * )
+{
+    local result ;
+    for local opt in $(user-options)
+    {
+        if $(opt:G) != <target> { continue ; }
+        if $(opt:G=) = $(lib-name)
+        {
+            result += $(lib-name) ;
+        }
+
+        result += [ MATCH ^$(lib-name)=(.*) : $(opt:G=) ]
+            [ MATCH ^$(lib-name)$ : $(opt:G=) ] ;
+    }
+    return $(result) ;
+}
+
+local rule get-configs ( proj-name )
+{
+    local configs = .configs-$(proj-name) ;
+    if ! $($(configs))
+    {
+        $(configs) = [ new configurations ] ;
+    }
+    return $($(configs)) ;
+}
+
+local rule register-config ( proj-name : configs : options * : condition )
+{
+    # multiple empty config registrations (i.e. default configs)
+    # are ignored
+    if ! $(options) && ( $(condition) = [ property-set.empty ] )
+    {
+        if [ $(configs).get $(condition) : condition ]
+        {
+            return ;
+        }
+    }
+
+    $(configs).register $(condition) ;
+    $(configs).set $(condition) : options : $(options) ;
+    $(configs).set $(condition) : condition : $(condition) ;
+    $(configs).set $(condition) : caller : [ project.current ] ;
+    $(configs).set $(condition) : targets ;
+
+    $(configs).use $(condition) ;
+    if $(.debug)
+    {
+        echo "notice: [$(proj-name)] registering configuration"
+            [ $(condition).raw ] ;
+    }
+}
+
+local rule get-project ( proj-name )
+{
+    local proj-id = /$(proj-name) ;
+    local proj-mod ;
+    # If the project is already registered, we don't create it again.
+    # The project may have been created by this module, or some package
+    # manager, or even some other extension module.
+    if ! [ project.is-registered-id $(proj-id) ]
+    {
+        local cur-tgt = [ project.current ] ;
+        local cur-mod = [ $(cur-tgt).project-module ] ;
+        local cur-loc = [ project.attribute $(cur-mod) location ] ;
+
+        local proj-loc = [ path.join $(cur-loc) $(proj-name) ] ;
+        proj-mod = [ project.module-name $(proj-loc) ] ;
+        if $(proj-mod) in [ modules.peek project : .init-stack ]
+        {
+            # the same or similar extension project is already being initialized
+            return ;
+        }
+
+        proj-mod = [ project.load $(proj-loc) : synthesize ] ;
+
+        .projects += $(proj-name) ;
+
+        project.push-current $(cur-tgt) ;
+        project.initialize $(proj-mod) : $(proj-loc) ;
+        project.pop-current ;
+
+        project.inherit-attributes $(proj-mod) : $(cur-mod) ;
+        local attributes = [ project.attributes $(proj-mod) ] ;
+        $(attributes).set id : $(proj-name) ;
+        $(attributes).set parent-module : $(cur-mod) : exact ;
+        # use-project $(proj-id) : $(proj-name) ;
+        project.register-id $(proj-id) : $(proj-mod) ;
+    }
+    else
+    {
+        if ! $(proj-name) in $(.projects)
+        {
+            return ;
+        }
+        proj-mod = [ project.find $(proj-id) : / ] ;
+    }
+
+    return [ project.target $(proj-mod) ] ;
+}
+
+class external-library : ac-library
+{
+    import configure ;
+    import os ;
+    import property ;
+
+    rule __init__ ( name : project : sources * : requirements
+        : include-path ? : library-path ? : library-name ? )
+    {
+        ac-library.__init__ $(name) : $(project) : $(requirements)
+            : $(include-path) : $(library-path) : $(library-name) ;
+        self.sources = $(sources) ;
+    }
+
+    rule set-caller ( caller )
+    {
+        self.caller = $(caller) ;
+    }
+
+    rule compute-usage-requirements ( subvariant )
+    {
+        local base = [ basic-target.compute-usage-requirements $(subvariant) ] ;
+        return [ $(base).add [ $(subvariant).sources-usage-requirements ] ] ;
+    }
+
+    rule construct ( name : sources * : property-set )
+    {
+        if $(self.target)
+        {
+            return [ targets.generate-from-reference $(self.target)
+                : $(self.caller) : $(property-set) ] ;
+        }
+
+        local proj = [ project ] ;
+        proj = [ $(proj).get id ] ;
+        proj = $(proj:B) ;
+
+        local use-environment ;
+        local vcpkg-ps ;
+        local used-vcpkg ;
+        if ! $(self.library-name) && ! $(self.include-path)
+        {
+            use-environment = true ;
+            local vcpkg-proj = [ project.target vcpkg : allow-missing ] ;
+            if $(vcpkg-proj)
+            {
+                vcpkg-ps = [ targets.generate-from-reference
+                    /vcpkg//prefix : $(vcpkg-proj) : $(property-set) ] ;
+            }
+        }
+
+        local libnames = $(self.library-name) ;
+        if ! $(libnames) && $(use-environment) && $(self.default-names)
+        {
+            libnames = [ os.environ $(proj:U)_$(name:U)_NAME ] ;
+            libnames ?= [ os.environ $(name:U)_NAME ] ;
+        }
+        libnames ?= $(self.default-names) ;
+
+        local include-path = $(self.include-path) ;
+        if ! $(include-path) && $(vcpkg-ps)
+        {
+            include-path = [ $(vcpkg-ps).get <include> ] ;
+            used-vcpkg = true ;
+        }
+        if ! $(include-path) && $(use-environment)
+        {
+            include-path = [ os.environ $(proj:U)_$(name:U)_INCLUDE ] ;
+            include-path ?= [ os.environ $(name:U)_INCLUDE ] ;
+        }
+
+        local library-path = $(self.library-path) ;
+        if ! $(library-path) && $(vcpkg-ps)
+        {
+            library-path = [ $(vcpkg-ps).get <search> ] ;
+            used-vcpkg = true ;
+        }
+        if ! $(library-path) && $(use-environment)
+        {
+            library-path = [ os.environ $(proj:U)_$(name:U)_LIBRARY_PATH ] ;
+            library-path ?= [ os.environ $(name:U)_LIBRARY_PATH ] ;
+        }
+
+        local relevant = [ $(self.requirements).raw ] ;
+        if $(used-vcpkg)
+        {
+            local vcpkg-proj = [ project.target vcpkg ] ;
+            local vcpkg-main = [ $(vcpkg-proj).main-target prefix ] ;
+            local vcpkg-alt = [
+                $(vcpkg-main).select-alternatives $(property-set) ] ;
+            local vcpkg-condition = [ $(vcpkg-alt).requirements ] ;
+            relevant += [ $(vcpkg-condition).raw ] ;
+        }
+
+        relevant = [ configure.get-relevant-features $(relevant) ] ;
+        relevant = $(relevant:G) ;
+        relevant = [ sequence.unique [ SORT $(relevant) ] ] ;
+        relevant = [ property.select $(relevant) : [ $(property-set).raw ] ] ;
+        relevant ?= "" ;
+
+        local min = [ property.as-path
+            [ SORT [ feature.minimize $(relevant) ] ] ] ;
+
+        local key = ext-lib-$(name)-$(relevant:J=-) ;
+        local lookup = [ config-cache.get $(key) ] ;
+
+        local result ;
+        local includes ;
+        if $(lookup)
+        {
+            if $(lookup) = missing
+            {
+                configure.log-library-search-result "$(name) ($(proj))"
+                    : "no  (cached)" $(min) ;
+                return [ property-set.empty ] ;
+            }
+
+            includes = $(lookup[1]) ;
+            if $(includes) = %default
+            {
+                includes = ;
+            }
+
+            if $(libnames)
+            {
+                result = [ ac.construct-library $(lookup[2]) :
+                    [ $(property-set).refine
+                        [ property-set.create $(lookup[3]) ] ]
+                    : $(library-path) ] ;
+            }
+            else
+            {
+                result = [ property-set.empty ] ;
+            }
+
+            configure.log-library-search-result "$(name) ($(proj))"
+                : "yes  (cached)" $(min) ;
+        }
+        else
+        {
+            includes = [ ac.find-include-path $(property-set)
+                : $(self.header) : $(include-path) : $(self.header-test) ] ;
+
+            local library ;
+            # we don't for library binary if there's no name (we assume it is
+            # header only)
+            if $(libnames)
+            {
+                library = [ ac.find-library $(property-set) : $(libnames)
+                    : $(library-path) ] ;
+            }
+
+            if $(includes) && ( ! $(libnames) || $(library) )
+            {
+                config-cache.set $(key) : $(includes) $(library) ;
+                if $(includes) = %default
+                {
+                    includes = ;
+                }
+
+                if $(library)
+                {
+                    result = [ ac.construct-library $(library[1]) :
+                        [ $(property-set).refine
+                            [ property-set.create $(library[2]) ] ]
+                        : $(library-path) ] ;
+                }
+                else
+                {
+                    result = [ property-set.empty ] ;
+                }
+
+                configure.log-library-search-result "$(name) ($(proj))"
+                    : "yes " $(min) ;
+            }
+            else
+            {
+                config-cache.set $(key) : missing ;
+                configure.log-library-search-result "$(name) ($(proj))"
+                    : "no " $(min) ;
+                return [ property-set.empty ] ;
+            }
+        }
+
+        result = [ $(result[1]).add-raw <include>$(includes) ]
+                $(result[2-]) ;
+        return $(result) $(sources) ;
+    }
+}
