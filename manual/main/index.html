@@ -886,6 +886,7 @@ a { color: inherit; }
 <li><a href="#bbv2.reference.generated_headers">5.8. Generated headers</a></li>
 <li><a href="#bbv2.tasks.crosscompile">5.9. Cross-compilation</a></li>
 <li><a href="#bbv2.tasks.packagemanagers">5.10. Package Managers</a></li>
+<li><a href="#bbv2.tasks.projectsearch">5.11. Searching For Projects</a></li>
 </ul>
 </li>
 <li><a href="#bbv2.reference">6. Reference</a>
@@ -4297,7 +4298,7 @@ for details.</p>
 <div class="sect2">
 <h3 id="bbv2.tasks.packagemanagers"><a class="anchor" href="#bbv2.tasks.packagemanagers"></a>5.10. Package Managers</h3>
 <div class="paragraph">
-<p>B2 support automatic, or manual, loading of generated build files
+<p>B2 supports automatic, or manual, loading of generated build files
 from package managers. For example using the Conan package manager which
 generates <code>conanbuildinfo.jam</code> files B2 will load that files automatically
 when it loads the project at the same location. The included file can
@@ -4378,6 +4379,189 @@ managers. Currently the supported ones are:</p>
 <a href="https://docs.conan.io/en/latest/reference/generators/b2.html"><code>b2 generator</code></a>.</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bbv2.tasks.projectsearch"><a class="anchor" href="#bbv2.tasks.projectsearch"></a>5.11. Searching For Projects</h3>
+<div class="paragraph">
+<p>B2 supports automatic searching for referenced global projects. For example,
+if you have references to <code>/boost/predef</code> with some minimal configuration B2
+can find the B2 project for it and automatically resolve the reference. The
+searching supports two modes: finding regular B2 project directories, and
+package/config style loading of single jam files.</p>
+</div>
+<div class="sect3">
+<h4 id="bbv2.tasks.projectsearch.path"><a class="anchor" href="#bbv2.tasks.projectsearch.path"></a>5.11.1. Search Path</h4>
+<div class="paragraph">
+<p>To control which and where projects are found one can use different methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>B2_PROJECT_PATH</code> environment variable.</p>
+</li>
+<li>
+<p><code>--project-search</code> command line argument.</p>
+</li>
+<li>
+<p><code>rule project-search</code> project rule.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The search path in both <code>B2_PROJECT_PATH</code> and <code>--project-search</code> specifies a
+key-value list of <em>project-id</em> and <em>path</em>. The parts of that key-value list, as
+the name indicates, is a path delimiter separated list. For example if we had
+these two projects we wanted to find: <code>/zlib</code> and <code>/boost/asio</code> the search paths
+could look like:</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Linux
+</td>
+<td class="hdlist2">
+<p><code>/zlib:/usr/local/share/zlib:/boost/asio:/home/user/external/boost-1.81/libs/asio</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Windows, VxWorks
+</td>
+<td class="hdlist2">
+<p><code>/zlib;C:/Dev/zlib;/boost/asio;C:Dev/boost-1.81/libs/asio</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+VMS
+</td>
+<td class="hdlist2">
+<p><code>/zlib,X:external.zlib,/boost/asio,X:external.boost181.libs.asio</code></p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <em>project-id</em> in the search path specification maps that project root to the
+indicated <em>path</em>. Which B2 will use to search for any projects and sub-projects
+with that <em>project-id</em> root.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.tasks.projectsearch.process"><a class="anchor" href="#bbv2.tasks.projectsearch.process"></a>5.11.2. Search Process</h4>
+<div class="paragraph">
+<p>Regardless of how the search path is specified, how the search happens is the
+same. Searching involves either searching for a B2 project directory, i.e.
+a directory containing a jamfile, or searching for a specially named <code>*.jam</code>
+file to include (similar to how the <a href="#bbv2.tasks.packagemanagers">Package Managers</a> support includes
+jam files).</p>
+</div>
+<div class="paragraph">
+<p>For a given <em>project-id</em> of the form <code>/d1/d2/../dn</code> we search for the following,
+in this order:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The project at <code>d1/d2/../dn</code> in any path registered for the <code>/</code> root.</p>
+</li>
+<li>
+<p>The project at <code>dn</code> in any path registered for the <code>/d1/d2/../dn-1</code> root.</p>
+</li>
+<li>
+<p>The jamfile <code>dn.jam</code> in any path registered for the <code>/d1/d2/../dn-1</code> root.</p>
+</li>
+<li>
+<p>The project at <code>dn-1_dn</code> in any path registered for the <code>/d1/d2/../dn-2</code> root.</p>
+</li>
+<li>
+<p>The jamfile <code>dn-1_dn.jam</code> in any path registered for the <code>/d1/d2/../dn-2</code>
+root.</p>
+</li>
+<li>
+<p>And so on until it searches for the project <code>d1_d2_.._dn</code> in any path
+registered for the <code>/</code> root.</p>
+</li>
+<li>
+<p>And for the jamfile <code>d1_d2_.._dn.jam</code> in any path registered for the <code>/</code> root.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For example, with this search paths:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/boost</code>: <code>/usr/share/boost-1.81.0</code>, <code>/home/user/boost-dev/libs</code></p>
+</li>
+<li>
+<p><code>/</code>: <code>/usr/share/b2/external</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>And given the <code>/boost/core</code> <em>project-id</em> to resolve, we search for:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>/usr/share/b2/external/boost/core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/core.jam</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/core.jam</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/boost_core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/boost_core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/boost_core.jam</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/boost_core.jam</code></p>
+</li>
+<li>
+<p><code>/usr/share/b2/external/boost_core.jam</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The first project jamfile will be assigned to the <em>project-id</em>. Or the first
+<code>*.jam</code> file found will be loaded.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.tasks.projectsearch.loading"><a class="anchor" href="#bbv2.tasks.projectsearch.loading"></a>5.11.3. Loading Process</h4>
+<div class="paragraph">
+<p>Depending on whether a project jamfile or <code>*.jam</code> file determines how the
+project is loaded.</p>
+</div>
+<div class="paragraph">
+<p>When loading a project jamfile with a <em>project-id</em> and <em>path</em> it is equivalent
+to calling <code>use-project <em>project-id</em> : <em>path</em> ;</code> from the context of the project
+that has the reference.</p>
+</div>
+<div class="paragraph">
+<p>When loading a <code>*.jam</code> file as the <em>path</em> it is equivalent to calling:
+<code>use-packages <em>path</em> ;</code> from the context of the project that has the reference.
+In this case it means that the file will be loaded as part of the referenced
+project and hence any bare targets or information it declares will be part of
+the project.</p>
+</div>
 </div>
 </div>
 </div>
