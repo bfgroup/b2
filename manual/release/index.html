@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="generator" content="Asciidoctor 2.0.20">
 <meta name="author" content="René Ferdinand Rivera Morell, Vladimir Prus, Steven Watanabe">
 <meta name="copyright" content="Copyright 2018-2021 René Ferdinand Rivera Morell; Copyright 2006, 2014 Vladimir Prus">
 <title>B2 User Manual</title>
@@ -886,6 +886,7 @@ a { color: inherit; }
 <li><a href="#bbv2.reference.generated_headers">5.8. Generated headers</a></li>
 <li><a href="#bbv2.tasks.crosscompile">5.9. Cross-compilation</a></li>
 <li><a href="#bbv2.tasks.packagemanagers">5.10. Package Managers</a></li>
+<li><a href="#bbv2.tasks.projectsearch">5.11. Searching For Projects</a></li>
 </ul>
 </li>
 <li><a href="#bbv2.reference">6. Reference</a>
@@ -955,30 +956,31 @@ a { color: inherit; }
 </li>
 <li><a href="#b2.history">13. History</a>
 <ul class="sectlevel2">
-<li><a href="#_version_4_9_6">13.1. Version 4.9.6</a></li>
-<li><a href="#_version_4_9_5">13.2. Version 4.9.5</a></li>
-<li><a href="#_version_4_9_4">13.3. Version 4.9.4</a></li>
-<li><a href="#_version_4_9_3">13.4. Version 4.9.3</a></li>
-<li><a href="#_version_4_9_2">13.5. Version 4.9.2</a></li>
-<li><a href="#_version_4_9_1">13.6. Version 4.9.1</a></li>
-<li><a href="#_version_4_9_0">13.7. Version 4.9.0</a></li>
-<li><a href="#_version_4_8_2">13.8. Version 4.8.2</a></li>
-<li><a href="#_version_4_8_1">13.9. Version 4.8.1</a></li>
-<li><a href="#_version_4_8_0">13.10. Version 4.8.0</a></li>
-<li><a href="#_version_4_7_2">13.11. Version 4.7.2</a></li>
-<li><a href="#_version_4_7_1">13.12. Version 4.7.1</a></li>
-<li><a href="#_version_4_7_0">13.13. Version 4.7.0</a></li>
-<li><a href="#_version_4_6_1">13.14. Version 4.6.1</a></li>
-<li><a href="#_version_4_6_0">13.15. Version 4.6.0</a></li>
-<li><a href="#_version_4_5_0">13.16. Version 4.5.0</a></li>
-<li><a href="#_version_4_4_2">13.17. Version 4.4.2</a></li>
-<li><a href="#_version_4_4_1">13.18. Version 4.4.1</a></li>
-<li><a href="#_version_4_4_0">13.19. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">13.20. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">13.21. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">13.22. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_1">13.23. Version 4.0.1</a></li>
-<li><a href="#_version_4_0_0">13.24. Version 4.0.0</a></li>
+<li><a href="#_version_4_10_0">13.1. Version 4.10.0</a></li>
+<li><a href="#_version_4_9_6">13.2. Version 4.9.6</a></li>
+<li><a href="#_version_4_9_5">13.3. Version 4.9.5</a></li>
+<li><a href="#_version_4_9_4">13.4. Version 4.9.4</a></li>
+<li><a href="#_version_4_9_3">13.5. Version 4.9.3</a></li>
+<li><a href="#_version_4_9_2">13.6. Version 4.9.2</a></li>
+<li><a href="#_version_4_9_1">13.7. Version 4.9.1</a></li>
+<li><a href="#_version_4_9_0">13.8. Version 4.9.0</a></li>
+<li><a href="#_version_4_8_2">13.9. Version 4.8.2</a></li>
+<li><a href="#_version_4_8_1">13.10. Version 4.8.1</a></li>
+<li><a href="#_version_4_8_0">13.11. Version 4.8.0</a></li>
+<li><a href="#_version_4_7_2">13.12. Version 4.7.2</a></li>
+<li><a href="#_version_4_7_1">13.13. Version 4.7.1</a></li>
+<li><a href="#_version_4_7_0">13.14. Version 4.7.0</a></li>
+<li><a href="#_version_4_6_1">13.15. Version 4.6.1</a></li>
+<li><a href="#_version_4_6_0">13.16. Version 4.6.0</a></li>
+<li><a href="#_version_4_5_0">13.17. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">13.18. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">13.19. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">13.20. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">13.21. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">13.22. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">13.23. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_1">13.24. Version 4.0.1</a></li>
+<li><a href="#_version_4_0_0">13.25. Version 4.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -4289,7 +4291,7 @@ for details.</p>
 <div class="sect2">
 <h3 id="bbv2.tasks.packagemanagers"><a class="anchor" href="#bbv2.tasks.packagemanagers"></a>5.10. Package Managers</h3>
 <div class="paragraph">
-<p>B2 support automatic, or manual, loading of generated build files
+<p>B2 supports automatic, or manual, loading of generated build files
 from package managers. For example using the Conan package manager which
 generates <code>conanbuildinfo.jam</code> files B2 will load that files automatically
 when it loads the project at the same location. The included file can
@@ -4370,6 +4372,189 @@ managers. Currently the supported ones are:</p>
 <a href="https://docs.conan.io/en/latest/reference/generators/b2.html"><code>b2 generator</code></a>.</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="bbv2.tasks.projectsearch"><a class="anchor" href="#bbv2.tasks.projectsearch"></a>5.11. Searching For Projects</h3>
+<div class="paragraph">
+<p>B2 supports automatic searching for referenced global projects. For example,
+if you have references to <code>/boost/predef</code> with some minimal configuration B2
+can find the B2 project for it and automatically resolve the reference. The
+searching supports two modes: finding regular B2 project directories, and
+package/config style loading of single jam files.</p>
+</div>
+<div class="sect3">
+<h4 id="bbv2.tasks.projectsearch.path"><a class="anchor" href="#bbv2.tasks.projectsearch.path"></a>5.11.1. Search Path</h4>
+<div class="paragraph">
+<p>To control which and where projects are found one can use different methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>B2_PROJECT_PATH</code> environment variable.</p>
+</li>
+<li>
+<p><code>--project-search</code> command line argument.</p>
+</li>
+<li>
+<p><code>rule project-search</code> project rule.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The search path in both <code>B2_PROJECT_PATH</code> and <code>--project-search</code> specifies a
+key-value list of <em>project-id</em> and <em>path</em>. The parts of that key-value list, as
+the name indicates, is a path delimiter separated list. For example if we had
+these two projects we wanted to find: <code>/zlib</code> and <code>/boost/asio</code> the search paths
+could look like:</p>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Linux
+</td>
+<td class="hdlist2">
+<p><code>/zlib:/usr/local/share/zlib:/boost/asio:/home/user/external/boost-1.81/libs/asio</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Windows, VxWorks
+</td>
+<td class="hdlist2">
+<p><code>/zlib;C:/Dev/zlib;/boost/asio;C:Dev/boost-1.81/libs/asio</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+VMS
+</td>
+<td class="hdlist2">
+<p><code>/zlib,X:external.zlib,/boost/asio,X:external.boost181.libs.asio</code></p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <em>project-id</em> in the search path specification maps that project root to the
+indicated <em>path</em>. Which B2 will use to search for any projects and sub-projects
+with that <em>project-id</em> root.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.tasks.projectsearch.process"><a class="anchor" href="#bbv2.tasks.projectsearch.process"></a>5.11.2. Search Process</h4>
+<div class="paragraph">
+<p>Regardless of how the search path is specified, how the search happens is the
+same. Searching involves either searching for a B2 project directory, i.e.
+a directory containing a jamfile, or searching for a specially named <code>*.jam</code>
+file to include (similar to how the <a href="#bbv2.tasks.packagemanagers">Package Managers</a> support includes
+jam files).</p>
+</div>
+<div class="paragraph">
+<p>For a given <em>project-id</em> of the form <code>/d1/d2/../dn</code> we search for the following,
+in this order:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The project at <code>d1/d2/../dn</code> in any path registered for the <code>/</code> root.</p>
+</li>
+<li>
+<p>The project at <code>dn</code> in any path registered for the <code>/d1/d2/../dn-1</code> root.</p>
+</li>
+<li>
+<p>The jamfile <code>dn.jam</code> in any path registered for the <code>/d1/d2/../dn-1</code> root.</p>
+</li>
+<li>
+<p>The project at <code>dn-1_dn</code> in any path registered for the <code>/d1/d2/../dn-2</code> root.</p>
+</li>
+<li>
+<p>The jamfile <code>dn-1_dn.jam</code> in any path registered for the <code>/d1/d2/../dn-2</code>
+root.</p>
+</li>
+<li>
+<p>And so on until it searches for the project <code>d1_d2_.._dn</code> in any path
+registered for the <code>/</code> root.</p>
+</li>
+<li>
+<p>And for the jamfile <code>d1_d2_.._dn.jam</code> in any path registered for the <code>/</code> root.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For example, with this search paths:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/boost</code>: <code>/usr/share/boost-1.81.0</code>, <code>/home/user/boost-dev/libs</code></p>
+</li>
+<li>
+<p><code>/</code>: <code>/usr/share/b2/external</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>And given the <code>/boost/core</code> <em>project-id</em> to resolve, we search for:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>/usr/share/b2/external/boost/core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/core.jam</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/core.jam</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/boost_core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/boost_core/&lt;jamfile&gt;</code></p>
+</li>
+<li>
+<p><code>/usr/share/boost-1.81.0/boost_core.jam</code></p>
+</li>
+<li>
+<p><code>/home/user/boost-dev/libs/boost_core.jam</code></p>
+</li>
+<li>
+<p><code>/usr/share/b2/external/boost_core.jam</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The first project jamfile will be assigned to the <em>project-id</em>. Or the first
+<code>*.jam</code> file found will be loaded.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.tasks.projectsearch.loading"><a class="anchor" href="#bbv2.tasks.projectsearch.loading"></a>5.11.3. Loading Process</h4>
+<div class="paragraph">
+<p>Depending on whether a project jamfile or <code>*.jam</code> file determines how the
+project is loaded.</p>
+</div>
+<div class="paragraph">
+<p>When loading a project jamfile with a <em>project-id</em> and <em>path</em> it is equivalent
+to calling <code>use-project <em>project-id</em> : <em>path</em> ;</code> from the context of the project
+that has the reference.</p>
+</div>
+<div class="paragraph">
+<p>When loading a <code>*.jam</code> file as the <em>path</em> it is equivalent to calling:
+<code>use-packages <em>path</em> ;</code> from the context of the project that has the reference.
+In this case it means that the file will be loaded as part of the referenced
+project and hence any bare targets or information it declares will be part of
+the project.</p>
+</div>
 </div>
 </div>
 </div>
@@ -4681,6 +4866,12 @@ tools. For <code>cflags</code> that is both the C and C++ compilers, for <code>c
 is the C++ compiler, and for <code>linkflags</code> that is the linker. The features are
 handy when you are trying to do something special that cannot be achieved by a
 higher-level feature in B2.</p>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.compileflags"></a><code>compileflags</code></dt>
+<dd>
+<p>The value of this feature is passed without modification to the corresponding
+tools. The values from the <code>compileflags</code> is applied to all compilation of any
+language for the tools.</p>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.conditional"></a><code>conditional</code></dt>
 <dd>
@@ -5075,6 +5266,17 @@ libraries.</p>
 sanitizer. The feature is optional, thus no sanitizer is enabled by default.</p>
 </div>
 </dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.linemarkers"></a><code>linemarkers</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>off</code>.</p>
+<div class="paragraph">
+<p>On preprocessing targets changes behavior to emit/omit line directives
+like <code>#line</code> and <code>#<em>linenum</em></code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>NOTE:</strong> The value doesn&#8217;t propagate.</p>
+</div>
+</dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.link"></a><code>link</code></dt>
 <dd>
 <p><strong>Allowed values:</strong> <code>shared</code>, <code>static</code></p>
@@ -5405,6 +5607,14 @@ controls if import libraries are produced for shared libraries or not.</p>
 </div>
 <div class="paragraph">
 <p>See the section <a href="#bbv2.tasks.crosscompile">Cross-compilation</a> for details of cross-compilation.</p>
+</div>
+</dd>
+<dt class="hdlist1"><a id="bbv2.builtin.features.threadapi"></a><code>threadapi</code></dt>
+<dd>
+<p><strong>Allowed values:</strong> <code>pthread</code>, <code>win32</code>.</p>
+<div class="paragraph">
+<p>Selects threading implementation. The default is <code>win32</code> if <code>&lt;target-os&gt;</code> is
+<code>windows</code> and <code>pthread</code> otherwise.</p>
 </div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.threading"></a><code>threading</code></dt>
@@ -6057,6 +6267,157 @@ and C++ sources.</p>
 <p>Specifies additional command line options that will be passed to the linker.</p>
 </dd>
 </dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="bbv2.reference.tools.compiler.borland"><a class="anchor" href="#bbv2.reference.tools.compiler.borland"></a>Embarcadero C++ Compiler</h5>
+<div class="paragraph">
+<p>The <code>embarcadero</code> module supports the 32-bit command line C compiler
+bcc32x and the 64-bit command line C compiler bcc64, both clang-based,
+running on Microsoft Windows. These are the clang-based Windows compilers
+for all versions of Embarcadero C++.</p>
+</div>
+<div class="paragraph">
+<p>The module is initialized using the following syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">using embarcadero : [version] : [c++-compile-command] : [compiler options] ;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This statement may be repeated several times, if you want to configure
+several versions of the compiler.</p>
+</div>
+<div class="paragraph">
+<p><code>version</code>:</p>
+</div>
+<div class="paragraph">
+<p>The version should be the compiler version if specified. if the
+version is not specified Boost Build will find the latest installed
+version of Embarcadero C and use that for the version. If the version
+is specified Boost Build does not check if this matches any particular
+version of Embarcadero C, so you may use the version as a mnemonic to
+configure separate 'versions'.</p>
+</div>
+<div class="paragraph">
+<p><code>c++-compile-command</code>:</p>
+</div>
+<div class="paragraph">
+<p>If the c-compile-command is not specified, Boost.Build will default to the
+bcc64 compiler. If you specify a compiler option of &lt;address-model&gt;32 the
+default compiler will be bcc32x. In either case when the command is not given
+Boost Build will assume the compiler is in the PATH. So it is not necessary
+to specify a command if you accept the default compiler and the Embarcadero
+C binary directory is in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>If the command is specified it will be used as is to invoke the compiler.
+If the command has either 'bcc32x(.exe)' or 'bcc64(.exe)' in it Boost Build
+will use the appropriate compiler to configure the toolset. If the command
+does not have either 'bcc32x(.exe)' or 'bcc64(.exe)' in it, Boost Build
+will use the default compiler to configure the toolset. If you have your
+own command, which does not have 'bcc32x(.exe)' in it but invokes the
+'bcc32x(.exe)' compiler, specify the &lt;address-model&gt;32 compiler option.</p>
+</div>
+<div class="paragraph">
+<p><code>compiler options</code>:</p>
+</div>
+<div class="paragraph">
+<p>The following options can be provided, using
+<em>`&lt;option-name&gt;option-value syntax`</em>:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>cflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling C
+and C++ sources.</p>
+</dd>
+<dt class="hdlist1"><code>cxxflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling C++
+sources.</p>
+</dd>
+<dt class="hdlist1"><code>linkflags</code></dt>
+<dd>
+<p>Specifies additional command line options that will be passed to the linker.</p>
+</dd>
+<dt class="hdlist1"><code>asmflags</code></dt>
+<dd>
+<p>Specifies additional command line options that will be passed to the assembler.</p>
+</dd>
+<dt class="hdlist1"><code>archiveflags</code></dt>
+<dd>
+<p>Specifies additional command line options that will be passed to the archiver,
+which creates a static library.</p>
+</dd>
+<dt class="hdlist1"><code>address-model</code></dt>
+<dd>
+<p>This option can be used to specify the default compiler as specified in the
+dicsussion above of the c++-compile-command. Otherwise the address model
+is not used to initialize the toolset.</p>
+</dd>
+<dt class="hdlist1"><code>user-interface</code></dt>
+<dd>
+<p>Specifies the user interface for applications. Valid choices are <code>console</code>
+for a console applicatiuon and <code>gui</code> for a Windows application.</p>
+</dd>
+<dt class="hdlist1"><code>root</code></dt>
+<dd>
+<p>Normallly Boost Build will automatically be able to determine the root of
+the Embarcadero C installation. It does this in various ways, but primarily
+by checking a registry entry. If you specify the root it will use that
+path, and the root you specify should be the full path to the Embarcadero
+C installation on your machine ( without a trailing \ or / ). You should
+not need to specify this option unless Boost Build can not find the
+Embarcadero C++ root directory.</p>
+</dd>
+<dt class="hdlist1">Examples</dt>
+<dd>
+<p>using embarcadero ;</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with bcc64 as the compiler.
+The bcc64 compiler must be in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : 7.40 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the 7.40 version, with bcc64 as the compiler.
+The bcc64 compiler must be in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : 7.40 : bcc32x ;
+using embarcadero : 7.40 : : &lt;address-model&gt;32 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the 7.40 version, with bcc32x as the compiler.
+The bcc32x compiler must be in the PATH.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : : c:/some_path/bcc64 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with full command specified.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : : full_command : &lt;address-model&gt;32 ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with full command specified
+and bcc32x as the compiler.</p>
+</div>
+<div class="paragraph">
+<p>using embarcadero : : : &lt;root&gt;c:/root_path ;</p>
+</div>
+<div class="paragraph">
+<p>Configures the toolset to use the latest version, with bcc64 as the compiler
+and the root directory of the installation specified. The bcc64 compiler must
+be in the PATH.</p>
 </div>
 </div>
 <div class="sect4">
@@ -14193,7 +14554,108 @@ variants accepted as valid for an option:</p>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>13. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>13.1. Version 4.9.6</h3>
+<h3 id="_version_4_10_0"><a class="anchor" href="#_version_4_10_0"></a>13.1. Version 4.10.0</h3>
+<div class="paragraph">
+<p>This release contains many bug fixes but along the way also cleanup and
+refactoring of many toolsets, thanks to Nikita.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New</strong>: Scan assembler files for C Preprocessor includes.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix: Inherit generator overrides from a base toolset.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add linemarkers feature that on preprocessing targets changes behavior to
+emit/omit line directives like <code>#line</code> and <code>#&lt;linenum&gt;</code>.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix compiler name for QNX.&#8201;&#8212;&#8201;<em>James Choi</em></p>
+</li>
+<li>
+<p>Fix openssl name handling.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix clang-win assembler path deduction.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix toolset sub-feature requirements inheritance.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Unify compile and link of clang-linux toolset with gcc toolset.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix same directory pch header generation for msvc toolset.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Implement <code>--durations</code> which reports top targets by execution time.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Change clang-darwin to inherit from clang-linux and unify compile commands.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix clang-linux to not override RPATH_OPTION.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix inadvertently running configuration checks that shouldn&#8217;t (as reported by
+Alexander Grund). By changing <code>&lt;build&gt;no</code> conditionals evaluation to short
+circuit.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix same toolset overrides (inherit-overrides).&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add using the C processors for assembly source files.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Many improvements and cleanup of internal testing.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Unify gcc and clang-linux soname option handling and disable it on Windows.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Unity gcc/mingw linking of shared and import libs.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix pdb generation ordering and naming issues.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Unify clang-darwin linking with gcc.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix mingw/msys/cygwin, winthreads/pthread inconsistencies to correct compiler
+flags.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Unify clang-vxworks by inheriting from clang-linux.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Don&#8217;t store empty config cache and log.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix generator custom rule name inheritance. This affects cygwin/mingw linking.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix testing.execute=off to correct run-fail behavior.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix use-project with native paths.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix msvc auto config version priority. Now msvc toolsets are configured in
+correct newest to oldest regardless of being found from the registry or not.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add support for automatic searching of external projects for global
+target and project references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>13.2. Version 4.9.6</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14203,7 +14665,7 @@ variants accepted as valid for an option:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>13.2. Version 4.9.5</h3>
+<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>13.3. Version 4.9.5</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14231,7 +14693,7 @@ when it is not on found in <code>PATH</code>.&#8201;&#8212;&#8201;<em>Nikita Kni
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>13.3. Version 4.9.4</h3>
+<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>13.4. Version 4.9.4</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14262,7 +14724,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>13.4. Version 4.9.3</h3>
+<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>13.5. Version 4.9.3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14272,7 +14734,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>13.5. Version 4.9.2</h3>
+<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>13.6. Version 4.9.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14282,7 +14744,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>13.6. Version 4.9.1</h3>
+<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>13.7. Version 4.9.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14297,7 +14759,7 @@ path specified in boost-build rule.&#8201;&#8212;&#8201;<em>René Ferdinand Rive
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>13.7. Version 4.9.0</h3>
+<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>13.8. Version 4.9.0</h3>
 <div class="paragraph">
 <p>This release has mostly internal cleanups and restructuring. The most
 significant being: fixing all memory leaks, automatic build system
@@ -14366,7 +14828,7 @@ deprecated and will be removed in a future release.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>13.8. Version 4.8.2</h3>
+<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>13.9. Version 4.8.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14377,7 +14839,7 @@ and incorrect target list pop unlinking.&#8201;&#8212;&#8201;<em>René Ferdinand
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>13.9. Version 4.8.1</h3>
+<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>13.10. Version 4.8.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14388,7 +14850,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>13.10. Version 4.8.0</h3>
+<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>13.11. Version 4.8.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14431,7 +14893,7 @@ cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>13.11. Version 4.7.2</h3>
+<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>13.12. Version 4.7.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14445,7 +14907,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>13.12. Version 4.7.1</h3>
+<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>13.13. Version 4.7.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14455,7 +14917,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>13.13. Version 4.7.0</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>13.14. Version 4.7.0</h3>
 <div class="paragraph">
 <p>Many, many fixes and internal cleanups in this release. But also adding
 auto-detection and bootstrap for VS 2022 preview toolset.</p>
@@ -14519,7 +14981,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.14. Version 4.6.1</h3>
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>13.15. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -14532,7 +14994,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>13.15. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>13.16. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -14595,7 +15057,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.16. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>13.17. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -14617,7 +15079,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.17. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>13.18. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -14634,7 +15096,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.18. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>13.19. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -14647,7 +15109,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.19. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>13.20. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -14738,7 +15200,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.20. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>13.21. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -14838,7 +15300,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.21. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>13.22. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -14880,7 +15342,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.22. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>13.23. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -14962,7 +15424,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>13.23. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>13.24. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -14972,7 +15434,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.24. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>13.25. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
