@@ -8250,7 +8250,7 @@ C++
 Jam
 </td>
 <td class="hdlist2">
-<p><code>rule is-as ( instance : type )</code></p>
+<p><code>rule is-a ( instance : type )</code></p>
 </td>
 </tr>
 <tr>
@@ -8887,6 +8887,42 @@ a list of new strings. The match string can be a regex expression.</p>
 <p><code>replacement</code>&#8201;&#8212;&#8201;The string to replace with.</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2regex_grep"><a class="anchor" href="#_b2regex_grep"></a><code>b2::regex_grep</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule grep ( directories + : files + : patterns + : result_expressions *
+: options * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>b2::list_ref regex_grep(b2::list_cref directories, b2::list_cref
+files, b2::list_cref patterns, list_cref result_expressions,
+list_cref options);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Match any of the <code>patterns</code> against the globbed <code>files</code> in <code>directories</code>, and
+return a list of files and indicated <code>result_expressions</code> (file1, re1, re..,
+&#8230;&#8203;). The <code>result_expressions</code> are indices from <code>0</code> to <code>10</code>. Where <code>0</code> is the
+full match.</p>
 </div>
 </div>
 </div>
@@ -16488,6 +16524,14 @@ key file to find build files.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Mor
 <li>
 <p><strong>New</strong>: Add <code>require-b2</code> builtin rule to verify the B2 version a particular
 Jam file needs.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add <code>regex.grep</code> builtin that does parallel (where available) file
+content search with regex matching.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Make parts of internals thread safe to support parallel built-ins.
+Currently includes Jam values, hash tables, and filesystem.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Fix consistent use of <code>OPT_SEMAPHORE</code> and documentation of <code>JAM_SEMAPHORE</code>.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
