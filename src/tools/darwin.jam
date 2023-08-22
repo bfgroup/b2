@@ -451,6 +451,38 @@ flags darwin.link FORCE_LOAD <force-load> ;
 # uncomment to see what libtool is doing under the hood
 #~ flags darwin.link.dll OPTIONS : -Wl,-v ;
 
+# Darwin specific translate-rule;
+# -------------------------------
+# Catch the Darwin-specific "@xxx" placeholders (see 'man dyld') in <dll-path>
+# properties, and return them as they are.
+# (I.e. signal to caller to NOT translate them to the filesystem.)
+# For all other values return nothing.
+# (I.e. signal to caller to continue with translation as usual.)
+# This is called from 'property.translate' - See documentation for 'translate-path' feature.
+rule at-placeholder-translate-path-rule ( feature value : properties * : project-id : project-location )
+{
+    local rv ;
+
+    if $(feature) = "<dll-path>"
+    {
+        # These '@xxx' placeholders are specified and processed by 'dyld';
+        # (See 'man dyld').
+        # As each of these is to be replaced by 'dyld' with a root path,
+        # they are only expected - and therefore tested here - as root paths.
+        switch $(value)
+        {
+            case @executable_path* : rv = $(value) ;
+            case @loader_path* : rv = $(value) ;
+            case @rpath* : rv = $(value) ;
+        }
+    }
+
+    return $(rv) ;
+}
+# Import the 'at-placeholder-translate-path-rule' into the global namespace
+# as 'darwin.at-placeholder-translate-path-rule'.
+IMPORT $(__name__) : at-placeholder-translate-path-rule : : darwin.at-placeholder-translate-path-rule ;
+
 # set up the -F option to include the paths to any frameworks used.
 local rule prepare-framework-path ( target + )
 {
