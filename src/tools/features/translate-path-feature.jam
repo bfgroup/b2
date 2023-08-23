@@ -26,6 +26,9 @@ the path property value, target properties, the target project ID, and
 the target project location. It should return the translated path value.
 Or return nothing if it doesn't do path translation. Leaving it do the
 default path translation.
++
+The feature is additive -- i.e. multiple `translate-path` rules can be called,
+in order -- until the first one to return a value.
 
 |# # end::doc[]
 

@@ -561,7 +561,7 @@ rule translate-indirect-value ( rulename : context-module )
 #
 rule translate ( properties * : project-id : project-location : context-module )
 {
-    local translate-path-rule = [ MATCH "^<translate-path>[@](.*)$" : "$(properties)" ] ;
+    local translate-path-rules = [ MATCH "^<translate-path>[@](.*)$" : "$(properties)" ] ;
     local result ;
     for local p in $(properties)
     {
@@ -610,10 +610,17 @@ rule translate ( properties * : project-id : project-location : context-module )
             {
                 if path in $(attributes)
                 {
-                    if $(translate-path-rule)
+                    # Iterate through each translate path rule in turn,
+                    # until one returns a successful translation.
+                    for local tpr in $(translate-path-rules)
                     {
-                        value = [ $(translate-path-rule) $(feature) $(property:G=) : $(properties) : $(project-id) : $(project-location) ] ;
+                        value = [ $(tpr) $(feature) $(property:G=) : $(properties) : $(project-id) : $(project-location) ] ;
+                        if $(value)
+                        {
+                            break ;
+                        }
                     }
+                    # If no translate path rule intervened, continue with usual translation.
                     if ! $(value)
                     {
                         value = [ translate-path-value $(property:G=) : $(project-location) ] ;
