@@ -552,6 +552,12 @@ rule translate-indirect-value ( rulename : context-module )
 
 }
 
+local translate-path-rules ;
+rule add-toolset-translate-path-rule ( tpr )
+{
+    translate-path-rules += $(tpr) ;
+}
+
 # Equivalent to a calling all of:
 #   translate-path
 #   translate-indirect
@@ -561,7 +567,7 @@ rule translate-indirect-value ( rulename : context-module )
 #
 rule translate ( properties * : project-id : project-location : context-module )
 {
-    local translate-path-rules = [ MATCH "^<translate-path>[@](.*)$" : "$(properties)" ] ;
+    translate-path-rules += [ MATCH "^<translate-path>[@](.*)$" : "$(properties)" ] ;
     local result ;
     for local p in $(properties)
     {

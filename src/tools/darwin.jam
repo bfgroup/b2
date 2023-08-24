@@ -17,6 +17,7 @@ import common ;
 import generators ;
 import path : basename ;
 import version ;
+import property ;
 import property-set ;
 import regex ;
 import errors ;
@@ -482,6 +483,8 @@ rule at-placeholder-translate-path-rule ( feature value : properties * : project
 # Import the 'at-placeholder-translate-path-rule' into the global namespace
 # as 'darwin.at-placeholder-translate-path-rule'.
 IMPORT $(__name__) : at-placeholder-translate-path-rule : : darwin.at-placeholder-translate-path-rule ;
+# Add the above exported name to the list of translate path rules for property.translate.
+property.add-toolset-translate-path-rule darwin.at-placeholder-translate-path-rule ;
 
 # set up the -F option to include the paths to any frameworks used.
 local rule prepare-framework-path ( target + )
