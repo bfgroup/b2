@@ -484,9 +484,9 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
                 name = c + 1;
         }
 
-        auto name = b2::value::format( "%.*s", int(endname - name), name );
+        auto member_name = b2::value::format( "%.*s", int(endname - name), name );
 
-        if ( name->as_string().size > 0 )
+        if ( member_name->as_string().size > 0 )
         {
             file_info_t * member = 0;
 
@@ -495,7 +495,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
              * Here we reverse the stored sequence by pushing members to front of
              * member file list to get the intended members order.
              */
-            archive->members = filelist_push_front( archive->members, name );
+            archive->members = filelist_push_front( archive->members, member_name );
             member = filelist_front( archive->members );
             member->is_file = 1;
             member->is_dir = 0;
