@@ -174,7 +174,7 @@ OBJECT * read_netstring( FILE * f )
 template <typename... Args>
 void write_netstring( FILE * f, char const * format, Args... args )
 {
-    if ( format ) format = "";
+    if ( format == nullptr ) format = "";
     auto size = std::snprintf(nullptr, 0, format, args...);
     std::unique_ptr<char[]> s(new char[size+1]);
     std::snprintf(s.get(), size+1, format, args...);
