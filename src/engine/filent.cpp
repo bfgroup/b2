@@ -484,7 +484,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
                 name = c + 1;
         }
 
-        auto name = b2::value::format( "%.*s", int(endname - name), name ) );
+        auto name = b2::value::format( "%.*s", int(endname - name), name );
 
         if ( name->as_string().size > 0 )
         {
