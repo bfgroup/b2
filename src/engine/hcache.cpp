@@ -407,7 +407,7 @@ void hcache_done()
         fputs( "\n", f );
         ++header_count;
     }
-    write_netstring( f, CACHE_RECORD_END );
+    write_netstring( f, "%s", CACHE_RECORD_END );
 
     if ( DEBUG_HEADER )
         out_printf( "hcache written to %s.   %d dependencies, %.0f%% hit rate\n",
