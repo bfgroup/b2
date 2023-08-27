@@ -87,9 +87,10 @@ struct value
 	template <typename... Args>
 	static inline value * format(const char * f, Args... args)
 	{
-		auto size = std::snprintf(nullptr, 0, f, args...);
+		using namespace std;
+		auto size = snprintf(nullptr, 0, f, args...);
 		std::unique_ptr<char[]> s(new char[size + 1]);
-		std::snprintf(s.get(), size + 1, f, args...);
+		snprintf(s.get(), size + 1, f, args...);
 		return value::make(s.get(), size);
 	}
 };
