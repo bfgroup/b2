@@ -2,7 +2,7 @@
 # subject to the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
-# Copyright Rene Ferdinand Rivera Morell 2015-2020.
+# Copyright Rene Ferdinand Rivera Morell 2015-2023.
 
 branches:
   only:
@@ -10,6 +10,15 @@ branches:
     - /release/
     - /feature\/.*/
     - /backport-.*/
+
+skip_commits:
+  files:
+    - ".circleci/*"
+    - ".cirrus.yml"
+    - ".drone.star"
+    - ".github/workflows/*"
+    - ".semaphore/*"
+    - "azure-pipelines.yml"
 
 environment:
   matrix:
