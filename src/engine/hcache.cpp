@@ -47,7 +47,6 @@
 
 #include <errno.h>
 #include <string.h>
-#include <stdio.h>
 
 typedef struct hcachedata HCACHEDATA ;
 
@@ -176,9 +175,9 @@ template <typename... Args>
 void write_netstring( FILE * f, char const * format, Args... args )
 {
     if ( format == nullptr ) format = "";
-    auto size = snprintf(nullptr, 0, format, args...);
+    auto size = std::snprintf(nullptr, 0, format, args...);
     std::unique_ptr<char[]> s(new char[size+1]);
-    snprintf(s.get(), size+1, format, args...);
+    std::snprintf(s.get(), size+1, format, args...);
     fprintf( f, "%lu\t%s\n", (long unsigned)size, s.get() );
 }
 

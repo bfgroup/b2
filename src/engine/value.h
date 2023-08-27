@@ -18,8 +18,6 @@ Distributed under the Boost Software License, Version 1.0.
 #include <memory>
 #include <string>
 
-#include <stdio.h>
-
 namespace b2 {
 
 struct object
@@ -89,9 +87,9 @@ struct value
 	template <typename... Args>
 	static inline value * format(const char * f, Args... args)
 	{
-		auto size = snprintf(nullptr, 0, f, args...);
+		auto size = std::snprintf(nullptr, 0, f, args...);
 		std::unique_ptr<char[]> s(new char[size + 1]);
-		snprintf(s.get(), size + 1, f, args...);
+		std::snprintf(s.get(), size + 1, f, args...);
 		return value::make(s.get(), size);
 	}
 };
