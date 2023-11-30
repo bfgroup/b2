@@ -4797,6 +4797,38 @@ are not allowed.</p>
 <dd>
 <p>This rule is deprecated and equivalent to <code>alias</code>.</p>
 </dd>
+<dt class="hdlist1"><a id="bbv2.reference.rules.import-search"></a><code>import-search</code></dt>
+<dd>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule import-search ( reference )</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Adds the given <code>reference</code> path to the set of directories that an <code>import</code> will
+search. The <code>reference</code> can be a plain directory or a known project path. If a
+project path is given it will be searched for and resolved to include any
+sub-project path in the reference. If a directory is given it will be rooted
+relative to the current project location. Example project path usage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">import-search /boost/config/checks ;
+import-search /boost/predef/tools/checks ;</code></pre>
+</div>
+</div>
+</dd>
 </dl>
 </div>
 <div class="sect3">
@@ -16535,7 +16567,7 @@ Currently includes Jam values, hash tables, and filesystem.&#8201;&#8212;&#8201;
 </li>
 <li>
 <p><strong>New</strong>: Add <code>import-search</code> project rule to declare additional search paths
-for <code>import</code> that refer to searched project locations.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+for <code>import</code> that refer to searched project locations, or other directories.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Fix consistent use of <code>OPT_SEMAPHORE</code> and documentation of <code>JAM_SEMAPHORE</code>.&#8201;&#8212;&#8201;<em>Thomas Brown</em></p>
