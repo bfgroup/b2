@@ -5094,13 +5094,33 @@ value, or both the symbol and the value, separated by equal sign.</p>
 will be brought up-to-date whenever the target being declared is). The
 dependency is not used in any other way.</p>
 </dd>
-<dt class="hdlist1"><a id="bbv2.builtin.features.dll-path"></a><code>dll-path</code></dt>
+<dt class="hdlist1"><a id="bbv2.builtin.features.dll-path"></a><code>dll-path</code> (<em>Unix</em> only)</dt>
 <dd>
+<p><strong>Allowed values:</strong> A directory path to shared libraries.</p>
+<div class="paragraph">
 <p>Specifies an additional directory where the system should look for shared
-libraries when the executable or shared library is run. This feature only
-affects Unix compilers. Please see
-<a href="#bbv2.faq.dll-path">Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</a>
-in <a href="#bbv2.faq">Frequently Asked Questions</a> for details.</p>
+libraries when the target is run.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">⚠</div>
+</td>
+<td class="content">
+Note that a relative path will be prepended with the directory of the relevant
+<code>jam</code> file - as supplied on the <code>b2</code> command line - thus <em>severely</em> limiting its
+practical use!.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Please see the <a href="#bbv2.faq.dll-path">FAQ entry on the
+<code>dll-path</code> and <code>hardcode-dll-paths</code></a> for details, and the
+<a href="#bbv2.builtin.features.hardcode-dll-paths"><code>hardcode-dll-paths</code></a> feature
+to automatically add paths for development.</p>
+</div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.embed-manifest"></a><code>embed-manifest</code></dt>
 <dd>
@@ -5166,21 +5186,28 @@ targets should be preferred over using this feature.</p>
 The value of this feature is passed without modification to the tool that will
 build the target.</p>
 </dd>
-<dt class="hdlist1"><a id="bbv2.builtin.features.hardcode-dll-paths"></a><code>hardcode-dll-paths</code></dt>
+<dt class="hdlist1"><a id="bbv2.builtin.features.hardcode-dll-paths"></a><code>hardcode-dll-paths</code> (<em>Unix</em> only)</dt>
 <dd>
-<p><strong>Allowed values:</strong> <code>true</code>, <code>false</code>.</p>
+<p><strong>Allowed values:</strong> <code>true</code>, <code>false</code>.<br>
+<strong>Defaults to:</strong> <code>true</code>(<a href="#bbv2.reference.rules.exe"><code>exe</code></a>),
+               <code>false</code>(<a href="#bbv2.reference.rules.install"><code>install</code></a>)<br>
+<strong>Ignored for:</strong> <a href="#bbv2.reference.rules.lib"><code>lib</code></a></p>
 <div class="paragraph">
-<p>Controls automatic generation of dll-path properties.</p>
+<p>When an <code>exe</code>cutable is built with <code>&lt;hardcode-dll-paths&gt;true</code> (default),
+the target binary will be linked with an <em>rpath list</em> that contains all the
+paths to the directories of used shared libraries.</p>
 </div>
 <div class="paragraph">
-<p>This property is specific to Unix systems. If an executable is built with
-<code>&lt;hardcode-dll-paths&gt;true</code>, the generated binary will contain the list of all
-the paths to the used shared libraries. As the result, the executable can be
-run without changing system paths to shared libraries or installing the
-libraries to system paths. This is very convenient during development. Please
-see the <a href="#bbv2.faq.dll-path">FAQ entry</a> for details. Note that on Mac OSX,
-the paths are unconditionally hardcoded by the linker, and it is not possible
-to disable that behavior</p>
+<p>When a target is <code>install</code>ed with <code>&lt;hardcode-dll-paths&gt;true</code>, those same
+paths, and any added with <a href="bbv2.builtin.features.dll-path"><code>&lt;dll-path&gt;</code></a>,
+are propagated through to the resulting binary.</p>
+</div>
+<div class="paragraph">
+<p>The purpose of this feature is to aid development; the resulting executable
+(<code>exe</code> - but not <code>install</code> target) can by default be run, without
+changing system paths to shared libraries or installing the libraries to
+system paths.<br>
+Please see the <a href="#bbv2.faq.dll-path">FAQ entry</a> for details.</p>
 </div>
 </dd>
 <dt class="hdlist1"><a id="bbv2.builtin.features.implicit-dependency"></a><code>implicit-dependency</code></dt>
@@ -12426,7 +12453,7 @@ obj b : b.cpp : &lt;variant&gt;release:&lt;optimization&gt;off ;</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="bbv2.faq.dll-path"><a class="anchor" href="#bbv2.faq.dll-path"></a>9.9. Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</h3>
+<h3 id="bbv2.faq.dll-path"><a class="anchor" href="#bbv2.faq.dll-path"></a>9.9. Why are the <a href="#bbv2.builtin.features.dll-path"><code>dll-path</code></a> and <a href="#bbv2.builtin.features.hardcode-dll-paths"><code>hardcode-dll-paths</code></a> properties useful?</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -12441,17 +12468,16 @@ This entry is specific to Unix systems.
 </div>
 <div class="paragraph">
 <p>Before answering the questions, let us recall a few points about shared
-libraries. Shared libraries can be used by several applications, or
-other libraries, without physically including the library in the
-application which can greatly decrease the total application size. It is
-also possible to upgrade a shared library when the application is
-already installed.</p>
+libraries. Shared libraries can be used by several applications&#8201;&#8212;&#8201;or
+other libraries&#8201;&#8212;&#8201;without physically including the library in the linked
+binary. This can greatly decrease the total application size. It is also
+possible to upgrade a shared library after an application is already installed.</p>
 </div>
 <div class="paragraph">
-<p>However, in order for application depending on shared libraries to be
-started the OS may need to find the shared library when the application
-is started. The dynamic linker will search in a system-defined list of
-paths, load the library and resolve the symbols. Which means that you
+<p>However, in order for an application depending on shared libraries to be
+started, the OS will need to find the shared libraries.
+The dynamic linker will search in a system-defined list of
+paths, load the library and resolve the symbols. This means that you
 should either change the system-defined list, given by the
 <code>LD_LIBRARY_PATH</code> environment variable, or install the libraries to a
 system location. This can be inconvenient when developing, since the
@@ -12459,18 +12485,95 @@ libraries are not yet ready to be installed, and cluttering system paths
 may be undesirable. Luckily, on Unix there is another way.</p>
 </div>
 <div class="paragraph">
-<p>An executable can include a list of additional library paths, which will
-be searched before system paths. This is excellent for development
-because the build system knows the paths to all libraries and can
-include them in the executables. That is done when the
-<code>hardcode-dll-paths</code> feature has the <code>true</code> value, which is the default.
-When the executables should be installed, the story is different.</p>
+<p>Using the <a href="#bbv2.builtin.features.hardcode-dll-paths"><code>hardcode-dll-paths</code></a>
+and <a href="#bbv2.builtin.features.dll-path"><code>dll-path</code></a> features,
+a target can be linked with an additional list of library directory paths
+that will be searched before the system paths&#8201;&#8212;&#8201;these are called "<em>runtime library search paths</em>" or "<em>run paths</em>", or
+"<em>run path list</em>", depending on which platform&#8217;s documentation you&#8217;re reading&#8201;&#8212;&#8201;See your platform&#8217;s dynamic linker <em>man page</em> or
+<a href="https://en.wikipedia.org/wiki/Rpath">Wikipedia</a> for more.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+We&#8217;ll just use <em>rpath list</em> for conciseness below.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_hardcode_dll_paths"><a class="anchor" href="#_hardcode_dll_paths"></a>9.9.1. <code>hardcode-dll-paths</code></h4>
+<div class="paragraph">
+<p>The <a href="#bbv2.builtin.features.hardcode-dll-paths"><code>hardcode-dll-paths</code></a>
+feature for <a href="#bbv2.reference.rules.exe"><code>exe</code></a> targets, is especially
+helpful for development; As the build system already knows the paths to all
+the used shared libraries, it will by default automatically add them to the
+executable <em>rpath list</em>.</p>
 </div>
 <div class="paragraph">
-<p>Obviously, installed executable should not contain hardcoded paths to
-your development tree. (The <code>install</code> rule explicitly disables the
-<code>hardcode-dll-paths</code> feature for that reason.) However, you can use the
-<code>dll-path</code> feature to add explicit paths manually. For example:</p>
+<p>When the executable is installed however, the story is different;
+Obviously, installed executables should not contain hardcoded paths to
+your development tree. The <a href="#bbv2.reference.rules.install"><code>install</code></a>
+rule therefore implicitly (i.e. by default) negates the
+<a href="#bbv2.builtin.features.hardcode-dll-paths"><code>hardcode-dll-paths</code></a>
+feature, by re-linking an executable <em>without</em> the automatic paths
+if necessary.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>For the <a href="#bbv2.reference.rules.exe"><code>exe</code></a> rule:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>With <code>&lt;hardcode-dll-paths&gt;true</code> (default), the paths to all
+directories with used shared libraries are <em>automatically</em> added
+to the target&#8217;s <em>rpath list</em>.</p>
+</li>
+<li>
+<p>An explicit <code>&lt;hardcode-dll-paths&gt;false</code> property is needed to
+<em>disable</em> the automatic adding  of directory paths to the shared
+libraries.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>For the <a href="#bbv2.reference.rules.install"><code>install</code></a> rule:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>If so desired, an explicit <code>&lt;hardcode-dll-paths&gt;true</code> is needed
+to propagate the <em>rpath list</em>, added to the source
+targets, through to the <code>install</code> targets. (This include explicit
+<a href="#bbv2.builtin.features.dll-path"><code>dll-path</code></a> entries added
+to the source targets.)</p>
+</li>
+<li>
+<p>By default, the implicit <code>&lt;hardcode-dll-paths&gt;false</code> property,
+will ensure that the source targets' <em>rpath lists</em> are <em><strong>not</strong></em>
+propagated through to the <code>install</code> targets.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The <code>&lt;hardcode-dll-paths&gt;</code> feature is ignored for the
+<a href="#bbv2.reference.rules.lib"><code>lib</code></a> rule.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dll_path"><a class="anchor" href="#_dll_path"></a>9.9.2. <code>dll-path</code></h4>
+<div class="paragraph">
+<p>As an alternative&#8201;&#8212;&#8201;or in addition&#8201;&#8212;&#8201;you can use the
+<a href="#bbv2.builtin.features.dll-path"><code>dll-path</code></a> feature to add explicit
+directory paths manually to the <em>rpath list</em>.<br>
+For example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -12482,9 +12585,12 @@ your development tree. (The <code>install</code> rule explicitly disables the
 <p>will allow the application to find libraries placed in the
 <code>/usr/lib/snake</code> directory.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_conclusion"><a class="anchor" href="#_conclusion"></a>9.9.3. Conclusion</h4>
 <div class="paragraph">
-<p>If you install libraries to a nonstandard location and add an explicit
-path, you get more control over libraries which will be used. A library
+<p>If you install libraries to a non-standard location and add an explicit
+path, you get more control over libraries that will be used. A library
 of the same name in a system location will not be inadvertently used. If
 you install libraries to a system location and do not add any paths, the
 system administrator will have more control. Each library can be
@@ -12495,11 +12601,87 @@ individually upgraded, and all applications will use the new library.</p>
 relatively standalone and can be used by third party applications, they
 should be installed in the system location. If you have lots of
 libraries which can be used only by your application, it makes sense to
-install them to a nonstandard directory and add an explicit path, like
+install them to a non-standard directory and add an explicit path, like
 the example above shows. Please also note that guidelines for different
 systems differ in this respect. For example, the Debian GNU guidelines
 prohibit any additional search paths while Solaris guidelines suggest
 that they should always be used.</p>
+</div>
+<div class="paragraph">
+<div class="title">Shared Library Search Path Summary</div>
+<p>(Applicable to the client target -
+ i.e. the target that <em>uses</em> the shared library.)</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Rule</th>
+<th class="tableblock halign-left valign-top">Feature</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top"><em>Rpath List</em> Additions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exe</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>hardcode-dll-paths</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> (default)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The <em>absolute paths</em> to the directories of all shared libraries.<br>
+ If these are targets themselves, their <em>build directory</em> paths are added.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exe</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>hardcode-dll-paths</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(none)</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>install</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>hardcode-dll-paths</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Propagate <em>rpath list</em> from the sources (<code>exe</code> &amp; <code>lib</code> targets)
+ to the installed binary. (This include explicit
+ <a href="#bbv2.builtin.features.dll-path"><code>dll-path</code></a>
+ entries added to the source targets.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>install</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>hardcode-dll-paths</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code> (default)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(none)</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>lib</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>hardcode-dll-paths</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>disabled</em><br>
+(no effect)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(none)</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exe</code>, <code>lib</code>, <code>install</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dll-path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(Absolute path)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The <em>absolute path</em> as specified.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exe</code>, <code>lib</code>, <code>install</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dll-path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(Relative path)</em><br>
+ ⚠️</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A path comprised of the specified relative path,
+ prepended with the path to the <em>jam</em> directory,
+ as specified on the command line.</p>
+<p class="tableblock">  ⚠️ WARNING: The resulting path will depend on the specific
+ command line invocation, thus severely limited in practical use.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect2">
