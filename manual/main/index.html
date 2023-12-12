@@ -1604,7 +1604,7 @@ exe app : app.cpp core ;</code></pre>
 <p>This works no matter what kind of linking is used. When <code>core</code> is built as a
 shared library, links <code>utils</code> directly into it. Static libraries can&#8217;t link
 to other libraries, so when <code>core</code> is built as a static library, its
-dependency on <code>utils</code> is passed along to <code>core&#8217;s dependents, causing `app</code>
+dependency on <code>utils</code> is passed along to <code>core</code>'s dependents, causing <code>app</code>
 to be linked with both <code>core</code> and <code>utils</code>.</p>
 </div>
 </td>
@@ -1714,8 +1714,8 @@ other target:</p>
 </div>
 <div class="paragraph">
 <p>As with any target, the alternative selected depends on the properties
-propagated from <code>lib2&#8217;s dependents. If we build the release and debug
-versions of `app</code> it will be linked with <code>lib2_release.a</code> and
+propagated from <code>lib2</code>'s dependents. If we build the release and debug
+versions of <code>app</code> it will be linked with <code>lib2_release.a</code> and
 <code>lib2_debug.a</code>, respectively.</p>
 </div>
 <div class="paragraph">
@@ -6372,7 +6372,7 @@ and C++ sources.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="bbv2.reference.tools.compiler.borland"><a class="anchor" href="#bbv2.reference.tools.compiler.borland"></a>Embarcadero C++ Compiler</h5>
+<h5 id="bbv2.reference.tools.compiler.embarcadero"><a class="anchor" href="#bbv2.reference.tools.compiler.embarcadero"></a>Embarcadero C++ Compiler</h5>
 <div class="paragraph">
 <p>The <code>embarcadero</code> module supports the 32-bit command line C compiler
 bcc32x and the 64-bit command line C compiler bcc64, both clang-based,
