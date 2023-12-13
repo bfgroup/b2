@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Copyright (C) 2006. Vladimir Prus
 # Distributed under the Boost Software License, Version 1.0.
@@ -56,8 +56,8 @@ rule a3-rule-2 ( properties * )
     t.run_build_system()
 
     t.expect_addition("bin/$toolset/debug*/a1.exe")
-    t.expect_addition("bin/$toolset/debug/optimization-speed*/a2.exe")
-    t.expect_addition("bin/$toolset/debug/optimization-speed*/a3.exe")
+    t.expect_addition("bin/$toolset/debug*/optimization-speed*/a2.exe")
+    t.expect_addition("bin/$toolset/debug*/optimization-speed*/a3.exe")
 
     t.cleanup()
 

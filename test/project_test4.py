@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Copyright 2003 Dave Abrahams
 # Copyright 2002, 2003, 2004 Vladimir Prus
@@ -28,7 +28,7 @@ t.expect_content("bin/$toolset/debug*/a.exe",
 
 t.expect_addition("lib/bin/$toolset/debug/optimization-speed*/b.obj")
 t.expect_content("lib/bin/$toolset/debug/optimization-speed*/b.obj",
-"""$toolset/debug/include-everything/optimization-speed*
+"""$toolset/debug/include-everything*/optimization-speed*
 lib/b.cpp
 """)
 

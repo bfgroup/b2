@@ -6,7 +6,7 @@
 
 #| tag::doc[]
 
-[[bbv2.reference.tools.compiler.borland]]
+[[bbv2.reference.tools.compiler.embarcadero]]
 = Embarcadero C++ Compiler
 
 The `embarcadero` module supports the 32-bit command line C++ compiler
@@ -141,9 +141,6 @@ import errors ;
 feature.extend toolset : embarcadero ;
 
 toolset.inherit-generators embarcadero : clang-linux ;
-generators.override embarcadero.prebuilt : builtin.lib-generator ;
-generators.override embarcadero.prebuilt : builtin.prebuilt ;
-generators.override embarcadero.searched-lib-generator : searched-lib-generator ;
 
 toolset.inherit-rules embarcadero : clang-linux ;
 toolset.inherit-flags embarcadero

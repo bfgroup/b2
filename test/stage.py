@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Copyright 2003 Dave Abrahams
 # Copyright 2002, 2003, 2004, 2005, 2006 Vladimir Prus
@@ -9,7 +9,7 @@
 
 import BoostBuild
 
-t = BoostBuild.Tester(use_test_config=False)
+t = BoostBuild.Tester(["link=shared"], use_test_config=False)
 
 t.write("jamroot.jam", "")
 t.write("jamfile.jam", """\

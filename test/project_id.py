@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Copyright (C) 2012. Jurko Gospodnetic
 # Distributed under the Boost Software License, Version 1.0.
@@ -146,7 +146,7 @@ project foo ;
 """)
     t.run_build_system(status=1)
     t.expect_output_lines("""\
-error: at jamroot.jam:4
+error: at jamroot.jam:4: in modules.load from module Jamfile<*>
 error: Attempt to redeclare already registered project id '/foo'.
 error: Original project:
 error:     Name: Jamfile<*>

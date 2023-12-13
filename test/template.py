@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Copyright (C) FILL SOMETHING HERE 2006.
 # Distributed under the Boost Software License, Version 1.0. (See
@@ -21,7 +21,7 @@ exe hello : hello.cpp ;
 
 t.write("hello.cpp", """
 int main() {}
-"""
+""")
 
 # Run the build.
 t.run_build_system()
