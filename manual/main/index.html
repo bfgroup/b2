@@ -16719,6 +16719,13 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <p>Fix compile errors for older versions of GCC and Clang toolset for the engine.
 We now support building the engine with GCC 4.7 and Clang 3.6 onward.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
+<li>
+<p>Fix <code>import-search</code> failing to find imports on Windows bacause of incorrect
+native vs. non-native path handling.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Support cross-compile install of B2, using <code>target-os=xyz</code>.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
 </ul>
 </div>
 </div>
