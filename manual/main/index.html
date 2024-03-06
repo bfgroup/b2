@@ -16717,15 +16717,21 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>New</strong>: Add listing of failed and skipped targets to end of build summary to
+make it easier to find what fails.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add <code>mpi.run-flags</code> to <code>mpi</code> toolset that allows for arbitrary flags
+applied to running mpi targets. This allows, for example, adding
+<code>--oversubscribe</code> flag to make it possible to run tests where the tasks are
+more than the nodes available.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
 <p>Fix spurious errors when the header scanning tries to scan empty file names.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Make C/C++/ObjC include directive scanning pattern more strict to avoid
 trying to scan for empty file names.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
-</li>
-<li>
-<p>Add listing of failed and skipped targets to end of build summary to make it
-easier to find what fails.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
