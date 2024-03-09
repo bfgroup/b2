@@ -16714,6 +16714,15 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_5_1_0"><a class="anchor" href="#_version_5_1_0"></a>14.1. Version 5.1.0</h3>
+<div class="paragraph">
+<p>This is mostly a bugfix release to account for issues impacting Boost Libraries.
+There is one "big" change though. It can be rather difficult to find build
+failures when running larger builds. To facilitate figuring out problems the
+brief summary output at the end of a build is now less brief. It now includes
+a <strong>sorted</strong> list of the targets that got skipped and failed. The output of those
+lists mirrors the general skipped/failed items. Hence it&#8217;s possible to search
+for the same strings in the rest of the output quickly.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
