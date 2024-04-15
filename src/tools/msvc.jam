@@ -121,7 +121,7 @@ case a target platform specific script has been explicitly specified
 for the current target platform. Used setup script will be passed the
 target platform identifier (x86, x86_amd64, x86_ia64, amd64 or ia64)
 as a parameter. If not specified a default script is chosen based on
-the used compiler binary, e.g. `vcvars32.bat` or `vsvars32.bat`.
+the used compiler binary, e.g. `vcvars32.bat` or `vsvars64.bat`.
 
 `setup-amd64`; `setup-i386`; `setup-ia64`::
 The filename of the target platform specific environment setup script
