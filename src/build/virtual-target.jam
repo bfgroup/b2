@@ -282,10 +282,7 @@ class abstract-file-target : virtual-target
         {
             $(action).add-targets $(__name__) ;
 
-            if $(self.type) && ! $(exact)
-            {
-                _adjust-name $(name) ;
-            }
+            _adjust-name $(name) ;
         }
     }
 
@@ -474,8 +471,16 @@ class abstract-file-target : virtual-target
                         : $(tag) ;
                 }
 
-                self.name = [ indirect.call $(rule-name) $(specified-name)
+                local name = [ indirect.call $(rule-name) $(specified-name)
                     : $(self.type) : $(ps) ] ;
+                if $(name)
+                {
+                    self.name = $(name) ;
+                }
+                else
+                {
+                    tag = ;
+                }
             }
             else
             {
@@ -484,8 +489,9 @@ class abstract-file-target : virtual-target
             }
         }
 
-        # If there is no tag or the tag rule returned nothing.
-        if ! $(tag) || ! $(self.name)
+        # If this is a typed target, the name is not requested to be exact,
+        # and there is no tag or the tag rule returned nothing.
+        if $(self.type) && ! $(exact) && ! $(tag)
         {
             self.name = [ virtual-target.add-prefix-and-suffix $(specified-name)
                 : $(self.type) : $(ps) ] ;
