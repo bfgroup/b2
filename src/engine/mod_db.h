@@ -15,11 +15,26 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include <map>
 
+/* tag::reference[]
+
+= `db` module.
+
+Classes and functions to manage structured data.
+
+end::reference[] */
+
 namespace b2 {
 
-class property_db : public object
+/* tag::reference[]
+
+== `b2::property_db` (`property-db`)
+
+Container for values structured as a tree with keys that are the tree path to
+the value. Arrays and objects (named fields) are supported.
+
+end::reference[] */
+struct property_db : public object
 {
-	public:
 	void emplace(list_cref k, value_ref v);
 	void write_file(value_ref filename, value_ref format);
 	std::string dump(value_ref format);
@@ -46,6 +61,53 @@ class property_db : public object
 	void write_file_json(value_ref filename);
 	std::string dump_json();
 };
+
+/* tag::reference[]
+
+=== `b2::property_db::emplace`
+
+====
+[horizontal]
+Jam:: `rule emplace ( key + : value )`
+{CPP}:: `void emplace(list_cref k, value_ref v);`
+====
+
+Set, or add, element at path `key` with `value`. The path can contain two kinds
+of position items: an array index or an object member. An array index is
+`"[]" _n_`. Where the `"[]"` indicates that a zero based index in the array,
+`_n_` follows. Anything else is treated as a member field name.
+
+end::reference[] */
+
+/* tag::reference[]
+
+=== `b2::property_db::write_file`
+
+====
+[horizontal]
+Jam:: `rule write-file ( filename : format ? )`
+{CPP}:: `void write_file(value_ref filename, value_ref format);`
+====
+
+Writes out a representation of the data to the given `filename` file formatted
+as `format`. Supported formats are: `JSON`.
+
+end::reference[] */
+
+/* tag::reference[]
+
+=== `b2::property_db::dump`
+
+====
+[horizontal]
+Jam:: `rule dump ( format ? )`
+{CPP}:: `std::string dump(value_ref format);`
+====
+
+Writes out a representation of the data as a string formatted as `format`.
+Supported formats are: `JSON`.
+
+end::reference[] */
 
 struct db_module : b2::bind::module_<db_module>
 {
