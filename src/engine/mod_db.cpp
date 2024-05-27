@@ -80,7 +80,7 @@ void build_json_from_db(const T & db, nlohmann::json & out)
 			if (a == array_tag)
 			{
 				if (++i >= k.size()) break;
-				b2::list_cref::size_type index = k[i]->as_number();
+				auto index = b2::list_cref::size_type(k[i]->as_number());
 				if (current->is_null()) *current = nlohmann::json::array();
 				if (!current->is_array()) break;
 				while (current->size() <= nlohmann::json::size_type(index))
