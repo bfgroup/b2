@@ -995,6 +995,11 @@ a { color: inherit; }
 <li><a href="#_version_4_0_0">14.30. Version 4.0.0</a></li>
 </ul>
 </li>
+<li><a href="#b2.appendix">Appendix A: Licenses</a>
+<ul class="sectlevel2">
+<li><a href="#_mit_license">A.1. MIT License</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -9411,7 +9416,115 @@ second version, <code>rhs</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.8. path</h4>
+<h4 id="_db_module"><a class="anchor" href="#_db_module"></a>6.5.8. <code>db</code> module.</h4>
+<div class="paragraph">
+<p>Classes and functions to manage structured data.</p>
+</div>
+<div class="sect4">
+<h5 id="_b2property_db_property_db"><a class="anchor" href="#_b2property_db_property_db"></a><code>b2::property_db</code> (<code>property-db</code>)</h5>
+<div class="paragraph">
+<p>Container for values structured as a tree with keys that are the tree path to
+the value. Arrays and objects (named fields) are supported.</p>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbemplace"><a class="anchor" href="#_b2property_dbemplace"></a><code>b2::property_db::emplace</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule emplace ( key + : value )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void emplace(list_cref k, value_ref v);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Set, or add, element at path <code>key</code> with <code>value</code>. The path can contain two kinds
+of position items: an array index or an object member. An array index is
+<code>"[]" <em>n</em></code>. Where the <code>"[]"</code> indicates that a zero based index in the array,
+<code><em>n</em></code> follows. Anything else is treated as a member field name.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbwrite_file"><a class="anchor" href="#_b2property_dbwrite_file"></a><code>b2::property_db::write_file</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule write-file ( filename : format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void write_file(value_ref filename, value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Writes out a representation of the data to the given <code>filename</code> file formatted
+as <code>format</code>. Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbdump"><a class="anchor" href="#_b2property_dbdump"></a><code>b2::property_db::dump</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule dump ( format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>std::string dump(value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Writes out a representation of the data as a string formatted as <code>format</code>.
+Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.9. path</h4>
 <div class="paragraph">
 <p>Performs various path manipulations. Paths are always in a 'normalized'
 representation. In it, a path may be either:</p>
@@ -9594,7 +9707,7 @@ exist.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.9. sequence</h4>
+<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.10. sequence</h4>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
@@ -9675,7 +9788,7 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.10. stage</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.11. stage</h4>
 <div class="paragraph">
 <p>This module defines the <code>install</code> rule, used to copy a set of targets to a
 single location.</p>
@@ -9794,7 +9907,7 @@ in project jam files).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.11. type</h4>
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.12. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
@@ -17874,6 +17987,49 @@ container installs.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="b2.appendix"><a class="anchor" href="#b2.appendix"></a>Appendix A: Licenses</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In addition to B2 being licensed under the Boost Software License - Version 1.0,
+B2 makes use of additional libraries that are differently licensed as follows.</p>
+</div>
+<div class="sect2">
+<h3 id="_mit_license"><a class="anchor" href="#_mit_license"></a>A.1. MIT License</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><a href="https://github.com/nlohmann/json">JSON for Modern C++</a></dt>
+<dd>
+<p>Copyright (c) 2013-2022 Niels Lohmann</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
