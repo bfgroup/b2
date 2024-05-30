@@ -486,6 +486,9 @@ rule compile.c++.preprocess ( targets * : sources * : properties * )
     {
         LANG on $(<) = "-x c++" ;
     }
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ] : "()[]\\+.*^$" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command)[^\n]*)" ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
@@ -498,6 +501,9 @@ rule compile.c.preprocess ( targets * : sources * : properties * )
     #{
         LANG on $(<) = "-x c" ;
     #}
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ] : "()[]\\+.*^$" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command)[^\n]*)" ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
@@ -509,6 +515,9 @@ rule compile.c++ ( targets * : sources * : properties * )
     {
         LANG on $(<) = "-x c++" ;
     }
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ] : "()[]\\+.*^$" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command)[^\n]*)" ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
@@ -521,11 +530,17 @@ rule compile.c ( targets * : sources * : properties * )
     #{
         LANG on $(<) = "-x c" ;
     #}
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ] : "()[]\\+.*^$" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command)[^\n]*)" ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
 rule compile.fortran ( targets * : sources * : properties * )
 {
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ] : "()[]\\+.*^$" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command)[^\n]*)" ;
 }
 
 actions compile.c++ bind PCH_FILE
@@ -555,6 +570,9 @@ actions compile.fortran
 
 rule compile.asm ( targets * : sources * : properties * )
 {
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ] : "()[]\\+.*^$" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command)[^\n]*)" ;
     LANG on $(<) = "-x assembler-with-cpp" ;
 }
 
