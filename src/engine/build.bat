@@ -168,8 +168,9 @@ echo ###
 
 set B2_SOURCES=
 set B2_SOURCES=%B2_SOURCES% bindjam.cpp builtins.cpp class.cpp
-set B2_SOURCES=%B2_SOURCES% command.cpp compile.cpp constants.cpp cwd.cpp
+set B2_SOURCES=%B2_SOURCES% command.cpp command_db.cpp compile.cpp constants.cpp cwd.cpp
 set B2_SOURCES=%B2_SOURCES% debug.cpp debugger.cpp
+set B2_SOURCES=%B2_SOURCES% events.cpp
 set B2_SOURCES=%B2_SOURCES% execcmd.cpp execnt.cpp execunix.cpp filent.cpp filesys.cpp fileunix.cpp frames.cpp function.cpp
 set B2_SOURCES=%B2_SOURCES% glob.cpp hash.cpp hcache.cpp hdrmacro.cpp headers.cpp jam.cpp
 set B2_SOURCES=%B2_SOURCES% jamgram.cpp lists.cpp make.cpp make1.cpp md5.cpp mem.cpp modules.cpp

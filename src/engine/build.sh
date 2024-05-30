@@ -443,11 +443,13 @@ bindjam.cpp \
 builtins.cpp \
 class.cpp \
 command.cpp \
+command_db.cpp \
 compile.cpp \
 constants.cpp \
 cwd.cpp \
 debug.cpp \
 debugger.cpp \
+events.cpp \
 execcmd.cpp \
 execnt.cpp \
 execunix.cpp \
