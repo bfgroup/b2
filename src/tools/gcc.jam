@@ -478,7 +478,7 @@ generators.register-c-compiler gcc.compile.mm  : OBJECTIVE_CPP : OBJ : <toolset>
 generators.register [ new fortran-compiling-generator
     gcc.compile.fortran : FORTRAN FORTRAN90 : OBJ : <toolset>gcc ] ;
 
-local rule set_command_db ( targets + )
+rule set_command_db ( targets + )
 {
     local config_command = [ regex.escape
         [ on $(targets[1]) return $(CONFIG_COMMAND) ]
@@ -494,7 +494,7 @@ rule compile.c++.preprocess ( targets * : sources * : properties * )
     {
         LANG on $(<) = "-x c++" ;
     }
-    set_command_db $(targets) ;
+    gcc.set_command_db $(targets) ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
@@ -507,7 +507,7 @@ rule compile.c.preprocess ( targets * : sources * : properties * )
     #{
         LANG on $(<) = "-x c" ;
     #}
-    set_command_db $(targets) ;
+    gcc.set_command_db $(targets) ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
@@ -519,7 +519,7 @@ rule compile.c++ ( targets * : sources * : properties * )
     {
         LANG on $(<) = "-x c++" ;
     }
-    set_command_db $(targets) ;
+    gcc.set_command_db $(targets) ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
@@ -532,13 +532,13 @@ rule compile.c ( targets * : sources * : properties * )
     #{
         LANG on $(<) = "-x c" ;
     #}
-    set_command_db $(targets) ;
+    gcc.set_command_db $(targets) ;
     DEPENDS $(<) : [ on $(<) return $(PCH_FILE) ] ;
 }
 
 rule compile.fortran ( targets * : sources * : properties * )
 {
-    set_command_db $(targets) ;
+    gcc.set_command_db $(targets) ;
 }
 
 actions compile.c++ bind PCH_FILE
@@ -568,7 +568,7 @@ actions compile.fortran
 
 rule compile.asm ( targets * : sources * : properties * )
 {
-    set_command_db $(targets) ;
+    gcc.set_command_db $(targets) ;
     LANG on $(<) = "-x assembler-with-cpp" ;
 }
 
