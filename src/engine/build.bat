@@ -168,7 +168,7 @@ echo ###
 
 set B2_SOURCES=
 set B2_SOURCES=%B2_SOURCES% bindjam.cpp builtins.cpp class.cpp
-set B2_SOURCES=%B2_SOURCES% command.cpp command_db.cpp compile.cpp constants.cpp cwd.cpp
+set B2_SOURCES=%B2_SOURCES% command.cpp compile.cpp constants.cpp cwd.cpp
 set B2_SOURCES=%B2_SOURCES% debug.cpp debugger.cpp
 set B2_SOURCES=%B2_SOURCES% events.cpp
 set B2_SOURCES=%B2_SOURCES% execcmd.cpp execnt.cpp execunix.cpp filent.cpp filesys.cpp fileunix.cpp frames.cpp function.cpp
@@ -178,6 +178,7 @@ set B2_SOURCES=%B2_SOURCES% native.cpp option.cpp output.cpp parse.cpp pathnt.cp
 set B2_SOURCES=%B2_SOURCES% pathsys.cpp pathunix.cpp regexp.cpp rules.cpp scan.cpp search.cpp jam_strings.cpp
 set B2_SOURCES=%B2_SOURCES% startup.cpp tasks.cpp
 set B2_SOURCES=%B2_SOURCES% timestamp.cpp value.cpp variable.cpp w32_getreg.cpp
+set B2_SOURCES=%B2_SOURCES% mod_command_db.cpp
 set B2_SOURCES=%B2_SOURCES% mod_db.cpp
 set B2_SOURCES=%B2_SOURCES% mod_jam_builtin.cpp
 set B2_SOURCES=%B2_SOURCES% mod_jam_class.cpp

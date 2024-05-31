@@ -443,7 +443,6 @@ bindjam.cpp \
 builtins.cpp \
 class.cpp \
 command.cpp \
-command_db.cpp \
 compile.cpp \
 constants.cpp \
 cwd.cpp \
@@ -489,6 +488,7 @@ timestamp.cpp \
 value.cpp \
 variable.cpp \
 w32_getreg.cpp \
+mod_command_db.cpp \
 mod_db.cpp \
 mod_jam_builtin.cpp \
 mod_jam_class.cpp \
