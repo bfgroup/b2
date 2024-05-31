@@ -138,7 +138,7 @@
 #include "variable.h"
 #include "execcmd.h"
 #include "mod_sysinfo.h"
-#include "command_db.h"
+#include "mod_command_db.h"
 
 #include <errno.h>
 #include <string.h>

@@ -4,7 +4,7 @@ Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
 */
 
-#include "command_db.h"
+#include "mod_command_db.h"
 
 #include "command.h"
 #include "cwd.h"
@@ -12,6 +12,7 @@ Distributed under the Boost Software License, Version 1.0.
 #include "lists.h"
 #include "mod_db.h"
 #include "output.h"
+#include "pathsys.h"
 #include "regexp.h"
 
 #include "ext_bfgroup_lyra.h"
@@ -25,6 +26,7 @@ struct database
 	bool output_flag = false;
 	std::string output_format = "json";
 	std::string output_filename = "compile_commands.json";
+	std::string output_directory;
 	std::string db_directory;
 	std::unordered_map<std::string, std::unique_ptr<regex::program>>
 		regex_cache;
@@ -36,6 +38,7 @@ struct database
 		// B2 doesn't change directories. And runs everything relative to CWD.
 		// So we can cache the value to fill into the database.
 		db_directory = b2::cwd_str();
+		output_directory = db_directory;
 	}
 
 	static database & get()
@@ -65,7 +68,7 @@ struct database
 				[](int s) { database::get().exit_main(s); }));
 	}
 
-	void set_output_filename(const std::string & f) {}
+	void set_output_filename(const std::string & f) { output_filename = f; }
 
 	void pre_exec_cmd(TARGET * t)
 	{
@@ -121,7 +124,19 @@ struct database
 	void exit_main(int status)
 	{
 		if (status == EXIT_FAIL) return;
-		prop_db->write_file(output_filename, output_format);
+		std::string filename = output_filename;
+		if (!b2::paths::is_rooted(output_filename))
+		{
+			if (!b2::paths::is_rooted(output_directory))
+				filename = b2::cwd_str() + "/";
+			filename += output_directory + "/" + output_filename;
+			filename = b2::paths::normalize(filename);
+		}
+		if (prop_db->write_file(filename, output_format))
+			out_printf("...wrote command database '%s'...\n", filename.c_str());
+		else
+			err_printf("...writing to command database '%s' FAILED...\n",
+				filename.c_str());
 	}
 };
 
@@ -136,7 +151,15 @@ void declare_args(lyra::cli & cli)
 		[](const std::string & f) { database::get().set_output_filename(f); },
 		"filename")
 			   .name("--command-database-out")
-			   .help("Filename to output the command database to.");
+			   .help(
+				   "Filename to output the command database to. "
+				   "A relative path for the filename is rooted to the project "
+				   "build-dir.");
+}
+
+void set_output_dir(value_ref dirname)
+{
+	database::get().output_directory = dirname;
 }
 
 }} // namespace b2::command_db

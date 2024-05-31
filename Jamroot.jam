@@ -22,7 +22,7 @@ import virtual-target ;
 
 path-constant SELF : . ;
 
-project b2
+project /bfgroup/b2
     : build-dir .build
     : requirements
         <cxxstd>11
