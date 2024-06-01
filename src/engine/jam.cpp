@@ -342,6 +342,12 @@ int guarded_main( int argc, char * * argv )
         return EXITOK;
     }
 
+	// Process options.
+	lyra::cli cli;
+	b2::command_db::declare_args(cli);
+	cli |= lyra::arg([](const std::string&){}, "").cardinality(0,0);
+	auto cli_parse_result = cli.parse({arg_c, arg_v});
+
     /* Pick up interesting options. */
     if ( ( s = getoptval( optv, 'n', 0 ) ) )
     {
@@ -425,12 +431,6 @@ int guarded_main( int argc, char * * argv )
         }
         /* ++globs.noexec; */
     }
-
-	//
-	lyra::cli cli;
-	b2::command_db::declare_args(cli);
-	cli |= lyra::arg([](const std::string&){}, "").cardinality(0,0);
-	auto cli_parse_result = cli.parse({arg_c, arg_v});
 
     {
         PROFILE_ENTER( MAIN );
