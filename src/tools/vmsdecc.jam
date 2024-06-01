@@ -17,6 +17,7 @@ import type ;
 import common ;
 import unix ;
 import path ;
+import regex ;
 
 
 if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ]

@@ -12,6 +12,7 @@ import feature ;
 import toolset : flags ;
 import common ;
 import generators ;
+import regex ;
 
 import unix ;
 import como ;

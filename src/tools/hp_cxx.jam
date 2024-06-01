@@ -69,6 +69,8 @@ Specifies additional command line options that will be passed to the linker.
 #   optimization is needed.
 #
 
+import regex ;
+
 import feature generators common ;
 import toolset : flags ;
 

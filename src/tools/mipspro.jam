@@ -11,6 +11,7 @@ import feature ;
 import fortran ;
 import type ;
 import common ;
+import regex ;
 
 feature.extend toolset : mipspro ;
 toolset.inherit mipspro : unix ;

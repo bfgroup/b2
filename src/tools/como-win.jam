@@ -15,6 +15,7 @@ import como ;
 import feature ;
 import generators ;
 import toolset : flags ;
+import regex ;
 
 feature.extend-subfeature toolset como : platform : win ;
 

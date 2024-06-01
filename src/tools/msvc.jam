@@ -229,6 +229,7 @@ import project ;
 import property ;
 import property-set ;
 import rc ;
+import regex ;
 import sequence ;
 import set ;
 import testing ;

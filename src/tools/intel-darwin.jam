@@ -13,6 +13,7 @@ import gcc ;
 import common ;
 import errors ;
 import generators ;
+import regex ;
 
 feature.extend-subfeature toolset intel : platform : darwin ;
 

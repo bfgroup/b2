@@ -13,6 +13,7 @@ import fortran ;
 import type ;
 import common ;
 import gcc ;
+import regex ;
 
 feature.extend toolset : pgi ;
 toolset.inherit pgi : unix ;
