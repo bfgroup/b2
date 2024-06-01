@@ -140,6 +140,11 @@ rule compile.c++
     }
 
     check-target-platform $(1) ;
+
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ]
+        : "()[]\\+.*^$\"" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "(\"$(config_command)\"[^\n]*)" ;
 }
 
 actions compile.c++
@@ -150,6 +155,11 @@ actions compile.c++
 rule compile.c
 {
     check-target-platform $(1) ;
+
+    local config_command = [ regex.escape
+        [ on $(targets[1]) return $(CONFIG_COMMAND) ]
+        : "()[]\\+.*^$\"" : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "(\"$(config_command)\"[^\n]*)" ;
 }
 
 actions compile.c

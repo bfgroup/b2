@@ -683,6 +683,12 @@ rule compile.c ( targets + : sources * : properties * )
     set-setup-command $(targets) : $(properties) ;
     get-rspline $(targets) : -TC CFLAGS  ;
     compile-c-c++ $(<) : $(>) ;
+
+    local config_command = [ regex.escape [ on $(targets[1]) return $(.CC) ]
+        : "|()[]\\+.*^$\" " : "\\" ] ;
+    local cc_filter = [ regex.escape [ on $(targets[1]) return $(.CC.FILTER) ]
+        : "|()[]\\+.*^$\" " : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command).*)$(cc_filter)" ;
 }
 
 
@@ -751,6 +757,12 @@ rule compile-c-c++ ( targets + : sources * )
     LOCATE on $(<[1]:S=.pdb) = [ on $(<[1]) return $(LOCATE) ] ;
     local pch-header = [ on $(<[1]) return $(PCH_HEADER) ] ;
     PCH_HEADER_AS_SPELLED on $(<[1]) = $(pch-header:G=) ;
+
+    local config_command = [ regex.escape [ on $(targets[1]) return $(.CC) ]
+        : "|()[]\\+.*^$\" " : "\\" ] ;
+    local cc_filter = [ regex.escape [ on $(targets[1]) return $(.CC.FILTER) ]
+        : "|()[]\\+.*^$\" " : "\\" ] ;
+    COMMAND_DATABASE on $(targets) = "($(config_command).*)$(cc_filter)" ;
 }
 
 rule preprocess-c-c++ ( targets + : sources * )
