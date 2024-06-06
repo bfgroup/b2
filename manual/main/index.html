@@ -7882,7 +7882,7 @@ Jam
 C++
 </td>
 <td class="hdlist2">
-<p><code>value_ref binding(const std::string &amp; module_name);</code></p>
+<p><code>value_ref binding(std::string module_name);</code></p>
 </td>
 </tr>
 </table>
@@ -7920,8 +7920,7 @@ Jam
 C++
 </td>
 <td class="hdlist2">
-<p><code>void record_binding(const std::string &amp; module_name, const value_ref &amp;
-value);</code></p>
+<p><code>void record_binding(std::string module_name, value_ref value);</code></p>
 </td>
 </tr>
 </table>
@@ -7964,8 +7963,8 @@ Jam
 C++
 </td>
 <td class="hdlist2">
-<p><code>void poke(const std::string &amp; module_name, list_cref variables,
-list_cref value);</code></p>
+<p><code>void poke(std::string module_name, list_cref variables, list_cref
+value);</code></p>
 </td>
 </tr>
 </table>
@@ -8005,7 +8004,7 @@ Jam
 C++
 </td>
 <td class="hdlist2">
-<p><code>list_ref peek(const std::string &amp; module_name, list_cref variables);</code></p>
+<p><code>list_ref peek(std::string module_name, list_cref variables);</code></p>
 </td>
 </tr>
 </table>
@@ -8079,8 +8078,8 @@ Jam
 C++
 </td>
 <td class="hdlist2">
-<p><code>list_ref call_in(const value_ref &amp; module_name, std::tuple&lt;value_ref,
-list_ref&gt; const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
+<p><code>list_ref call_in(value_ref module_name, std::tuple&lt;value_ref, list_ref&gt;
+const lists &amp; rest, bind::context_ref_ context_ref);</code></p>
 </td>
 </tr>
 </table>
@@ -8167,7 +8166,7 @@ Jam
 C++
 </td>
 <td class="hdlist2">
-<p><code>void run_tests(const value_ref &amp; m, bind::context_ref_ context_ref);</code></p>
+<p><code>void run_tests(value_ref m, bind::context_ref_ context_ref);</code></p>
 </td>
 </tr>
 </table>
@@ -8199,7 +8198,7 @@ Jam
 C++
 </td>
 <td class="hdlist2">
-<p><code>void load(const value_ref &amp; module_name, value_ref filename, list_cref
+<p><code>void load(value_ref module_name, value_ref filename, list_cref
 search, bind::context_ref_ context_ref);</code></p>
 </td>
 </tr>
