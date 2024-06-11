@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.22">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <meta name="author" content="René Ferdinand Rivera Morell, Vladimir Prus, Steven Watanabe">
 <meta name="copyright" content="Copyright 2018-2021 René Ferdinand Rivera Morell; Copyright 2006, 2014 Vladimir Prus">
 <title>B2 User Manual</title>
@@ -887,6 +887,7 @@ a { color: inherit; }
 <li><a href="#bbv2.tasks.crosscompile">5.9. Cross-compilation</a></li>
 <li><a href="#bbv2.tasks.packagemanagers">5.10. Package Managers</a></li>
 <li><a href="#bbv2.tasks.projectsearch">5.11. Searching For Projects</a></li>
+<li><a href="#b2.tasks.commanddb">5.12. Command Database, and IDE Integration</a></li>
 </ul>
 </li>
 <li><a href="#bbv2.reference">6. Reference</a>
@@ -963,35 +964,41 @@ a { color: inherit; }
 </li>
 <li><a href="#b2.history">14. History</a>
 <ul class="sectlevel2">
-<li><a href="#_version_5_1_0">14.1. Version 5.1.0</a></li>
-<li><a href="#_version_5_0_1">14.2. Version 5.0.1</a></li>
-<li><a href="#_version_5_0_0">14.3. Version 5.0.0</a></li>
-<li><a href="#_version_4_10_1">14.4. Version 4.10.1</a></li>
-<li><a href="#_version_4_10_0">14.5. Version 4.10.0</a></li>
-<li><a href="#_version_4_9_6">14.6. Version 4.9.6</a></li>
-<li><a href="#_version_4_9_5">14.7. Version 4.9.5</a></li>
-<li><a href="#_version_4_9_4">14.8. Version 4.9.4</a></li>
-<li><a href="#_version_4_9_3">14.9. Version 4.9.3</a></li>
-<li><a href="#_version_4_9_2">14.10. Version 4.9.2</a></li>
-<li><a href="#_version_4_9_1">14.11. Version 4.9.1</a></li>
-<li><a href="#_version_4_9_0">14.12. Version 4.9.0</a></li>
-<li><a href="#_version_4_8_2">14.13. Version 4.8.2</a></li>
-<li><a href="#_version_4_8_1">14.14. Version 4.8.1</a></li>
-<li><a href="#_version_4_8_0">14.15. Version 4.8.0</a></li>
-<li><a href="#_version_4_7_2">14.16. Version 4.7.2</a></li>
-<li><a href="#_version_4_7_1">14.17. Version 4.7.1</a></li>
-<li><a href="#_version_4_7_0">14.18. Version 4.7.0</a></li>
-<li><a href="#_version_4_6_1">14.19. Version 4.6.1</a></li>
-<li><a href="#_version_4_6_0">14.20. Version 4.6.0</a></li>
-<li><a href="#_version_4_5_0">14.21. Version 4.5.0</a></li>
-<li><a href="#_version_4_4_2">14.22. Version 4.4.2</a></li>
-<li><a href="#_version_4_4_1">14.23. Version 4.4.1</a></li>
-<li><a href="#_version_4_4_0">14.24. Version 4.4.0</a></li>
-<li><a href="#_version_4_3_0">14.25. Version 4.3.0</a></li>
-<li><a href="#_version_4_2_0">14.26. Version 4.2.0</a></li>
-<li><a href="#_version_4_1_0">14.27. Version 4.1.0</a></li>
-<li><a href="#_version_4_0_1">14.28. Version 4.0.1</a></li>
-<li><a href="#_version_4_0_0">14.29. Version 4.0.0</a></li>
+<li><a href="#_version_5_2_0">14.1. Version 5.2.0</a></li>
+<li><a href="#_version_5_1_0">14.2. Version 5.1.0</a></li>
+<li><a href="#_version_5_0_1">14.3. Version 5.0.1</a></li>
+<li><a href="#_version_5_0_0">14.4. Version 5.0.0</a></li>
+<li><a href="#_version_4_10_1">14.5. Version 4.10.1</a></li>
+<li><a href="#_version_4_10_0">14.6. Version 4.10.0</a></li>
+<li><a href="#_version_4_9_6">14.7. Version 4.9.6</a></li>
+<li><a href="#_version_4_9_5">14.8. Version 4.9.5</a></li>
+<li><a href="#_version_4_9_4">14.9. Version 4.9.4</a></li>
+<li><a href="#_version_4_9_3">14.10. Version 4.9.3</a></li>
+<li><a href="#_version_4_9_2">14.11. Version 4.9.2</a></li>
+<li><a href="#_version_4_9_1">14.12. Version 4.9.1</a></li>
+<li><a href="#_version_4_9_0">14.13. Version 4.9.0</a></li>
+<li><a href="#_version_4_8_2">14.14. Version 4.8.2</a></li>
+<li><a href="#_version_4_8_1">14.15. Version 4.8.1</a></li>
+<li><a href="#_version_4_8_0">14.16. Version 4.8.0</a></li>
+<li><a href="#_version_4_7_2">14.17. Version 4.7.2</a></li>
+<li><a href="#_version_4_7_1">14.18. Version 4.7.1</a></li>
+<li><a href="#_version_4_7_0">14.19. Version 4.7.0</a></li>
+<li><a href="#_version_4_6_1">14.20. Version 4.6.1</a></li>
+<li><a href="#_version_4_6_0">14.21. Version 4.6.0</a></li>
+<li><a href="#_version_4_5_0">14.22. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">14.23. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">14.24. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">14.25. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">14.26. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">14.27. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">14.28. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_1">14.29. Version 4.0.1</a></li>
+<li><a href="#_version_4_0_0">14.30. Version 4.0.0</a></li>
+</ul>
+</li>
+<li><a href="#b2.appendix">Appendix A: Licenses</a>
+<ul class="sectlevel2">
+<li><a href="#_mit_license">A.1. MIT License</a></li>
 </ul>
 </li>
 </ul>
@@ -2611,8 +2618,7 @@ debugging custom generators.</p>
 </dd>
 <dt class="hdlist1"><code>-d N</code></dt>
 <dd>
-<p>Enable cumulative debugging levels from 1 to n. Values are:
-+</p>
+<p>Enable cumulative debugging levels from 1 to n. Values are:<br></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2674,6 +2680,15 @@ them.</p>
 <dd>
 <p>Set the variable <code>var</code> to <code>value</code> in the global scope of the jam language
 interpreter, overriding variables imported from the environment.</p>
+</dd>
+<dt class="hdlist1"><code>--command-database=<em>format</em></code></dt>
+<dd>
+<p>Output a compile commands database as <em>format</em>. Currently <em>format</em> can be:
+<code>json</code>. (See <a href="#b2.tasks.commanddb">Command Database</a> for details.)</p>
+</dd>
+<dt class="hdlist1"><code>--command-database-out=<em>file</em></code></dt>
+<dd>
+<p>Specify the <em>file</em> path to output the commands database to.</p>
 </dd>
 </dl>
 </div>
@@ -4566,6 +4581,100 @@ In this case it means that the file will be loaded as part of the referenced
 project and hence any bare targets or information it declares will be part of
 the project.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="b2.tasks.commanddb"><a class="anchor" href="#b2.tasks.commanddb"></a>5.12. Command Database, and IDE Integration</h3>
+<div class="paragraph">
+<p>Many IDE programs accept the use of a
+<a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html"><code>compile_commands.json</code></a>
+file to learn what and how your project builds. B2 supports generating such
+files for any build you make. B2 supports this through a generic facility to
+extract commands from the actions it executes. There are two options that
+control this. The <code>--command-database=<em>format</em></code> option indicates to generate the
+file for the given <em>format</em>. It has a couple of effects when specified:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It tells B2 to start observing and extracting commands from actions (as
+specified by the toolset).</p>
+</li>
+<li>
+<p>It disables execution of actions. I.e. equivalent to adding the <code>-n</code> option.</p>
+</li>
+<li>
+<p>It enables building all default and specified targets. I.e. the equivalent to
+adding the <code>-a</code> option.</p>
+</li>
+<li>
+<p>It disables all action execution output. I.e. as if specifying <code>-d0</code> option.</p>
+</li>
+<li>
+<p>At the end of the main build it writes out the results of what it observed
+to the database file.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Currently on <code>json</code> is supported as a format that follows the
+<a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">Clang JSON Compilation
+Database Format Specification</a>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>--command-database-out=<em>file</em></code> option controls the name, and optionally
+location, of the generated file. By default the <em>file</em> is
+<code>compile_commands.json</code> to follow the ecosystem convention. And it is generated,
+by default, in one of the following locations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Relative to the <code>build-dir</code> of the root project, if it&#8217;s specified by the
+project. With the default <em>file</em> name or as given.</p>
+</li>
+<li>
+<p>At the absolute <em>file</em> path if it is rooted.</p>
+</li>
+<li>
+<p>At the <em>current working directory</em>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following fields are populated in the generated database:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>directory</code> - This will always be the current directory as B2 makes all paths
+relative to that (or absolute).</p>
+</li>
+<li>
+<p><code>file</code> - The first source of each action recorded.</p>
+</li>
+<li>
+<p><code>command</code> - The quoted, full, command as extracted by the toolset.</p>
+</li>
+<li>
+<p><code>output</code> - The first target file of each action recorded. As B2 can build
+multiple variants at once this is required to differentiate between multiple
+compilations of the same source file.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+Only one command database file is generated per <code>b2</code> invocation. And each
+time it is generated it overwrites any previous such file.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -6753,6 +6862,9 @@ command line tools are listed below:</p>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p>Visual Studio 2022-14.3</p>
+</li>
 <li>
 <p>Visual Studio 2019-14.2</p>
 </li>
@@ -9407,7 +9519,115 @@ second version, <code>rhs</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.8. path</h4>
+<h4 id="_db_module"><a class="anchor" href="#_db_module"></a>6.5.8. <code>db</code> module.</h4>
+<div class="paragraph">
+<p>Classes and functions to manage structured data.</p>
+</div>
+<div class="sect4">
+<h5 id="_b2property_db_property_db"><a class="anchor" href="#_b2property_db_property_db"></a><code>b2::property_db</code> (<code>property-db</code>)</h5>
+<div class="paragraph">
+<p>Container for values structured as a tree with keys that are the tree path to
+the value. Arrays and objects (named fields) are supported.</p>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbemplace"><a class="anchor" href="#_b2property_dbemplace"></a><code>b2::property_db::emplace</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule emplace ( key + : value )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void emplace(list_cref k, value_ref v);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Set, or add, element at path <code>key</code> with <code>value</code>. The path can contain two kinds
+of position items: an array index or an object member. An array index is
+<code>"[]" <em>n</em></code>. Where the <code>"[]"</code> indicates that a zero based index in the array,
+<code><em>n</em></code> follows. Anything else is treated as a member field name.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbwrite_file"><a class="anchor" href="#_b2property_dbwrite_file"></a><code>b2::property_db::write_file</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule write-file ( filename : format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>void write_file(value_ref filename, value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Writes out a representation of the data to the given <code>filename</code> file formatted
+as <code>format</code>. Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbdump"><a class="anchor" href="#_b2property_dbdump"></a><code>b2::property_db::dump</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule dump ( format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C++
+</td>
+<td class="hdlist2">
+<p><code>std::string dump(value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Writes out a representation of the data as a string formatted as <code>format</code>.
+Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bbv2.reference.modules.path"><a class="anchor" href="#bbv2.reference.modules.path"></a>6.5.9. path</h4>
 <div class="paragraph">
 <p>Performs various path manipulations. Paths are always in a 'normalized'
 representation. In it, a path may be either:</p>
@@ -9590,7 +9810,7 @@ exist.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.9. sequence</h4>
+<h4 id="bbv2.reference.modules.sequence"><a class="anchor" href="#bbv2.reference.modules.sequence"></a>6.5.10. sequence</h4>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
@@ -9671,7 +9891,7 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.10. stage</h4>
+<h4 id="bbv2.reference.modules.stage"><a class="anchor" href="#bbv2.reference.modules.stage"></a>6.5.11. stage</h4>
 <div class="paragraph">
 <p>This module defines the <code>install</code> rule, used to copy a set of targets to a
 single location.</p>
@@ -9790,7 +10010,7 @@ in project jam files).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.11. type</h4>
+<h4 id="bbv2.reference.modules.type"><a class="anchor" href="#bbv2.reference.modules.type"></a>6.5.12. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
@@ -16414,6 +16634,7 @@ allocate, copy, move <code>LIST</code> objects as needed.</p>
 
 	// list operations
 	inline list_ref &amp; slice(size_type i, size_type j = -1);
+	inline list_cref cref() const;
 };</code></pre>
 </div>
 </div>
@@ -16713,7 +16934,86 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>14. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_5_1_0"><a class="anchor" href="#_version_5_1_0"></a>14.1. Version 5.1.0</h3>
+<h3 id="_version_5_2_0"><a class="anchor" href="#_version_5_2_0"></a>14.1. Version 5.2.0</h3>
+<div class="paragraph">
+<p>Many fixes in this release from regular contributors Nikita and Dmitry. There
+are a couple of new features.. First the ability to have <code>dll-path</code> in searched
+libraries. Which makes it possible to better support system/external libraries.
+The second new feature is the addition of generating <code>compile_commands.json</code>
+for IDE and tool integration. That has a been a wish item for a long time.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New</strong>: Add support for generating <code>compile_commands.json</code> command database
+for some IDE integration.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Addition of a module (<code>db</code>) for structured data management. Has a
+<code>property-db</code> class that can write out as JSON data.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Allow adding dll-path to usage requirements of searched libraries.
+Which makes it possible to adjust search paths for dynamic libs on the
+platform.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix incorrect recursive loading of modules when doing recursive importing of
+modules. The recursive loading would cause stack overflows.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Default to building with Clang on FreeBSD and OpenBSD.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix Solaris/SunOS detection in engine for <code>OS=SUNOS</code> and <code>OS=SOLARIS</code>.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Allow some tools to be default initialized with <code>using</code> multiple times. The
+tools are <code>asciidoctor</code>, <code>fop</code>, <code>gettext</code>, <code>pkg-config</code>, <code>python</code>, <code>sass</code>,
+and <code>saxonhe</code>.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix using relevant features in ac module that would cause incorrect configure
+checks.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix application of -m31, -m32, -m64 for address model on certain hardware and
+avoid adding them when not supported, generally.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix incorrectly attaching manifest when not targeting Windows for engine
+bootstrap build.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix <code>embed-manifest-via=linker</code> for clang-win toolset.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix incorrect <code>unknown</code> OS name, to use correct <code>none</code>. Which is needed for
+correct emscripten toolset building.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix: For msvc toolset, register only the versions that have been asked to
+init.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix: Suppress spurious <code>1 file(s) copied.</code> message after every test.&#8201;&#8212;&#8201;<em>Nikita Kniazev</em></p>
+</li>
+<li>
+<p>Fix: Improve handling of install directories.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix: For msvc toolset, recognize Visual Studio 2022 v17.10.0, which uses
+toolchain version 14.40.33807.&#8201;&#8212;&#8201;<em>Dmitry Andric</em></p>
+</li>
+<li>
+<p>Fix: For msvc toolset, exception-handling=off should define
+<code><em>HAS_EXCEPTIONS=0</code> for Dinkumware/MSSTL.&#8201;&#8212;&#8201;_Nikita Kniazev</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_5_1_0"><a class="anchor" href="#_version_5_1_0"></a>14.2. Version 5.1.0</h3>
 <div class="paragraph">
 <p>This is mostly a bugfix release to account for issues impacting Boost Libraries.
 There is one "big" change though. It can be rather difficult to find build
@@ -16753,7 +17053,7 @@ supported, debug symbols option.&#8201;&#8212;&#8201;<em>John McFarlane</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_0_1"><a class="anchor" href="#_version_5_0_1"></a>14.2. Version 5.0.1</h3>
+<h3 id="_version_5_0_1"><a class="anchor" href="#_version_5_0_1"></a>14.3. Version 5.0.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16771,7 +17071,7 @@ native vs. non-native path handling.&#8201;&#8212;&#8201;<em>René Ferdinand Riv
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>14.3. Version 5.0.0</h3>
+<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>14.4. Version 5.0.0</h3>
 <div class="paragraph">
 <p>This is a new era in B2. The drive of this new major version is to move the
 core build system from being implemented in Jam to C++. This initial release
@@ -16835,7 +17135,7 @@ features became too much. And was taking away from other improvements.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_10_1"><a class="anchor" href="#_version_4_10_1"></a>14.4. Version 4.10.1</h3>
+<h3 id="_version_4_10_1"><a class="anchor" href="#_version_4_10_1"></a>14.5. Version 4.10.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16846,7 +17146,7 @@ toolset in b2 build.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em><
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_10_0"><a class="anchor" href="#_version_4_10_0"></a>14.5. Version 4.10.0</h3>
+<h3 id="_version_4_10_0"><a class="anchor" href="#_version_4_10_0"></a>14.6. Version 4.10.0</h3>
 <div class="paragraph">
 <p>This release contains many bug fixes but along the way also cleanup and
 refactoring of many toolsets, thanks to Nikita.</p>
@@ -16947,7 +17247,7 @@ target and project references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Mo
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>14.6. Version 4.9.6</h3>
+<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>14.7. Version 4.9.6</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16957,7 +17257,7 @@ target and project references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Mo
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>14.7. Version 4.9.5</h3>
+<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>14.8. Version 4.9.5</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -16985,7 +17285,7 @@ when it is not on found in <code>PATH</code>.&#8201;&#8212;&#8201;<em>Nikita Kni
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>14.8. Version 4.9.4</h3>
+<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>14.9. Version 4.9.4</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17016,7 +17316,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.9. Version 4.9.3</h3>
+<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.10. Version 4.9.3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17026,7 +17326,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.10. Version 4.9.2</h3>
+<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.11. Version 4.9.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17036,7 +17336,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.11. Version 4.9.1</h3>
+<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.12. Version 4.9.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17051,7 +17351,7 @@ path specified in boost-build rule.&#8201;&#8212;&#8201;<em>René Ferdinand Rive
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.12. Version 4.9.0</h3>
+<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.13. Version 4.9.0</h3>
 <div class="paragraph">
 <p>This release has mostly internal cleanups and restructuring. The most
 significant being: fixing all memory leaks, automatic build system
@@ -17120,7 +17420,7 @@ deprecated and will be removed in a future release.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.13. Version 4.8.2</h3>
+<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.14. Version 4.8.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17131,7 +17431,7 @@ and incorrect target list pop unlinking.&#8201;&#8212;&#8201;<em>René Ferdinand
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.14. Version 4.8.1</h3>
+<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.15. Version 4.8.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17142,7 +17442,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.15. Version 4.8.0</h3>
+<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.16. Version 4.8.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17185,7 +17485,7 @@ cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.16. Version 4.7.2</h3>
+<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.17. Version 4.7.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17199,7 +17499,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.17. Version 4.7.1</h3>
+<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.18. Version 4.7.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17209,7 +17509,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.18. Version 4.7.0</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.19. Version 4.7.0</h3>
 <div class="paragraph">
 <p>Many, many fixes and internal cleanups in this release. But also adding
 auto-detection and bootstrap for VS 2022 preview toolset.</p>
@@ -17273,7 +17573,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.19. Version 4.6.1</h3>
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.20. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17286,7 +17586,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.20. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.21. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -17349,7 +17649,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.21. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.22. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -17371,7 +17671,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.22. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.23. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -17388,7 +17688,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.23. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.24. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -17401,7 +17701,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.24. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.25. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -17492,7 +17792,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.25. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.26. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -17592,7 +17892,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.26. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.27. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -17634,7 +17934,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.27. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.28. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -17716,7 +18016,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.28. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.29. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -17726,7 +18026,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.29. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.30. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
@@ -17806,6 +18106,49 @@ container installs.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="b2.appendix"><a class="anchor" href="#b2.appendix"></a>Appendix A: Licenses</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In addition to B2 being licensed under the Boost Software License - Version 1.0,
+B2 makes use of additional libraries that are differently licensed as follows.</p>
+</div>
+<div class="sect2">
+<h3 id="_mit_license"><a class="anchor" href="#_mit_license"></a>A.1. MIT License</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><a href="https://github.com/nlohmann/json">JSON for Modern C++</a></dt>
+<dd>
+<p>Copyright (c) 2013-2022 Niels Lohmann</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
