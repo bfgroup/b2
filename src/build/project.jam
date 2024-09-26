@@ -161,8 +161,11 @@ rule find ( name : current-location )
             local jamfile = $(root-and-jamfile[2]) ;
             if $(root)
             {
-                local caller-project = [ CALLER_MODULE ] ;
-                local caller-module = [ $(caller-project).project-module ] ;
+                local caller-module = [ CALLER_MODULE ] ;
+                if [ class.is-a $(caller-module) project-target ]
+                {
+                    caller-module = [ $(caller-module).project-module ] ;
+                }
                 if $(jamfile)
                 {
                     modules.call-in $(caller-module)
