@@ -20,6 +20,9 @@ cd "$pwd"
 cp "./src/engine/b2" . 2>/dev/null
 cp "./src/engine/b2.exe" . 2>/dev/null
 
+# Fix up the UTF8 test (AIX does not support utf8 file/dir names)
+cp -r libs/wave/test/testwave/testfiles/utf8-test libs/wave/test/testwave/testfiles/utf8-test-ßµ™∃
+
 cat << EOF
 
 Building is done. To install, run:
