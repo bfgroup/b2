@@ -6,6 +6,8 @@ REM
 REM Distributed under the Boost Software License, Version 1.0.
 REM (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
 
+mkdir libs\wave\test\testwave\testfiles\utf8-test-ßµ™∃
+copy libs\wave\test\testwave\testfiles\utf8-test\file.hpp libs\wave\test\testwave\testfiles\utf8-test-ßµ™∃\file.hpp
 
 :b2_build
 ECHO Building the B2 engine..
