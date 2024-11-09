@@ -71,6 +71,7 @@ rule tag ( name : type ? : property-set )
         case SHARED_LIB : tags += _dll ;
         case STATIC_LIB : tags += _lib ;
         case EXE        : tags += _exe ;
+        case *          : tags = ;
     }
     if $(tags)
     {
