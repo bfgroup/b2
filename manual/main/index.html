@@ -6105,7 +6105,7 @@ default path translation.</p>
 <p><strong>Allowed values:</strong> <code>on</code>.</p>
 <div class="paragraph">
 <p>Enables link time optimizations (also known as interprocedural optimizations or
-whole-program optimizations). Currently supported toolsets are <a href="#bbv2.reference.tools.compiler.gcc">GNU C++</a>,
+whole-program optimizations). Currently supported toolsets are <a href="#GNU C++">[GNU C++]</a>,
 clang and <a href="#bbv2.reference.tools.compiler.msvc">Microsoft Visual C++</a>. The feature is optional.</p>
 </div>
 </dd>
@@ -6304,6 +6304,20 @@ and C++ sources.</p>
 for a console applicatiuon and <code>gui</code> for a Windows application.</p>
 </dd>
 </dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="bbv2.reference.tools.compiler.clang-linux"><a class="anchor" href="#bbv2.reference.tools.compiler.clang-linux"></a>Clang (GCC frontend)</h5>
+<div class="paragraph">
+<p>The <code>clang-linux</code> module supports Clang with GCC frontend and has the same
+options as <a href="#bbv2.reference.tools.compiler.gcc"><code>gcc</code></a> toolset.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="bbv2.reference.tools.compiler.clang-win"><a class="anchor" href="#bbv2.reference.tools.compiler.clang-win"></a>Clang (MSVC frontend)</h5>
+<div class="paragraph">
+<p>The <code>clang-win</code> module supports Clang with MSVC frontend and has the same
+options as <a href="#bbv2.reference.tools.compiler.msvc"><code>msvc</code></a> toolset.</p>
 </div>
 </div>
 <div class="sect4">
@@ -6636,7 +6650,48 @@ be in the PATH.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="bbv2.reference.tools.compiler.gcc"><a class="anchor" href="#bbv2.reference.tools.compiler.gcc"></a>GNU C++</h5>
+<h5 id="bbv2.reference.tools.compiler.emscripten"><a class="anchor" href="#bbv2.reference.tools.compiler.emscripten"></a>Emscripten</h5>
+<div class="paragraph">
+<p>The <code>emscripten</code> module supports <a href="https://emscripten.org">Emscripten toolchain</a>
+and has the same options as <a href="#bbv2.reference.tools.compiler.clang-linux"><code>clang-linux</code></a>
+toolset.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">⚠</div>
+</td>
+<td class="content">
+Emscripten toolset defaults to static linkage because it is what
+generally expected and limitations of the toolchain itself
+(<code>wasm-ld</code> does not support <code>rpath</code>; js launcher does not respect
+<code>LD_LIBRARY_PATH</code>/<code>PATH</code> when looking for shared objects).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Additional <a href="#bbv2.overview.invocation.properties">features</a>
+supported by Emscripten toolset exclusively:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>debug-symbols-source-map</code></dt>
+<dd>
+<p>Setting to <code>on</code> will enable source map generation, more info could be found in
+<a href="https://emscripten.org/docs/tools_reference/emcc.html#emcc-gsource-map">Emscripten documentation</a>.</p>
+</dd>
+<dt class="hdlist1"><code>exception-handling-method</code></dt>
+<dd>
+<p>Setting to <code>js</code> will result in using Emscripten’s JavaScript-based exception
+support instead of native WebAssembly exception handling.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="bbv2.reference.tools.compiler.gcc"><a class="anchor" href="#bbv2.reference.tools.compiler.gcc"></a>GCC - GNU Compiler Collection</h5>
 <div class="paragraph">
 <p>The <code>gcc</code> module supports the <a href="http://gcc.gnu.org">GNU C++ compiler</a> on
 Linux, a number of Unix-like system including SunOS and on Windows
