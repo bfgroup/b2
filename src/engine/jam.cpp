@@ -139,6 +139,7 @@
 #include "execcmd.h"
 #include "mod_sysinfo.h"
 #include "mod_command_db.h"
+#include "mod_args.h"
 
 #include <errno.h>
 #include <string.h>
@@ -591,6 +592,9 @@ int guarded_main( int argc, char * * argv )
                 status = b2::startup::bootstrap(frame) ? 0 : 13;
             }
         }
+
+		// Process options.
+		b2::args::parse(arg_c, arg_v);
 
         /* FIXME: What shall we do if builtin_update_now,
          * the sole place setting last_update_now_status,
