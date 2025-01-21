@@ -1,0 +1,279 @@
+#|
+Copyright René Ferdinand Rivera Morell 2024
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE.txt
+or copy at https://www.bfgroup.xyz/b2/LICENSE.txt)
+|#
+
+#| tag::doc[]
+
+[[bbv2.reference.tools.compiler.ibmcxx]]
+= IBM C and C++ Compiler Family
+
+The `ibmcxx` module supports the
+https://www.ibm.com/products/c-and-c-plus-plus-compiler-family[IBM
+C and C++ Compiler Family], for the AIX and Linux operating systems.
+
+The module is initialized using the following syntax:
+
+----
+using ibmcxx : [version] : [c++-compile-command] : [compiler options] ;
+----
+
+|# # end::doc[]
+
+import toolset : flags ;
+import feature ;
+import common ;
+import generators ;
+import os ;
+import unix ;
+import path ;
+import sequence ;
+import version ;
+
+# Common (minimal) toolset.
+feature.extend toolset : ibmcxx ;
+toolset.inherit ibmcxx : unix ;
+feature.subfeature toolset ibmcxx : tool : : propagated link-incompatible ;
+
+# Clang tool sub-toolset.
+feature.extend-subfeature toolset ibmcxx : tool : clang ;
+
+# IBM tool sub-toolset.
+feature.extend-subfeature toolset ibmcxx : tool : ibm ;
+
+rule init ( version ? : command * : options * : requirements * )
+{
+    # No command information given to go on. Try and discover the most
+    # recent tool available.
+    local detected-versions ;
+    if ! $(command) && ! $(version)
+    {
+        detected-versions = [ find-versions ] ;
+        version = $(detected-versions[1]) ;
+    }
+    local tool = [ feature.get-values <tool> : $(options) ] ;
+    if $(tool) = clang
+    {
+        if ! $(command) && $(version)
+        {
+            command = [ common.find-tool "ibm-clang++_r" :
+                [ path.make "/opt/IBM/openxlC/$(version)/bin" ] ] ;
+        }
+        if ! $(command) && $(version)
+        {
+            command = [ common.find-tool "xlclang++" :
+                [ path.make "/opt/IBM/xlc/$(version)/bin" ] ] ;
+        }
+        if ! $(command) && ! $(version)
+        {
+            command = [ common.find-tool "xlclang++" :
+                [ path.make "/usr/xlcpp/bin" ] [ path.make "/usr/vacpp/bin" ] ] ;
+        }
+    }
+    else if $(tool) = ibm
+    {
+        if ! $(command) && $(version)
+        {
+            command = [ common.find-tool "xlc++" :
+                [ path.make "/opt/IBM/xlc/$(version)/bin" ] ] ;
+        }
+        if ! $(command) && ! $(version)
+        {
+            command = [ common.find-tool "xlc++" :
+                [ path.make "/usr/xlcpp/bin" ] [ path.make "/usr/vacpp/bin" ] ] ;
+        }
+    }
+    local default_tool = $(command:B) ;
+    if $(command) && ! $(tool)
+    {
+        switch $(command:B)
+        {
+            case *clang* :
+                tool = clang ;
+                default_command ?= "ibm-clang++_r" :
+
+            case * :
+                tool = ibm ;
+                default_command ?= "xlc++" :
+        }
+    }
+    requirements += <toolset-ibmcxx:tool>$(tool) ;
+    command = [ common.find-compiler ibmcxx : $(default_command)
+        : $(version) : $(command) ] ;
+    local condition = [
+        common.check-init-parameters ibmcxx $(requirements)
+            : version $(version) ] ;
+    common.handle-options ibmcxx : $(condition) : $(command) : $(options) ;
+}
+
+rule find-versions ( )
+{
+    local paths = /opt/IBM/openxlC /opt/IBM/xlc ;
+    local found = [ path.glob $(paths) : "*" ] ;
+    local versions ;
+    for local f in $(found)
+    {
+        versions += $(f:B) ;
+    }
+    versions = [ sequence.insertion-sort $(versions) : version.version-less ] ;
+    return [ sequence.reverse $(version) ] ;
+}
+
+# Declare generators
+generators.register-c-compiler ibmcxx.compile.c : C : OBJ : <toolset>ibmcxx ;
+generators.register-c-compiler ibmcxx.compile.c++ : CPP : OBJ : <toolset>ibmcxx ;
+
+rule flags-clang ( name cond * : vals * : rule ? )
+{
+    flags-* $(name) $(cond) <toolset-ibmcxx:tool>clang : $(vals) : $(rule) ;
+}
+rule flags-ibm ( name cond * : vals * : rule ? )
+{
+    flags-* $(name) $(cond) <toolset-ibmcxx:tool>ibm : $(vals) : $(rule) ;
+}
+rule flags-* ( name cond * : vals * : rule ? )
+{
+    local rule-or-mod = ibmcxx.$(rule) ;
+    rule-or-mod ?= ibmcxx ;
+    flags $(rule-or-mod) $(name) $(cond:J=/) : $(vals) ;
+}
+
+# Allow C++ style comments in C files
+# flags-ibm CFLAGS : -qnoxlcompatmacros ;
+# flags-ibm CFLAGS : -qcpluscmt ;
+
+# Optimization flags
+flags-clang CFLAGS <optimization>off : -O0 ;
+flags-clang CFLAGS <optimization>speed : -O3 ;
+flags-clang CFLAGS <optimization>space : -O2 -Os ;
+flags-ibm CFLAGS <optimization>off : -O0 ;
+flags-ibm CFLAGS <optimization>speed : -O3 -qstrict ;
+flags-ibm CFLAGS <optimization>space : -O2 -qcompact ;
+# flags-ibm CFLAGS <optimization>off : -qNOOPTimize ;
+
+# Discretionary inlining (not recommended)
+flags-clang CFLAGS <inlining>off : -fno-inline-functions ;
+flags-ibm CFLAGS <inlining>off : -qnoinline ;
+flags-ibm CFLAGS <inlining>on : -qinline ;
+
+# Exception handling
+flags-clang C++FLAGS <exception-handling>off : -fno-exceptions ;
+flags-ibm C++FLAGS <exception-handling>off : -qnoeh ;
+flags-ibm C++FLAGS <exception-handling>on : -qeh ;
+
+# Run-time Type Identification
+flags-clang C++FLAGS <rtti>off : -fno-rtti ;
+flags-ibm C++FLAGS <rtti>off : -qnortti ;
+flags-ibm C++FLAGS <rtti>on : -qrtti ;
+
+# Enable 64-bit memory addressing model
+flags-clang CFLAGS <address-model>64 : -m64 ;
+flags-clang LINKFLAGS <address-model>64 : -m64 ;
+flags-ibm CFLAGS <address-model>64 : -q64 ;
+flags-ibm LINKFLAGS <address-model>64 : -q64 ;
+flags ibmcxx ARFLAGS <target-os>aix/<address-model>64 : -X 64 ;
+
+# Debug information
+flags-clang CFLAGS <debug-symbols>on : -g ;
+flags-clang LINKFLAGS <debug-symbols>on : -g ;
+flags-ibm LINKFLAGS <debug-symbols>off : -s ;
+
+# Use absolute path when generating debug information
+flags-ibm CFLAGS <debug-symbols>on : -g -qfullpath ;
+flags-ibm LINKFLAGS <debug-symbols>on : -g -qfullpath ;
+
+# ??
+flags-clang C++FLAGS <target-os>aix : -ffunction-sections : compile ;
+flags-ibm C++FLAGS <target-os>aix : -qfuncsect : compile ;
+flags-ibm CFLAGS <target-os>linux/<link>shared : -qpic=large : compile ;
+flags-ibm FINDLIBS <target-os>linux : rt ;
+
+# The -bnoipath strips the prepending (relative) path of libraries from
+# the loader section in the target library or executable. Hence, during
+# load-time LIBPATH (identical to LD_LIBRARY_PATH) or a hard-coded
+# -blibpath (*similar* to -lrpath/-lrpath-link) is searched. Without
+# this option, the prepending (relative) path + library name is
+# hard-coded in the loader section, causing *only* this path to be
+# searched during load-time. Note that the AIX linker does not have an
+# -soname equivalent, this is as close as it gets.
+#
+# The above options are definitely for AIX 5.x, and most likely also for
+# AIX 4.x and AIX 6.x. For details about the AIX linker see:
+# http://download.boulder.ibm.com/ibmdl/pub/software/dw/aix/es-aix_ll.pdf
+#
+flags-* LINKFLAGS <target-os>aix/<link>shared : -bnoipath : link ;
+
+# Run-time linking
+flags-* EXE-LINKFLAGS <target-os>aix/<link>shared : -brtl : link ;
+
+# Symbol visibility
+flags-ibm OPTIONS <target-os>linux/<local-visibility>hidden
+    : -qvisibility=hidden : compile ;
+flags-ibm OPTIONS <target-os>linux/<local-visibility>protected
+    : -qvisibility=protected : compile ;
+flags-ibm OPTIONS <target-os>linux/<local-visibility>global
+    : -qvisibility=default : compile ;
+
+# Profiling
+flags-* CFLAGS <profiling>on : -pg ;
+flags-* LINKFLAGS <profiling>on : -pg ;
+
+# C++ standard version
+flags-ibm OPTIONS <cxxstd>98 : -std=c++03 : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>03 : -std=c++03 : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>0x : -std=c++11 : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>11 : -std=c++11 : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>1y : -std=c++1y : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>14 : -std=c++1y : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>1z : -std=c++1y : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>17 : -std=c++1y : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>2a : -std=c++1y : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>20 : -std=c++1y : compile.c++ ;
+flags-ibm OPTIONS <cxxstd>latest : -std=c++1y : compile.c++ ;
+
+flags-* OPTIONS <cflags> : compile ;
+flags-* OPTIONS <cxxflags> : compile.c++ ;
+flags-* DEFINES <define> ;
+flags-* UNDEFS <undef> ;
+flags-* HDRS <include> ;
+flags-* STDHDRS <sysinclude> ;
+flags-* OPTIONS <linkflags> : link ;
+flags-* ARFLAGS <arflags> ;
+
+flags-* LIBPATH <library-path> ;
+flags-* NEEDLIBS <library-file> ;
+flags-* FINDLIBS <find-shared-library> ;
+flags-* FINDLIBS <find-static-library> ;
+
+flags-ibm OPTIONS : -qsourcetype=c : compile.c ;
+flags-ibm OPTIONS : -qsourcetype=c++ : compile.c++ ;
+
+
+_ = " " ;
+
+actions ibmcxx.link bind NEEDLIBS
+{
+    "$(CONFIG_COMMAND)" $(EXE-LINKFLAGS) $(LINKFLAGS) -o "$(<[1])" -L$(LIBPATH) -L$(STDLIBPATH) "$(>)" "$(NEEDLIBS)" "$(NEEDLIBS)" -l$(FINDLIBS) $(OPTIONS) $(USER_OPTIONS)
+}
+
+actions ibmcxx.link.dll bind NEEDLIBS
+{
+    "$(CONFIG_COMMAND)" -G $(LINKFLAGS) -o "$(<[1])" $(HAVE_SONAME)-Wl,-soname$(_)-Wl,$(<[-1]:D=) -L$(LIBPATH) -L$(STDLIBPATH) "$(>)" "$(NEEDLIBS)" "$(NEEDLIBS)" -l$(FINDLIBS) $(OPTIONS) $(USER_OPTIONS)
+}
+
+actions ibmcxx.compile.c
+{
+    "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
+}
+
+actions ibmcxx.compile.c++
+{
+    "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) $(C++FLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
+}
+
+actions updated together piecemeal ibmcxx.archive
+{
+    ar $(ARFLAGS) ru "$(<)" "$(>)"
+}
