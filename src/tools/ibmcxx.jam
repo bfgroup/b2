@@ -221,17 +221,13 @@ flags-* CFLAGS <profiling>on : -pg ;
 flags-* LINKFLAGS <profiling>on : -pg ;
 
 # C++ standard version
-flags-ibm OPTIONS <cxxstd>98 : -std=c++03 : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>03 : -std=c++03 : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>0x : -std=c++11 : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>11 : -std=c++11 : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>1y : -std=c++1y : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>14 : -std=c++1y : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>1z : -std=c++1y : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>17 : -std=c++1y : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>2a : -std=c++1y : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>20 : -std=c++1y : compile.c++ ;
-flags-ibm OPTIONS <cxxstd>latest : -std=c++1y : compile.c++ ;
+flags-clang OPTIONS <cxxstd>98 : -std=c++0x : compile.c++ ;
+flags-clang OPTIONS <cxxstd>03 : -std=c++0x : compile.c++ ;
+flags-clang OPTIONS <cxxstd>0x : -std=c++1x : compile.c++ ;
+flags-clang OPTIONS <cxxstd>11 : -std=c++11 : compile.c++ ;
+flags-clang OPTIONS <cxxstd>1y : -std=c++1y : compile.c++ ;
+flags-clang OPTIONS <cxxstd>14 : -std=c++14 : compile.c++ ;
+flags-clang OPTIONS <cxxstd>latest : -std=c++14 : compile.c++ ;
 
 flags-* OPTIONS <cflags> : compile ;
 flags-* OPTIONS <cxxflags> : compile.c++ ;
@@ -249,6 +245,8 @@ flags-* FINDLIBS <find-static-library> ;
 
 flags-ibm OPTIONS : -qsourcetype=c : compile.c ;
 flags-ibm OPTIONS : -qsourcetype=c++ : compile.c++ ;
+flags-clang OPTIONS : "-x c" : compile.c ;
+flags-clang OPTIONS : "-x c++" : compile.c++ ;
 
 
 _ = " " ;
