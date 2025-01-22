@@ -47,58 +47,57 @@ rule init ( version ? : command * : options * : requirements * )
 {
     # No command information given to go on. Try and discover the most
     # recent tool available.
-    local detected-versions ;
+    local version-detected ;
     if ! $(command) && ! $(version)
     {
-        detected-versions = [ find-versions ] ;
-        version = $(detected-versions[1]) ;
+        local detected-versions = [ find-versions ] ;
+        version-detected = $(detected-versions[1]) ;
     }
     local tool = [ feature.get-values <tool> : $(options) ] ;
-    if $(tool) = clang
+    if $(tool) = clang || ! $(tool)
     {
-        if ! $(command) && $(version)
+        if ! $(command) && ( $(version) || $(version-detected) )
         {
             command = [ common.find-tool "ibm-clang++_r" :
-                [ path.make "/opt/IBM/openxlC/$(version)/bin" ] ] ;
+                [ path.make "/opt/IBM/openxlC/$(version:E=$(version-detected))/bin" ] ] ;
         }
-        if ! $(command) && $(version)
+        if ! $(command) && ( $(version) || $(version-detected) )
         {
             command = [ common.find-tool "xlclang++" :
-                [ path.make "/opt/IBM/xlc/$(version)/bin" ] ] ;
+                [ path.make "/opt/IBM/xlc/$(version:E=$(version-detected))/bin" ] ] ;
         }
-        if ! $(command) && ! $(version)
+        if ! $(command) && ! ( $(version) || $(version-detected) )
         {
             command = [ common.find-tool "xlclang++" :
                 [ path.make "/usr/xlcpp/bin" ] [ path.make "/usr/vacpp/bin" ] ] ;
         }
+        if $(command)
+        {
+            tool = clang ;
+            version ?= $(version-detected) ;
+        }
     }
-    else if $(tool) = ibm
+    if $(tool) = ibm || ! $(tool)
     {
-        if ! $(command) && $(version)
+        if ! $(command) && ( $(version) || $(version-detected) )
         {
             command = [ common.find-tool "xlc++" :
-                [ path.make "/opt/IBM/xlc/$(version)/bin" ] ] ;
+                [ path.make "/opt/IBM/xlc/$(version:E=$(version-detected))/bin" ] ] ;
         }
         if ! $(command) && ! $(version)
         {
             command = [ common.find-tool "xlc++" :
                 [ path.make "/usr/xlcpp/bin" ] [ path.make "/usr/vacpp/bin" ] ] ;
         }
-    }
-    local default_tool = $(command:B) ;
-    if $(command) && ! $(tool)
-    {
-        switch $(command:B)
+        if $(command)
         {
-            case *clang* :
-                tool = clang ;
-                default_command ?= "ibm-clang++_r" :
-
-            case * :
-                tool = ibm ;
-                default_command ?= "xlc++" :
+            tool = ibm ;
+            version ?= $(version-detected) ;
         }
     }
+    local default_command = $(command:D=) ;
+    default_command ?= "ibm-clang++_r" ;
+    tool ?= clang ;
     requirements += <toolset-ibmcxx:tool>$(tool) ;
     command = [ common.find-compiler ibmcxx : $(default_command)
         : $(version) : $(command) ] ;
@@ -115,10 +114,11 @@ rule find-versions ( )
     local versions ;
     for local f in $(found)
     {
-        versions += $(f:B) ;
+        versions += $(f:D=) ;
     }
     versions = [ sequence.insertion-sort $(versions) : version.version-less ] ;
-    return [ sequence.reverse $(version) ] ;
+    versions = [ sequence.reverse $(versions) ] ;
+    return $(versions) ;
 }
 
 # Declare generators
