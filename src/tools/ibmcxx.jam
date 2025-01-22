@@ -243,10 +243,15 @@ flags-* NEEDLIBS <library-file> ;
 flags-* FINDLIBS <find-shared-library> ;
 flags-* FINDLIBS <find-static-library> ;
 
+# Language for source files to compile.
 flags-ibm OPTIONS : -qsourcetype=c : compile.c ;
 flags-ibm OPTIONS : -qsourcetype=c++ : compile.c++ ;
 flags-clang OPTIONS : "-x c" : compile.c ;
 flags-clang OPTIONS : "-x c++" : compile.c++ ;
+
+# Generate shared link objects.
+flags-ibm LINKFLAGS : -G : ibmcxx.link.dll ;
+flags-clang LINKFLAGS : -shared : ibmcxx.link.dll ;
 
 
 _ = " " ;
@@ -258,7 +263,7 @@ actions ibmcxx.link bind NEEDLIBS
 
 actions ibmcxx.link.dll bind NEEDLIBS
 {
-    "$(CONFIG_COMMAND)" -G $(LINKFLAGS) -o "$(<[1])" $(HAVE_SONAME)-Wl,-soname$(_)-Wl,$(<[-1]:D=) -L$(LIBPATH) -L$(STDLIBPATH) "$(>)" "$(NEEDLIBS)" "$(NEEDLIBS)" -l$(FINDLIBS) $(OPTIONS) $(USER_OPTIONS)
+    "$(CONFIG_COMMAND)" $(LINKFLAGS) -o "$(<[1])" $(HAVE_SONAME)-Wl,-soname$(_)-Wl,$(<[-1]:D=) -L$(LIBPATH) -L$(STDLIBPATH) "$(>)" "$(NEEDLIBS)" "$(NEEDLIBS)" -l$(FINDLIBS) $(OPTIONS) $(USER_OPTIONS)
 }
 
 actions ibmcxx.compile.c
