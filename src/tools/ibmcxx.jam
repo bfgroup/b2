@@ -122,8 +122,8 @@ rule find-versions ( )
 }
 
 # Declare generators
-generators.register-c-compiler ibmcxx.compile.c : C : OBJ : <toolset>ibmcxx ;
 generators.register-c-compiler ibmcxx.compile.c++ : CPP : OBJ : <toolset>ibmcxx ;
+generators.register-c-compiler ibmcxx.compile.c : C : OBJ : <toolset>ibmcxx ;
 
 rule flags-clang ( name cond * : vals * : rule ? )
 {
@@ -221,21 +221,22 @@ flags-* CFLAGS <profiling>on : -pg ;
 flags-* LINKFLAGS <profiling>on : -pg ;
 
 # C++ standard version
-flags-clang OPTIONS <cxxstd>98 : -std=c++0x : compile.c++ ;
-flags-clang OPTIONS <cxxstd>03 : -std=c++0x : compile.c++ ;
-flags-clang OPTIONS <cxxstd>0x : -std=c++1x : compile.c++ ;
+flags-clang OPTIONS <cxxstd>98 : -std=c++98 : compile.c++ ;
+flags-clang OPTIONS <cxxstd>03 : -std=c++03 : compile.c++ ;
 flags-clang OPTIONS <cxxstd>11 : -std=c++11 : compile.c++ ;
-flags-clang OPTIONS <cxxstd>1y : -std=c++1y : compile.c++ ;
 flags-clang OPTIONS <cxxstd>14 : -std=c++14 : compile.c++ ;
-flags-clang OPTIONS <cxxstd>latest : -std=c++14 : compile.c++ ;
+flags-clang OPTIONS <cxxstd>17 : -std=c++17 : compile.c++ ;
+flags-clang OPTIONS <cxxstd>20 : -std=c++20 : compile.c++ ;
+flags-clang OPTIONS <cxxstd>23 : -std=c++2c : compile.c++ ;
+flags-clang OPTIONS <cxxstd>latest : -std=c++20 : compile.c++ ;
 
-flags-* OPTIONS <cflags> : compile ;
-flags-* OPTIONS <cxxflags> : compile.c++ ;
-flags-* DEFINES <define> ;
-flags-* UNDEFS <undef> ;
+flags-* USER_OPTIONS <cflags> : : compile ;
+flags-* USER_OPTIONS <cxxflags> : : compile.c++ ;
+flags-* DEFINES <define> : : compile ;
+flags-* UNDEFS <undef> : : compile ;
 flags-* HDRS <include> ;
 flags-* STDHDRS <sysinclude> ;
-flags-* OPTIONS <linkflags> : link ;
+flags-* USER_OPTIONS <linkflags> : : link ;
 flags-* ARFLAGS <arflags> ;
 
 flags-* LIBPATH <library-path> ;
@@ -250,8 +251,8 @@ flags-clang OPTIONS : "-x c" : compile.c ;
 flags-clang OPTIONS : "-x c++" : compile.c++ ;
 
 # Generate shared link objects.
-flags-ibm LINKFLAGS : -G : ibmcxx.link.dll ;
-flags-clang LINKFLAGS : -shared : ibmcxx.link.dll ;
+flags-ibm LINKFLAGS <link>shared : -G : link.dll ;
+flags-clang LINKFLAGS <link>shared : -shared : link.dll ;
 
 
 _ = " " ;
