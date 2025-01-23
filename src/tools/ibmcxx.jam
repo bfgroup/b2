@@ -126,6 +126,7 @@ generators.register-c-compiler ibmcxx.compile.c++.preprocess : CPP : PREPROCESSE
 generators.register-c-compiler ibmcxx.compile.c.preprocess : C : PREPROCESSED_C : <toolset>ibmcxx ;
 generators.register-c-compiler ibmcxx.compile.c++ : CPP : OBJ : <toolset>ibmcxx ;
 generators.register-c-compiler ibmcxx.compile.c : C : OBJ : <toolset>ibmcxx ;
+generators.register-c-compiler ibmcxx.compile.asm : ASM_CPP : OBJ : <toolset>ibmcxx ;
 
 rule flags-clang ( name cond * : vals * : rule ? )
 {
@@ -240,6 +241,7 @@ flags-* HDRS <include> ;
 flags-* STDHDRS <sysinclude> ;
 flags-* USER_OPTIONS <linkflags> : : link ;
 flags-* ARFLAGS <arflags> ;
+flags-* USER_OPTIONS <asmflags> : : compile.asm ;
 
 flags-* LIBPATH <library-path> ;
 flags-* NEEDLIBS <library-file> ;
@@ -249,8 +251,10 @@ flags-* FINDLIBS <find-static-library> ;
 # Language for source files to compile.
 flags-ibm OPTIONS : -qsourcetype=c : compile.c ;
 flags-ibm OPTIONS : -qsourcetype=c++ : compile.c++ ;
+flags-ibm OPTIONS : -qsourcetype=assembler : compile.asm ;
 flags-clang OPTIONS : "-x c" : compile.c ;
 flags-clang OPTIONS : "-x c++" : compile.c++ ;
+flags-clang OPTIONS : "-x assembler-with-cpp" : compile.asm ;
 
 # Generate shared link objects.
 flags-ibm LINKFLAGS <link>shared : -G : link.dll ;
@@ -281,6 +285,11 @@ actions ibmcxx.compile.c
 actions ibmcxx.compile.c++
 {
     "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) $(C++FLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
+}
+
+actions ibmcxx.compile.asm
+{
+    "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
 }
 
 actions updated together piecemeal ibmcxx.archive
