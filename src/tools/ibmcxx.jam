@@ -256,6 +256,10 @@ flags-clang OPTIONS : "-x c++" : compile.c++ ;
 flags-ibm LINKFLAGS <link>shared : -G : link.dll ;
 flags-clang LINKFLAGS <link>shared : -shared : link.dll ;
 
+# Preprocessing.
+flags-* OPTIONS <linemarkers>off : -P : compile.c.preprocess ;
+flags-* OPTIONS <linemarkers>off : -P : compile.c++.preprocess ;
+
 
 _ = " " ;
 
