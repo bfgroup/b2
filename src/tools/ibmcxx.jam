@@ -122,6 +122,8 @@ rule find-versions ( )
 }
 
 # Declare generators
+generators.register-c-compiler ibmcxx.compile.c++.preprocess : CPP : PREPROCESSED_CPP : <toolset>ibmcxx ;
+generators.register-c-compiler ibmcxx.compile.c.preprocess : C : PREPROCESSED_C : <toolset>ibmcxx ;
 generators.register-c-compiler ibmcxx.compile.c++ : CPP : OBJ : <toolset>ibmcxx ;
 generators.register-c-compiler ibmcxx.compile.c : C : OBJ : <toolset>ibmcxx ;
 
@@ -280,4 +282,14 @@ actions ibmcxx.compile.c++
 actions updated together piecemeal ibmcxx.archive
 {
     ar $(ARFLAGS) ru "$(<)" "$(>)"
+}
+
+actions ibmcxx.compile.c.preprocess bind PCH_FILE
+{
+    "$(CONFIG_COMMAND)" -E $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
+}
+
+actions ibmcxx.compile.c++.preprocess bind PCH_FILE
+{
+    "$(CONFIG_COMMAND)" -E $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) $(C++FLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
 }
