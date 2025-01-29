@@ -128,19 +128,23 @@ generators.register-c-compiler ibmcxx.compile.c++ : CPP : OBJ : <toolset>ibmcxx 
 generators.register-c-compiler ibmcxx.compile.c : C : OBJ : <toolset>ibmcxx ;
 generators.register-c-compiler ibmcxx.compile.asm : ASM_CPP : OBJ : <toolset>ibmcxx ;
 
-rule flags-clang ( name cond * : vals * : rule ? )
+rule flags-clang ( name cond * : vals * : rules * )
 {
-    flags-* $(name) $(cond) <toolset-ibmcxx:tool>clang : $(vals) : $(rule) ;
+    flags-* $(name) $(cond) <toolset-ibmcxx:tool>clang : $(vals) : $(rules) ;
 }
-rule flags-ibm ( name cond * : vals * : rule ? )
+rule flags-ibm ( name cond * : vals * : rules * )
 {
-    flags-* $(name) $(cond) <toolset-ibmcxx:tool>ibm : $(vals) : $(rule) ;
+    flags-* $(name) $(cond) <toolset-ibmcxx:tool>ibm : $(vals) : $(rules) ;
 }
-rule flags-* ( name cond * : vals * : rule ? )
+rule flags-* ( name cond * : vals * : rules * )
 {
-    local rule-or-mod = ibmcxx.$(rule) ;
-    rule-or-mod ?= ibmcxx ;
-    flags $(rule-or-mod) $(name) $(cond:J=/) : $(vals) ;
+    cond = [ SORT $(cond) ] ;
+    local rules-mods = ibmcxx.$(rules) ;
+    rules-mods ?= ibmcxx ;
+    for local rule-mod in $(rules-mods)
+    {
+        flags $(rule-mod) $(name) $(cond:J=/) : $(vals) ;
+    }
 }
 
 # Allow C++ style comments in C files
@@ -190,7 +194,7 @@ flags-ibm LINKFLAGS <debug-symbols>on : -g -qfullpath ;
 # ??
 flags-clang C++FLAGS <target-os>aix : -ffunction-sections : compile ;
 flags-ibm C++FLAGS <target-os>aix : -qfuncsect : compile ;
-flags-ibm CFLAGS <target-os>linux/<link>shared : -qpic=large : compile ;
+flags-ibm CFLAGS <target-os>linux <link>shared : -qpic=large : compile ;
 flags-ibm FINDLIBS <target-os>linux : rt ;
 
 # The -bnoipath strips the prepending (relative) path of libraries from
@@ -206,18 +210,20 @@ flags-ibm FINDLIBS <target-os>linux : rt ;
 # AIX 4.x and AIX 6.x. For details about the AIX linker see:
 # http://download.boulder.ibm.com/ibmdl/pub/software/dw/aix/es-aix_ll.pdf
 #
-flags-* LINKFLAGS <target-os>aix/<link>shared : -bnoipath : link ;
+flags-* LINKFLAGS <target-os>aix <link>shared : -bnoipath : link ;
 
 # Run-time linking
-flags-* EXE-LINKFLAGS <target-os>aix/<link>shared : -brtl : link ;
+flags-* EXE-LINKFLAGS <target-os>aix <link>shared : -brtl : link ;
 
 # Symbol visibility
-flags-ibm OPTIONS <target-os>linux/<local-visibility>hidden
-    : -qvisibility=hidden : compile ;
-flags-ibm OPTIONS <target-os>linux/<local-visibility>protected
-    : -qvisibility=protected : compile ;
-flags-ibm OPTIONS <target-os>linux/<local-visibility>global
-    : -qvisibility=default : compile ;
+flags-ibm OPTIONS <local-visibility>hidden : -qvisibility=hidden : compile ;
+flags-ibm OPTIONS <local-visibility>protected : -qvisibility=protected : compile ;
+flags-ibm OPTIONS <local-visibility>global : -qvisibility=default : compile ;
+flags-clang OPTIONS <local-visibility>hidden : -fvisibility=hidden : compile ;
+flags-clang OPTIONS <local-visibility>hidden : -fvisibility-inlines-hidden : compile.c++ ;
+flags-clang OPTIONS <local-visibility>protected : -fvisibility=protected : compile ;
+flags-clang OPTIONS <local-visibility>global : -fvisibility=default : compile ;
+#flags-clang OPTIONS <local-visibility> : -mdefault-visibility-mapping=all -fvisibility=default : compile link ;
 
 # Profiling
 flags-* CFLAGS <profiling>on : -pg ;
@@ -257,52 +263,56 @@ flags-clang OPTIONS : "-x c++" : compile.c++ ;
 flags-clang OPTIONS : "-x assembler-with-cpp" : compile.asm ;
 
 # Generate shared link objects.
-flags-ibm LINKFLAGS <link>shared : -G : link.dll ;
-flags-clang LINKFLAGS <link>shared : -shared : link.dll ;
+flags-ibm LINKFLAGS : -G : link.dll ;
+flags-clang LINKFLAGS : -shared : link.dll ;
 
 # Preprocessing.
-flags-* OPTIONS <linemarkers>off : -P : compile.c.preprocess ;
-flags-* OPTIONS <linemarkers>off : -P : compile.c++.preprocess ;
+flags-* OPTIONS <linemarkers>off : -P
+    : compile.c.preprocess compile.c++.preprocess ;
+
+# Threading.
+flags-ibm OPTIONS <threading>multi : -qthreaded : compile link ;
+flags-clang OPTIONS <threading>multi : -pthread : compile link ;
 
 
 _ = " " ;
 
-actions ibmcxx.link bind NEEDLIBS
+actions link bind NEEDLIBS
 {
     "$(CONFIG_COMMAND)" $(EXE-LINKFLAGS) $(LINKFLAGS) -o "$(<[1])" -L$(LIBPATH) -L$(STDLIBPATH) "$(>)" "$(NEEDLIBS)" "$(NEEDLIBS)" -l$(FINDLIBS) $(OPTIONS) $(USER_OPTIONS)
 }
 
-actions ibmcxx.link.dll bind NEEDLIBS
+actions link.dll bind NEEDLIBS
 {
     "$(CONFIG_COMMAND)" $(LINKFLAGS) -o "$(<[1])" $(HAVE_SONAME)-Wl,-soname$(_)-Wl,$(<[-1]:D=) -L$(LIBPATH) -L$(STDLIBPATH) "$(>)" "$(NEEDLIBS)" "$(NEEDLIBS)" -l$(FINDLIBS) $(OPTIONS) $(USER_OPTIONS)
 }
 
-actions ibmcxx.compile.c
+actions compile.c
 {
     "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
 }
 
-actions ibmcxx.compile.c++
+actions compile.c++
 {
     "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) $(C++FLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
 }
 
-actions ibmcxx.compile.asm
+actions compile.asm
 {
     "$(CONFIG_COMMAND)" -c $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
 }
 
-actions updated together piecemeal ibmcxx.archive
+actions updated together piecemeal archive
 {
     ar $(ARFLAGS) ru "$(<)" "$(>)"
 }
 
-actions ibmcxx.compile.c.preprocess bind PCH_FILE
+actions compile.c.preprocess bind PCH_FILE
 {
     "$(CONFIG_COMMAND)" -E $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
 }
 
-actions ibmcxx.compile.c++.preprocess bind PCH_FILE
+actions compile.c++.preprocess bind PCH_FILE
 {
     "$(CONFIG_COMMAND)" -E $(OPTIONS) $(USER_OPTIONS) -U$(UNDEFS) -D$(DEFINES) $(CFLAGS) $(C++FLAGS) -I"$(HDRS)" -I"$(STDHDRS)" -o "$(<)" "$(>)"
 }
