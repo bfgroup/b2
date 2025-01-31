@@ -341,8 +341,8 @@ case "${B2_TOOLSET}" in
     ;;
 
     ibmcxx-clang)
-        CXX_VERSION_OPT=${CXX_VERSION_OPT:--qversion}
-        B2_CXXFLAGS_RELEASE="-O3 -s -Wno-deprecated-declarations"
+        CXX_VERSION_OPT=${CXX_VERSION_OPT:---version}
+        B2_CXXFLAGS_RELEASE="-O3 -Wl,-s -Wno-deprecated-declarations"
         B2_CXXFLAGS_DEBUG="-O0 -fno-inline -g -Wno-deprecated-declarations"
     ;;
 
