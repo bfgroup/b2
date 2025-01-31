@@ -65,8 +65,8 @@ You can specify the toolset as the argument, i.e.:
     ./build.sh [options] gcc
 
 Toolsets supported by this script are:
-    acc, clang, como, gcc, intel-darwin, intel-linux, kcc, kylix, mipspro,
-    pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
+    acc, clang, como, gcc, ibmcxx-clang, ibmcxx-ibm, intel-darwin, intel-linux,
+    kcc, kylix, mipspro, pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
 
 For any toolset you can override the path to the compiler with the '--cxx'
 option. You can also use additional flags for the compiler with the
@@ -235,6 +235,11 @@ check_toolset ()
             return ${TRUE}
         fi
     fi
+    # AIX IBM/XL (ibmcxx-clang/ibm)
+    IBMCXX=`ls -1 -r /opt/IBM/openxlC/17.*/bin/ibm-clang++_r`
+    if test_toolset ibmcxx-clang && test_uname AIX && && test "" != "${IBMCXX}" && test_compiler "${IBMCXX}" ; then B2_TOOLSET=ibmcxx-clang ; return ${TRUE} ; fi
+    IBMCXX=`ls -1 -r /opt/IBM/xlc/16.*/bin/xlc++`
+    if test_toolset ibmcxx-ibm && test_uname AIX && && test "" != "${IBMCXX}" && test_compiler "${IBMCXX}" ; then B2_TOOLSET=ibmcxx-ibm ; return ${TRUE} ; fi
     # AIX VA C++ (vacpp)
     if test_toolset vacpp && test_uname AIX && test_compiler xlC_r ; then B2_TOOLSET=vacpp ; return ${TRUE} ; fi
     # PGI (pgi)
@@ -333,6 +338,18 @@ case "${B2_TOOLSET}" in
         CXX_VERSION_OPT=${CXX_VERSION_OPT:---version}
         B2_CXXFLAGS_RELEASE="-O3 -static-intel"
         B2_CXXFLAGS_DEBUG="-O0 -g -static-intel"
+    ;;
+
+    ibmcxx-clang)
+        CXX_VERSION_OPT=${CXX_VERSION_OPT:--qversion}
+        B2_CXXFLAGS_RELEASE="-O3 -s -Wno-deprecated-declarations"
+        B2_CXXFLAGS_DEBUG="-O0 -fno-inline -g -Wno-deprecated-declarations"
+    ;;
+
+    ibmcxx-ibm)
+        CXX_VERSION_OPT=${CXX_VERSION_OPT:--qversion}
+        B2_CXXFLAGS_RELEASE="-O3 -s -qstrict -qinline"
+        B2_CXXFLAGS_DEBUG="-g -qNOOPTimize -qnoinline -pg"
     ;;
 
     vacpp)
