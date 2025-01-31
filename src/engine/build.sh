@@ -237,9 +237,9 @@ check_toolset ()
     fi
     # AIX IBM/XL (ibmcxx-clang/ibm)
     IBMCXX=`ls -1 -r /opt/IBM/openxlC/17.*/bin/ibm-clang++_r`
-    if test_toolset ibmcxx-clang && test_uname AIX && && test "" != "${IBMCXX}" && test_compiler "${IBMCXX}" ; then B2_TOOLSET=ibmcxx-clang ; return ${TRUE} ; fi
+    if test_toolset ibmcxx-clang && test_uname AIX && test "" != "${IBMCXX}" && test_compiler "${IBMCXX}" ; then B2_TOOLSET=ibmcxx-clang ; return ${TRUE} ; fi
     IBMCXX=`ls -1 -r /opt/IBM/xlc/16.*/bin/xlc++`
-    if test_toolset ibmcxx-ibm && test_uname AIX && && test "" != "${IBMCXX}" && test_compiler "${IBMCXX}" ; then B2_TOOLSET=ibmcxx-ibm ; return ${TRUE} ; fi
+    if test_toolset ibmcxx-ibm && test_uname AIX && test "" != "${IBMCXX}" && test_compiler "${IBMCXX}" ; then B2_TOOLSET=ibmcxx-ibm ; return ${TRUE} ; fi
     # AIX VA C++ (vacpp)
     if test_toolset vacpp && test_uname AIX && test_compiler xlC_r ; then B2_TOOLSET=vacpp ; return ${TRUE} ; fi
     # PGI (pgi)
