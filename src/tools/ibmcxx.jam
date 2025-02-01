@@ -35,13 +35,7 @@ import version ;
 # Common (minimal) toolset.
 feature.extend toolset : ibmcxx ;
 toolset.inherit ibmcxx : unix ;
-feature.subfeature toolset ibmcxx : tool : : propagated link-incompatible ;
-
-# Clang tool sub-toolset.
-feature.extend-subfeature toolset ibmcxx : tool : clang ;
-
-# IBM tool sub-toolset.
-feature.extend-subfeature toolset ibmcxx : tool : ibm ;
+feature.subfeature toolset ibmcxx : tool : clang ibm : propagated link-incompatible ;
 
 rule init ( version ? : command * : options * : requirements * )
 {
@@ -64,7 +58,7 @@ rule init ( version ? : command * : options * : requirements * )
         if ! $(command) && ( $(version) || $(version-detected) )
         {
             command = [ common.find-tool "xlclang++" :
-                [ path.make "/opt/IBM/xlc/$(version:E=$(version-detected))/bin" ] ] ;
+                [ path.make "/opt/IBM/xlC/$(version:E=$(version-detected))/bin" ] ] ;
         }
         if ! $(command) && ! ( $(version) || $(version-detected) )
         {
@@ -82,7 +76,7 @@ rule init ( version ? : command * : options * : requirements * )
         if ! $(command) && ( $(version) || $(version-detected) )
         {
             command = [ common.find-tool "xlc++" :
-                [ path.make "/opt/IBM/xlc/$(version:E=$(version-detected))/bin" ] ] ;
+                [ path.make "/opt/IBM/xlC/$(version:E=$(version-detected))/bin" ] ] ;
         }
         if ! $(command) && ! $(version)
         {
@@ -130,20 +124,24 @@ generators.register-c-compiler ibmcxx.compile.asm : ASM_CPP : OBJ : <toolset>ibm
 
 rule flags-clang ( name cond * : vals * : rules * )
 {
-    flags-* $(name) $(cond) <toolset-ibmcxx:tool>clang : $(vals) : $(rules) ;
+    flags-* $(name) $(cond)
+        <toolset-ibmcxx:tool>clang
+        : $(vals) : $(rules) ;
 }
 rule flags-ibm ( name cond * : vals * : rules * )
 {
-    flags-* $(name) $(cond) <toolset-ibmcxx:tool>ibm : $(vals) : $(rules) ;
+    flags-* $(name) $(cond)
+        <toolset-ibmcxx:tool>ibm
+        : $(vals) : $(rules) ;
 }
-rule flags-* ( name cond * : vals * : rules * )
+rule flags-* ( name cond * : vals * : rules * : sub ? )
 {
     cond = [ SORT $(cond) ] ;
-    local rules-mods = ibmcxx.$(rules) ;
-    rules-mods ?= ibmcxx ;
+    local rules-mods = $(sub:E=ibmcxx).$(rules) ;
+    rules-mods ?= $(sub:E=ibmcxx) ;
     for local rule-mod in $(rules-mods)
     {
-        flags $(rule-mod) $(name) $(cond:J=/) : $(vals) ;
+        flags $(rule-mod) $(name) $(cond:J=/) : $(vals) : unchecked ;
     }
 }
 
@@ -192,7 +190,7 @@ flags-ibm CFLAGS <debug-symbols>on : -g -qfullpath ;
 flags-ibm LINKFLAGS <debug-symbols>on : -g -qfullpath ;
 
 # ??
-flags-clang C++FLAGS <target-os>aix : -ffunction-sections : compile ;
+# flags-clang C++FLAGS <target-os>aix : -ffunction-sections : compile ;
 flags-ibm C++FLAGS <target-os>aix : -qfuncsect : compile ;
 flags-ibm CFLAGS <target-os>linux <link>shared : -qpic=large : compile ;
 flags-ibm FINDLIBS <target-os>linux : rt ;
