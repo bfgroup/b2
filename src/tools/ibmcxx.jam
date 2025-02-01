@@ -1,5 +1,5 @@
 #|
-Copyright René Ferdinand Rivera Morell 2024
+Copyright René Ferdinand Rivera Morell 2024-2025
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE.txt
 or copy at https://www.bfgroup.xyz/b2/LICENSE.txt)
@@ -19,6 +19,24 @@ The module is initialized using the following syntax:
 ----
 using ibmcxx : [version] : [c++-compile-command] : [compiler options] ;
 ----
+
+This statement may be repeated several times, if you want to configure
+several versions of the compiler.
+
+Without a version or command B2 will attempt to find a compiler that matches
+the options in various standard install location, including in the `PATH`.
+
+The following options can be provided, using
+_`<option-name>option-value syntax`_:
+
+`tool`::
+Indicates the type of frontend the compiler is. The values can be `clang` or
+`ibm`. The `clang` frontend corresponds to the Open XL >= 17.x versions. And
+the `ibm` frontend corresponds to XL <= 16.x.
+
+If you have multiple compilers configured as separate frontends one can select
+the specific one by instead of using the base `ibmcxx` toolset name using
+extended `ibmcxx-clang` or `ibmcxx-ibm` names.
 
 |# # end::doc[]
 

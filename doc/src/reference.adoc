@@ -338,7 +338,6 @@ include::../../src/tools/ibmcxx.jam[tag=doc]
 include::../../src/tools/intel.jam[tag=doc]
 include::../../src/tools/msvc.jam[tag=doc]
 include::../../src/tools/sun.jam[tag=doc]
-include::../../src/tools/vacpp.jam[tag=doc]
 :leveloffset: -3
 
 === Third-party libraries
