@@ -6304,6 +6304,70 @@ for a console applicatiuon and <code>gui</code> for a Windows application.</p>
 </div>
 </div>
 <div class="sect4">
+<h5 id="b2.reference.tools.compiler.cc"><a class="anchor" href="#b2.reference.tools.compiler.cc"></a>CC - Generic C Compiler</h5>
+<div class="paragraph">
+<p>The <code>cc</code> modules supports a simple, generic, compiler that can be configured
+to specify the options a particular unknown compiler supports.</p>
+</div>
+<div class="paragraph">
+<p>The <code>cc</code> modules is initialize using the following syntax:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">using cc : &lt;version&gt; : &lt;compile-command&gt; : [compiler options] ;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This statement may be repeated several times, if you want to configure
+several versions of the compiler. The <code>version</code> and <code>compile-command</code> are
+required to differentiate multiple such configuration, for the former. And to
+have a command as there is no default, for the latter.</p>
+</div>
+<div class="paragraph">
+<p>The following options can be provided, using
+<em>`&lt;option-name&gt;option-value syntax`</em>:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>asmflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling assembler
+sources.</p>
+</dd>
+<dt class="hdlist1"><code>cflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling C sources.</p>
+</dd>
+<dt class="hdlist1"><code>compileflags</code></dt>
+<dd>
+<p>Specifies additional compiler flags that will be used when compiling any
+language sources.</p>
+</dd>
+<dt class="hdlist1"><code>linkflags</code></dt>
+<dd>
+<p>Specifies additional command line options that will be passed to the linker.</p>
+</dd>
+<dt class="hdlist1"><code>-o</code>, <code>-L</code>, <code>-l</code>, <code>-D</code>, <code>-U</code>, <code>-I</code>, <code>-c</code>, <code>-shared</code>, <code>-g</code>, <code>-E</code>, <code>-P</code></dt>
+<dd>
+<p>Specifies the option the compiler accepts for the given GCC style option. If
+not given teh default is to use the same GCC style option.
+For example: <code>&lt;-o&gt;--output</code>.</p>
+</dd>
+<dt class="hdlist1"><code>-soname</code></dt>
+<dd>
+<p>Like the compiler options above, but this does not have a default. And only
+when it&#8217;s specified is it used.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="title">Example configuration for TinyCC.</div>
+<div class="content">
+<pre>using cc : tcc~c11~0.98 : tcc : &lt;cflags&gt;"-std=c11" &lt;-soname&gt;-soname ;</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="b2.reference.tools.compiler.clang-linux"><a class="anchor" href="#b2.reference.tools.compiler.clang-linux"></a>Clang (GCC frontend)</h5>
 <div class="paragraph">
 <p>The <code>clang-linux</code> module supports Clang with GCC frontend and has the same
@@ -16992,6 +17056,10 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <div class="ulist">
 <ul>
 <li>
+<p><strong>New</strong>: Add generic <code>cc</code> toolset for simply, direct, configuration of unknown
+C compiler toolsets (for example <code>tcc</code>).&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
 <p>Fix command database output file path when an output dir is not given.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
@@ -17014,6 +17082,9 @@ contexts with minimal effort.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </li>
 <li>
 <p>Updated cxxstd=latest for gcc and clang to account for C&#43;&#43; 26.&#8201;&#8212;&#8201;<em>Andrey Semashev</em></p>
+</li>
+<li>
+<p>Fix Building on Haiku OS which doesn&#8217;t have <code>wait4</code>.&#8201;&#8212;&#8201;<em>Fas Xmut</em></p>
 </li>
 </ul>
 </div>
