@@ -5,6 +5,7 @@
 # (See accompanying file LICENSE.txt
 # or copy at https://www.bfgroup.xyz/b2/LICENSE.txt)
 
+import args ;
 import common ;
 import errors ;
 import feature ;
@@ -24,7 +25,7 @@ toolset.inherit-flags clang-win : msvc : : YLOPTION ;
 toolset.inherit-rules clang-win : msvc ;
 
 
-if [ MATCH (--debug-(clang-(win-)?)?configuration) : [ modules.peek : ARGV ] ]
+if [ args.get-arg debug-configuration ]
 {
     local rule .notice ( messages * )
     {

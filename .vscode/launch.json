@@ -8,7 +8,7 @@
 			"name": "(gdb) Pipe Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "/root/b2/.build/gcc-12/debug/cxxstd-11-iso/threading-multi/b2",
+			"program": "/root/b2/.build/gcc-14/debug/cxxstd-11-iso/threading-multi/b2",
 			"args": [],
 			"stopAtEntry": true,
 			"cwd": "/root/b2/test/grep",
@@ -17,10 +17,7 @@
 			"pipeTransport": {
 				"debuggerPath": "/usr/local/bin/gdb",
 				"pipeProgram": "/usr/bin/ssh",
-				"pipeArgs": [
-					"-v",
-					"root@192.168.13.163"
-				],
+				"pipeArgs": ["-v", "root@192.168.13.163"],
 				"pipeCwd": ""
 			},
 			"MIMode": "gdb",
@@ -40,9 +37,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}\\.build\\gcc-10\\debug\\cxxstd-11-iso\\b2.exe",
-			"args": [
-				"-v"
-			],
+			"args": ["-v"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
@@ -67,9 +62,7 @@
 			"type": "cppvsdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}\\.build\\msvc-14.3\\debug\\cxxstd-11-iso\\threading-multi\\b2.exe",
-			"args": [
-				"-v"
-			],
+			"args": ["-v"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}\\src\\engine",
 			"environment": []
@@ -79,11 +72,7 @@
 			"type": "cppvsdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}\\.build\\msvc-14.3\\debug\\cxxstd-11-iso\\threading-multi\\b2.exe",
-			"args": [
-				"--debug",
-				"--build-system=test/test",
-				"-j1"
-			],
+			"args": ["--debug", "--build-system=test/test", "-j1"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}\\test",
 			"environment": []
@@ -93,9 +82,9 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/threading-multi/b2",
-			"args": [],
+			"args": ["-h"],
 			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}",
+			"cwd": "${workspaceFolder}/example/hello",
 			"environment": [],
 			"externalConsole": false,
 			"MIMode": "gdb",
@@ -111,11 +100,8 @@
 			"name": "(gcc) Launch: ASAN",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/address-sanitizer-on/cxxstd-11-iso/b2",
-			"args": [
-				"-na",
-				"toolset=gcc"
-			],
+			"program": "${workspaceFolder}/.build/gcc-14/debug/address-sanitizer-on/cxxstd-11-iso/threading-multi/b2",
+			"args": ["-n", "-a"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
@@ -133,7 +119,7 @@
 			"name": "(gcc) Launch, Unit Tests",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/cxxstd-11-iso/threading-multi/b2",
+			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/threading-multi/b2",
 			"args": [
 				"--debug",
 				"--build-system=test/test",
@@ -158,7 +144,7 @@
 			"name": "(gcc) Launch, Unit Tests: ASAN",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/address-sanitizer-on/cxxstd-11-iso/b2",
+			"program": "${workspaceFolder}/.build/gcc-14/debug/address-sanitizer-on/cxxstd-11-iso/b2",
 			"args": [
 				"--debug",
 				"--build-system=test/test",
@@ -187,10 +173,8 @@
 			"name": "(rr) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/cxxstd-11-iso/b2",
-			"args": [
-				"--grep"
-			],
+			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/b2",
+			"args": ["--grep"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

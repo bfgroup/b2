@@ -8,6 +8,7 @@ Distributed under the Boost Software License, Version 1.0.
 #define B2_MOD_ARGS_H
 
 #include "bind.h"
+#include "ext_bfgroup_lyra.h"
 #include "lists.h"
 #include "value.h"
 
@@ -54,11 +55,13 @@ Does something.
 end::reference[] */
 list_ref get_arg(const value_ref & name);
 
-void add_args(int argc, char ** argv);
+void set_args(int argc, char ** argv);
+lyra::cli & lyra_cli();
+void process_args(bool silent = false);
 
 struct args_module : b2::bind::module_<args_module>
 {
-	const char * module_name = "arga";
+	const char * module_name = "args";
 	static const char * init_code;
 
 	template <class Binder>
@@ -71,6 +74,12 @@ struct args_module : b2::bind::module_<args_module>
 		binder.eval(init_code);
 		binder.loaded();
 	}
+};
+
+template <typename SubType>
+struct declaration_
+{
+	declaration_() { SubType::declare_args(); }
 };
 
 }} // namespace b2::args

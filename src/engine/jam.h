@@ -482,56 +482,95 @@
 #define DEBUG_MAX  14
 
 
-struct globs
+struct global_config
 {
-    int    noexec;
-    int    jobs;
-    int    quitquick;
-    int    newestfirst;         /* build newest sources first */
-    int    pipe_action;
-    char   debug[ DEBUG_MAX ];
-    FILE * out;                 /* mirror output here */
-    long   timeout;             /* number of seconds to limit actions to,
-                                 * default 0 for no limit.
-                                 */
-    int    dart;                /* output build and test results formatted for
-                                 * Dart
-                                 */
-    int    max_buf;             /* maximum amount of output saved from target
-                                 * (kb)
-                                 */
+	// Do not execute actions.
+	bool noexec = false;
+	// Build all targets.
+	bool anyhow = false;
+	// Max number of parallel jobs/actions.
+	int jobs = 1;
+	// Abort building on first fail occurrence.
+	bool quitquick = false;
+	// Build newest sources first.
+	bool newestfirst = false;
+	// Where to send the output streams.
+	int pipe_action = 0;
+	// Debug level flags.
+	bool debug[DEBUG_MAX] = { false, true };
+	// Mirror output here
+	FILE * out = nullptr;
+	// Number of seconds to limit actions to, default 0 for no limit.
+	long timeout = 0;
+	// Maximum amount of output saved from target (kb)
+	int max_buf = 0;
+	// Is behaving as a debugger.
+	bool is_debugger = false;
+	// Debugger interface.
+	enum : char
+	{
+		debug_interface_no = 0,
+		debug_interface_console,
+		debug_interface_mi,
+		debug_interface_child
+	} debug_interface = debug_interface_no;
+	// Print out information on configuration actions.
+	bool debug_configuration = false;
+	// Show help output instead of building.
+	bool display_help = false;
+
+	void out_print() const;
 };
 
-extern struct globs globs;
+extern global_config globs;
 
-extern int anyhow;
+/* show actions when executed */
+inline bool is_debug_make() { return globs.debug[1]; }
+/* show even quiet actions */
+inline bool is_debug_makeq() { return globs.debug[2]; }
+/* show text of actions */
+inline bool is_debug_exec() { return globs.debug[2]; }
+/* show make0 progress */
+inline bool is_debug_makeprog() { return globs.debug[3]; }
+/* show when files bound */
+inline bool is_debug_bind() { return globs.debug[3]; }
 
-#define DEBUG_MAKE     ( globs.debug[ 1 ] )   /* show actions when executed */
-#define DEBUG_MAKEQ    ( globs.debug[ 2 ] )   /* show even quiet actions */
-#define DEBUG_EXEC     ( globs.debug[ 2 ] )   /* show text of actons */
-#define DEBUG_MAKEPROG ( globs.debug[ 3 ] )   /* show make0 progress */
-#define DEBUG_BIND     ( globs.debug[ 3 ] )   /* show when files bound */
+/* show execcmds()'s work */
+inline bool is_debug_execcmd() { return globs.debug[4]; }
 
-#define DEBUG_EXECCMD  ( globs.debug[ 4 ] )   /* show execcmds()'s work */
+/* show rule invocations */
+inline bool is_debug_compile() { return globs.debug[5]; }
 
-#define DEBUG_COMPILE  ( globs.debug[ 5 ] )   /* show rule invocations */
+/* show result of header scan */
+inline bool is_debug_header() { return globs.debug[6]; }
+/* show result of dir scan */
+inline bool is_debug_bindscan() { return globs.debug[6]; }
+/* show binding attempts */
+inline bool is_debug_search() { return globs.debug[6]; }
 
-#define DEBUG_HEADER   ( globs.debug[ 6 ] )   /* show result of header scan */
-#define DEBUG_BINDSCAN ( globs.debug[ 6 ] )   /* show result of dir scan */
-#define DEBUG_SEARCH   ( globs.debug[ 6 ] )   /* show binding attempts */
+/* show variable settings */
+inline bool is_debug_varset() { return globs.debug[7]; }
+/* show variable fetches */
+inline bool is_debug_varget() { return globs.debug[8]; }
+/* show variable expansions */
+inline bool is_debug_varexp() { return globs.debug[8]; }
+/* show 'if' calculations */
+inline bool is_debug_if() { return globs.debug[8]; }
+/* show list manipulation */
+inline bool is_debug_lists() { return globs.debug[9]; }
+/* show scanner tokens */
+inline bool is_debug_scan() { return globs.debug[9]; }
+/* show memory use */
+inline bool is_debug_mem() { return globs.debug[9]; }
 
-#define DEBUG_VARSET   ( globs.debug[ 7 ] )   /* show variable settings */
-#define DEBUG_VARGET   ( globs.debug[ 8 ] )   /* show variable fetches */
-#define DEBUG_VAREXP   ( globs.debug[ 8 ] )   /* show variable expansions */
-#define DEBUG_IF       ( globs.debug[ 8 ] )   /* show 'if' calculations */
-#define DEBUG_LISTS    ( globs.debug[ 9 ] )   /* show list manipulation */
-#define DEBUG_SCAN     ( globs.debug[ 9 ] )   /* show scanner tokens */
-#define DEBUG_MEM      ( globs.debug[ 9 ] )   /* show memory use */
-
-#define DEBUG_PROFILE  ( globs.debug[ 10 ] )  /* dump rule execution times */
-#define DEBUG_PARSE    ( globs.debug[ 11 ] )  /* debug parsing */
-#define DEBUG_GRAPH    ( globs.debug[ 12 ] )  /* debug dependencies */
-#define DEBUG_FATE     ( globs.debug[ 13 ] )  /* show fate changes in make0() */
+/* dump rule execution times */
+inline bool is_debug_profile() { return globs.debug[10]; }
+/* debug parsing */
+inline bool is_debug_parse() { return globs.debug[11]; }
+/* debug dependencies */
+inline bool is_debug_graph() { return globs.debug[12]; }
+/* show fate changes in make0() */
+inline bool is_debug_fate() { return globs.debug[13]; }
 
 /* Everyone gets the memory definitions. */
 #include "mem.h"
