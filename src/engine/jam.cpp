@@ -402,10 +402,10 @@ int guarded_main(int argc, char * argv[])
 #if NT
 
 	/* Check whether this instance is being run by the debugger. */
-	if (arg_data.debug_handles.size() >= 2)
+	if (args_data.debug_handles.size() >= 2)
 	{
-		debug_init_handles(arg_data.debug_handles[0].c_str(),
-			arg_data.debug_handles[1].c_str());
+		debug_init_handles(args_data.debug_handles[0].c_str(),
+			args_data.debug_handles[1].c_str());
 		/* Fix up argc/argv to hide the internal options */
 		arg_c = argc = (argc - 2);
 		argv[2] = argv[0];
