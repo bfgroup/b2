@@ -36,7 +36,7 @@ steps:
 - bash: |
     set -e
     ./bootstrap.sh ${TOOLSET}
-    ./b2 --prefix=$HOME/temp/.b2 install ${TOOLSET:+toolset=$TOOLSET} ${{ parameters.b2_opts }}
+    sudo ./b2 --prefix=$HOME/temp/.b2 install ${TOOLSET:+toolset=$TOOLSET} ${{ parameters.b2_opts }}
     rm ./b2
     export PATH=$HOME/temp/.b2/bin:$PATH
     cd $HOME
