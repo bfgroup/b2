@@ -17,7 +17,10 @@
 			"pipeTransport": {
 				"debuggerPath": "/usr/local/bin/gdb",
 				"pipeProgram": "/usr/bin/ssh",
-				"pipeArgs": ["-v", "root@192.168.13.163"],
+				"pipeArgs": [
+					"-v",
+					"root@192.168.13.163"
+				],
 				"pipeCwd": ""
 			},
 			"MIMode": "gdb",
@@ -37,7 +40,9 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}\\.build\\gcc-10\\debug\\cxxstd-11-iso\\b2.exe",
-			"args": ["-v"],
+			"args": [
+				"-v"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
@@ -62,17 +67,28 @@
 			"type": "cppvsdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}\\.build\\msvc-14.3\\debug\\cxxstd-11-iso\\threading-multi\\b2.exe",
-			"args": ["-v"],
+			"args": [
+				"-ftest.jam"
+			],
 			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}\\src\\engine",
-			"environment": []
+			"cwd": "${workspaceFolder}\\test",
+			"environment": [
+				{
+					"name": "BOOST_BUILD_PATH",
+					"value": "${workspaceFolder}"
+				}
+			]
 		},
 		{
 			"name": "(msvc) Launch, Unit Tests",
 			"type": "cppvsdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}\\.build\\msvc-14.3\\debug\\cxxstd-11-iso\\threading-multi\\b2.exe",
-			"args": ["--debug", "--build-system=test/test", "-j1"],
+			"args": [
+				"--debug",
+				"--build-system=test/test",
+				"-j1"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}\\test",
 			"environment": []
@@ -82,7 +98,9 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/threading-multi/b2",
-			"args": ["-h"],
+			"args": [
+				"-h"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/example/hello",
 			"environment": [],
@@ -101,7 +119,10 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/.build/gcc-14/debug/address-sanitizer-on/cxxstd-11-iso/threading-multi/b2",
-			"args": ["-n", "-a"],
+			"args": [
+				"-n",
+				"-a"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
@@ -174,7 +195,9 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/b2",
-			"args": ["--grep"],
+			"args": [
+				"--grep"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
