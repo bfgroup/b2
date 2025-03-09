@@ -68,11 +68,16 @@
 			"request": "launch",
 			"program": "${workspaceFolder}\\.build\\msvc-14.3\\debug\\cxxstd-11-iso\\threading-multi\\b2.exe",
 			"args": [
-				"-v"
+				"-ftest.jam"
 			],
 			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}\\src\\engine",
-			"environment": []
+			"cwd": "${workspaceFolder}\\test",
+			"environment": [
+				{
+					"name": "BOOST_BUILD_PATH",
+					"value": "${workspaceFolder}"
+				}
+			]
 		},
 		{
 			"name": "(msvc) Launch, Unit Tests",
@@ -92,8 +97,10 @@
 			"name": "(gcc) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/cxxstd-11-iso/threading-multi/b2",
-			"args": ["-d1", "--command-database=json", "b2"],
+			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/threading-multi/b2",
+			"args": [
+				"-h"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
@@ -119,7 +126,6 @@
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
-			"externalConsole": false,
 			"MIMode": "gdb",
 			"setupCommands": [
 				{
@@ -187,7 +193,7 @@
 			"name": "(rr) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/cxxstd-11-iso/b2",
+			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/b2",
 			"args": [
 				"--grep"
 			],
@@ -196,9 +202,6 @@
 			"environment": [],
 			"externalConsole": true,
 			"MIMode": "gdb",
-			"miDebuggerServerAddress": "localhost:50505",
-			// "miDebuggerPath": "rr",
-			// "miDebuggerArgs": "replay -s 50505",
 			"setupCommands": [
 				{
 					"description": "Setup to resolve symbols",
