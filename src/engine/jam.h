@@ -496,6 +496,8 @@ struct global_config
 	bool newestfirst = false;
 	// Where to send the output streams.
 	int pipe_action = 0;
+    // If a debug level flag was given.
+    bool debug_flag_used = false;
 	// Debug level flags.
 	bool debug[DEBUG_MAX] = { false, true };
 	// Mirror output here

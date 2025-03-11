@@ -257,7 +257,7 @@ int guarded_main(int argc, char * argv[])
 
 	cli |= lyra::opt([](bool) {
 		globs.noexec = true;
-		globs.debug[2] = true;
+		if (!globs.debug_flag_used) globs.debug[2] = true;
 	})
 			   .name("-n")
 			   .help("Don't actually execute the updating actions.");
@@ -326,10 +326,9 @@ int guarded_main(int argc, char * argv[])
 		[](const std::string & val) {
 			/* Turn on/off debugging */
 			/* First -d, turn off defaults. */
-			static bool first = true;
-			if (first)
+			if (!globs.debug_flag_used)
 				for (bool & d : globs.debug) d = false;
-			first = false;
+			globs.debug_flag_used = true;
 			if (val == "mi")
 			{
 				globs.debug_interface = global_config::debug_interface_mi;
@@ -346,7 +345,8 @@ int guarded_main(int argc, char * argv[])
 			{
 				/* n turns on levels 1-n. And turns everything else off*/
 				int d = std::stoi(val);
-				for (int i = 0; i < DEBUG_MAX; ++i) globs.debug[i] = i <= d;
+				globs.debug[0] = false;
+				for (int i = 1; i < DEBUG_MAX; ++i) globs.debug[i] = (i <= d);
 			}
 		},
 		"x")
