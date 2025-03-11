@@ -1142,10 +1142,10 @@ static void debug_start_child( int argc, const char * * argv )
     string_copy( command_line, "b2 " );
     /* Pass the handles as the first and second arguments. */
     string_append( command_line, debugger_opt );
-    string_append( command_line, b2::value::format( "%p", pipe1[ 0 ] )->str() );
+    string_append( command_line, b2::value::format( "=%p", pipe1[ 0 ] )->str() );
     string_push_back( command_line, ' ' );
     string_append( command_line, debugger_opt );
-    string_append( command_line, b2::value::format( "%p", pipe2[ 1 ] )->str() );
+    string_append( command_line, b2::value::format( "=%p", pipe2[ 1 ] )->str() );
     /* Pass the rest of the command line. */
 	{
         int i;
@@ -2727,7 +2727,7 @@ static void debug_listen( void )
 }
 
 struct debug_child_data_t debug_child_data;
-const char debugger_opt[] = "--b2db-internal-debug-handle=";
+const char debugger_opt[] = "--b2db-internal-debug-handle";
 int debug_interface;
 
 void debugger_done()
