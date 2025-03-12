@@ -44,17 +44,6 @@ import args ;
 
 feature.feature install-default-prefix : : free incidental ;
 
-args.add-arg prefix : --prefix
-    : "Install to a tree rooted at prefix." ;
-args.add-arg bindir : --bindir
-    : "Install binaries to this directory. [default: <prefix>/bin]" ;
-args.add-arg libdir : --libdir
-    : "Install libraries to this directory. [default: <prefix>/lib]" ;
-args.add-arg includedir : --includedir
-    : "install include files to this directory. [default: <prefix>/include]" ;
-args.add-arg datarootdir : --datarootdir
-    : "Install shared data files to this directory. [default: <prefix>/share]" ;
-
 class package-paths
 {
     import args ;
