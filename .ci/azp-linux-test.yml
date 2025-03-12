@@ -4,14 +4,13 @@ parameters:
     default: ""
 
 steps:
-  - displayName: Install
-    bash: |
+  - bash: |
       set -e
       uname -a
       ./.ci/linux-cxx-install.sh
       python3 --version
-  - displayName: Build
-    bash: |
+    displayName: Install
+  - bash: |
       set -e
       cd src/engine
       set PATH=${PATH};${CXX_PATH}
@@ -19,8 +18,8 @@ steps:
       ./b2 -v
       cd ../..
       echo "using ${TOOLSET%%-[0-9]*} : : ${CXX} ;" > ${HOME}/user-config.jam
-  - displayName: Test
-    bash: |
+    displayName: Build
+  - bash: |
       set -e
       echo "Available system locales:"
       locale -a
@@ -29,12 +28,12 @@ steps:
       cd test
       ./test_all.py ${TOOLSET}
       cd ..
-  - displayName: "No Warnings"
-    bash: |
+    displayName: Test
+  - bash: |
       set -e
       ./src/engine/b2 b2 warnings-as-errors=on variant=debug,release ${TOOLSET:+toolset=$TOOLSET} ${{ parameters.b2_opts }}
-  - displayName: Bootstrap
-    bash: |
+    displayName: "No Warnings"
+  - bash: |
       set -e
       ./bootstrap.sh ${TOOLSET}
       ./b2 --prefix=$HOME/temp/.b2 install ${TOOLSET:+toolset=$TOOLSET} ${{ parameters.b2_opts }}
@@ -44,3 +43,4 @@ steps:
       touch build.jam
       b2 -v
       b2 -n --debug-configuration ${TOOLSET:+toolset=$TOOLSET} ${{ parameters.b2_opts }}
+    displayName: Bootstrap
