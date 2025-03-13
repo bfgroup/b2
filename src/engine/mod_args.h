@@ -1,5 +1,5 @@
 /*
-Copyright 2024 René Ferdinand Rivera Morell
+Copyright 2025 René Ferdinand Rivera Morell
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
 */
@@ -32,7 +32,17 @@ Jam:: `rule add-arg ( name : opts + : help : flags * )`
 help, list_cref flags);`
 ====
 
-Does something.
+Declares a new command line argument option to accept. When specified the
+argument is then available for access with `get-arg`. The `name` is a symbolic
+tag, used for both retrieving the option value and for the help (`-h`)
+displayed. The `opts` is a set of option names that are accepted for this
+argument. Both short and long variations are valid for `opts`. The `help` is
+a description of the argument printed out in the help output (`-h`). The `flags`
+value can indicate definition characteristics for the argument. Accepted `flags`
+are:
+
+`flag`:: Declares this as an option that has no value. For example `--version`
+as opposed to `--prefix=/some/path`.
 
 end::reference[] */
 void add_arg(const value_ref & name,
@@ -50,7 +60,7 @@ Jam:: `rule get-arg ( name )`
 {CPP}:: `list_ref get_arg(value_ref name);`
 ====
 
-Does something.
+Retrieve the value of a previous specified command line argument.
 
 end::reference[] */
 list_ref get_arg(const value_ref & name);
