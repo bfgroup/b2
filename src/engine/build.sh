@@ -472,7 +472,6 @@ md5.cpp \
 mem.cpp \
 modules.cpp \
 native.cpp \
-option.cpp \
 output.cpp \
 parse.cpp \
 pathnt.cpp \
@@ -488,6 +487,7 @@ timestamp.cpp \
 value.cpp \
 variable.cpp \
 w32_getreg.cpp \
+mod_args.cpp \
 mod_command_db.cpp \
 mod_db.cpp \
 mod_jam_builtin.cpp \
