@@ -25,6 +25,3 @@ indent_style = space
 [.clangd]
 indent_size = 2
 indent_style = space
-
-[jam.cpp]
-indent_style = space
