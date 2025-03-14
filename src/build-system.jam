@@ -1063,7 +1063,7 @@ local rule should-clean-project ( project )
     NOTFILE all ;
 
     # Skip building (i.e. updating) if the user is asking for help. We need all
-    # the declarations to get ad-hok help arguments declared. But we don't
+    # the declarations to get ad-hoc help arguments declared. But we don't
     # want to update while also asking for help.
     if [ args.get-arg help ]
     {
