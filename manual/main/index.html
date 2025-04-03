@@ -9764,7 +9764,87 @@ Supported formats are: <code>JSON</code>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.path"><a class="anchor" href="#b2.reference.modules.path"></a>6.5.9. path</h4>
+<h4 id="b2.reference.modules.args"><a class="anchor" href="#b2.reference.modules.args"></a>6.5.9. <code>args</code> module.</h4>
+<div class="sect4">
+<h5 id="_b2argsadd_arg"><a class="anchor" href="#_b2argsadd_arg"></a><code>b2::args::add_arg</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule add-arg ( name : opts + : help : flags * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>void add_arg(const value_ref &amp; name, list_cref opts, const value_ref &amp;
+help, list_cref flags);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Declares a new command line argument option to accept. When specified the
+argument is then available for access with <code>get-arg</code>. The <code>name</code> is a symbolic
+tag, used for both retrieving the option value and for the help (<code>-h</code>)
+displayed. The <code>opts</code> is a set of option names that are accepted for this
+argument. Both short and long variations are valid for <code>opts</code>. The <code>help</code> is
+a description of the argument printed out in the help output (<code>-h</code>). The <code>flags</code>
+value can indicate definition characteristics for the argument. Accepted <code>flags</code>
+are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>flag</code></dt>
+<dd>
+<p>Declares this as an option that has no value. For example <code>--version</code>
+as opposed to <code>--prefix=/some/path</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2argsget_arg"><a class="anchor" href="#_b2argsget_arg"></a><code>b2::args::get_arg</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule get-arg ( name )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>list_ref get_arg(value_ref name);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Retrieve the value of a previous specified command line argument.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="b2.reference.modules.path"><a class="anchor" href="#b2.reference.modules.path"></a>6.5.10. path</h4>
 <div class="paragraph">
 <p>Performs various path manipulations. Paths are always in a 'normalized'
 representation. In it, a path may be either:</p>
@@ -9947,7 +10027,7 @@ exist.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.sequence"><a class="anchor" href="#b2.reference.modules.sequence"></a>6.5.10. sequence</h4>
+<h4 id="b2.reference.modules.sequence"><a class="anchor" href="#b2.reference.modules.sequence"></a>6.5.11. sequence</h4>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
@@ -10028,7 +10108,7 @@ parallel list <code>rank</code> is equal to the maximum value in <code>rank</cod
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.stage"><a class="anchor" href="#b2.reference.modules.stage"></a>6.5.11. stage</h4>
+<h4 id="b2.reference.modules.stage"><a class="anchor" href="#b2.reference.modules.stage"></a>6.5.12. stage</h4>
 <div class="paragraph">
 <p>This module defines the <code>install</code> rule, used to copy a set of targets to a
 single location.</p>
@@ -10147,7 +10227,7 @@ in project jam files).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.reference.modules.type"><a class="anchor" href="#b2.reference.modules.type"></a>6.5.12. type</h4>
+<h4 id="b2.reference.modules.type"><a class="anchor" href="#b2.reference.modules.type"></a>6.5.13. type</h4>
 <div class="paragraph">
 <p>Deals with target type declaration and defines target class which
 supports typed targets.</p>
@@ -17083,6 +17163,10 @@ supports the old compilers and the new "IBM XL" and  "IBM Open XL" compilers.&#8
 C compiler toolsets (for example <code>tcc</code>).&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
+<p><strong>New</strong>: Add <code>args</code> module for common handling of both native and Jam side
+command line arguments.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
 <p>Fix command database output file path when an output dir is not given.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
@@ -17108,6 +17192,11 @@ contexts with minimal effort.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </li>
 <li>
 <p>Fix Building on Haiku OS which doesn&#8217;t have <code>wait4</code>.&#8201;&#8212;&#8201;<em>Fas Xmut</em></p>
+</li>
+<li>
+<p>Rewrite the command like argument parsing to use the Lyra library. The result
+is that arguments from Jam and native are integrated and available with the
+built-in <code>-h</code> help.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
