@@ -17152,6 +17152,11 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_5_3_0"><a class="anchor" href="#_version_5_3_0"></a>14.1. Version 5.3.0</h3>
+<div class="paragraph">
+<p>Biggest changes for this release is the creation of two new toolsets: <code>ibmcxx</code>
+and <code>cc</code>. The former covers all the IBM compilers, and the latter is a generic
+C compiler toolset.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -17199,6 +17204,19 @@ is that arguments from Jam and native are integrated and available with the
 built-in <code>-h</code> help.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">⚠</div>
+</td>
+<td class="content">
+The <code>vacpp</code> and <code>xlcpp</code> have been removed in favor of <code>ibmcxx</code> as the
+latter covers the same support.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
