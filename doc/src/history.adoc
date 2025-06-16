@@ -1,6 +1,13 @@
 [[b2.history]]
 = History
 
+== Version 5.3.3
+
+* Fix `stdlib=libc++` feature being applied to compiles other than {CPP}.
+  -- _Dmitry Arkhipov_
+* Fix silently ignored argument parsing errors.
+  -- _Dmitry Arkhipov_
+
 == Version 5.3.2
 
 Fix regression for handling of the `--command-database` option. The new command
