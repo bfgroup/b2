@@ -216,6 +216,7 @@ http://blogs.msdn.com/b/vcblog/archive/2014/07/18/using-boost-libraries-in-windo
 #
 ################################################################################
 
+import args ;
 import "class" : new ;
 import common ;
 import feature ;
@@ -1339,15 +1340,15 @@ local rule configure-really ( version ? : options * )
             # version from the path.
             # FIXME: We currently detect both Microsoft Visual Studio 9.0 and
             # 9.0express as 9.0 here.
-            if [ MATCH "(MSVC\\\\14.[34])" : $(command) ]
+            if [ MATCH "(MSVC(\\/|\\\\)14.[34])" : $(command) ]
             {
                 version = 14.3 ;
             }
-            else if [ MATCH "(MSVC\\\\14.2)" : $(command) ]
+            else if [ MATCH "(MSVC(\\/|\\\\)14.2)" : $(command) ]
             {
                 version = 14.2 ;
             }
-            else if [ MATCH "(MSVC\\\\14.1)" : $(command) ]
+            else if [ MATCH "(MSVC(\\/|\\\\)14.1)" : $(command) ]
             {
                 version = 14.1 ;
             }
@@ -2112,10 +2113,7 @@ local rule register-configuration ( version : path ? )
 #
 ################################################################################
 
-if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ]
-{
-    .debug-configuration = true ;
-}
+.debug-configuration = [ args.get-arg debug-configuration ] ;
 
 # Miscellaneous constants.
 .RM = [ common.rm-command ] ;

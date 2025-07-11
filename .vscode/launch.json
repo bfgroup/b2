@@ -8,7 +8,7 @@
 			"name": "(gdb) Pipe Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "/root/b2/.build/gcc-12/debug/cxxstd-11-iso/threading-multi/b2",
+			"program": "/root/b2/.build/gcc-14/debug/cxxstd-11-iso/threading-multi/b2",
 			"args": [],
 			"stopAtEntry": true,
 			"cwd": "/root/b2/test/grep",
@@ -102,7 +102,7 @@
 				"-h"
 			],
 			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}",
+			"cwd": "${workspaceFolder}/example/hello",
 			"environment": [],
 			"externalConsole": false,
 			"MIMode": "gdb",
@@ -118,10 +118,10 @@
 			"name": "(gcc) Launch: ASAN",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/address-sanitizer-on/cxxstd-11-iso/b2",
+			"program": "${workspaceFolder}/.build/gcc-14/debug/address-sanitizer-on/cxxstd-11-iso/threading-multi/b2",
 			"args": [
-				"-na",
-				"toolset=gcc"
+				"-n",
+				"-a"
 			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
@@ -139,7 +139,7 @@
 			"name": "(gcc) Launch, Unit Tests",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/cxxstd-11-iso/threading-multi/b2",
+			"program": "${workspaceFolder}/.build/gcc-14/debug/cxxstd-11-iso/threading-multi/b2",
 			"args": [
 				"--debug",
 				"--build-system=test/test",
@@ -164,7 +164,7 @@
 			"name": "(gcc) Launch, Unit Tests: ASAN",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/.build/gcc-13/debug/address-sanitizer-on/cxxstd-11-iso/b2",
+			"program": "${workspaceFolder}/.build/gcc-14/debug/address-sanitizer-on/cxxstd-11-iso/b2",
 			"args": [
 				"--debug",
 				"--build-system=test/test",

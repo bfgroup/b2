@@ -335,10 +335,10 @@ include::../../src/tools/embarcadero.jam[tag=doc]
 include::../../src/tools/emscripten.jam[tag=doc]
 include::../../src/tools/gcc.jam[tag=doc]
 include::../../src/tools/hp_cxx.jam[tag=doc]
+include::../../src/tools/ibmcxx.jam[tag=doc]
 include::../../src/tools/intel.jam[tag=doc]
 include::../../src/tools/msvc.jam[tag=doc]
 include::../../src/tools/sun.jam[tag=doc]
-include::../../src/tools/vacpp.jam[tag=doc]
 :leveloffset: -3
 
 === Third-party libraries
@@ -780,6 +780,7 @@ include::../../src/engine/mod_set.h[tag=reference]
 include::../../src/engine/mod_string.h[tag=reference]
 include::../../src/engine/mod_version.h[tag=reference]
 include::../../src/engine/mod_db.h[tag=reference]
+include::../../src/engine/mod_args.h[tag=reference]
 
 include::path.adoc[]
 

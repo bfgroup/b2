@@ -17,11 +17,11 @@ options as link:#b2.reference.tools.compiler.gcc[`gcc`] toolset.
 
 |# # end::doc[]
 
+import args ;
 import common ;
 import toolset ;
 import feature ;
 import toolset : flags ;
-
 import clang ;
 import gcc ;
 import common ;
@@ -55,9 +55,7 @@ toolset.inherit-flags clang-linux : gcc
   : INCLUDE-GCH
   ;
 
-if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ] {
-  .debug-configuration = true ;
-}
+.debug-configuration = [ args.get-arg debug-configuration ] ;
 
 rule init ( version ? :  command * : options * ) {
   command = [ common.find-compiler clang-linux : clang++ : $(version) : $(command) ] ;
@@ -169,8 +167,8 @@ toolset.flags clang-linux.compile OPTIONS <lto>on/<lto-mode>full : -flto=full ;
 toolset.flags clang-linux.link OPTIONS <lto>on/<lto-mode>full : -flto=full ;
 
 # stdlib selection
-toolset.flags clang-linux.compile OPTIONS <stdlib>gnu <stdlib>gnu11 : -stdlib=libstdc++ ;
+toolset.flags clang-linux.compile.c++ OPTIONS <stdlib>gnu <stdlib>gnu11 : -stdlib=libstdc++ ;
 toolset.flags clang-linux.link OPTIONS <stdlib>gnu <stdlib>gnu11 : -stdlib=libstdc++ ;
 
-toolset.flags clang-linux.compile OPTIONS <stdlib>libc++ : -stdlib=libc++ ;
+toolset.flags clang-linux.compile.c++ OPTIONS <stdlib>libc++ : -stdlib=libc++ ;
 toolset.flags clang-linux.link OPTIONS <stdlib>libc++ : -stdlib=libc++ ;
