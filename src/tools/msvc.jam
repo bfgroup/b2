@@ -1349,7 +1349,7 @@ local rule configure-really ( version ? : options * )
             # version from the path.
             # FIXME: We currently detect both Microsoft Visual Studio 9.0 and
             # 9.0express as 9.0 here.
-			if [ MATCH "(MSVC(\\/|\\\\)14.5)" : $(command) ]
+            if [ MATCH "(MSVC(\\/|\\\\)14.5)" : $(command) ]
             {
                 version = 14.5 ;
             }
