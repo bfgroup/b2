@@ -6420,7 +6420,14 @@ when it&#8217;s specified is it used.</p>
 <h5 id="b2.reference.tools.compiler.clang-linux"><a class="anchor" href="#b2.reference.tools.compiler.clang-linux"></a>Clang (GCC frontend)</h5>
 <div class="paragraph">
 <p>The <code>clang-linux</code> module supports Clang with GCC frontend and has the same
-options as <a href="#b2.reference.tools.compiler.gcc"><code>gcc</code></a> toolset.</p>
+options as <a href="#b2.reference.tools.compiler.gcc"><code>gcc</code></a> toolset, with the
+addition of <code>&lt;triple&gt;</code> option.</p>
+</div>
+<div class="paragraph">
+<p>The value of that option is passed as the value of <code>--target=</code> flag, unless
+provided as <code>&lt;triple&gt;none</code>. In that case the flag is not passed to the build
+tools. If the option is not provided the build system may try to guess the
+correct target triple.</p>
 </div>
 </div>
 <div class="sect4">
