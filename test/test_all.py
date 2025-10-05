@@ -390,6 +390,7 @@ tests = ["abs_workdir",
          "using",
          "wrapper",
          "wrong_project",
+         "escaping_dollar_before_round_bracket",
          ]
 
 if os.name == "posix":
