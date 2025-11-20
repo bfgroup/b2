@@ -36,7 +36,7 @@ variables:
 - { name: windows_latest_vm, value: 'windows-2022' }
 - { name: clang_latest, value: '21' }
 - { name: clang_latest_libstdcxx, value: '12' }
-- { name: gcc_latest, value: '15' }
+- { name: gcc_latest, value: '14' }
 - { name: vc_latest, value: 'vc143' }
 - { name: vs_latest, value: '2022' }
 - { name: xc_latest, value: '16.4' }
@@ -269,6 +269,7 @@ stages:
   - job: 'Co_Linux'
     strategy:
       matrix:
+        GCC 15: {CXX: g++-15, TOOLSET: gcc-15, CONTAINER: "linux_gcc15"}
         GCC 14: {CXX: g++-14, TOOLSET: gcc-14, CONTAINER: "linux_gcc14"}
         GCC 13: {CXX: g++-13, TOOLSET: gcc-13, CONTAINER: "linux_gcc13"}
         GCC 12: {CXX: g++-12, TOOLSET: gcc-12, CONTAINER: "linux_gcc12"}
@@ -281,6 +282,7 @@ stages:
         GCC 5: {CXX: g++-5, TOOLSET: gcc-5, CONTAINER: "linux_gcc5"}
         GCC 4.9: {CXX: g++-4.9, TOOLSET: gcc-4.9, CONTAINER: "linux_gcc49"}
         GCC 4.8: {CXX: g++-4.8, TOOLSET: gcc-4.8, CONTAINER: "linux_gcc48"}
+        Clang 21: {CXX: clang++-21, TOOLSET: clang-21, CONTAINER: "linux_clang21"}
         Clang 20: {CXX: clang++-20, TOOLSET: clang-20, CONTAINER: "linux_clang20"}
         Clang 19: {CXX: clang++-19, TOOLSET: clang-19, CONTAINER: "linux_clang19"}
         Clang 18: {CXX: clang++-18, TOOLSET: clang-18, CONTAINER: "linux_clang18"}
