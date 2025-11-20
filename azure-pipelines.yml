@@ -36,7 +36,7 @@ variables:
 - { name: windows_latest_vm, value: 'windows-2022' }
 - { name: clang_latest, value: '21' }
 - { name: clang_latest_libstdcxx, value: '12' }
-- { name: gcc_latest, value: '16' }
+- { name: gcc_latest, value: '15' }
 - { name: vc_latest, value: 'vc143' }
 - { name: vs_latest, value: '2022' }
 - { name: xc_latest, value: '16.4' }
@@ -63,7 +63,6 @@ resources:
         volumes: [
           "/node20217:/node20217:rw,rshared",
           "/node20217:/__e/node20:ro,rshared" ] }
-    - { container: linux_gcc16, image: 'teeks99/gcc-ubuntu:16', options: "${{variables.co_options}}" }
     - { container: linux_gcc15, image: 'teeks99/gcc-ubuntu:15', options: "${{variables.co_options}}" }
     - { container: linux_gcc14, image: 'teeks99/gcc-ubuntu:14', options: "${{variables.co_options}}" }
     - { container: linux_gcc13, image: 'teeks99/gcc-ubuntu:13', options: "${{variables.co_options}}" }
@@ -270,7 +269,6 @@ stages:
   - job: 'Co_Linux'
     strategy:
       matrix:
-        GCC 15: {CXX: g++-15, TOOLSET: gcc-15, CONTAINER: "linux_gcc15"}
         GCC 14: {CXX: g++-14, TOOLSET: gcc-14, CONTAINER: "linux_gcc14"}
         GCC 13: {CXX: g++-13, TOOLSET: gcc-13, CONTAINER: "linux_gcc13"}
         GCC 12: {CXX: g++-12, TOOLSET: gcc-12, CONTAINER: "linux_gcc12"}
