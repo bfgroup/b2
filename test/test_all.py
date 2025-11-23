@@ -293,6 +293,7 @@ tests = ["abs_workdir",
          "dll_path",
          "double_loading",
          "duplicate",
+         "escaping_dollar_before_round_bracket",
          "example_libraries",
          "example_make",
          "exit_status",
@@ -390,7 +391,6 @@ tests = ["abs_workdir",
          "using",
          "wrapper",
          "wrong_project",
-         "escaping_dollar_before_round_bracket",
          ]
 
 if os.name == "posix":
