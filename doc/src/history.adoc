@@ -6,6 +6,18 @@
 * *New*: Add initial support for {CPP}-26 Contracts for GCC based toolsets
   (like clang).
   -- _René Ferdinand Rivera Morell_
+* *New*: Allow explicit target `triple` for `clang-linux` and `clang-darwin`.
+  -- _Dmitry Arkhipov_
+* *New*: Change documentation style to support light/dark user preference.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Added the ability to escape the '$' character before '(' as "$$" which
+  will allow using the "$()" and "$(())" expressions of bash, sh, and other
+  shells.
+  -- _Ivan Kotov_
+* Fix invoking asciidoctor on Windows.
+  -- _René Ferdinand Rivera Morell_
+* Fix, propagate `dll-path` to shared libraries.
+  -- _Dmitry Arkhipov_
 
 == Version 5.3.3
 
