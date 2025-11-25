@@ -18,6 +18,8 @@
   -- _René Ferdinand Rivera Morell_
 * Fix, propagate `dll-path` to shared libraries.
   -- _Dmitry Arkhipov_
+* Fix mpi compiler detection to detect not just the first one (`mpi++`).
+  -- _Samuel Debionne_
 
 == Version 5.3.3
 
