@@ -23,6 +23,11 @@ skip_commits:
 
 environment:
   matrix:
+  - job_name: 'Xcode 14.3'
+    job_build: 'XcodeBuild'
+    job_test: 'XcodeTest'
+    XCODE_APP: /Applications/Xcode_14.3.app
+    APPVEYOR_BUILD_WORKER_IMAGE: macos-sonoma
   - job_name: 'Visual Studio 2022, Test'
     job_build: 'WindowsBuild'
     job_test: 'WindowsTest'
@@ -68,11 +73,6 @@ environment:
     TEST_TOOLSET: gcc
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
     B2_CXX_PATH: C:/cygwin64/bin
-  - job_name: 'Xcode 14.3'
-    job_build: 'XcodeBuild'
-    job_test: 'XcodeTest'
-    XCODE_APP: /Applications/Xcode_14.3.app
-    APPVEYOR_BUILD_WORKER_IMAGE: macos-sonoma
 
 for:
 
