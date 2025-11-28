@@ -116,7 +116,4 @@ for:
       only:
         - job_build: 'XcodeBuild'
     build_script:
-      - bash: |
-          set -e
-          uname -a
-          ls -laF /Applications
+      - ./.ci/macos-install.sh
