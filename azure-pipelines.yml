@@ -331,9 +331,9 @@ stages:
         Xcode 26.0.1: {XCODE_APP: /Applications/Xcode_26.0.1.app, VM_IMAGE: 'macOS-15'}
         # Xcode 16.3: {XCODE_APP: /Applications/Xcode_16.3.app, VM_IMAGE: 'macOS-15'}
         Xcode 15.4: {XCODE_APP: /Applications/Xcode_15.4.app, VM_IMAGE: 'macOS-14'}
-        Xcode 14.3.1: {XCODE_APP: /Applications/Xcode_14.3.1.app, VM_IMAGE: 'macOS-13'}
-        Xcode 14.2: {XCODE_APP: /Applications/Xcode_14.2.app, VM_IMAGE: 'macOS-13'}
-        Xcode 14.1: {XCODE_APP: /Applications/Xcode_14.1.app, VM_IMAGE: 'macOS-13'}
+        # Xcode 14.3.1: {XCODE_APP: /Applications/Xcode_14.3.1.app, VM_IMAGE: 'macOS-13'}
+        # Xcode 14.2: {XCODE_APP: /Applications/Xcode_14.2.app, VM_IMAGE: 'macOS-13'}
+        # Xcode 14.1: {XCODE_APP: /Applications/Xcode_14.1.app, VM_IMAGE: 'macOS-13'}
         # Xcode 14.0.1: {XCODE_APP: /Applications/Xcode_14.0.1.app, VM_IMAGE: 'macOS-12'}
         # Xcode 13.4.1: {XCODE_APP: /Applications/Xcode_13.4.1.app, VM_IMAGE: 'macOS-12'}
         # Xcode 12.5.1: {XCODE_APP: /Applications/Xcode_12.5.1.app, VM_IMAGE: 'macOS-11'}
