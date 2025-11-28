@@ -120,5 +120,9 @@ for:
   - matrix:
       only:
         - job_build: 'XcodeBuild'
-    build_script:
+    install:
       - ./.ci/macos-install.sh
+    build_script:
+      - ./.ci/macos-build.sh
+    test_script:
+      - ./.ci/macos-test.sh
