@@ -18,6 +18,7 @@ import time
 import signal
 import sys
 import threading
+import inspect
 
 xml = "--xml" in sys.argv
 toolset = BoostBuild.get_toolset()
@@ -99,12 +100,16 @@ def run_tests(critical_tests, other_tests):
 
     cancelled = False
     max_workers = 1 if "--not-parallel" in sys.argv else None
-    executor = concurrent.futures.ProcessPoolExecutor(
-        max_workers=max_workers,
+    exc_args = {}
+    exc_args["max_workers"] = max_workers
+    if (
+        "max_tasks_per_child"
+        in inspect.signature(concurrent.futures.ProcessPoolExecutor).parameters.keys()
+    ):
         # Limit to 1-to-1 processing to allow for timeout canceling at the
         # process level.
-        max_tasks_per_child=1,
-    )
+        exc_args["max_tasks_per_child"] = 1
+    executor = concurrent.futures.ProcessPoolExecutor(**exc_args)
 
     def handler(sig, frame):
         cancelled = True
