@@ -65,8 +65,8 @@ You can specify the toolset as the argument, i.e.:
     ./build.sh [options] gcc
 
 Toolsets supported by this script are:
-    acc, clang, como, gcc, intel-darwin, intel-linux, kcc, kylix, mipspro,
-    pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
+    acc, clang, como, gcc, ibmcxx-clang, intel-darwin, intel-linux,
+    kcc, kylix, mipspro, pathscale, pgi, qcc, sun, sunpro, tru64cxx
 
 For any toolset you can override the path to the compiler with the '--cxx'
 option. You can also use additional flags for the compiler with the
@@ -116,7 +116,7 @@ test_compiler ()
     CMD="${EXE} $@ ${B2_CXXFLAGS_OPT:-}"
     SETUP=${B2_SETUP:-true}
     if test_true ${B2_VERBOSE_OPT} ; then
-        echo "> ${CMD} check_cxx11.cpp"
+        echo "> ${CMD} check_clib.cpp check_cxx11.cpp"
         ( ${SETUP} ; ${CMD} check_clib.cpp check_cxx11.cpp )
     else
         ( ${SETUP} ; ${CMD} check_clib.cpp check_cxx11.cpp ) 1>/dev/null 2>/dev/null
@@ -125,7 +125,7 @@ test_compiler ()
     if test_true ${CHECK_RESULT} ; then
         B2_CXX=${CMD}
     fi
-    rm -rf check_cxx11.o* a.out a.exe 1>/dev/null 2>/dev/null
+    rm -rf check_clib.o* check_cxx11.o* a.out a.exe 1>/dev/null 2>/dev/null
     return ${CHECK_RESULT}
 }
 
@@ -156,11 +156,13 @@ check_toolset ()
 
     # Prefer Clang (clang) on macOS..
     if test_toolset clang && test_uname Darwin && test_compiler clang++$TOOLSET_SUFFIX -x c++ -std=c++11 ; then B2_TOOLSET=clang$TOOLSET_SUFFIX ; return ${TRUE} ; fi
+    # GCC (gcc) with -pthread arg (for AIX and others)..
+    if test_toolset gcc && test_compiler g++$TOOLSET_SUFFIX -x c++ -std=c++11 -pthread ; then B2_TOOLSET=gcc$TOOLSET_SUFFIX ; return ${TRUE} ; fi
     # GCC (gcc)..
     if test_toolset gcc && test_compiler g++$TOOLSET_SUFFIX -x c++ -std=c++11 ; then B2_TOOLSET=gcc$TOOLSET_SUFFIX ; return ${TRUE} ; fi
     if test_toolset gcc && test_compiler g++$TOOLSET_SUFFIX -x c++ -std=c++11 -D_GNU_SOURCE ; then B2_TOOLSET=gcc$TOOLSET_SUFFIX ; return ${TRUE} ; fi
-    # GCC (gcc) with -pthread arg (for AIX)..
-    if test_toolset gcc && test_compiler g++$TOOLSET_SUFFIX -x c++ -std=c++11 -pthread ; then B2_TOOLSET=gcc$TOOLSET_SUFFIX ; return ${TRUE} ; fi
+    # Clang (clang) with -pthread arg (for FreeBSD and others)..
+    if test_toolset clang && test_compiler clang++$TOOLSET_SUFFIX -x c++ -std=c++11 -pthread ; then B2_TOOLSET=clang$TOOLSET_SUFFIX ; return ${TRUE} ; fi
     # Clang (clang)..
     if test_toolset clang && test_compiler clang++$TOOLSET_SUFFIX -x c++ -std=c++11 ; then B2_TOOLSET=clang$TOOLSET_SUFFIX ; return ${TRUE} ; fi
     # Intel macOS (intel-darwin)
@@ -221,20 +223,9 @@ check_toolset ()
     if test_toolset tru64cxx && test_uname OSF1 && test_compiler cc ; then B2_TOOLSET=mipspro ; return ${TRUE} ; fi
     # QNX (qcc)
     if test_toolset qcc && test_uname QNX && test_compiler QCC ; then B2_TOOLSET=qcc ; return ${TRUE} ; fi
-    # Linux XL/VA C++ (xlcpp, vacpp)
-    if test_toolset xlcpp vacpp && test_uname Linux && test_compiler xlC_r ; then
-        if /usr/bin/lscpu | grep Byte | grep Little > /dev/null 2>&1 ; then
-            # Little endian linux
-            B2_TOOLSET=xlcpp
-            return ${TRUE}
-        else
-            # Big endian linux
-            B2_TOOLSET=vacpp
-            return ${TRUE}
-        fi
-    fi
-    # AIX VA C++ (vacpp)
-    if test_toolset vacpp && test_uname AIX && test_compiler xlC_r ; then B2_TOOLSET=vacpp ; return ${TRUE} ; fi
+    # AIX IBM Open XL (ibmcxx-clang)
+    IBMCXX=`ls -1 -r /opt/IBM/openxlC/17.*/bin/ibm-clang++_r`
+    if test_toolset ibmcxx-clang && test_uname AIX && test "" != "${IBMCXX}" && test_compiler "${IBMCXX}" ; then B2_TOOLSET=ibmcxx-clang ; return ${TRUE} ; fi
     # PGI (pgi)
     if test_toolset pgi && test_compiler pgc++ -std=c++11 ; then B2_TOOLSET=pgi ; return ${TRUE} ; fi
     # Pathscale C++ (pathscale)
@@ -249,7 +240,7 @@ check_toolset ()
     if test_toolset sunpro && test_compiler /opt/SUNWspro/bin/CC -std=c++11 ; then B2_TOOLSET=sunpro ; return ${TRUE} ; fi
     # Generic (cxx)
     if test_toolset cxx && test_compiler cxx ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
-    if test_toolset cxx && test_compiler cpp ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
+    if test_toolset cxx && test_compiler c++ ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
     if test_toolset cxx && test_compiler CC ; then B2_TOOLSET=cxx ; return ${TRUE} ; fi
 
     # Nothing found.
@@ -333,16 +324,10 @@ case "${B2_TOOLSET}" in
         B2_CXXFLAGS_DEBUG="-O0 -g -static-intel"
     ;;
 
-    vacpp)
-        CXX_VERSION_OPT=${CXX_VERSION_OPT:--qversion}
-        B2_CXXFLAGS_RELEASE="-O3 -s -qstrict -qinline"
-        B2_CXXFLAGS_DEBUG="-g -qNOOPTimize -qnoinline -pg"
-    ;;
-
-    xlcpp)
-        CXX_VERSION_OPT=${CXX_VERSION_OPT:--qversion}
-        B2_CXXFLAGS_RELEASE="-s -O3 -qstrict -qinline"
-        B2_CXXFLAGS_DEBUG="-g -qNOOPTimize -qnoinline -pg"
+    ibmcxx-clang)
+        CXX_VERSION_OPT=${CXX_VERSION_OPT:---version}
+        B2_CXXFLAGS_RELEASE="-O3 -Wl,-s -Wno-deprecated-declarations"
+        B2_CXXFLAGS_DEBUG="-O0 -fno-inline -g -Wno-deprecated-declarations"
     ;;
 
     como)
@@ -389,8 +374,8 @@ case "${B2_TOOLSET}" in
 
     clang|clang-*)
         CXX_VERSION_OPT=${CXX_VERSION_OPT:---version}
-        B2_CXXFLAGS_RELEASE="-O3 -s"
-        B2_CXXFLAGS_DEBUG="-O0 -fno-inline -g"
+        B2_CXXFLAGS_RELEASE="-O3 -s -Wno-deprecated-declarations"
+        B2_CXXFLAGS_DEBUG="-O0 -fno-inline -g -Wno-deprecated-declarations"
     ;;
 
     tru64cxx)
@@ -446,6 +431,7 @@ constants.cpp \
 cwd.cpp \
 debug.cpp \
 debugger.cpp \
+events.cpp \
 execcmd.cpp \
 execnt.cpp \
 execunix.cpp \
@@ -469,7 +455,6 @@ md5.cpp \
 mem.cpp \
 modules.cpp \
 native.cpp \
-option.cpp \
 output.cpp \
 parse.cpp \
 pathnt.cpp \
@@ -480,11 +465,14 @@ rules.cpp \
 scan.cpp \
 search.cpp \
 startup.cpp \
-subst.cpp \
+tasks.cpp \
 timestamp.cpp \
 value.cpp \
 variable.cpp \
 w32_getreg.cpp \
+mod_args.cpp \
+mod_command_db.cpp \
+mod_db.cpp \
 mod_jam_builtin.cpp \
 mod_jam_class.cpp \
 mod_jam_errors.cpp \
@@ -496,12 +484,24 @@ mod_regex.cpp \
 mod_sequence.cpp \
 mod_set.cpp \
 mod_string.cpp \
+mod_summary.cpp \
 mod_sysinfo.cpp \
 mod_version.cpp \
  "
 
     if test_true ${B2_DEBUG_OPT} ; then B2_CXXFLAGS="${B2_CXXFLAGS_DEBUG}"
     else B2_CXXFLAGS="${B2_CXXFLAGS_RELEASE} -DNDEBUG"
+    fi
+    if [ -z "$B2_DONT_EMBED_MANIFEST" ] ; then
+        case "$(${B2_CXX} ${B2_CXXFLAGS} -dumpmachine 2>/dev/null)" in
+            *-windows*|*-mingw*|*-msys*|*-cygnus*|*-cygwin*)
+                WINDRES="$(${B2_CXX} ${B2_CXXFLAGS} -print-prog-name=windres 2>/dev/null)"
+            ;;
+        esac
+        if [ -n "${WINDRES}" ] ; then
+            B2_CXXFLAGS="${B2_CXXFLAGS} -Wl,res.o"
+            ( B2_VERBOSE_OPT=${TRUE} echo_run ${WINDRES} --input res.rc --output res.o )
+        fi
     fi
     ( B2_VERBOSE_OPT=${TRUE} echo_run ${B2_CXX} ${B2_CXXFLAGS} ${B2_SOURCES} -o b2 )
 }

@@ -76,6 +76,7 @@ import property-set ;
 import sequence ;
 import set ;
 import toolset ;
+import args ;
 
 
 # Base class for all abstract targets.
@@ -147,10 +148,9 @@ class abstract-target
 }
 
 
-if --debug-building in [ modules.peek : ARGV ]
-{
-    modules.poke : .debug-building : true ;
-}
+args.add-arg debug-building : --debug-building
+    : "Prints what targets are being built and with what properties." ;
+modules.poke : .debug-building : [ args.get-arg debug-building ] ;
 
 
 rule indent ( )
@@ -275,7 +275,7 @@ class project-target : abstract-target
             targets += $(g[2-]) ;
         }
         targets.decrease-indent ;
-        return $(usage-requirements) [ sequence.unique $(targets) ] ;
+        return $(usage-requirements) [ sequence.unique $(targets) : stable ] ;
     }
 
     # Computes and returns a list of abstract-target instances which must be
@@ -809,7 +809,7 @@ class main-target : abstract-target
             }
         }
         end-building $(__name__) ;
-        return $(usage-requirements) [ sequence.unique $(result) ] ;
+        return $(usage-requirements) [ sequence.unique $(result) : stable ] ;
     }
 
     # Generates the main target with the given property set and returns a list
@@ -1406,6 +1406,12 @@ class basic-target : abstract-target
                     local result = [ construct $(self.name) : $(source-targets) :
                         $(rproperties) ] ;
 
+                    if $(result) && [ $(result[1]).get <build> ] = no
+                    {
+                        result = ;
+                        skip = true ;
+                    }
+
                     if $(result)
                     {
                         local gur = $(result[1]) ;
@@ -1669,7 +1675,7 @@ class typed-target : basic-target
                 ECHO "error: no generators were found for type '$(self.type)'" ;
                 ECHO "error: and the requested properties" ;
                 ECHO "error: make sure you've configured the needed tools" ;
-                ECHO "See https://www.bfgroup.xyz/b2/manual/release/index.html#bbv2.overview.configuration" ;
+                ECHO "See https://www.bfgroup.xyz/b2/manual/release/index.html#b2.overview.configuration" ;
                 EXIT "To debug this problem, try the --debug-generators option."
                     ;
             }

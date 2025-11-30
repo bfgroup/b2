@@ -826,11 +826,11 @@ static void debug_mi_error( const char * message )
 
 static void debug_error_( const char * message )
 {
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         printf( "%s\n", message );
     }
-    else if ( debug_interface == DEBUG_INTERFACE_MI )
+    else if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_error( message );
     }
@@ -885,11 +885,11 @@ static void debug_error( const char * format, ... )
 
 static void debug_parent_child_exited( int pid, int exit_code )
 {
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         printf( "Child %d exited with status %d\n", (int)child_pid, (int)exit_code );
     }
-    else if ( debug_interface == DEBUG_INTERFACE_MI )
+    else if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         if ( exit_code == 0 )
             printf( "*stopped,reason=\"exited-normally\"\n(gdb) \n" );
@@ -907,11 +907,11 @@ static void debug_parent_child_exited( int pid, int exit_code )
 static void debug_parent_child_signalled( int pid, int id )
 {
 
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         printf( "Child %d exited on signal %d\n", child_pid, id );
     }
-    else if ( debug_interface == DEBUG_INTERFACE_MI )
+    else if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         const char * name = "unknown";
         const char * meaning = "unknown";
@@ -937,14 +937,14 @@ static void debug_parent_on_breakpoint( void )
     fprintf( command_output, "info frame\n" );
     fflush( command_output );
     debug_frame_read( command_child, &base );
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         printf( "Breakpoint %d, ", id );
         debug_print_frame_info( base );
         printf( "\n" );
         debug_print_source( base.file, base.line );
     }
-    else if ( debug_interface == DEBUG_INTERFACE_MI )
+    else if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         printf( "*stopped,reason=\"breakpoint-hit\",bkptno=\"%d\",disp=\"keep\",", id );
         debug_mi_print_frame_info( &base );
@@ -964,7 +964,7 @@ static void debug_parent_on_end_stepping( void )
     fprintf( command_output, "info frame\n" );
     fflush( command_output );
     debug_frame_read( command_child, &base );
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         debug_print_source( base.file, base.line );
     }
@@ -1108,7 +1108,6 @@ static void debug_parent_copy_breakpoints( void )
 static void debug_start_child( int argc, const char * * argv )
 {
 #if NT
-    char buf[ 80 ];
     HANDLE pipe1[ 2 ];
     HANDLE pipe2[ 2 ];
     string self[ 1 ];
@@ -1143,12 +1142,10 @@ static void debug_start_child( int argc, const char * * argv )
     string_copy( command_line, "b2 " );
     /* Pass the handles as the first and second arguments. */
     string_append( command_line, debugger_opt );
-    sprintf( buf, "%p", pipe1[ 0 ] );
-    string_append( command_line, buf );
+    string_append( command_line, b2::value::format( "=%p", pipe1[ 0 ] )->str() );
     string_push_back( command_line, ' ' );
     string_append( command_line, debugger_opt );
-    sprintf( buf, "%p", pipe2[ 1 ] );
-    string_append( command_line, buf );
+    string_append( command_line, b2::value::format( "=%p", pipe2[ 1 ] )->str() );
     /* Pass the rest of the command line. */
 	{
         int i;
@@ -1268,7 +1265,7 @@ static void debug_parent_run( int argc, const char * * argv )
         debug_parent_wait( 1 );
     }
     debug_parent_run_print( argc, argv );
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         printf( "=thread-created,id=\"1\",group-id=\"i1\"\n" );
         debug_mi_format_token();
@@ -1315,7 +1312,7 @@ static void debug_parent_continue( int argc, const char * * argv )
         debug_error( "Too many arguments to continue." );
         return;
     }
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^running\n(gdb) \n" );
@@ -1331,7 +1328,7 @@ static void debug_parent_kill( int argc, const char * * argv )
         debug_error( "Too many arguments to kill." );
         return;
     }
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^done\n(gdb) \n" );
@@ -1347,7 +1344,7 @@ static void debug_parent_step( int argc, const char * * argv )
         debug_error( "Too many arguments to step." );
         return;
     }
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^running\n(gdb) \n" );
@@ -1363,7 +1360,7 @@ static void debug_parent_next( int argc, const char * * argv )
         debug_error( "Too many arguments to next." );
         return;
     }
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^running\n(gdb) \n" );
@@ -1379,7 +1376,7 @@ static void debug_parent_finish( int argc, const char * * argv )
         debug_error( "Too many arguments to finish." );
         return;
     }
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^running\n(gdb) \n" );
@@ -1403,11 +1400,11 @@ static void debug_parent_break( int argc, const char * * argv )
     }
     id = debug_add_breakpoint( argv[ 1 ] );
     debug_parent_forward_nowait( argc, argv, 1, 0 );
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         printf( "Breakpoint %d set at %s\n", id, argv[ 1 ] );
     }
-    else if ( debug_interface == DEBUG_INTERFACE_MI )
+    else if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^done\n(gdb) \n" );
@@ -1456,7 +1453,7 @@ static void debug_parent_disable( int argc, const char * * argv )
     }
     debug_child_disable( argc, argv );
     debug_parent_forward_nowait( 2, argv, 1, 0 );
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^done\n(gdb) \n" );
@@ -1471,7 +1468,7 @@ static void debug_parent_enable( int argc, const char * * argv )
     }
     debug_child_enable( argc, argv );
     debug_parent_forward_nowait( 2, argv, 1, 0 );
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^done\n(gdb) \n" );
@@ -1486,7 +1483,7 @@ static void debug_parent_delete( int argc, const char * * argv )
     }
     debug_child_delete( argc, argv );
     debug_parent_forward_nowait( 2, argv, 1, 0 );
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         debug_mi_format_token();
         printf( "^done\n(gdb) \n" );
@@ -1495,7 +1492,6 @@ static void debug_parent_delete( int argc, const char * * argv )
 
 static void debug_parent_clear( int argc, const char * * argv )
 {
-    char buf[ 16 ];
     const char * new_args[ 2 ];
     int id;
     if ( argc < 2 )
@@ -1515,14 +1511,14 @@ static void debug_parent_clear( int argc, const char * * argv )
         return;
     }
 
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         printf( "Deleted breakpoint %d\n", id );
     }
 
-    sprintf( buf, "%d", id );
+    auto id_s = std::to_string(id);
     new_args[ 0 ] = "delete";
-    new_args[ 1 ] = buf;
+    new_args[ 1 ] = id_s.c_str();
     debug_parent_delete( 2, new_args );
 }
 
@@ -1535,12 +1531,12 @@ static void debug_parent_print( int argc, const char * * argv )
     }
     result = debug_list_read( command_child );
 
-    if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+    if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
     {
         list_print( result );
         printf( "\n" );
     }
-    else if ( debug_interface == DEBUG_INTERFACE_MI )
+    else if ( globs.debug_interface == DEBUG_INTERFACE_MI )
     {
         printf( "~\"$1 = " );
         list_print( result );
@@ -1577,9 +1573,8 @@ static void debug_parent_backtrace( int argc, const char * * argv )
     for ( i = 0; i < depth; ++i )
     {
         FRAME_INFO frame;
-        char buf[ 16 ];
-        sprintf( buf, "%d", i );
-        new_args[ 2 ] = buf;
+        auto i_s = std::to_string(i);
+        new_args[ 2 ] = i_s.c_str();
         debug_parent_forward_nowait( 3, new_args, 0, 0 );
         debug_frame_read( command_child, &frame );
         printf( "#%d  in ", i );
@@ -1937,10 +1932,9 @@ static void debug_mi_break_insert( int argc, const char * * argv )
 
     if ( disabled )
     {
-        char buf[ 80 ];
-        sprintf( buf, "%d", num_breakpoints );
+        auto num_breakpoints_s = std::to_string(num_breakpoints);
         inner_argv[ 0 ] = "disable";
-        inner_argv[ 1 ] = buf;
+        inner_argv[ 1 ] = num_breakpoints_s.c_str();
         debug_child_disable( 2, inner_argv );
         debug_parent_forward_nowait( 2, inner_argv, 1, 0 );
     }
@@ -2607,11 +2601,11 @@ int debugger( void )
 {
     command_array = parent_commands;
     command_input = stdin;
-    if ( debug_interface == DEBUG_INTERFACE_MI )
+    if ( globs.debug_interface == DEBUG_INTERFACE_MI )
         printf( "=thread-group-added,id=\"i1\"\n(gdb) \n" );
     while ( 1 )
     {
-        if ( debug_interface == DEBUG_INTERFACE_CONSOLE )
+        if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
             printf("(b2db) ");
         fflush( stdout );
         read_command();
@@ -2733,7 +2727,7 @@ static void debug_listen( void )
 }
 
 struct debug_child_data_t debug_child_data;
-const char debugger_opt[] = "--b2db-internal-debug-handle=";
+const char debugger_opt[] = "--b2db-internal-debug-handle";
 int debug_interface;
 
 void debugger_done()

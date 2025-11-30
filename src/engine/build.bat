@@ -170,13 +170,17 @@ set B2_SOURCES=
 set B2_SOURCES=%B2_SOURCES% bindjam.cpp builtins.cpp class.cpp
 set B2_SOURCES=%B2_SOURCES% command.cpp compile.cpp constants.cpp cwd.cpp
 set B2_SOURCES=%B2_SOURCES% debug.cpp debugger.cpp
+set B2_SOURCES=%B2_SOURCES% events.cpp
 set B2_SOURCES=%B2_SOURCES% execcmd.cpp execnt.cpp execunix.cpp filent.cpp filesys.cpp fileunix.cpp frames.cpp function.cpp
 set B2_SOURCES=%B2_SOURCES% glob.cpp hash.cpp hcache.cpp hdrmacro.cpp headers.cpp jam.cpp
 set B2_SOURCES=%B2_SOURCES% jamgram.cpp lists.cpp make.cpp make1.cpp md5.cpp mem.cpp modules.cpp
-set B2_SOURCES=%B2_SOURCES% native.cpp option.cpp output.cpp parse.cpp pathnt.cpp
+set B2_SOURCES=%B2_SOURCES% native.cpp output.cpp parse.cpp pathnt.cpp
 set B2_SOURCES=%B2_SOURCES% pathsys.cpp pathunix.cpp regexp.cpp rules.cpp scan.cpp search.cpp jam_strings.cpp
-set B2_SOURCES=%B2_SOURCES% startup.cpp subst.cpp
+set B2_SOURCES=%B2_SOURCES% startup.cpp tasks.cpp
 set B2_SOURCES=%B2_SOURCES% timestamp.cpp value.cpp variable.cpp w32_getreg.cpp
+set B2_SOURCES=%B2_SOURCES% mod_args.cpp
+set B2_SOURCES=%B2_SOURCES% mod_command_db.cpp
+set B2_SOURCES=%B2_SOURCES% mod_db.cpp
 set B2_SOURCES=%B2_SOURCES% mod_jam_builtin.cpp
 set B2_SOURCES=%B2_SOURCES% mod_jam_class.cpp
 set B2_SOURCES=%B2_SOURCES% mod_jam_errors.cpp
@@ -188,6 +192,7 @@ set B2_SOURCES=%B2_SOURCES% mod_regex.cpp
 set B2_SOURCES=%B2_SOURCES% mod_sequence.cpp
 set B2_SOURCES=%B2_SOURCES% mod_set.cpp
 set B2_SOURCES=%B2_SOURCES% mod_string.cpp
+set B2_SOURCES=%B2_SOURCES% mod_summary.cpp
 set B2_SOURCES=%B2_SOURCES% mod_sysinfo.cpp
 set B2_SOURCES=%B2_SOURCES% mod_version.cpp
 
@@ -195,7 +200,8 @@ set B2_CXXFLAGS=%B2_CXXFLAGS% -DNDEBUG
 
 @echo ON
 %B2_CXX% %CXXFLAGS% %B2_CXXFLAGS% %B2_SOURCES% %B2_CXX_LINK%
+@if errorlevel 1 goto :Finish
 dir *.exe
 
 :Finish
-@exit /b %ERRORLEVEL%
+@cmd /c exit %ERRORLEVEL%

@@ -66,7 +66,7 @@ LIST * evaluate_rule( RULE * rule, OBJECT * rulename, FRAME * frame )
     profile_frame   prof[ 1 ];
     module_t      * prev_module = frame->module;
 
-    if ( DEBUG_COMPILE )
+    if ( is_debug_compile() )
     {
         /* Try hard to indicate in which module the rule is going to execute. */
         char buf[ 256 ] = "";
@@ -90,7 +90,7 @@ LIST * evaluate_rule( RULE * rule, OBJECT * rulename, FRAME * frame )
     if ( rule->procedure && rule->module != prev_module )
     {
         /* Propagate current module to nested rule invocations. */
-        frame->module = rule->module;
+        frame->module = b2::ensure_valid(rule->module);
     }
 
     /* Record current rule name in frame. */
@@ -98,7 +98,7 @@ LIST * evaluate_rule( RULE * rule, OBJECT * rulename, FRAME * frame )
     {
         frame->rulename = object_str( rulename );
         /* And enter record profile info. */
-        if ( DEBUG_PROFILE )
+        if ( is_debug_profile() )
             profile_enter( function_rulename( rule->procedure ), prof );
     }
 
@@ -153,10 +153,10 @@ LIST * evaluate_rule( RULE * rule, OBJECT * rulename, FRAME * frame )
         result.reset( function_run( function.get(), frame ) );
     }
 
-    if ( DEBUG_PROFILE && rule->procedure )
+    if ( is_debug_profile() && rule->procedure )
         profile_exit( prof );
 
-    if ( DEBUG_COMPILE )
+    if ( is_debug_compile() )
         debug_compile( -1, 0, frame );
 
     return result.release();
@@ -180,7 +180,7 @@ LIST * call_rule( OBJECT * rulename, FRAME * caller_frame, LOL * args )
     inner->prev_user = caller_frame->module->user_module
         ? caller_frame
         : caller_frame->prev_user;
-    inner->module = caller_frame->module;
+    inner->module = b2::ensure_valid(caller_frame->module);
 
     for ( int32_t a = 0; a < args->count; ++a)
     {
@@ -259,7 +259,7 @@ LIST * call_member_rule(
     inner->prev = caller_frame;
     inner->prev_user = caller_frame->module->user_module
         ? caller_frame : caller_frame->prev_user;
-    inner->module = caller_frame->module;
+    inner->module = b2::ensure_valid(caller_frame->module);
 
     args.swap( inner->args[0] );
 

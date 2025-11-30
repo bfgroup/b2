@@ -21,6 +21,9 @@ Distributed under the Boost Software License, Version 1.0.
 #include "value.h"
 #include "variable.h"
 
+#include "mod_args.h"
+#include "mod_command_db.h"
+#include "mod_db.h"
 #include "mod_jam_builtin.h"
 #include "mod_jam_class.h"
 #include "mod_jam_errors.h"
@@ -821,7 +824,10 @@ void bind_jam(FRAME * f)
 		.bind(set_module())
 		.bind(string_module())
 		.bind(sysinfo_module())
-		.bind(version_module());
+		.bind(version_module())
+		.bind(db_module())
+		.bind(command_db_module())
+		.bind(b2::args::args_module());
 }
 
 }} // namespace b2::jam

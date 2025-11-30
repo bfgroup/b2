@@ -34,15 +34,35 @@
 # rule. Standalone projects are not recorded and can only be referenced using
 # their project id.
 
+import args ;
 import "class" : new ;
 import modules ;
+import os ;
 import path ;
 import print ;
 import property-set ;
+import regex ;
 import sequence ;
+import command-db ;
 
 
-.debug-loading = [ MATCH ^(--debug-loading)$ : [ modules.peek : ARGV ] ] ;
+args.add-arg project-search : --project-search
+    : "Defines search paths for resolving global, i.e. rooted, project references." ;
+
+args.add-arg debug-loading : --debug-loading
+    : "Display the progress of loading projects."
+    : flag ;
+
+args.add-arg debug-project-search : --debug-project-search
+    : "Display the progress of searching for projects."
+    : flag ;
+
+args.add-arg build-dir : --build-dir
+    : "Specify the directory to output build artifacts." ;
+
+.debug-loading = [ args.get-arg debug-loading ] ;
+.debug-project-search = [ args.get-arg debug-project-search ] ;
+.global-build-dir = [ args.get-arg build-dir ] ;
 
 
 # Loads the Jamfile at the given location. After loading, project global file
@@ -141,12 +161,42 @@ rule load-parent ( location )
 #
 rule find ( name : current-location )
 {
+    name = [ NORMALIZE_PATH $(name) ] ;
     local project-module ;
 
     # Try interpreting name as project id.
     if [ path.is-rooted $(name) ]
     {
         project-module = $($(name).jamfile-module) ;
+        if ! $(project-module)
+        {
+            # Not immediately found as a project. Try and search for a project
+            # we can import.
+            local root-and-jamfile = [ search $(name) ] ;
+            local root = $(root-and-jamfile[1]) ;
+            local jamfile = $(root-and-jamfile[2]) ;
+            if $(root)
+            {
+                local caller-project = [ CALLER_MODULE ] ;
+                local caller-module = [ $(caller-project).project-module ] ;
+                if $(jamfile)
+                {
+                    modules.call-in $(caller-module)
+                        : use-packages $(jamfile) ;
+                }
+                else
+                {
+                    if $(.debug-project-search)
+                    {
+                        ECHO Using project '$(name)' from '$(root)' ;
+                    }
+                    modules.call-in $(caller-module)
+                        : use-project $(name) : $(root) ;
+                    load-used-projects $(caller-module) ;
+                }
+            }
+            project-module = $($(name).jamfile-module) ;
+        }
     }
 
     if ! $(project-module)
@@ -174,6 +224,119 @@ rule find ( name : current-location )
     }
 
     return $(project-module) ;
+}
+
+
+B2_PROJECT_PATH = [ modules.peek : B2_PROJECT_PATH ]
+    [ regex.split-list
+        [ args.get-arg project-search ]
+            : [ os.path-separator ] ] ;
+{
+    while $(B2_PROJECT_PATH)
+    {
+        local root = $(B2_PROJECT_PATH[1]) ;
+        local path = [ path.make $(B2_PROJECT_PATH[2]) ] ;
+        B2_PROJECT_PATH = $(B2_PROJECT_PATH[3-]) ;
+        if $(root) && $(path)
+        {
+            path = [ path.root $(path) [ path.pwd ] ] ;
+            .search-path.$(root) += $(path) ;
+        }
+    }
+}
+
+
+rule add-project-search ( root : search-paths + )
+{
+    for local search-path in $(search-paths)
+    {
+        if ! [ path.is-rooted $(search-path) ]
+        {
+            local prj = [ current ] ;
+            search-path = [ path.join [ $(prj).location ] $(search-path) ] ;
+            search-path = [ path.root $(search-path) [ path.pwd ] ] ;
+        }
+        .search-path.$(root) += $(search-path) ;
+    }
+}
+
+
+rule search ( name )
+{
+    if [ path.is-rooted $(name) ]
+    {
+        # Check for a regular B2 project at an exactly matched registered
+        # search path location.
+        for local dir in "$(.search-path.$(name))"
+        {
+            local jamfile = [ path.glob $(dir) : $(JAMROOT) $(JAMFILE) ] ;
+            if $(jamfile)
+            {
+                return $(dir) ;
+            }
+        }
+        # Check for a regular B2 project relative to the search path and
+        # project subdir.
+        for local dir in "$(.search-path./)"
+        {
+            dir = $(dir)$(name) ;
+            local jamfile = [ path.glob $(dir) : $(JAMROOT) $(JAMFILE) ] ;
+            if $(jamfile)
+            {
+                return $(dir) ;
+            }
+        }
+        # Do searching for various dir names and jamfiles based on the built
+        # basename <a>_<b>_<c>[.jam].
+        local root = [ path.parent $(name) ] ;
+        local base = [ path.basename $(name) ] ;
+        local sub = $(base) ;
+        while $(base)
+        {
+            # Check for a regular B2 project in the search path and subdir base.
+            for local dir in $(.search-path.$(root))
+            {
+                dir = [ path.join $(dir) $(base) ] ;
+                local jamfile = [ path.glob $(dir) : $(JAMROOT) $(JAMFILE) ] ;
+                if $(jamfile)
+                {
+                    return $(dir) ;
+                }
+            }
+            # Check for a regular B2 project in the search path and subdir subpath.
+            for local dir in $(.search-path.$(root))
+            {
+                dir = [ path.join $(dir) $(sub) ] ;
+                local jamfile = [ path.glob $(dir) : $(JAMROOT) $(JAMFILE) ] ;
+                if $(jamfile)
+                {
+                    return $(dir) ;
+                }
+            }
+            # Check for a <base>.jam to include.
+            for local dir in $(.search-path.$(root))
+            {
+                local jamfile = [ path.glob $(dir) : $(base:L).jam ] ;
+                if $(jamfile)
+                {
+                    return $(dir) $(jamfile[1]) ;
+                }
+            }
+            if [ path.has-parent $(root) ]
+            {
+                sub = [ path.join [ path.basename $(root) ] $(sub) ] ;
+                base = [ path.basename $(root) ] $(base) ;
+                base = $(base:L:J=_) ;
+                root = [ path.parent $(root) ] ;
+            }
+            else
+            {
+                sub = ;
+                base = ;
+                root = ;
+            }
+        }
+    }
 }
 
 
@@ -298,7 +461,9 @@ PACKAGE_MANAGER_BUILD_INFO(CONAN) = "conanbuildinfo.jam" ;
 # 3. Environment variable "PACKAGE_MANAGER_BUILD_INFO".
 # 4. Conan, others.
 #
-local .use-package-manager = [ MATCH "^--use-package-manager=(.*)$" : [ modules.peek : ARGV ] ] ;
+args.add-arg use-package-manager : --use-package-manage
+    : "Load target definitions from the given package manager." ;
+local .use-package-manager = [ args.get-arg use-package-manager ] ;
 PACKAGE_MANAGER_BUILD_INFO ?= $(PACKAGE_MANAGER_BUILD_INFO($(.use-package-manager:U))) ;
 PACKAGE_MANAGER_BUILD_INFO ?= [ modules.peek : PACKAGE_MANAGER_BUILD_INFO ] ;
 PACKAGE_MANAGER_BUILD_INFO ?= $(PACKAGE_MANAGER_BUILD_INFO(CONAN)) ;
@@ -322,7 +487,7 @@ rule load-package-manager-build-info ( )
         if $(pm) && ! ( $(pm-tag) in $(.package-manager-build-info) )
         {
             .package-manager-build-info += $(pm-tag) ;
-            # We found a matching builf info to load, but we have to be careful
+            # We found a matching build info to load, but we have to be careful
             # as the loading can affect the current project since it can define
             # sub-projects. Hence we save and restore the current project.
             local saved-project = $(.current-project) ;
@@ -488,14 +653,6 @@ rule load-aux ( module-name : file )
 }
 
 
-.global-build-dir = [ MATCH ^--build-dir=(.*)$ : [ modules.peek : ARGV ] ] ;
-if $(.global-build-dir)
-{
-    # If the option is specified several times, take the last value.
-    .global-build-dir = [ path.make $(.global-build-dir[-1]) ] ;
-}
-
-
 # Initialize the module for a project.
 #
 rule initialize (
@@ -566,11 +723,12 @@ rule initialize (
 
     # load-parent can end up loading this module again. Make sure this is not
     # duplicated.
+    local attributes ;
     if ! $($(module-name).attributes)
     {
         $(module-name).attributes = [ new project-attributes $(location)
             $(module-name) ] ;
-        local attributes = $($(module-name).attributes) ;
+        attributes = $($(module-name).attributes) ;
 
         if $(location)
         {
@@ -619,6 +777,9 @@ rule initialize (
             {
                 .first-project-root = $(module-name) ;
             }
+            # Set the default build-dir so that we don't get build results
+            # spread out everywhere.
+            # $(attributes).set build-dir : ".b2/bin" ;
         }
 
         local parent ;
@@ -642,6 +803,12 @@ rule initialize (
     }
 
     .current-project = [ target $(module-name) ] ;
+
+    if $(jamroot) && [ $(attributes).get build-dir ]
+    {
+        command-db.set-output-dir
+            [ path.native [ $(attributes).get build-dir ] ] ;
+    }
 }
 
 
@@ -1119,8 +1286,6 @@ module project-rules
     {
         import toolset ;
 
-        local saved-project = [ modules.peek project : .current-project ] ;
-
         # Temporarily change the search path so the module referred to by
         # 'using' can be placed in the same directory as Jamfile. User will
         # expect the module to be found even though the directory is not in
@@ -1133,13 +1298,6 @@ module project-rules
             $(9) : $(10) : $(11) : $(12) : $(13) : $(14) : $(15) : $(16) : $(17)
             : $(18) : $(19) ;
         modules.poke : BOOST_BUILD_PATH : $(x) ;
-
-        # The above might have clobbered .current-project in case it caused a
-        # new project instance to be created (which would then automatically
-        # get set as the 'current' project). Restore the correct value so any
-        # main targets declared after this do not get mapped to the loaded
-        # module's project.
-        modules.poke project : .current-project : $(saved-project) ;
     }
 
     rule import ( * : * : * )
@@ -1163,6 +1321,7 @@ module project-rules
     {
         import path ;
         import project ;
+        import command-db ;
 
         local caller = [ CALLER_MODULE ] ;
         local attributes = [ project.attributes $(caller) ] ;
@@ -1233,6 +1392,12 @@ module project-rules
                 }
             }
         }
+
+        if $(explicit-build-dir)
+        {
+            command-db.set-output-dir
+                [ path.native [ $(attributes).get build-dir ] ] ;
+        }
     }
 
     # Declare and set a project global constant. Project global constants are
@@ -1266,8 +1431,9 @@ module project-rules
         import path ;
         local caller = [ CALLER_MODULE ] ;
         local location = [ project.attribute $(caller) location ] ;
-        modules.poke $(caller) : .used-projects : [ modules.peek $(caller) :
-            .used-projects ] $(id) [ path.root $(where) $(location) ] ;
+        where = [ path.root [ path.make $(where) ] $(location) ] ;
+        modules.poke $(caller) : .used-projects
+            : [ modules.peek $(caller) : .used-projects ] $(id) $(where) ;
     }
 
     rule build-project ( dir )
@@ -1415,6 +1581,55 @@ module project-rules
                 : $(2) : $(3) : $(4) : $(5) : $(6) : $(7) : $(8) : $(9) : $(10)
                 : $(11) : $(12) : $(13) : $(14) : $(15) : $(16) : $(17) : $(18)
                 ] ;
+        }
+    }
+
+    # Defines search paths for resolving global, i.e. rooted, project references.
+    rule project-search ( root : search-paths + )
+    {
+        import project ;
+        project.add-project-search $(root) : $(search-paths) ;
+    }
+
+    # Adds the project, or subdirectory of the project, location to the search
+    # of importing modules.
+    rule import-search ( reference )
+    {
+        import modules ;
+        import path ;
+        import project ;
+        local dir ;
+        if ! $(dir)
+        {
+            local project-dir = [ project.search $(reference) ] ;
+            if $(project-dir)
+            {
+                # Resolved it as a project reference.
+                dir = [ path.native $(project-dir) ] ;
+            }
+        }
+        if ! $(dir)
+        {
+            local os-dir = [ path.root [ path.make $(reference) ] [ path.pwd ] ] ;
+            if ! [ CHECK_IF_FILE [ path.native $(os-dir) ] ]
+            {
+                # It's not a file, i.e. it's a directory.
+                dir = [ path.native $(os-dir) ] ;
+            }
+        }
+        if $(dir)
+        {
+            local b2-path = [ modules.peek : BOOST_BUILD_PATH ] ;
+            if ! $(dir) in $(b2-path)
+            {
+                modules.poke : BOOST_BUILD_PATH : $(dir) $(b2-path) ;
+            }
+        }
+        else
+        {
+            import errors ;
+            errors.error Unable find project reference '$(reference)'. ;
+            return ;
         }
     }
 }

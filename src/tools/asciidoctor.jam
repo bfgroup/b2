@@ -130,6 +130,13 @@ rule init ( command * )
         # TODO: Design and implement a mechanism to resolve generator conflicts.
         generators.override asciidoctor.convert : boostbook.docbook-to-onehtml ;
     }
+    else
+    {
+        if ! $(command)
+        {
+            return ;
+        }
+    }
 
     # The command.. Default is bare asciidoctor.
     command ?= asciidoctor ;
@@ -140,7 +147,16 @@ rule init ( command * )
     {
         local t = [ common.find-tool $(c) ] ;
         t ?= $(c) ;
-        ASCIIDOCTOR += $(t) ;
+        if [ MATCH "(\ )" : $(t) ]
+        {
+            # Ruby handles quotes weirdly. So we only add them if absolutely
+            # needed.
+            ASCIIDOCTOR += \"$(t)\" ;
+        }
+        else
+        {
+            ASCIIDOCTOR += $(t) ;
+        }
     }
 }
 
@@ -186,11 +202,13 @@ class asciidoctor-generator : generator
         for local p in [ $(property-set).raw ]
         {
             if $(p:G) in <asciidoctor-attribute> <asciidoctor-doctype>
-                <flags>
+                <flags> <location>
             {
                 raw-set += $(p) ;
             }
         }
+        local relevant-ps = [ $(property-set).relevant $(property-set) ] ;
+        raw-set += [ $(relevant-ps).raw ] ;
         raw-set = [ feature.expand-composites $(raw-set) ] ;
         raw-set += [ $(property-set).incidental ] ;
         property-set = [ property-set.create $(raw-set) ] ;
@@ -208,5 +226,5 @@ feature.compose <asciidoctor-backend>pdf : <flags>"-r asciidoctor-pdf" ;
 
 actions convert
 {
-    "$(ASCIIDOCTOR)" -o$(_)"$(<:D=)" -D$(_)"$(<:D)" -b$(_)"$(BACKEND)" -a$(_)"$(ATTRIBUTE)" -d$(_)"$(DOCTYPE)" $(FLAGS) "$(>)"
+    $(ASCIIDOCTOR) -o$(_)"$(<:D=)" -D$(_)"$(<:D)" -b$(_)"$(BACKEND)" -a$(_)"$(ATTRIBUTE)" -d$(_)"$(DOCTYPE)" $(FLAGS) "$(>)"
 }

@@ -259,6 +259,14 @@ struct list_cref::iterator
 	{
 		return list_i - b.list_i;
 	}
+	inline iterator operator+(difference_type count) const
+	{
+		return iterator(list_i + count);
+	}
+	inline iterator operator-(difference_type count) const
+	{
+		return iterator(list_i - count);
+	}
 
 	private:
 	LISTITER list_i;
@@ -496,6 +504,7 @@ struct list_ref : private list_cref
 
 	// list operations
 	inline list_ref & slice(size_type i, size_type j = -1);
+	inline list_cref cref() const;
 };
 // end::reference[]
 /* tag::reference[]
@@ -648,6 +657,7 @@ inline list_ref & list_ref::operator+(T value) // <2>
 
 Adds a single value to the end of the list. The list is returned to allow for
 chaining.
+
 end::reference[] */
 inline list_ref & list_ref::push_back(OBJECT * value)
 {
@@ -715,6 +725,8 @@ inline list_ref & list_ref::slice(size_type i, size_type j)
 	list_obj = list_sublist(list_obj, i, (j < 0 ? length() + j : j) - i + 1);
 	return *this;
 }
+
+inline list_cref list_ref::cref() const { return list_cref(list_obj); }
 
 /* tag::reference[]
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2022 René Ferdinand Rivera Morell
+Copyright 2022-2023 René Ferdinand Rivera Morell
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
 */
@@ -9,9 +9,13 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include "config.h"
 
+#include "strview.h"
+
 #include <cstdint>
+#include <cstdio>
 #include <cstring>
 #include <limits>
+#include <memory>
 #include <string>
 
 namespace b2 {
@@ -44,6 +48,7 @@ struct value
 	virtual ~value() {}
 	virtual type get_type() const = 0;
 	virtual bool equal_to(const value & o) const = 0;
+	virtual int compare_to(const value & o) const = 0;
 	virtual str_view as_string() const = 0;
 	virtual double as_number() const = 0;
 	virtual object * as_object() const = 0;
@@ -62,6 +67,10 @@ struct value
 	{
 		return make(str.c_str(), str.size());
 	}
+	static inline value * make(string_view str)
+	{
+		return make(str.data(), str.length());
+	}
 	static value * make(object * obj);
 	static value * make(double v);
 	static inline value * copy(value * v) { return v; }
@@ -69,6 +78,28 @@ struct value
 	static void done();
 
 	inline bool has_value() const { return get_type() == type::null; }
+
+	template <typename T>
+	static inline value * as_string(T v)
+	{
+		return value::make(std::to_string(v));
+	}
+
+	template <typename... Args>
+	static inline value * format(const char * f, Args... args)
+	{
+		auto size = std::snprintf(nullptr, 0, f, args...);
+		std::unique_ptr<char[]> s(new char[size + 1]);
+		std::snprintf(s.get(), size + 1, f, args...);
+		return value::make(s.get(), size);
+	}
+
+	inline int compare(const value & other) const
+	{
+		if (get_type() != other.get_type())
+			return int(get_type()) - int(other.get_type());
+		return compare_to(other);
+	}
 };
 
 typedef value * value_ptr;

@@ -1,11 +1,210 @@
 [[b2.history]]
 = History
 
+== Version 5.4.0
+
+* *New*: Add initial support for {CPP}-26 Contracts for GCC based toolsets
+  (like clang).
+  -- _René Ferdinand Rivera Morell_
+* *New*: Allow explicit target `triple` for `clang-linux` and `clang-darwin`.
+  -- _Dmitry Arkhipov_
+* *New*: Change documentation style to support light/dark user preference.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Added the ability to escape the '$' character before '(' as "$$" which
+  will allow using the "$()" and "$(())" expressions of bash, sh, and other
+  shells.
+  -- _Ivan Kotov_
+* Fix invoking asciidoctor on Windows.
+  -- _René Ferdinand Rivera Morell_
+* Fix, propagate `dll-path` to shared libraries.
+  -- _Dmitry Arkhipov_
+* Fix mpi compiler detection to detect not just the first one (`mpi++`).
+  -- _Samuel Debionne_
+* Fix flag options, that are not registered as args, not being recognized.
+  Fixes `--show-libraries` in Boost build files.
+  -- _Dmitry Arkhipov_
+
+== Version 5.3.3
+
+* Fix `stdlib=libc++` feature being applied to compiles other than {CPP}.
+  -- _Dmitry Arkhipov_
+* Fix silently ignored argument parsing errors.
+  -- _Dmitry Arkhipov_
+* Fix not allowing "/" in paths for msvc version detection.
+  -- _chausner_
+
+== Version 5.3.2
+
+Fix regression for handling of the `--command-database` option. The new command
+line arguments parsing made the output to be reset and cleared causing nothing
+to get output for the commands. Thanks to _Dmitry Arkhipov_ for the fix.
+
+== Version 5.3.1
+
+Fix backward incompatibility of `option.get` if an argument is not added with
+`args.add-arg`. When such an argument isn't registered we fail to check `ARGV`
+directly as a backup, for backward compatibility. This fixes that problem by
+checking if an argument is registered, and if not falling back on the direct
+`ARGV` check.
+
+== Version 5.3.0
+
+Biggest changes for this release is the creation of two new toolsets: `ibmcxx`
+and `cc`. The former covers all the IBM compilers, and the latter is a generic
+C compiler toolset.
+
+* *New*: Replace the old `vacpp` and `xlcpp` with a new `ibmcxx` toolset that
+  supports the old compilers and the new "IBM XL" and  "IBM Open XL" compilers.
+  -- _René Ferdinand Rivera Morell_ and _Chris Ward_
+* *New*: Add generic `cc` toolset for simply, direct, configuration of unknown
+  C compiler toolsets (for example `tcc`).
+  -- _René Ferdinand Rivera Morell_
+* *New*: Add `args` module for common handling of both native and Jam side
+  command line arguments.
+  -- _René Ferdinand Rivera Morell_
+* Fix command database output file path when an output dir is not given.
+  -- _René Ferdinand Rivera Morell_
+* Fix asciidoctor ignoring relevant features when building which caused invalid
+  reuse of the target.
+  -- _René Ferdinand Rivera Morell_
+* Add documentation for clang and emscripten toolsets.
+  -- _Nikita Kniazev_
+* Fix doxygen tool to properly handle paths relative to the wording dir or
+  absolute paths.
+  -- _Dmitry Arkhipov_
+* Fix staging path calculation when using install prefix's.
+  -- _Dmitry Arkhipov_
+* Make `toolset.using` preserve current project to allow for calling it in more
+  contexts with minimal effort.
+  -- _Dmitry Arkhipov_
+* Updated cxxstd=latest for gcc and clang to account for {CPP} 26.
+  -- _Andrey Semashev_
+* Fix Building on Haiku OS which doesn't have `wait4`.
+  -- _Fas Xmut_
+* Rewrite the command like argument parsing to use the Lyra library. The result
+  is that arguments from Jam and native are integrated and available with the
+  built-in `-h` help.
+  -- _René Ferdinand Rivera Morell_
+
+WARNING: The `vacpp` and `xlcpp` have been removed in favor of `ibmcxx` as the
+latter covers the same support.
+
+== Version 5.2.1
+
+This patch reverts the change to define `_HAS_EXCEPTIONS=0` for Dinkumware
+std library. It has the undesired effect of changing the ABI. It's better for
+user code to handle the combination of turning off exceptions while treating
+warnings as errors, and getting warnings/errors from the std library by having
+the users silence the warning themselves.
+
+This patch also fixes the case of asking to initialize any msvc toolset
+versions (`using msvc ;`) when there are already versions initialized. Instead
+of erroring to say that a version is already in use, it considers the set
+of already initialized msvc toolsets as satisfying the request to generally
+initialize msvc.
+
+== Version 5.2.0
+
+Many fixes in this release from regular contributors Nikita and Dmitry. There
+are a couple of new features.. First the ability to have `dll-path` in searched
+libraries. Which makes it possible to better support system/external libraries.
+The second new feature is the addition of generating `compile_commands.json`
+for IDE and tool integration. That has a been a wish item for a long time.
+
+* *New*: Add support for generating `compile_commands.json` command database
+  for some IDE integration.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Addition of a module (`db`) for structured data management. Has a
+  `property-db` class that can write out as JSON data.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Allow adding dll-path to usage requirements of searched libraries.
+  Which makes it possible to adjust search paths for dynamic libs on the
+  platform.
+  -- _Dmitry Arkhipov_
+* Fix incorrect recursive loading of modules when doing recursive importing of
+  modules. The recursive loading would cause stack overflows.
+  -- _René Ferdinand Rivera Morell_
+* Default to building with Clang on FreeBSD and OpenBSD.
+  -- _Nikita Kniazev_
+* Fix Solaris/SunOS detection in engine for `OS=SUNOS` and `OS=SOLARIS`.
+  -- _Nikita Kniazev_
+* Allow some tools to be default initialized with `using` multiple times. The
+  tools are `asciidoctor`, `fop`, `gettext`, `pkg-config`, `python`, `sass`,
+  and `saxonhe`.
+  -- _Dmitry Arkhipov_
+* Fix using relevant features in ac module that would cause incorrect configure
+  checks.
+  -- _Dmitry Arkhipov_
+* Fix application of -m31, -m32, -m64 for address model on certain hardware and
+  avoid adding them when not supported, generally.
+  -- _Nikita Kniazev_
+* Fix incorrectly attaching manifest when not targeting Windows for engine
+  bootstrap build.
+  -- _Nikita Kniazev_
+* Fix `embed-manifest-via=linker` for clang-win toolset.
+  -- _Nikita Kniazev_
+* Fix incorrect `unknown` OS name, to use correct `none`. Which is needed for
+  correct emscripten toolset building.
+  -- _Nikita Kniazev_
+* Fix: For msvc toolset, register only the versions that have been asked to
+  init.
+  -- _Nikita Kniazev_
+* Fix: Suppress spurious `1 file(s) copied.` message after every test.
+  -- _Nikita Kniazev_
+* Fix: Improve handling of install directories.
+  -- _Dmitry Arkhipov_
+* Fix: For msvc toolset, recognize Visual Studio 2022 v17.10.0, which uses
+  toolchain version 14.40.33807.
+  -- _Dmitry Andric_
+* Fix: For msvc toolset, exception-handling=off should define
+  `_HAS_EXCEPTIONS=0` for Dinkumware/MSSTL.
+  -- _Nikita Kniazev_
+
+== Version 5.1.0
+
+This is mostly a bugfix release to account for issues impacting Boost Libraries.
+There is one "big" change though. It can be rather difficult to find build
+failures when running larger builds. To facilitate figuring out problems the
+brief summary output at the end of a build is now less brief. It now includes
+a *sorted* list of the targets that got skipped and failed. The output of those
+lists mirrors the general skipped/failed items. Hence it's possible to search
+for the same strings in the rest of the output quickly.
+
+* *New*: Add listing of failed and skipped targets to end of build summary to
+  make it easier to find what fails.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Add `mpi.run-flags` to `mpi` toolset that allows for arbitrary flags
+  applied to running mpi targets. This allows, for example, adding
+  `--oversubscribe` flag to make it possible to run tests where the tasks are
+  more than the nodes available.
+  -- _René Ferdinand Rivera Morell_
+* Fix spurious errors when the header scanning tries to scan empty file names.
+  -- _René Ferdinand Rivera Morell_
+* Make C/C++/ObjC include directive scanning pattern more strict to avoid
+  trying to scan for empty file names.
+  -- _Andrey Semashev_
+* Fix mingw linker commands to always replace backslashes with forward slashes.
+  -- _Christian Seiler_
+* Fix QCC debug build flag. The QCC toolset was using an old, no longer
+  supported, debug symbols option.
+  -- _John McFarlane_
+
+== Version 5.0.1
+
+* Fix compile errors for older versions of GCC and Clang toolset for the engine.
+  We now support building the engine with GCC 4.7 and Clang 3.6 onward.
+  -- _René Ferdinand Rivera Morell_
+* Fix `import-search` failing to find imports on Windows bacause of incorrect
+  native vs. non-native path handling.
+  -- _René Ferdinand Rivera Morell_
+* Support cross-compile install of B2, using `target-os=xyz`.
+  -- _René Ferdinand Rivera Morell_
+
 == Version 5.0.0
 
 This is a new era in B2. The drive of this new major version is to move the
 core build system from being implemented in Jam to {CPP}. This initial release
-does is only a start in this move by having some minimal aspects implemented
+is only a start in this move by having some minimal aspects implemented
 in {CPP} using a new Jam/{CPP} native binding system. Even though this is a
 major release, the goal is to still have backward compatibility for existing
 project build files. But that backward compatibility is not guaranteed for
@@ -23,8 +222,97 @@ other Jam files.
 * *New*: Add `require-b2` builtin rule to verify the B2 version a particular
   Jam file needs.
   -- _René Ferdinand Rivera Morell_
+* *New*: Add `regex.grep` builtin that does parallel (where available) file
+  content search with regex matching.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Make parts of internals thread safe to support parallel built-ins.
+  Currently includes Jam values, hash tables, and filesystem.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Add `import-search` project rule to declare additional search paths
+  for `import` that refer to searched project locations, or other directories.
+  -- _René Ferdinand Rivera Morell_
 * Fix consistent use of `OPT_SEMAPHORE` and documentation of `JAM_SEMAPHORE`.
   -- _Thomas Brown_
+* Fix archive actions failing for mingw.
+  -- _René Ferdinand Rivera Morell_
+
+IMPORTANT: Building B2 with VisualStudio 2013, i.e. MSVC 12, is no longer
+supported or tested. The effort to engineer workarounds for the missing {CPP}11
+features became too much. And was taking away from other improvements.
+
+== Version 4.10.1
+
+* Silence warnings for using standard deprecated functions by Apple clang
+  toolset in b2 build.
+  -- _René Ferdinand Rivera Morell_
+
+== Version 4.10.0
+
+This release contains many bug fixes but along the way also cleanup and
+refactoring of many toolsets, thanks to Nikita.
+
+* *New*: Scan assembler files for C Preprocessor includes.
+  -- _Nikita Kniazev_
+* Fix: Inherit generator overrides from a base toolset.
+  -- _Nikita Kniazev_
+* *New*: Add linemarkers feature that on preprocessing targets changes behavior to
+  emit/omit line directives like `+#line+` and `+#<linenum>+`.
+  -- _Nikita Kniazev_
+* Fix compiler name for QNX.
+  -- _James Choi_
+* Fix openssl name handling.
+  -- _Dmitry Arkhipov_
+* Fix clang-win assembler path deduction.
+  -- _Nikita Kniazev_
+* Fix toolset sub-feature requirements inheritance.
+  -- _Nikita Kniazev_
+* Unify compile and link of clang-linux toolset with gcc toolset.
+  -- _Nikita Kniazev_
+* Fix same directory pch header generation for msvc toolset.
+  -- _Nikita Kniazev_
+* Implement `--durations` which reports top targets by execution time.
+  -- _Nikita Kniazev_
+* Change clang-darwin to inherit from clang-linux and unify compile commands.
+  -- _Nikita Kniazev_
+* Fix clang-linux to not override RPATH_OPTION.
+  -- _Nikita Kniazev_
+* Fix inadvertently running configuration checks that shouldn't (as reported by
+  Alexander Grund). By changing `<build>no` conditionals evaluation to short
+  circuit.
+  -- _Nikita Kniazev_
+* Fix same toolset overrides (inherit-overrides).
+  -- _Nikita Kniazev_
+* *New*: Add using the C processors for assembly source files.
+  -- _Nikita Kniazev_
+* Many improvements and cleanup of internal testing.
+  -- _Nikita Kniazev_
+* Unify gcc and clang-linux soname option handling and disable it on Windows.
+  -- _Nikita Kniazev_
+* Unity gcc/mingw linking of shared and import libs.
+  -- _Nikita Kniazev_
+* Fix pdb generation ordering and naming issues.
+  -- _Nikita Kniazev_
+* Unify clang-darwin linking with gcc.
+  -- _Nikita Kniazev_
+* Fix mingw/msys/cygwin, winthreads/pthread inconsistencies to correct compiler
+  flags.
+  -- _Nikita Kniazev_
+* Unify clang-vxworks by inheriting from clang-linux.
+  -- _Nikita Kniazev_
+* Don't store empty config cache and log.
+  -- _Nikita Kniazev_
+* Fix generator custom rule name inheritance. This affects cygwin/mingw linking.
+  -- _Nikita Kniazev_
+* Fix testing.execute=off to correct run-fail behavior.
+  -- _Nikita Kniazev_
+* Fix use-project with native paths.
+  -- _René Ferdinand Rivera Morell_
+* Fix msvc auto config version priority. Now msvc toolsets are configured in
+  correct newest to oldest regardless of being found from the registry or not.
+  -- _René Ferdinand Rivera Morell_
+* *New*: Add support for automatic searching of external projects for global
+  target and project references.
+  -- _René Ferdinand Rivera Morell_
 
 == Version 4.9.6
 

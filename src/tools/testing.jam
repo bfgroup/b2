@@ -34,6 +34,7 @@
 
 
 import alias ;
+import args ;
 import build-system ;
 import "class" ;
 import common ;
@@ -224,7 +225,8 @@ rule dump-tests
     }
 }
 
-if ( --dump-tests in [ modules.peek : ARGV ] )
+args.add-arg dump-tests : --dump-tests : "?" ;
+if [ args.get-arg dump-tests ]
 {
     IMPORT testing : dump-tests : : testing.dump-tests ;
     build-system.add-pre-build-hook testing.dump-tests ;
@@ -243,7 +245,7 @@ local rule get-library-name ( path )
     if $(match1) { return $(match1[2]) ; }
     else if $(match2) { return $(match2[2]) ; }
     else if $(match3) { return "" ; }
-    else if --dump-tests in [ modules.peek : ARGV ]
+    else if [ args.get-arg dump-tests ]
     {
         # The 'run' rule and others might be used outside boost. In that case,
         # just return the path, since the 'library name' makes no sense.
@@ -253,7 +255,7 @@ local rule get-library-name ( path )
 
 
 # Was an XML dump requested?
-.out-xml = [ MATCH --out-xml=(.*) : [ modules.peek : ARGV ] ] ;
+.out-xml = [ args.get-arg out-xml ] ;
 
 
 # Takes a target (instance of 'basic-target') and prints
@@ -348,6 +350,28 @@ local rule register-fail-expected ( source-type : test-type )
         testing.expect-failure : $(source-type) : $(test-type) ] ;
 }
 
+class capture-output-generator : generator
+{
+    import generators ;
+
+    rule run ( project name ? : property-set : sources + )
+    {
+        local result = [ generator.run $(project) $(name) : $(property-set)
+            : $(sources) ] ;
+
+        if $(result) && [ $(property-set).get <testing.execute> ] = off
+        {
+            # skip self and dependants but still build dependencies
+            local action = [ $(result[2]).action ] ;
+            local exe = [ $(action).sources ] ;
+            DEPENDS all : [ $(exe).actualize ] ;
+            return [ property-set.create <build>no ] $(result[2-]) ;
+        }
+
+        return $(result) ;
+    }
+}
+
 # Register generators. Depending on target type, either 'expect-success' or
 # 'expect-failure' rule will be used.
 generators.register-standard testing.expect-success : OBJ        : COMPILE      ;
@@ -358,7 +382,7 @@ generators.register-standard testing.expect-success : EXE        : LINK         
 register-fail-expected                                EXE        : LINK_FAIL    ;
 
 # Generator which runs an EXE and captures output.
-generators.register-standard testing.capture-output : EXE : RUN_OUTPUT ;
+generators.register [ class.new capture-output-generator testing.capture-output : EXE : RUN_OUTPUT ] ;
 
 # Generator which creates a target if sources run successfully. Differs from RUN
 # in that run output is not captured. The reason why it exists is that the 'run'
@@ -495,7 +519,9 @@ toolset.flags testing.capture-output LAUNCHER <testing.launcher> ;
 toolset.uses-features testing.capture-output :
     <testing.launcher> <testing.execute> <dll-path> <xdll-path> <target-os> ;
 
-if --remove-test-targets in [ modules.peek : ARGV ]
+args.add-arg remove-test-targets : --remove-test-targets
+    : "Delete intermediate test files for successful tests." ;
+if [ args.get-arg remove-test-targets ]
 {
     feature.set-default preserve-test-targets : off ;
 }
@@ -524,12 +550,6 @@ rule capture-output ( target : source : properties * )
     DEPENDS $(target) : [ on $(target) return $(INPUT_FILES) ] ;
 
     run-path-setup $(target) : $(source) : $(properties) ;
-
-    DISABLE_TEST_EXECUTION on $(target) = 0 ;
-    if [ feature.get-values testing.execute : $(properties) ] = off
-    {
-        DISABLE_TEST_EXECUTION on $(target) = 1 ;
-    }
 
     if ! [ feature.get-values testing.launcher : $(properties) ]
     {
@@ -625,10 +645,13 @@ else
     .CP            = cp ;
     .NULLIN        = "<" "/dev/null" ;
 }
+.NULL_OUT = [ modules.peek common : NULL_OUT ] ;
 
 
+args.add-arg verbose-test : --verbose-test
+    : "Include output of tests when run." ;
 .VERBOSE_TEST = 0 ;
-if --verbose-test in [ modules.peek : ARGV ]
+if [ args.get-arg verbose-test ]
 {
     .VERBOSE_TEST = 1 ;
 }
@@ -640,17 +663,12 @@ if --verbose-test in [ modules.peek : ARGV ]
 actions capture-output bind INPUT_FILES output-file
 {
     $(PATH_SETUP)
-    $(.SHELL_SET)status=$(DISABLE_TEST_EXECUTION)
-    if $(.STATUS_NOT_0)
-        echo Skipping test execution due to testing.execute=off
-        exit $(.EXIT_SUCCESS)
-    $(.ENDIF)
     $(LAUNCHER) "$(>)" $(ARGS) "$(INPUT_FILES)" > "$(output-file)" 2>&1 $(.NULLIN)
     $(.SET_STATUS)
     $(.RUN_OUTPUT_NL) >> "$(output-file)"
     echo EXIT STATUS: $(.STATUS) >> "$(output-file)"
     if $(.STATUS_0)
-        $(.CP) "$(output-file)" "$(<)"
+        $(.CP) "$(output-file)" "$(<)" $(.NULL_OUT)
     $(.ENDIF)
     $(.SHELL_SET)verbose=$(.VERBOSE_TEST)
     if $(.STATUS_NOT_0)
@@ -675,11 +693,6 @@ if [ os.name ] = VMS
     actions capture-output bind INPUT_FILES output-file
     {
         $(PATH_SETUP)
-        $(.SHELL_SET)status=$(DISABLE_TEST_EXECUTION)
-        if $(.STATUS_NOT_0)
-            $(.SAY) "Skipping test execution due to testing.execute=off"
-            exit "$(.EXIT_SUCCESS)"
-        $(.ENDIF)
         !! Execute twice - first for status, second for output
         set noon
         pipe $(LAUNCHER) $(>:W) $(ARGS) $(INPUT_FILES:W) 2>NL: >NL:

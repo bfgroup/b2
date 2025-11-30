@@ -19,7 +19,10 @@ on:
         "appveyor.yml",
         "azure-pipelines.yml",
         ".ci/azp-*.yml",
+        ".github/workflows/backport.yml",
+        ".github/workflows/core_tests.yml",
         ".github/workflows/installer_*.yml",
+        ".github/workflows/release_archives.yml",
       ]
 
 jobs:
@@ -63,7 +66,7 @@ jobs:
       TOOLSET: ${{ matrix.toolset }}
     steps:
       - name: "Checkout"
-        uses: actions/checkout@master
+        uses: actions/checkout@main
       - name: "Install"
         run: |
           sudo apt-get -o Acquire::Retries=3 update

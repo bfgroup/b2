@@ -55,7 +55,8 @@ rule init-cxxstd-flags ( toolset : condition * : version )
     local dialects = [ feature.values <cxxstd-dialect> ] ;
     dialects = [ set.difference $(dialects) : gnu iso ] ;
     local std ;
-    if [ version-ge $(version) : 12.0 ] { std = 2b ; }
+    if [ version-ge $(version) : 17.0 ] { std = 26 ; }
+    else if [ version-ge $(version) : 12.0 ] { std = 2b ; }
     else if [ version-ge $(version) : 10.0 ] { std = 20 ; }
     else if [ version-ge $(version) : 6.0 ] { std = 2a ; }
     else if [ version-ge $(version) : 5.0 ] { std = 17 ; }
@@ -91,20 +92,36 @@ local rule init-flags-cross ( toolset : condition * : architecture + : address-m
                 case x86-32 : arch = i386 ;
             }
 
-            toolset.flags $(toolset)
-                OPTIONS $(condition)/<target-os>$(target-os)/<architecture>$(_architecture_)/<address-model>$(_address-model_)
-                : "--target=$(arch)-$(vendor-sys)"
-                : unchecked ;
+            set-triple $(toolset) :
+                $(condition)/<target-os>$(target-os)/<architecture>$(_architecture_)/<address-model>$(_address-model_)
+                : "$(arch)-$(vendor-sys)"
+                ;
         }
     }
 }
 
-rule init-flags ( toolset : condition * : version )
+local rule set-triple ( toolset : condition  : triple )
+{
+    toolset.flags $(toolset) OPTIONS $(condition) : --target=$(triple)
+        : unchecked ;
+}
+
+rule init-flags ( toolset : condition * : version : triple ? )
 {
     init-cxxstd-flags $(toolset) : $(condition) : $(version) ;
 
-    init-flags-cross $(toolset) : $(condition) : arm x86 : 64 : darwin ;
-    init-flags-cross $(toolset) : $(condition) : arm x86 : 64 32 : linux ;
+    if ! $(triple)
+    {
+        init-flags-cross $(toolset) : $(condition) : arm x86 : 64 : darwin ;
+        init-flags-cross $(toolset) : $(condition) : arm x86 : 64 32 : linux ;
+    }
+    else
+    {
+        if $(triple) != none
+        {
+            set-triple $(toolset) : $(condition) : $(triple) ;
+        }
+    }
 
     # This is a temporary solution for doing combined architecture builds on macOS.
     toolset.flags $(toolset)

@@ -96,6 +96,13 @@ rule init ( command * )
         # Register generators
         generators.register [ new sass-generator sass.convert : SASS : CSS ] ;
     }
+    else
+    {
+        if ! $(command)
+        {
+            return ;
+        }
+    }
 
     # Setting up command
     if ! $(command)
@@ -166,7 +173,7 @@ class sass-generator : generator
     local rule recognized-feature ( feature )
     {
         local result ;
-        if $(feature:G) in <include> <flags>
+        if $(feature:G) in <include> <flags> <location>
         {
           result = true ;
         }

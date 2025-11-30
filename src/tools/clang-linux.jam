@@ -7,11 +7,27 @@
 #  License Version 1.0. (See accompanying file LICENSE.txt or
 #  https://www.bfgroup.xyz/b2/LICENSE.txt)
 
+#| tag::doc[]
+
+[[b2.reference.tools.compiler.clang-linux]]
+= Clang (GCC frontend)
+
+The `clang-linux` module supports Clang with GCC frontend and has the same
+options as link:#b2.reference.tools.compiler.gcc[`gcc`] toolset, with the
+addition of `<triple>` option.
+
+The value of that option is passed as the value of `--target=` flag, unless
+provided as `<triple>none`. In that case the flag is not passed to the build
+tools. If the option is not provided the build system may try to guess the
+correct target triple.
+
+|# # end::doc[]
+
+import args ;
 import common ;
 import toolset ;
 import feature ;
 import toolset : flags ;
-
 import clang ;
 import gcc ;
 import common ;
@@ -21,6 +37,7 @@ import type ;
 import numbers ;
 import os ;
 import property ;
+import rc ;
 import set ;
 
 feature.extend-subfeature toolset clang : platform : linux ;
@@ -29,17 +46,22 @@ toolset.inherit-generators clang-linux
     <toolset>clang <toolset-clang:platform>linux : gcc
   : gcc.mingw.link gcc.mingw.link.dll gcc.cygwin.link gcc.cygwin.link.dll ;
 
+local all-os = [ feature.values <target-os> ] ;
+local all-arch = [ feature.values <architecture> ] ;
+
 toolset.inherit-rules clang-linux : gcc ;
 toolset.inherit-flags clang-linux : gcc
   : <inlining>full
     <lto>on/<lto-mode>full
     <lto>on/<lto-mode>fat
+    <target-os>$(all-os)/<address-model>32
+    <target-os>$(all-os)/<address-model>64
+    <target-os>$(all-os)/<architecture>$(all-arch)/<address-model>32
+    <target-os>$(all-os)/<architecture>$(all-arch)/<address-model>64
   : INCLUDE-GCH
   ;
 
-if [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ] {
-  .debug-configuration = true ;
-}
+.debug-configuration = [ args.get-arg debug-configuration ] ;
 
 rule init ( version ? :  command * : options * ) {
   command = [ common.find-compiler clang-linux : clang++ : $(version) : $(command) ] ;
@@ -52,7 +74,8 @@ rule init ( version ? :  command * : options * ) {
     : version $(version) ] ;
 
   common.handle-options clang-linux : $(condition) : $(command) : $(options) ;
-  clang.init-flags clang-linux : $(condition) : $(version) ;
+  clang.init-flags clang-linux : $(condition) : $(version) :
+      [ feature.get-values <triple> : $(options) ] ;
 
   # Support for gcc root as the backend, this is mainly useful for clang/gcc on Windows
   # since on Linux gcc will be the default compiler already located on the PATH.
@@ -86,6 +109,23 @@ rule init ( version ? :  command * : options * ) {
     archiver = $(root)/bin/ar ;
     }
   toolset.flags clang-linux.archive .AR $(condition) : $(archiver[1]) ;
+
+    # - Resource compiler.
+    local rc = [ common.get-invocation-command-nodefault clang-linux : windres :
+        [ feature.get-values <rc> : $(options) ] : $(bin) : search-path ] ;
+    local rc-type = [ feature.get-values <rc-type> : $(options) ] ;
+    rc-type ?= windres ;
+    if ! $(rc)
+    {
+        # If we can not find an RC compiler we fallback to a null one that
+        # creates empty object files. This allows the same Jamfiles to work
+        # across the board. The null RC uses assembler to create the empty
+        # objects, so configure that.
+        rc = [ common.get-invocation-command clang-linux : as : : $(bin) : search-path ]
+            ;
+        rc-type = null ;
+    }
+    rc.configure $(rc) : $(condition) : <rc-type>$(rc-type) ;
 }
 
 rule get-full-version ( command-string )
@@ -108,6 +148,12 @@ rule get-short-version ( command-string : single-digit-since ? )
     return $(version[1]) ;
 }
 
+local rule compile-link-flags ( * )
+{
+    toolset.flags clang-linux.compile OPTIONS $(1) : $(2) ;
+    toolset.flags clang-linux.link OPTIONS $(1) : $(2) ;
+}
+
 ###############################################################################
 # Flags
 
@@ -117,6 +163,9 @@ toolset.flags clang-linux.compile INCLUDE-PCH : -include-pch ;
 # For clang, 'on' and 'full' are identical.
 toolset.flags clang-linux.compile OPTIONS <inlining>full : -Wno-inline ;
 
+compile-link-flags <address-model>32 : -m32 ;
+compile-link-flags <address-model>64 : -m64 ;
+
 # LTO
 toolset.flags clang-linux.compile OPTIONS <lto>on/<lto-mode>thin : -flto=thin ;
 toolset.flags clang-linux.link OPTIONS <lto>on/<lto-mode>thin : -flto=thin ;
@@ -125,8 +174,8 @@ toolset.flags clang-linux.compile OPTIONS <lto>on/<lto-mode>full : -flto=full ;
 toolset.flags clang-linux.link OPTIONS <lto>on/<lto-mode>full : -flto=full ;
 
 # stdlib selection
-toolset.flags clang-linux.compile OPTIONS <stdlib>gnu <stdlib>gnu11 : -stdlib=libstdc++ ;
+toolset.flags clang-linux.compile.c++ OPTIONS <stdlib>gnu <stdlib>gnu11 : -stdlib=libstdc++ ;
 toolset.flags clang-linux.link OPTIONS <stdlib>gnu <stdlib>gnu11 : -stdlib=libstdc++ ;
 
-toolset.flags clang-linux.compile OPTIONS <stdlib>libc++ : -stdlib=libc++ ;
+toolset.flags clang-linux.compile.c++ OPTIONS <stdlib>libc++ : -stdlib=libc++ ;
 toolset.flags clang-linux.link OPTIONS <stdlib>libc++ : -stdlib=libc++ ;

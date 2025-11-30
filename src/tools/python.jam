@@ -35,6 +35,7 @@ import feature ;
 import set ;
 import builtin ;
 import property-set ;
+import args ;
 
 
 # Make this module a project.
@@ -104,6 +105,18 @@ py3-version = ;
 rule init ( version ? : cmd-or-prefix ? : includes * : libraries ?
     : condition * : extension-suffix ? )
 {
+    if ! $(.initialized)
+    {
+        .initialized = true ;
+    }
+    else
+    {
+        if ! ( $(1) || $(2) || $(3) || $(4) || $(5) || $(6) )
+        {
+            return ;
+        }
+    }
+
     project.push-current $(.project) ;
 
     debug-message Configuring python... ;
@@ -229,7 +242,7 @@ local rule invokes-cygwin-symlink ( cmd )
 
 local rule debug-message ( message * )
 {
-    if --debug-configuration in [ modules.peek : ARGV ]
+    if [ args.get-arg debug-configuration ]
     {
         ECHO "notice:" "[python-cfg]" $(message) ;
     }

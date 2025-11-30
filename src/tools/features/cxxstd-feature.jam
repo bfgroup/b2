@@ -7,7 +7,7 @@ import feature ;
 
 #| tag::doc[]
 
-[[bbv2.builtin.features.cxxstd]]`cxxstd`::
+[[b2.builtin.features.cxxstd]]`cxxstd`::
 *Allowed values*: `98`, `03`, `0x`, `11`, `1y`, `14`, `1z`, `17`, `2a`, `20`,
 `2b`, `23`, `2c`, `26`, `latest`.
 +
@@ -19,8 +19,8 @@ up to the released standard version. Those are included following the GNU
 nomenclature as `0x`, `1y`, `1z`, `2a`, `2b` and `2c`. Depending on the compiler
 `latest` would map to one of those.
 
-NOTE: This is an `optional` feature. Hence when not specified the compiler
-default behaviour is used.
+TIP: This is an `optional` feature. Hence when not specified the compiler
+default behavior is used.
 
 NOTE: Please consult the toolset specific documentation for which `cxxstd`
 is supported.
@@ -33,7 +33,7 @@ feature.feature cxxstd
 
 #| tag::doc[]
 
-[[bbv2.builtin.features.cxxstd-dialect]]`cxxstd-dialect`::
+[[b2.builtin.features.cxxstd-dialect]]`cxxstd-dialect`::
 *Subfeature of* `cxxstd`
 +
 *Allowed values*: `iso`, `gnu`, `ms`.
