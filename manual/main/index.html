@@ -4116,7 +4116,103 @@ managers. Currently the supported ones are:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="b2.tasks.projectsearch"><a class="anchor" href="#b2.tasks.projectsearch"></a>5.11. Searching For Projects</h3>
+<h3 id="b2.tasks.packagemanagers.vcpkg"><a class="anchor" href="#b2.tasks.packagemanagers.vcpkg"></a>5.11. vcpkg support</h3>
+<div class="paragraph">
+<p><a href="https://learn.microsoft.com/vcpkg">vcpkg</a> is a cross-platform package manager
+for C and C&#43;&#43; developed by Microsoft. vcpkg provides first-class support
+for CMake and MSBuild build systems, but you can still use packages installed
+by vcpkg in b2 either as <a href="#b2.tutorial.prebuilt">prebuilt libraries</a>,
+with the help of <a href="#_pkg_config">pkg-config</a> tool, or if the package provides
+a <a href="#b2.extending.toolset_modules">toolset module</a>. In-built toolset modules
+(e.g. <code>openssl</code> are already integrated with this module).</p>
+</div>
+<div class="paragraph">
+<p>The module declares the project <code>/vcpkg</code> with a main target <code>/vcpkg//prefix</code>.
+The target can be used as a dependency to add its <code>&lt;include&gt;</code> and <code>&lt;search&gt;</code>
+usage requirements.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">lib sqlite3 : /vcpkg//prefix ;</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_initialization"><a class="anchor" href="#_initialization"></a>5.11.1. Initialization</h4>
+<div class="paragraph">
+<p>To enable vcpkg integration you need to declare it in a configuration file
+with the help of <code>using</code> rule:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">using vcpkg : [root] : [options] ... : [ condition ] ... ;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>root</code>: vcpkg installation root.</p>
+</li>
+<li>
+<p><code>options</code>: options that specify the location of vcpkg package installation
+tree. Allowed options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;include&gt;</code>: directory with header files;</p>
+</li>
+<li>
+<p><code>&lt;search&gt;</code>: directory with library binaries;</p>
+</li>
+<li>
+<p><code>&lt;prefix&gt;</code>: installation prefix for the triplet;</p>
+</li>
+<li>
+<p><code>&lt;triplet&gt;</code>: the triplet to use.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>condition</code>: properties that distinguish this configuration.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If options contain neither <code>&lt;include&gt;</code> nor <code>&lt;search&gt;</code>, they are set to
+<code>include</code> and <code>lib</code> subdirectories of <code>&lt;prefix&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>If options do not contain <code>&lt;prefix&gt;</code>, it is set to <code>root/&lt;triplet&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>If <code>root</code> is empty,  it is set to <code>installed</code> subdirectory of the directory
+pointed to by <code>VCPKG_ROOT</code> environment variable if it is not empty. Otherwise,
+<a href="https://learn.microsoft.com/vcpkg/concepts/manifest-mode">Manisfest mode</a> is
+assumed, and <code>vcpkg.json</code> file is searched for in the current directory and its
+parents. If the file is found, then <code>root</code> is set to <code>vcpkg_installed</code>
+subdirectory of its parent directory.</p>
+</div>
+<div class="paragraph">
+<p>If options do not contain <code>&lt;triplet&gt;</code>, it is set to the value of
+<code>VCPKG_DEFAULT_TRIPLET</code> environment variable if it is not empty. Otherwise,
+if there is exactly one triplet subdirectory of <code>root</code> directory, then its
+name is used.</p>
+</div>
+<div class="paragraph">
+<p>If <code>condition</code> does not contain a property of <code>&lt;variant&gt;</code>, and <code>options</code> do not
+contain <code>&lt;search&gt;</code>, then two versions are configured: one for
+<code>&lt;variant&gt;release</code> that sets <code>&lt;search&gt;</code> to <code>&lt;prefix&gt;/lib</code>, and another for
+<code>&lt;variant&gt;debug</code> that sets <code>&lt;search&gt;</code> to <code>&lt;prefix&gt;/debug/lib</code>.</p>
+</div>
+<div class="paragraph">
+<p>Finally, if <code>options</code> contain none of <code>&lt;include&gt;</code>, <code>&lt;search&gt;</code>, <code>&lt;prefix&gt;</code>, and
+<code>&lt;triplet&gt;</code> and <code>requirements</code> are empty, appropriate configurations for
+several default triplets provided by vcpkg are made.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="b2.tasks.projectsearch"><a class="anchor" href="#b2.tasks.projectsearch"></a>5.12. Searching For Projects</h3>
 <div class="paragraph">
 <p>B2 supports automatic searching for referenced global projects. For example,
 if you have references to <code>/boost/predef</code> with some minimal configuration B2
@@ -4125,7 +4221,7 @@ searching supports two modes: finding regular B2 project directories, and
 package/config style loading of single jam files.</p>
 </div>
 <div class="sect3">
-<h4 id="b2.tasks.projectsearch.path"><a class="anchor" href="#b2.tasks.projectsearch.path"></a>5.11.1. Search Path</h4>
+<h4 id="b2.tasks.projectsearch.path"><a class="anchor" href="#b2.tasks.projectsearch.path"></a>5.12.1. Search Path</h4>
 <div class="paragraph">
 <p>To control which and where projects are found one can use different methods:</p>
 </div>
@@ -4184,7 +4280,7 @@ with that <em>project-id</em> root.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.tasks.projectsearch.process"><a class="anchor" href="#b2.tasks.projectsearch.process"></a>5.11.2. Search Process</h4>
+<h4 id="b2.tasks.projectsearch.process"><a class="anchor" href="#b2.tasks.projectsearch.process"></a>5.12.2. Search Process</h4>
 <div class="paragraph">
 <p>Regardless of how the search path is specified, how the search happens is the
 same. Searching involves either searching for a B2 project directory, i.e.
@@ -4279,7 +4375,7 @@ registered for the <code>/</code> root.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="b2.tasks.projectsearch.loading"><a class="anchor" href="#b2.tasks.projectsearch.loading"></a>5.11.3. Loading Process</h4>
+<h4 id="b2.tasks.projectsearch.loading"><a class="anchor" href="#b2.tasks.projectsearch.loading"></a>5.12.3. Loading Process</h4>
 <div class="paragraph">
 <p>Depending on whether a project jamfile or <code>*.jam</code> file determines how the
 project is loaded.</p>
@@ -4299,7 +4395,7 @@ the project.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="b2.tasks.commanddb"><a class="anchor" href="#b2.tasks.commanddb"></a>5.12. Command Database, and IDE Integration</h3>
+<h3 id="b2.tasks.commanddb"><a class="anchor" href="#b2.tasks.commanddb"></a>5.13. Command Database, and IDE Integration</h3>
 <div class="paragraph">
 <p>Many IDE programs accept the use of a
 <a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html"><code>compile_commands.json</code></a>
@@ -13106,7 +13202,7 @@ requirement. The default for each target type are:</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_initialization"><a class="anchor" href="#_initialization"></a>Initialization</h5>
+<h5 id="_initialization_2"><a class="anchor" href="#_initialization_2"></a>Initialization</h5>
 <div class="paragraph">
 <p>To use the <code>asciidoctor</code> tool you need to declare it in a configuration file
 with the <code>using</code> rule. The initialization takes the following arguments:</p>
@@ -13177,15 +13273,12 @@ example,</p>
 <div class="paragraph">
 <p>Main target rule that imports a <strong>pkg-config</strong> package. When its consumer targets
 are built, <strong>pkg-config</strong> command will be invoked with arguments that depend on
-current property set. The features that have an effect are:</p>
+the current property set. The features that have an effect are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
 <p><code>&lt;pkg-config-define&gt;</code>: adds a <code>--define-variable</code> argument;</p>
-</li>
-<li>
-<p><code>&lt;link&gt;</code>: adds <code>--static</code> argument when <code>&lt;link&gt;static</code>;</p>
 </li>
 <li>
 <p><code>&lt;link&gt;</code>: adds <code>--static</code> argument when <code>&lt;link&gt;static</code>;</p>
@@ -13219,7 +13312,7 @@ with the <code>using</code> rule:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">using pkg-config : [config] : [command] ... : [ options ] ... ;</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">using pkg-config : [config] : [command] ... : [ options ] ... : [condition] ... ;</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -13235,7 +13328,8 @@ empty the string <code>pkg-config</code> is used.</p>
 </li>
 <li>
 <p><code>options</code>: options that modify <code>pkg-config</code> behavior. Allowed options are:</p>
-</li>
+<div class="ulist">
+<ul>
 <li>
 <p><code>&lt;path&gt;</code>: sets <code>PKG_CONFIG_PATH</code> environment variable;
 multiple occurences are allowed.</p>
@@ -13259,6 +13353,12 @@ multiple occurences are allowed.</p>
 <li>
 <p><code>&lt;variable&gt;</code>: adds a variable definition argument to command invocation;
 multiple occurences are allowed.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>condition</code>: properties that distinguish this configuration.</p>
 </li>
 </ul>
 </div>
@@ -13327,7 +13427,17 @@ while builds for B should use configuration B:</p>
 </div>
 <div class="paragraph">
 <p>Thanks to the fact, that <code>project-config</code>, <code>user-config</code> and <code>site-config</code>
-modules are parents of jamroot module, you can put it in any of those files.o</p>
+modules are parents of jamroot module, you can put it in any of those files.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can use the condition argument during initialization, and
+achieve the same thing without project requirements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">using pkg-config : A : : &lt;libdir&gt;path/to/collection/A : &lt;target-os&gt;A-os &lt;architecture&gt;A-arch ;
+using pkg-config : B : : &lt;libdir&gt;path/to/collection/B : &lt;target-os&gt;B-os &lt;architecture&gt;B-arch ;</code></pre>
+</div>
 </div>
 </div>
 <div class="sect5">
@@ -13356,7 +13466,7 @@ rule infer-name ( properties * )
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>common.format-name</code> rule can be very useful in this situation.</p>
+<p>The rule <code>common.format-name</code> can be very useful in such situations.</p>
 </div>
 </div>
 <div class="sect5">
@@ -13434,7 +13544,7 @@ for this feature is specified, then one is copied from the feature
 </div>
 </div>
 <div class="sect4">
-<h5 id="_initialization_2"><a class="anchor" href="#_initialization_2"></a>Initialization</h5>
+<h5 id="_initialization_3"><a class="anchor" href="#_initialization_3"></a>Initialization</h5>
 <div class="paragraph">
 <p>To use the <code>sass</code> tool you need to declare it in a configuration file with the
 <code>using</code> rule. The initialization takes the following arguments:</p>
@@ -16968,6 +17078,9 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <p><strong>New</strong>: Added the ability to escape the '$' character before '(' as "$$" which
 will allow using the "$()" and "$(())" expressions of bash, sh, and other
 shells.&#8201;&#8212;&#8201;<em>Ivan Kotov</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Added integration for vcpkg with distinct roots.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </li>
 <li>
 <p>Fix invoking asciidoctor on Windows.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
