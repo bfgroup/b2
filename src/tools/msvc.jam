@@ -2248,28 +2248,28 @@ for local arch in [ MATCH "^\\.cpus-on-(.*)" : [ VARNAMES $(__name__) ] ]
 # path will be checked instead.
 .version-7.1toolkit-path    = "Microsoft Visual C++ Toolkit 2003/bin" ;
 .version-7.1toolkit-env     = VCToolkitInstallDir ;
+
 # Visual Studio 2017 doesn't use a registry at all. And the suggested methods
 # of discovery involve having a compiled program. So as a fallback we search
 # paths for VS2017 (aka msvc >= 14.1).
 .version-14.1-path =
     "../../VC/Tools/MSVC/*/bin/Host*/*"
-    "Microsoft Visual Studio/2017/*/VC/Tools/MSVC/*/bin/Host*/*"
-    ;
+    "Microsoft Visual Studio/2017/*/VC/Tools/MSVC/*/bin/Host*/*" ;
 .version-14.1-env = VS150COMNTOOLS ProgramFiles ProgramFiles(x86) ;
+
 .version-14.2-path =
     "../../VC/Tools/MSVC/*/bin/Host*/*"
-    "Microsoft Visual Studio/2019/*/VC/Tools/MSVC/*/bin/Host*/*"
-    ;
+    "Microsoft Visual Studio/2019/*/VC/Tools/MSVC/*/bin/Host*/*" ;
 .version-14.2-env = VS160COMNTOOLS ProgramFiles ProgramFiles(x86) ;
+
 .version-14.3-path =
     "../../VC/Tools/MSVC/*/bin/Host*/*"
-    "Microsoft Visual Studio/2022/*/VC/Tools/MSVC/*/bin/Host*/*"
-    ;
+    "Microsoft Visual Studio/2022/*/VC/Tools/MSVC/*/bin/Host*/*" ;
 .version-14.3-env = VS170COMNTOOLS ProgramFiles ProgramFiles(x86) ;
+
 .version-14.5-path =
     "../../VC/Tools/MSVC/*/bin/Host*/*"
-    "Microsoft Visual Studio/2026/*/VC/Tools/MSVC/*/bin/Host*/*"
-    ;
+    "Microsoft Visual Studio/18/*/VC/Tools/MSVC/14.5*/bin/Host*/*" ;
 .version-14.5-env = VS180COMNTOOLS ProgramFiles ProgramFiles(x86) ;
 
 
