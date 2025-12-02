@@ -168,8 +168,8 @@ call vswhere_usability_wrapper.cmd
 REM Reset ERRORLEVEL since from now on it's all based on ENV vars
 ver > nul 2> nul
 if "_%B2_TOOLSET_ROOT%_" == "__" (
-    if NOT "_%VS170COMNTOOLS%_" == "__" (
-        set "B2_TOOLSET_ROOT=%VS170COMNTOOLS%..\..\VC\"
+    if NOT "_%VS180COMNTOOLS%_" == "__" (
+        set "B2_TOOLSET_ROOT=%VS180COMNTOOLS%..\..\VC\"
     ))
 
 if "_%B2_ARCH%_" == "__" set B2_ARCH=%PROCESSOR_ARCHITECTURE%

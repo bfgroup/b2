@@ -1790,11 +1790,11 @@ local rule default-path ( version )
             {
                 limit = "-version \"[18.0,19.0)\" -prerelease" ;
             }
-            else if $(version) = 14.3
+            else if $(version) = 14.3 || $(version) = "default"
             {
                 limit = "-version \"[17.0,18.0)\" -prerelease" ;
             }
-            else if $(version) = 14.2 || $(version) = "default"
+            else if $(version) = 14.2
             {
                 limit = "-version \"[16.0,17.0)\"" ;
             }
