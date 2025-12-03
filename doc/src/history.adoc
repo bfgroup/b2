@@ -16,6 +16,9 @@
   -- _Ivan Kotov_
 * *New*: Added integration for vcpkg with distinct roots.
   -- _Dmitry Arkhipov_
+* *New*: Add support for detecting and building with VS-2026 (AKA vs-18.0,
+  aka msvc 14.5).
+  -- _Miuna_, _Zangetsu_, _René Ferdinand Rivera Morell_
 * Fix invoking asciidoctor on Windows.
   -- _René Ferdinand Rivera Morell_
 * Fix, propagate `dll-path` to shared libraries.
