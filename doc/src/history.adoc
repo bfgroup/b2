@@ -28,6 +28,8 @@
 * Fix flag options, that are not registered as args, not being recognized.
   Fixes `--show-libraries` in Boost build files.
   -- _Dmitry Arkhipov_
+* Fix discovery and building with Python free-threaded variant.
+  -- _Zhang Wen_
 
 == Version 5.3.3
 
