@@ -73,8 +73,8 @@ local rule get-option ( option : addr : options * )
 
 rule init ( version ? : command * : options * )
 {
-    ECHO env:ProgramFiles.. [ os.environ "ProgramFiles" ] ;
-    ECHO env:ProgramFiles(x86).. [ os.environ "ProgramFiles(x86)" ] ;
+    ECHO "env:ProgramFiles.." [ os.environ "ProgramFiles" ] ;
+    ECHO "env:ProgramFiles(x86).." [ os.environ "ProgramFiles(x86)" ] ;
     local ProgramFiles = [ os.environ "ProgramFiles" ] [ os.environ "ProgramFiles(x86)" ] ;
     command = [ common.get-invocation-command-nodefault clang-win : clang-cl.exe : $(command) : "$(ProgramFiles)\\LLVM\\bin" ] ;
 
