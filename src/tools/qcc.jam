@@ -137,7 +137,7 @@ rule compile.c++ ( targets * : sources * : properties * )
     local template-depth = [ on $(1) return $(TEMPLATE_DEPTH) ] ;
     if ! $(template-depth)
     {
-        TEMPLATE_DEPTH on $(1) = 128 ;
+        TEMPLATE_DEPTH on $(1) = 256 ;
     }
 
     check-target-platform $(1) ;
