@@ -13,6 +13,7 @@ import errors ;
 import feature ;
 import generators ;
 import os ;
+import pch ;
 import property ;
 import regex ;
 import set ;
