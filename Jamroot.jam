@@ -38,6 +38,8 @@ project /bfgroup/b2
         <toolset>gcc:<cxxflags>-Wno-attributes
         <toolset>clang:<cxxflags>-Wno-attributes
         <toolset>clang:<cxxflags>-Wno-c++14-extensions
+    : default-build
+        <variant>release
     ;
 
 #|
