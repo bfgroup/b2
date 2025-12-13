@@ -30,6 +30,13 @@
   -- _Dmitry Arkhipov_
 * Fix discovery and building with Python free-threaded variant.
   -- _Zhang Wen_
+* Fix build issues with QNX compiolers.
+  -- _"fragarian"_
+* Add `libstdc++` to `stdlib` feature as the current naming for that std
+  library.
+  -- _Dmitry Arkhipov_
+* Fix building when targetting WASM64 with emscripten.
+  -- _Uilian Ries_
 
 == Version 5.3.3
 
