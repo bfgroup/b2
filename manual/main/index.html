@@ -5524,7 +5524,8 @@ e.g. to generate configuration files.</p>
 </dd>
 <dt class="hdlist1"><a id="b2.builtin.features.stdlib"></a><code>stdlib</code></dt>
 <dd>
-<p><strong>Allowed values</strong>: <code>native</code>, <code>gnu</code>, <code>gnu11</code>, <code>libc++</code>, <code>sun-stlport</code>, <code>apache</code>.</p>
+<p><strong>Allowed values</strong>: <code>native</code>, <code>libstdc`, `gnu`, `gnu11`, `libc</code>,
+<code>sun-stlport</code>, <code>apache</code>.</p>
 <div class="paragraph">
 <p>Specifies C++ standard library to link to and in some cases the library ABI to
 use:</p>
@@ -5535,13 +5536,17 @@ use:</p>
 <dd>
 <p>Use compiler&#8217;s default.</p>
 </dd>
+<dt class="hdlist1"><code>libstdc++</code></dt>
+<dd>
+<p>Use GNU Standard Library (a.k.a. libstdc++).</p>
+</dd>
 <dt class="hdlist1"><code>gnu</code></dt>
 <dd>
-<p>Use GNU Standard Library (a.k.a. libstdc++) with the old ABI.</p>
+<p>Use GNU Standard Library and explicitly enable the old ABI.</p>
 </dd>
 <dt class="hdlist1"><code>gnu11</code></dt>
 <dd>
-<p>Use GNU Standard Library with the new ABI.</p>
+<p>Use GNU Standard Library and explicitly enable the new ABI.</p>
 </dd>
 <dt class="hdlist1"><code>libc++</code></dt>
 <dd>
@@ -17104,6 +17109,16 @@ Fixes <code>--show-libraries</code> in Boost build files.&#8201;&#8212;&#8201;<e
 </li>
 <li>
 <p>Fix discovery and building with Python free-threaded variant.&#8201;&#8212;&#8201;<em>Zhang Wen</em></p>
+</li>
+<li>
+<p>Fix build issues with QNX compiolers.&#8201;&#8212;&#8201;<em>"fragarian"</em></p>
+</li>
+<li>
+<p>Add <code>libstdc++</code> to <code>stdlib</code> feature as the current naming for that std
+library.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
+</li>
+<li>
+<p>Fix building when targetting WASM64 with emscripten.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
 </li>
 </ul>
 </div>
