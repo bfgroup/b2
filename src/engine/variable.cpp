@@ -40,6 +40,7 @@
 #include "pathsys.h"
 #include "jam_strings.h"
 #include "output.h"
+#include "strview.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,83 +74,53 @@ static void var_dump( OBJECT * symbol, LIST * value, const char * what );
 
 void var_defines( struct module_t * module, const char * const * e, int preprocess )
 {
-    string buf[ 1 ];
-
-    string_new( buf );
-
     for ( ; *e; ++e )
     {
-        const char * val;
-
-        if ( ( val = strchr( *e, '=' ) )
-#if defined( OS_MAC )
-            /* On the mac (MPW), the var=val is actually var\0val */
-            /* Think different. */
-            || ( val = *e + strlen( *e ) )
-#endif
-        )
+        ::b2::string_view var_val(*e);
+        ::b2::string_view var(var_val.begin(), var_val.find('='));
+        if (var.size() < var_val.size())
         {
-            LIST * l = L0;
-            int32_t const len = int32_t(strlen( val + 1 ));
-            int const quoted = ( val[ 1 ] == '"' ) && ( val[ len ] == '"' ) &&
-                ( len > 1 );
-
-            if ( quoted && preprocess )
+            ::b2::string_view val(var_val.begin() + var.size() + 1);
+            const bool quoted = val.size() >= 2 && *val.begin() == '"'
+                && *(val.end()-1) == '"';
+            b2::jam::variable jam_var { module, ::b2::value_ref(var) };
+            if (preprocess)
             {
-                string_append_range( buf, val + 2, val + len );
-                l = list_push_back( l, object_new( buf->value ) );
-                string_truncate( buf, 0 );
+                if (quoted)
+                    jam_var = ::b2::list_ref { ::b2::value_ref {
+                        val.substr(1, val.size()-2) } };
+                else
+                    jam_var = ::b2::list_ref { ::b2::value_ref { val } };
             }
             else
             {
-                const char * p;
-                const char * pp;
-                char split =
-#if defined( OPT_NO_EXTERNAL_VARIABLE_SPLIT )
-                    '\0'
-#elif defined( OS_MAC )
-                    ','
-#else
-                    ' '
-#endif
-                    ;
-
+                char split = ' ';
                 /* Split *PATH at :'s, not spaces. */
-                if ( val - 4 >= *e )
+                if (val.ends_with("PATH") || val.ends_with("Path" ||
+                    val.ends_with("path")))
                 {
-                    if ( !strncmp( val - 4, "PATH", 4 ) ||
-                        !strncmp( val - 4, "Path", 4 ) ||
-                        !strncmp( val - 4, "path", 4 ) )
-                        split = SPLITPATH;
+                    split = SPLITPATH;
                 }
-
                 /* Do the split. */
-                for
-                (
-                    pp = val + 1;
-                    preprocess && ( ( p = strchr( pp, split ) ) != 0 );
-                    pp = p + 1
-                )
+                ::b2::string_view::size_type p0 = 0;
+                ::b2::string_view::size_type p1 = 0;
+                do
                 {
-                    string_append_range( buf, pp, p );
-                    l = list_push_back( l, object_new( buf->value ) );
-                    string_truncate( buf, 0 );
-                }
-
-                l = list_push_back( l, object_new( pp ) );
+                    p1 = val.find(split, p0);
+                    if (p1 == val.npos)
+                    {
+                        jam_var += ::b2::value_ref { val.substr(p0) };
+                        p0 = val.npos;
+                    }
+                    else
+                    {
+                        jam_var += ::b2::value_ref { val.substr(p0, p1 - p0) };
+                        p0 = p1 + 1;
+                    }
+                } while (p0 != val.npos);
             }
-
-            /* Get name. */
-            string_append_range( buf, *e, val );
-            {
-                OBJECT * varname = object_new( buf->value );
-                var_set( module, varname, l, VAR_SET );
-                object_free( varname );
-            }
-            string_truncate( buf, 0 );
         }
     }
-    string_free( buf );
 }
 
 
