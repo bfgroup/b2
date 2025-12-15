@@ -41,6 +41,7 @@
 #include "jam_strings.h"
 #include "output.h"
 #include "strview.h"
+#include "value.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,57 +73,63 @@ static void var_dump( OBJECT * symbol, LIST * value, const char * what );
  * Otherwise, split the value at blanks.
  */
 
-void var_defines( struct module_t * module, const char * const * e, int preprocess )
+void var_defines(struct module_t * module, const char * const * e, int preprocess)
 {
-    for ( ; *e; ++e )
-    {
-        ::b2::string_view var_val(*e);
-        ::b2::string_view var(var_val.begin(), var_val.find('='));
-        if (var.size() < var_val.size())
-        {
-            ::b2::string_view val(var_val.begin() + var.size() + 1);
-            const bool quoted = val.size() >= 2 && *val.begin() == '"'
-                && *(val.end()-1) == '"';
-            b2::jam::variable jam_var { module, ::b2::value_ref(var) };
-            if (preprocess)
-            {
-                if (quoted)
-                    jam_var = ::b2::list_ref { ::b2::value_ref {
-                        val.substr(1, val.size()-2) } };
-                else
-                    jam_var = ::b2::list_ref { ::b2::value_ref { val } };
-            }
-            else
-            {
-                char split = ' ';
-                /* Split *PATH at :'s, not spaces. */
-                if (val.ends_with("PATH") || val.ends_with("Path" ||
-                    val.ends_with("path")))
-                {
-                    split = SPLITPATH;
-                }
-                /* Do the split. */
-                ::b2::string_view::size_type p0 = 0;
-                ::b2::string_view::size_type p1 = 0;
-                do
-                {
-                    p1 = val.find(split, p0);
-                    if (p1 == val.npos)
-                    {
-                        jam_var += ::b2::value_ref { val.substr(p0) };
-                        p0 = val.npos;
-                    }
-                    else
-                    {
-                        jam_var += ::b2::value_ref { val.substr(p0, p1 - p0) };
-                        p0 = p1 + 1;
-                    }
-                } while (p0 != val.npos);
-            }
-        }
-    }
+	for (; *e; ++e)
+	{
+		// std::printf(">> var_defines: *e = %s\n", *e);
+		::b2::string_view var_val(*e);
+		::b2::string_view var(var_val.begin(), var_val.find('='));
+		if (var.size() < var_val.size())
+		{
+			::b2::string_view val(var_val.begin() + var.size() + 1);
+			const bool quoted = val.size() > 2 && *val.begin() == '"'
+				&& *(val.end() - 1) == '"';
+			b2::jam::variable jam_var { module,
+				std::string { var.begin(), var.end() }.c_str() };
+			if (preprocess)
+			{
+				if (quoted)
+					jam_var = ::b2::list_ref { ::b2::value_ref {
+						val.substr(1, val.size() - 2) } };
+				else
+				{
+					char split = ' ';
+					/* Split *PATH at :'s, not spaces. */
+					if (var.ends_with("PATH")
+						|| var.ends_with("Path" || var.ends_with("path")))
+					{
+						split = SPLITPATH;
+					}
+					/* Do the split. */
+					::b2::string_view::size_type p0 = 0;
+					::b2::string_view::size_type p1 = 0;
+					while (p0 < val.size())
+					{
+						p1 = val.find(split, p0);
+						if (p1 == val.npos)
+						{
+							jam_var += ::b2::value_ref { val.substr(p0) };
+							p0 = val.npos;
+						}
+						else
+						{
+							jam_var
+								+= ::b2::value_ref { val.substr(p0, p1 - p0) };
+							p0 = p1 + 1;
+						}
+					}
+				}
+			}
+			else
+				jam_var = ::b2::list_ref { ::b2::value_ref { val } };
+			// for (auto v : jam_var.get())
+			// {
+			// 	std::printf("   '%s'\n", v->str());
+			// }
+		}
+	}
 }
-
 
 /* Last returned variable value saved so we may clear it in var_done(). */
 static LIST * saved_var = L0;
