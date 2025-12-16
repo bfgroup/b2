@@ -412,6 +412,7 @@ tests = [
     "project_dependencies",
     "project_glob",
     "project_id",
+    "project_sub_resolution",
     "project_root_constants",
     "project_root_rule",
     "project_test3",
