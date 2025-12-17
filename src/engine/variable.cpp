@@ -77,56 +77,58 @@ void var_defines(struct module_t * module, const char * const * e, int preproces
 {
 	for (; *e; ++e)
 	{
+		::b2::string_view def(*e);
+		::b2::string_view var(def.begin(), def.find('='));
+		::b2::string_view val(def.begin() + var.size() + 1);
+		b2::jam::variable jam_var { module,
+			std::string { var.begin(), var.end() }.c_str() };
 		// std::printf(">> var_defines: *e = %s\n", *e);
-		::b2::string_view var_val(*e);
-		::b2::string_view var(var_val.begin(), var_val.find('='));
-		if (var.size() < var_val.size())
+		// for (auto v : jam_var.get())
+		// {
+		// 	std::printf("   '%s'\n", v->str());
+		// }
+
+		// No value to set var with.
+		if (var.size() == def.size()) continue;
+
+		// Skip pre-processing, to just set the raw value.
+		if (preprocess == 0)
 		{
-			::b2::string_view val(var_val.begin() + var.size() + 1);
-			const bool quoted = val.size() > 2 && *val.begin() == '"'
-				&& *(val.end() - 1) == '"';
-			b2::jam::variable jam_var { module,
-				std::string { var.begin(), var.end() }.c_str() };
-			if (preprocess)
+			jam_var = ::b2::list_ref { ::b2::value_ref { val } };
+			continue;
+		}
+
+		// Quoted values do not get separator-split. But do get unquoted.
+		if (val.size() >= 2 && val.front() == '"' && val.back() == '"')
+		{
+			jam_var = ::b2::list_ref { ::b2::value_ref {
+				val.substr(1, val.size() - 2) } };
+			continue;
+		}
+
+		// Split on separator, either space or path.
+		jam_var = ::b2::list_cref {};
+		{
+			char split = ' ';
+			/* Split *PATH at :'s, not spaces. */
+			if (var.ends_with("PATH")
+				|| var.ends_with("Path" || var.ends_with("path")))
+				split = SPLITPATH;
+			/* Do the split. */
+			for (::b2::string_view::size_type p0 = 0; p0 < val.size();)
 			{
-				if (quoted)
-					jam_var = ::b2::list_ref { ::b2::value_ref {
-						val.substr(1, val.size() - 2) } };
+				auto p1 = val.find(split, p0);
+				if (p1 == val.npos)
+				{
+					jam_var += ::b2::value_ref { val.substr(p0) };
+					p0 = val.npos;
+				}
 				else
 				{
-					char split = ' ';
-					/* Split *PATH at :'s, not spaces. */
-					if (var.ends_with("PATH")
-						|| var.ends_with("Path" || var.ends_with("path")))
-					{
-						split = SPLITPATH;
-					}
-					/* Do the split. */
-					::b2::string_view::size_type p0 = 0;
-					::b2::string_view::size_type p1 = 0;
-					while (p0 < val.size())
-					{
-						p1 = val.find(split, p0);
-						if (p1 == val.npos)
-						{
-							jam_var += ::b2::value_ref { val.substr(p0) };
-							p0 = val.npos;
-						}
-						else
-						{
-							jam_var
-								+= ::b2::value_ref { val.substr(p0, p1 - p0) };
-							p0 = p1 + 1;
-						}
-					}
+					jam_var += ::b2::value_ref { val.substr(p0, p1 - p0) };
+					p0 = p1 + 1;
 				}
 			}
-			else
-				jam_var = ::b2::list_ref { ::b2::value_ref { val } };
-			// for (auto v : jam_var.get())
-			// {
-			// 	std::printf("   '%s'\n", v->str());
-			// }
 		}
 	}
 }
