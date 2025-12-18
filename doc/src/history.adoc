@@ -37,6 +37,8 @@
   -- _Dmitry Arkhipov_
 * Fix building when targetting WASM64 with emscripten.
   -- _Uilian Ries_
+* Fix resolution of subprojects of rooted projects.
+  -- _Dmitry Arkhipov_
 
 == Version 5.3.3
 
