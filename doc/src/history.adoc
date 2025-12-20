@@ -39,6 +39,8 @@
   -- _Uilian Ries_
 * Fix resolution of subprojects of rooted projects.
   -- _Dmitry Arkhipov_
+* Fix crash when using `-d9` to output module debug stats.
+  -- _René Ferdinand Rivera Morell_
 
 == Version 5.3.3
 
