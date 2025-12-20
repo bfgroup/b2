@@ -4,7 +4,7 @@
 == Version 5.4.0
 
 This is the end of year release. Biggest new items are the detection of
-Visual Studio 2026 (aka msvc143).
+Visual Studio 2026 (aka msvc145).
 
 * *New*: Add initial support for {CPP}-26 Contracts for GCC based toolsets
   (like clang).
