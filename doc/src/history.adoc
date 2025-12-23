@@ -1,7 +1,20 @@
 [[b2.history]]
 = History
 
+== Version 5.4.2
+
+Fix detection of Visual Studio 2026 to account for non-native tools being
+installed by default and hence conflicting with the native tools.
+
+== Version 5.4.1
+
+Fix error in path environment variables not being properly processed to split
+on path separator.
+
 == Version 5.4.0
+
+This is the end of year release. Biggest new items are the detection of
+Visual Studio 2026 (aka msvc145).
 
 * *New*: Add initial support for {CPP}-26 Contracts for GCC based toolsets
   (like clang).
@@ -37,6 +50,10 @@
   -- _Dmitry Arkhipov_
 * Fix building when targetting WASM64 with emscripten.
   -- _Uilian Ries_
+* Fix resolution of subprojects of rooted projects.
+  -- _Dmitry Arkhipov_
+* Fix crash when using `-d9` to output module debug stats.
+  -- _René Ferdinand Rivera Morell_
 
 == Version 5.3.3
 
