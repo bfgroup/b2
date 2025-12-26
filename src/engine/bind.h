@@ -131,7 +131,7 @@ template <int C>
 arg_<C + 1> operator+(const arg_<C> & a, const param_ & b)
 {
 	arg_<C + 1> result;
-	for (std::size_t i = 0; i < C - 1; ++i) result.args[i] = a.args[i];
+	for (std::size_t i = 0; i < C; ++i) result.args[i] = a.args[i];
 	result.args[C] = b;
 	return result;
 }
