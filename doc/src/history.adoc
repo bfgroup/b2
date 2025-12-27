@@ -3,6 +3,10 @@
 
 == Version 5.5.0
 
+* Fix jam/{CPP} bind definitions of 4 or more values in a single
+  declared argument not actually adding all the definitions.
+  -- _Paolo Pastori_
+
 == Version 5.4.2
 
 Fix detection of Visual Studio 2026 to account for non-native tools being
