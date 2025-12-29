@@ -54,7 +54,7 @@
 # define FSCTL_GET_REPARSE_POINT 0x000900a8
 #endif
 #ifndef IO_REPARSE_TAG_SYMLINK
-# define IO_REPARSE_TAG_SYMLINK	(0xA000000CL)
+# define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
 #endif
 
 #include <io.h>
@@ -169,9 +169,12 @@ void load_builtins()
       bind_builtin( "ALWAYS",
                     builtin_flags, T_FLAG_TOUCHED, 0 ) );
 
-    duplicate_rule( "Depends",
-      bind_builtin( "DEPENDS",
-                    builtin_depends, 0, 0 ) );
+    {
+        char const * args[] = { "targets1", "*", ":", "targets2", "*", 0 };
+        duplicate_rule( "Depends",
+          bind_builtin( "DEPENDS",
+                        builtin_depends, 0, args ) );
+    }
 
     duplicate_rule( "echo",
     duplicate_rule( "Echo",
@@ -199,9 +202,12 @@ void load_builtins()
                       builtin_glob_recursive, 0, args );
     }
 
-    duplicate_rule( "Includes",
-      bind_builtin( "INCLUDES",
-                    builtin_depends, 1, 0 ) );
+    {
+        char const * args[] = { "targets1", "*", ":", "targets2", "*", 0 };
+        duplicate_rule( "Includes",
+          bind_builtin( "INCLUDES",
+                        builtin_depends, 1, args ) );
+    }
 
     {
         char const * args[] = { "targets", "*", ":", "targets-to-rebuild", "*",
@@ -463,10 +469,10 @@ void load_builtins()
 
 #ifdef JAM_DEBUGGER
 
-	{
-		const char * args[] = { "list", "*", 0 };
-		bind_builtin("__DEBUG_PRINT_HELPER__", builtin_debug_print_helper, 0, args);
-	}
+    {
+        const char * args[] = { "list", "*", 0 };
+        bind_builtin("__DEBUG_PRINT_HELPER__", builtin_debug_print_helper, 0, args);
+    }
 
 #endif
 
