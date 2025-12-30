@@ -100,7 +100,7 @@
  *  builtin_flags()               - ALWAYS/LEAVES/NOCARE/NOTIME/NOTFILE/NOUPDATE
  *                                  TEMPORARY/ISFILE/FAIL_EXPECTED/RMOLD rule
  *  builtin_glob()                - GLOB rule
- *  builtin_glob_recursive()      - ???
+ *  builtin_glob_recursive()      - GLOB-RECURSIVELY rule
  *  builtin_hdrmacro()            - ???
  *  builtin_import()              - IMPORT rule
  *  builtin_match()               - MATCH rule, regexp matching
@@ -967,9 +967,13 @@ LIST * glob_recursive( char const * pattern )
 }
 
 
-/*
- * builtin_glob_recursive() - ???
- */
+//
+// builtin_glob_recursive() - GLOB-RECURSIVELY rule
+//
+// Recursively expands each of the provided patterns (GLOBs) into a list
+// of paths. Each pattern can have different components for each directory
+// e.g., */*.test
+//
 
 LIST * builtin_glob_recursive( FRAME * frame, int flags )
 {
