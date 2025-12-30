@@ -180,10 +180,13 @@ void load_builtins()
                         builtin_depends, 0, args ) );
     }
 
-    duplicate_rule( "echo",
-    duplicate_rule( "Echo",
-      bind_builtin( "ECHO",
-                    builtin_echo, 0, 0 ) ) );
+    {
+        char const * args[] = { "args", "*", 0 };
+        duplicate_rule( "echo",
+        duplicate_rule( "Echo",
+          bind_builtin( "ECHO",
+                        builtin_echo, 0, args ) ) );
+    }
 
     {
         char const * args[] = { "message", "*", ":", "result-value", "?", 0 };
@@ -227,9 +230,12 @@ void load_builtins()
                         builtin_flags, T_FLAG_LEAVES, args ) );
     }
 
-    duplicate_rule( "Match",
-      bind_builtin( "MATCH",
-                    builtin_match, 0, 0 ) );
+    {
+        char const * args[] = { "regexps", "*", ":", "list", "*", 0 };
+        duplicate_rule( "Match",
+          bind_builtin( "MATCH",
+                        builtin_match, 0, args ) );
+    }
 
     {
         char const * args[] = { "string", ":", "delimiters", 0 };
