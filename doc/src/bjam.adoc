@@ -270,7 +270,7 @@ targets. Pseudo-targets are symbols representing dependencies on other
 targets, but which are not themselves associated with any real file.
 
 A file target's identifier is generally the file's name, which can be
-absolutely rooted, relative to the directory of `b2`s invocation, or
+absolutely rooted, relative to the directory of ``b2``s invocation, or
 simply local (no directory). Most often it is the last case, and the
 actual file path is bound using the `$(SEARCH)` and `$(LOCATE)` special
 variables. See link:#jam.language.variables.builtins.search[SEARCH and
@@ -756,7 +756,7 @@ The `MATCH` rule does pattern matching.
 
 [source]
 ----
-rule MATCH ( regexps + : list * )
+rule MATCH ( regexps * : list * )
 ----
 
 Matches the `egrep`(1) style regular expressions _regexps_ against the
@@ -768,12 +768,13 @@ for each string in _list_, and for each regular expression in _regexps_.
 
 [source]
 ----
-rule BACKTRACE ( )
+rule BACKTRACE ( levels ? )
 ----
 
 Returns a list of quadruples: _filename_ _line_ _module_ _rulename_...,
-describing each shallower level of the call stack. This rule can be used
-to generate useful diagnostic messages from Jam rules.
+describing each shallower level of the call stack, or only last _levels_
+when the argument is provided. This rule can be used to generate useful
+diagnostic messages from Jam rules.
 
 [[jam.language.rules.builtins.utility._update__]]
 ===== `UPDATE`
