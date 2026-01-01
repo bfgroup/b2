@@ -381,7 +381,7 @@ on target $(var) field1 : field2 : ... : fieldN ;
 ----
 
 The variable's value names the rule (or rules) to be invoked. A rule is
-invoked for each element in the list of `$(var)`s values. The fields
+invoked for each element in the list of ``$(var)``s values. The fields
 `field1 : field2 : ...` are passed as arguments for each invocation For the [
 ... ] forms, the return value is the concatenation of the return values
 for all of the invocations.
@@ -663,7 +663,7 @@ WARNING: This is currently not fully implemented.
 [[jam.language.rules.builtins.utility]]
 ==== Utility
 
-The two rules `ECHO` and `EXIT` are utility rules, used only in `b2`s
+The two rules `ECHO` and `EXIT` are utility rules, used only in ``b2``s
 parsing phase.
 
 [[jam.language.rules.builtins.utility._echo__]]
