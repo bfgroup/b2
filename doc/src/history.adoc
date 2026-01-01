@@ -6,6 +6,9 @@
 * Fix jam/{CPP} bind definitions of 4 or more values in a single
   declared argument not actually adding all the definitions.
   -- _Paolo Pastori_
+* *New*: Argument lists description provided for all built-in rules,
+  HDRMACRO and NOTIME discontinued.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 

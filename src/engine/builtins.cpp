@@ -14,7 +14,7 @@
 #include "filesys.h"
 #include "frames.h"
 #include "hash.h"
-#include "hdrmacro.h"
+//#include "hdrmacro.h"  // NOTE: Faulty feature HDRMACRO, discontinued.
 #include "lists.h"
 #include "make.h"
 #include "md5.h"
@@ -101,7 +101,7 @@
  *                                  TEMPORARY/ISFILE/FAIL_EXPECTED/RMOLD rule
  *  builtin_glob()                - GLOB rule
  *  builtin_glob_recursive()      - GLOB-RECURSIVELY rule
- *  builtin_hdrmacro()            - ???
+ *  builtin_hdrmacro()            - HDRMACRO rule, faulty, discontinued
  *  builtin_import()              - IMPORT rule
  *  builtin_match()               - MATCH rule, regexp matching
  *  builtin_rebuilds()            - REBUILDS rule
@@ -200,7 +200,7 @@ void load_builtins()
         char const * args[] = { "directories", "*", ":", "patterns", "*", ":",
             "case-insensitive", "?", 0 };
         duplicate_rule( "Glob",
-                        bind_builtin( "GLOB", builtin_glob, 0, args ) );
+          bind_builtin( "GLOB", builtin_glob, 0, args ) );
     }
 
     {
@@ -252,10 +252,10 @@ void load_builtins()
 
     {
         char const * args[] = { "targets", "*", 0 };
-        duplicate_rule( "NOTIME",
+        /*duplicate_rule( "NOTIME",    // Bad alias, discontinued. */
         duplicate_rule( "NotFile",
           bind_builtin( "NOTFILE",
-                        builtin_flags, T_FLAG_NOTFILE, args ) ) );
+                        builtin_flags, T_FLAG_NOTFILE, args ) );
     }
 
     {
@@ -278,9 +278,10 @@ void load_builtins()
                         builtin_flags, T_FLAG_ISFILE, args );
     }
 
+    /* NOTE: Faulty feature HDRMACRO, discontinued.
     duplicate_rule( "HdrMacro",
       bind_builtin( "HDRMACRO",
-                    builtin_hdrmacro, 0, 0 ) );
+                    builtin_hdrmacro, 0, 0 ) ); */
 
     {
         /* FAIL_EXPECTED is used to indicate that the result of a target build
@@ -1122,9 +1123,9 @@ LIST * builtin_split_by_characters( FRAME * frame, int flags )
 
 
 /*
- * builtin_hdrmacro() - ???
- */
-
+ * builtin_hdrmacro() - HDRMACRO rule, faulty, discontinued
+ *
+ *
 LIST * builtin_hdrmacro( FRAME * frame, int flags )
 {
     LIST * const l = lol_get( frame->args, 0 );
@@ -1135,7 +1136,7 @@ LIST * builtin_hdrmacro( FRAME * frame, int flags )
     {
         TARGET * const t = bindtarget( list_item( iter ) );
 
-        /* Scan file for header filename macro definitions. */
+        // Scan file for header filename macro definitions.
         if ( is_debug_header() )
             out_printf( "scanning '%s' for header file macro definitions\n",
                 object_str( list_item( iter ) ) );
@@ -1144,7 +1145,7 @@ LIST * builtin_hdrmacro( FRAME * frame, int flags )
     }
 
     return L0;
-}
+} */
 
 
 /*

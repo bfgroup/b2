@@ -28,7 +28,6 @@
 #include "class.h"
 #include "constants.h"
 #include "hash.h"
-#include "hdrmacro.h"
 #include "make.h"
 #include "modules.h"
 #include "parse.h"

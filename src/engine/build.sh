@@ -443,7 +443,6 @@ function.cpp \
 glob.cpp \
 hash.cpp \
 hcache.cpp \
-hdrmacro.cpp \
 headers.cpp \
 jam_strings.cpp \
 jam.cpp \

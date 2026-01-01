@@ -27,7 +27,7 @@
 #include "headers.h"
 
 #include "compile.h"
-#include "hdrmacro.h"
+//#include "hdrmacro.h"  // NOTE: Faulty feature HDRMACRO, discontinued.
 #include "lists.h"
 #include "modules.h"
 #include "object.h"
@@ -84,7 +84,7 @@ void headers( TARGET * t )
     }
 
     /* Doctor up call to HDRRULE rule */
-    /* Call headers1() to get LIST of included files. */
+    /* Get LIST of included files. */
     {
         FRAME frame[ 1 ];
         frame_init( frame );
@@ -164,7 +164,9 @@ LIST * headers1( LIST * l, OBJECT * file, int rec, b2::regex::program re[] )
             }
         }
 
-        /* Special treatment for #include MACRO. */
+        /* NOTE: Faulty feature HDRMACRO, discontinued.
+         *
+        // Special treatment for #include MACRO.
         auto re_macros_i = re_macros.search( buf );
         if ( re_macros_i && re_macros_i[ 1 ].end() != nullptr )
         {
@@ -187,7 +189,7 @@ LIST * headers1( LIST * l, OBJECT * file, int rec, b2::regex::program re[] )
                 if ( is_debug_header() )
                     out_printf( " ignored !!\n" );
             }
-        }
+        } */
     }
 
     fclose( f );
