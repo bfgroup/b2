@@ -64,7 +64,7 @@ rule check-target-builds ( target message ? : true-properties * : false-properti
 +
 This function can only be used when passing requirements or usage
 requirements to a metatarget rule. For example, to make an application
-link to a library if it's available, one has use the following:
+link to a library if it's available, one has to use the following:
 +
 ----
 exe app : app.cpp : [ check-target-builds has_foo "System has foo" : <library>foo : <define>FOO_MISSING=1 ] ;

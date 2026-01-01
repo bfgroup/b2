@@ -119,6 +119,11 @@ void macro_headers( TARGET * t )
                 object_free( symbol );
             /* XXXX: FOR NOW, WE IGNORE MULTIPLE MACRO DEFINITIONS !! */
             /*       WE MIGHT AS WELL USE A LIST TO STORE THEM..      */
+            /*
+             * NO, YOU CANNOT IGNORE A SYMBOL REDEFINITION, SINCE YOU STORE
+             * THE FIRST VERSION YOU SAW, WHILE PREPROCESSORS TYPICALLY
+             * OVERRIDE AND USE THE LATEST VERSION.
+             */
         }
     }
 
