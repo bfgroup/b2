@@ -52,7 +52,7 @@ struct program
 	private:
 	const regex_prog * compiled = nullptr;
 
-	static regex_prog * compile(const char * patter);
+	static regex_prog * compile(const char * pattern);
 };
 
 struct program::result_iterator
@@ -108,6 +108,25 @@ inline program::result_iterator program::search(const char * str_begin)
 {
 	return this->search(string_view(str_begin, std::strlen(str_begin)));
 }
+
+}} // namespace b2::regex
+
+typedef struct frame FRAME;
+
+namespace b2 { namespace regex {
+
+thread_local extern FRAME * frame;
+
+/*
+ * Simple class which use RAII to set b2::regex::frame during
+ * compilation phase, for proper error message emission and
+ * program exit.
+ */
+struct frame_ctx
+{
+	frame_ctx(FRAME * frm) { frame = frm; }
+	~frame_ctx() { frame = nullptr; }
+};
 
 }} // namespace b2::regex
 

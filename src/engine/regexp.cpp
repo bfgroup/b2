@@ -1,5 +1,5 @@
 /*
- * regcomp and regexec -- regsub and regerror are elsewhere
+ * regcomp and regexec
  *
  *  Copyright (c) 1986 by University of Toronto.
  *  Written by Henry Spencer.  Not derived from licensed software.
@@ -49,6 +49,7 @@
 #include "jam.h"
 #include "output.h"
 #include "strview.h"
+#include "frames.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -60,7 +61,22 @@
 #include <string>
 #include <unordered_map>
 
-namespace b2 { namespace regex {
+/*
+ * All these forward declarations are only needed for the error function
+ * regerror below.
+ */
+void backtrace_line(FRAME *);
+void backtrace(FRAME *);
+void print_source_line(FRAME *);
+typedef struct _lol LOL;
+void lol_print(LOL * lol);
+
+namespace b2 {
+
+// more forward
+void clean_exit(int exit_code);
+
+namespace regex {
 
 /*
  * The first byte of the regexp internal "program" is actually this magic
@@ -68,7 +84,33 @@ namespace b2 { namespace regex {
  */
 #define MAGIC 0234
 
-void regerror(char const * s);
+thread_local FRAME * frame = nullptr;
+
+/*
+ * Handles any errors that occur while compiling a regex.
+ * Largely inspired to argument_error() from function.cpp. An alternative,
+ * more structured method of issuing errors would be appropriate.
+ */
+void regerror(char const * s)
+{
+	// frame comes from the thread_local variable b2::regex::frame
+	if (frame == nullptr)
+	{
+		// NOTE: "legacy" behaviour, but should exit here
+		printf("regexp error: %s\n", s);
+	}
+	else
+	{
+		backtrace_line( frame->prev );
+		out_printf( "*** regexp error\n* rule %s", frame->rulename );
+		out_printf( " called with: ( " );
+		lol_print( frame->args );
+		out_printf( " )\n* %s\n", s );
+		print_source_line( frame );
+		backtrace( frame->prev );
+		b2::clean_exit( EXITBAD );
+	}
+}
 
 /*
  * The "internal use only" fields in regexp.h are present to pass info from
@@ -1148,8 +1190,6 @@ bool regex_exec(
 	auto result = e.regexec(prog, expr, text);
 	return result;
 }
-
-void regerror(char const * s) { out_printf("re error %s\n", s); }
 
 regex_prog * program::compile(const char * pattern)
 {

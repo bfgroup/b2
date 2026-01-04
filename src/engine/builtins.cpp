@@ -1018,7 +1018,12 @@ LIST * builtin_match( FRAME * frame, int flags )
     b2::list_cref patterns( lol_get( frame->args, 0 ) );
     for ( auto pattern : patterns )
     {
-        b2::regex::program re( pattern->str() );
+        b2::regex::program re;
+        {
+            // compilation errors print a nice error message and exit
+            b2::regex::frame_ctx ctx(frame);
+            re.reset( pattern->str() );
+        }
 
         /* For each text string to match against. */
         b2::list_cref texts( lol_get( frame->args, 1 ) );
