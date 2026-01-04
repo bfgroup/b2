@@ -52,7 +52,7 @@ struct program
 	private:
 	const regex_prog * compiled = nullptr;
 
-	static regex_prog & compile(const char * patter);
+	static regex_prog * compile(const char * patter);
 };
 
 struct program::result_iterator
