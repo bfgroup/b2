@@ -1151,19 +1151,19 @@ bool regex_exec(
 
 void regerror(char const * s) { out_printf("re error %s\n", s); }
 
-regex_prog & program::compile(const char * pattern)
+regex_prog * program::compile(const char * pattern)
 {
 	static std::unordered_map<std::string, regex_prog_ptr> cache;
 	if (cache.count(pattern) == 0)
 	{
 		cache[pattern] = regex_comp(pattern);
 	}
-	return *cache[pattern];
+	return cache[pattern].get();
 }
 
 program::program(const char * pattern) { reset(pattern); }
 
-void program::reset(const char * pattern) { compiled = &compile(pattern); }
+void program::reset(const char * pattern) { compiled = compile(pattern); }
 
 program::result_iterator::result_iterator(
 	const regex_prog & c, const string_view & s)
@@ -1176,7 +1176,7 @@ program::result_iterator::result_iterator(
 void program::result_iterator::advance()
 {
 	// We start searching for a match at the end of the previous match.
-	if (regex_exec(*compiled, expressions, rest))
+	if ((compiled != nullptr) && regex_exec(*compiled, expressions, rest))
 	{
 		// A match means the subexpressions are filled in and the first entry
 		// is the full match. Advance `rest` to follow the match.
