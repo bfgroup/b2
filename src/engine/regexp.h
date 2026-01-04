@@ -22,7 +22,7 @@
 namespace b2 { namespace regex {
 
 // The resulting matches for a regex match. Expression 0 is the full match.
-// And expressions [1,NSUBEXP] are the subexpressions matched.
+// And expressions [1, NSUBEXP] are the subexpressions (groups) matched.
 struct regex_expr
 {
 	string_view sub[NSUBEXP];
@@ -78,11 +78,18 @@ struct program::result_iterator
 	}
 	inline reference operator*() const { return (*this)[0]; }
 	inline pointer operator->() const { return &(*this)[0]; }
-	explicit inline operator bool() const { return !(*this)[0].empty(); }
+	inline operator bool() const { return !(*this)[0].empty(); }
 	inline reference operator[](std::size_t i) const
 	{
 		static const value_type invalid { nullptr, 0 };
 		return i < NSUBEXP ? expressions.sub[i] : invalid;
+	}
+	// total groups matched
+	inline int count() const
+	{
+		int i = NSUBEXP - 1;
+		while ( expressions.sub[i].begin() == nullptr && i ) i--;
+		return i;
 	}
 
 	private:
