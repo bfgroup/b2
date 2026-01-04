@@ -289,7 +289,11 @@ struct compiler
 		regnpar = 1;
 		regcode = r->program;
 		regc(MAGIC);
-		if (reg(0, &flags) == nullptr) return nullptr;
+		if (reg(0, &flags) == nullptr)
+		{
+			BJAM_FREE(r);
+			return nullptr;
+		}
 
 		/* Dig out information for optimizations. */
 		r->regstart = '\0'; /* Worst-case defaults. */
