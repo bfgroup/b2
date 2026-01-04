@@ -82,7 +82,7 @@ struct program::result_iterator
 	inline reference operator[](std::size_t i) const
 	{
 		static const value_type invalid { nullptr, 0 };
-		return i <= NSUBEXP ? expressions.sub[i] : invalid;
+		return i < NSUBEXP ? expressions.sub[i] : invalid;
 	}
 
 	private:
