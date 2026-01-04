@@ -1031,12 +1031,10 @@ LIST * builtin_match( FRAME * frame, int flags )
         {
             if ( auto re_i = re.search( text->str() ) )
             {
-                /* Find highest parameter */
-                int top = NSUBEXP-1;
-                while ( !re_i[top].begin() ) top -= 1;
-                /* And add all parameters up to highest onto list. */
-                /* Must have parameters to have results! */
-                for ( int i = 1; i <= top ; ++i )
+                /* Find total groups matched */
+                int tot = re_i.count();
+                /* And add all catched matches onto result list. */
+                for ( int i = 1; i <= tot ; ++i )
                 {
                     string_append_range( buf, re_i[i].begin(), re_i[i].end() );
                     result.push_back( object_new( buf->value ) );
