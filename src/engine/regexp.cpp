@@ -46,10 +46,11 @@
  */
 
 #include "regexp.h"
-#include "jam.h"
-#include "output.h"
-#include "strview.h"
+#include "lists.h"
 #include "frames.h"
+#include "output.h"
+#include "startup.h"
+#include "strview.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -68,15 +69,8 @@
 void backtrace_line(FRAME *);
 void backtrace(FRAME *);
 void print_source_line(FRAME *);
-typedef struct _lol LOL;
-void lol_print(LOL * lol);
 
-namespace b2 {
-
-// more forward
-void clean_exit(int exit_code);
-
-namespace regex {
+namespace b2 { namespace regex {
 
 /*
  * The first byte of the regexp internal "program" is actually this magic
