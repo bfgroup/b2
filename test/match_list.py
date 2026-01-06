@@ -79,8 +79,8 @@ trials = [
 testln = []
 exptln = []
 for n, c in enumerate(trials):
-    testln.append(f'ECHO {n} [ MATCH {c[0]} : {c[1]} ] ;')
-    exptln.append(f'{n} {c[2]}' if c[2] else f'{n}')
+    testln.append('ECHO {0} [ MATCH {1} : {2} ] ;'.format(n, c[0], c[1]))
+    exptln.append('{0} {1}'.format(n, c[2]) if c[2] else str(n))
 testln.append('EXIT : 0 ;\n')
 exptln.append('\n')
 
