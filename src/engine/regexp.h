@@ -7,7 +7,8 @@
 #ifndef B2_REGEXP_H
 #define B2_REGEXP_H
 
-#include "jam.h"
+#include "config.h"
+
 #include "mem.h"
 #include "strview.h"
 #include "types.h"

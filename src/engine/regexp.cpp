@@ -39,15 +39,19 @@
  *** seiwald@perforce.com, on 20 January 2000, to use function prototypes.
  *** THIS IS AN ALTERED VERSION.  It was altered by René Ferdinand Rivera Morell
  *** on 2023-01, to convert to C++ and to be thread safe.
+ *** THIS IS AN ALTERED VERSION.  It was altered by Paolo Pastori on 2026-01,
+ *** to fix issues with malformed regexps and reshape regerror().
  *
  * Beware that some of this code is subtly aware of the way operator precedence
  * is structured in regular expressions. Serious changes in regular-expression
  * syntax might require a total rethink.
  */
 
+#include "jam.h"
 #include "regexp.h"
-#include "lists.h"
+
 #include "frames.h"
+#include "lists.h"
 #include "output.h"
 #include "startup.h"
 #include "strview.h"
