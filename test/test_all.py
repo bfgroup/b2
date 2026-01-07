@@ -394,6 +394,7 @@ tests = [
     "load_order",
     "loop",
     "make_rule",
+    "match_list",
     "message",
     "ndebug",
     "no_type",

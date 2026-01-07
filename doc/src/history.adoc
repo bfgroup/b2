@@ -6,6 +6,8 @@
 * Fix jam/{CPP} bind definitions of 4 or more values in a single
   declared argument not actually adding all the definitions.
   -- _Paolo Pastori_
+* *New*: Added test for regular expressions with MATCH builtin rule.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 
