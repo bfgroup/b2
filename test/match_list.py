@@ -29,7 +29,7 @@ trials = [
     # literal dot (with escaping looses special meaning)
     # NOTE: a \ followed by one of the characters ^.[$()|*+?\
     # matches that character taken as an ordinary character,
-    # while a \ followed by any other character (but </>) does nothing!
+    # while a \ followed by any other character (but <>) does nothing!
     # NOTE: because of common escaping by shell/interpreters
     # to obtain a final \ you often have to escape itself using
     # \\ or enclose it in raw strings (Python r'..', C++ R"...")
@@ -79,8 +79,8 @@ trials = [
 testln = []
 exptln = []
 for n, c in enumerate(trials):
-    testln.append('ECHO {0} [ MATCH {1} : {2} ] ;'.format(n, c[0], c[1]))
-    exptln.append('{0} {1}'.format(n, c[2]) if c[2] else str(n))
+    testln.append('ECHO {} [ MATCH {} : {} ] ;'.format(n, c[0], c[1]))
+    exptln.append('{} {}'.format(n, c[2]) if c[2] else str(n))
 testln.append('EXIT : 0 ;\n')
 exptln.append('\n')
 
