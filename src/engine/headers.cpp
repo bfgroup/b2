@@ -27,7 +27,6 @@
 #include "headers.h"
 
 #include "compile.h"
-#include "hdrmacro.h"
 #include "lists.h"
 #include "modules.h"
 #include "object.h"
@@ -84,7 +83,7 @@ void headers( TARGET * t )
     }
 
     /* Doctor up call to HDRRULE rule */
-    /* Call headers1() to get LIST of included files. */
+    /* Get LIST of included files. */
     {
         FRAME frame[ 1 ];
         frame_init( frame );
@@ -118,12 +117,6 @@ LIST * headers1( LIST * l, OBJECT * file, int rec, b2::regex::program re[] )
     FILE * f;
     char buf[ 1024 ];
     int i;
-
-    /* The following regexp is used to detect cases where a file is included
-     * through a line like "#include MACRO".
-     */
-    b2::regex::program re_macros(
-        "#[ \t]*include[ \t]*([A-Za-z][A-Za-z0-9_]*).*$" );
 
 #ifdef OPT_IMPROVED_PATIENCE_EXT
     static int count = 0;
@@ -161,31 +154,6 @@ LIST * headers1( LIST * l, OBJECT * file, int rec, b2::regex::program re[] )
                 if ( is_debug_header() )
                     out_printf( "header found: %s\n", header.c_str() );
                 l = list_push_back( l, object_new( header.c_str() ) );
-            }
-        }
-
-        /* Special treatment for #include MACRO. */
-        auto re_macros_i = re_macros.search( buf );
-        if ( re_macros_i && re_macros_i[ 1 ].end() != nullptr )
-        {
-            std::string macro_name(re_macros_i[ 1 ].begin(), re_macros_i[ 1 ].end());
-
-            if ( is_debug_header() )
-                out_printf( "macro header found: %s", macro_name.c_str() );
-
-            b2::value_ref macro_name_v(macro_name);
-            b2::value_ref header_filename_v(macro_header_get( macro_name_v ));
-            if ( header_filename_v.has_value() )
-            {
-                if ( is_debug_header() )
-                    out_printf( " resolved to '%s'\n", header_filename_v->str()
-                        );
-                l = list_push_back( l, header_filename_v );
-            }
-            else
-            {
-                if ( is_debug_header() )
-                    out_printf( " ignored !!\n" );
             }
         }
     }
