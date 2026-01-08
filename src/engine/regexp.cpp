@@ -85,17 +85,17 @@ namespace b2 { namespace regex {
 thread_local FRAME * frame = nullptr;
 
 /*
- * Handles any errors that occur while compiling a regex.
+ * Handles any error that occur while compiling a regex.
  * Largely inspired to argument_error() from function.cpp. An alternative,
- * more structured method of issuing errors would be appropriate.
+ * more structured method of issuing errors would be appropriate,
+ * using stderr would be better too.
  */
 void regerror(char const * s)
 {
 	// frame comes from the thread_local variable b2::regex::frame
 	if (frame == nullptr)
 	{
-		// NOTE: "legacy" behaviour, but should exit here
-		printf("regexp error: %s\n", s);
+		out_printf("regexp error: %s\n", s);
 	}
 	else
 	{
@@ -106,8 +106,8 @@ void regerror(char const * s)
 		out_printf( " )\n* %s\n", s );
 		print_source_line( frame );
 		backtrace( frame->prev );
-		b2::clean_exit( EXITBAD );
 	}
+	b2::clean_exit( EXITBAD );
 }
 
 /*
