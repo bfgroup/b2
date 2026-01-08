@@ -4578,7 +4578,7 @@ The function signature is:</p>
 <div class="paragraph">
 <p>This function can only be used when passing requirements or usage
 requirements to a metatarget rule. For example, to make an application
-link to a library if it&#8217;s available, one has use the following:</p>
+link to a library if it&#8217;s available, one has to use the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7855,8 +7855,8 @@ of X. They won&#8217;t interfere with each other in any way. Similarly,
 importing rules into one module has no effect on any other module.</p>
 </div>
 <div class="paragraph">
-<p>Every module has two special variables. <code>$(<em>file</em>)</code> contains the name
-of the file that the module was loaded from and <code>$(<em>name</em>)</code> contains
+<p>Every module has two special variables. <code>$(__file__)</code> contains the name
+of the file that the module was loaded from and <code>$(__name__)</code> contains
 the name of the module.</p>
 </div>
 <div class="admonitionblock note">
@@ -7866,7 +7866,7 @@ the name of the module.</p>
 <div class="title">ℹ</div>
 </td>
 <td class="content">
-<code>$(<em>file</em>)</code> does not contain the full path to the file. If you need
+<code>$(__file__)</code> does not contain the full path to the file. If you need
 this, use <code>modules.binding</code>.
 </td>
 </tr>
@@ -8184,7 +8184,7 @@ C&#43;&#43;
 </div>
 <div class="paragraph">
 <p>Runs internal B2 unit tests for the specified module. The module&#8217;s
-<code><em>test</em></code> rule is executed in its own module to eliminate any inadvertent
+<code>__test__</code> rule is executed in its own module to eliminate any inadvertent
 effects of testing module dependencies (such as assert) on the module itself.</p>
 </div>
 </div>
@@ -8327,7 +8327,7 @@ C&#43;&#43;
 </div>
 </div>
 <div class="paragraph">
-<p>Instantiates a new instance of the given class and calls the <code><em>init</em></code> with
+<p>Instantiates a new instance of the given class and calls the <code>__init__</code> with
 the given arguments. Returns the instance ID.</p>
 </div>
 </div>
@@ -8517,31 +8517,6 @@ lists &amp; rest, bind::context_ref_ context_ref);</code></p>
 </div>
 <div class="sect4">
 <h5 id="_b2jamerrorstry_catch"><a class="anchor" href="#_b2jamerrorstry_catch"></a><code>b2::jam::errors::try-catch</code></h5>
-<div class="exampleblock">
-<div class="content">
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-Jam
-</td>
-<td class="hdlist2">
-<p><code>rule error-skip-frames ( skip-frames messages * : * )</code></p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-C&#43;&#43;
-</td>
-<td class="hdlist2">
-<p><code>void error_skip_frames(std::tuple&lt;int, list_ref&gt; skip_messages, const
-lists &amp; rest, bind::context_ref_ context_ref);</code></p>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
 <div class="paragraph">
 <p>This is not really an exception-handling mechanism, but it does allow us to
 perform some error-checking on our error-checking. Errors are suppressed
@@ -8794,10 +8769,10 @@ user module.</p>
 <p><code>"$"</code> matches the end of the string.</p>
 </li>
 <li>
-<p><code>"&lt;"</code> matches the beginning of a word.</p>
+<p><code>"\&lt;"</code> matches the beginning of a word.</p>
 </li>
 <li>
-<p><code>"&gt;"</code> matches the end of a word.</p>
+<p><code>"\&gt;"</code> matches the end of a word.</p>
 </li>
 </ul>
 </div>
@@ -8823,7 +8798,7 @@ Jam
 C&#43;&#43;
 </td>
 <td class="hdlist2">
-<p><code>b2::list_ref rb2::egex_split(const std::tuple&lt;b2::value_ref,
+<p><code>b2::list_ref b2::regex_split(const std::tuple&lt;b2::value_ref,
 b2::value_ref&gt; &amp; string_separator);</code></p>
 </td>
 </tr>
@@ -8879,7 +8854,7 @@ separator);</code></p>
 </div>
 </div>
 <div class="paragraph">
-<p>Returns the concatenated results of Applying regex.split to every element of
+<p>Returns the concatenated results of applying regex.split to every element of
 the list using the separator pattern.</p>
 </div>
 </div>
@@ -10321,7 +10296,7 @@ tries each suffix. E.g. for name of "file.so.1.2" suffixes "2", "1", and
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>rule <em>init</em> ( name : project )</code></p>
+<p><code>rule __init__ ( name : project )</code></p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>name</code></dt>
@@ -10562,7 +10537,7 @@ and handles generation of those dependency targets.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>rule <em>init</em> ( name : project : sources * : requirements * : default-build * : usage-requirements * )</code></p>
+<p><code>rule __init__ ( name : project : sources * : requirements * : default-build * : usage-requirements * )</code></p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>name</code></dt>
@@ -10643,7 +10618,7 @@ automatically for each type.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>rule <em>init</em> ( name : project : type : sources * : requirements * : default-build * : usage-requirements * )</code></p>
+<p><code>rule __init__ ( name : project : type : sources * : requirements * : default-build * : usage-requirements * )</code></p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>name</code></dt>
@@ -14276,9 +14251,9 @@ targets, but which are not themselves associated with any real file.</p>
 </div>
 <div class="paragraph">
 <p>A file target&#8217;s identifier is generally the file&#8217;s name, which can be
-absolutely rooted, relative to the directory of <code>b2`s invocation, or
+absolutely rooted, relative to the directory of <code>b2</code>s invocation, or
 simply local (no directory). Most often it is the last case, and the
-actual file path is bound using the `$(SEARCH)</code> and <code>$(LOCATE)</code> special
+actual file path is bound using the <code>$(SEARCH)</code> and <code>$(LOCATE)</code> special
 variables. See <a href="#jam.language.variables.builtins.search">SEARCH and
 LOCATE Variables</a> below. A local filename is optionally qualified with
 grist, a string value used to assure uniqueness. A file target with an
@@ -14402,8 +14377,8 @@ on target $(var) field1 : field2 : ... : fieldN ;
 </div>
 <div class="paragraph">
 <p>The variable&#8217;s value names the rule (or rules) to be invoked. A rule is
-invoked for each element in the list of <code>$(var)`s values. The fields
-`field1 : field2 : &#8230;&#8203;</code> are passed as arguments for each invocation For the [
+invoked for each element in the list of <code>$(var)</code>s values. The fields
+<code>field1 : field2 : &#8230;&#8203;</code> are passed as arguments for each invocation For the [
 &#8230;&#8203; ] forms, the return value is the concatenation of the return values
 for all of the invocations.</p>
 </div>
@@ -14755,7 +14730,7 @@ This is currently not fully implemented.
 <div class="sect4">
 <h5 id="jam.language.rules.builtins.utility"><a class="anchor" href="#jam.language.rules.builtins.utility"></a>Utility</h5>
 <div class="paragraph">
-<p>The two rules <code>ECHO</code> and <code>EXIT</code> are utility rules, used only in `b2`s
+<p>The two rules <code>ECHO</code> and <code>EXIT</code> are utility rules, used only in <code>b2</code>s
 parsing phase.</p>
 </div>
 <div class="sect5">
@@ -14858,7 +14833,7 @@ specified.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule MATCH ( regexps + : list * )</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule MATCH ( regexps * : list * )</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -14871,13 +14846,14 @@ for each string in <em>list</em>, and for each regular expression in <em>regexps
 <h6 id="jam.language.rules.builtins.utility._backtrace__"><a class="anchor" href="#jam.language.rules.builtins.utility._backtrace__"></a><code>BACKTRACE</code></h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule BACKTRACE ( )</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule BACKTRACE ( levels ? )</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Returns a list of quadruples: <em>filename</em> <em>line</em> <em>module</em> <em>rulename</em>&#8230;&#8203;,
-describing each shallower level of the call stack. This rule can be used
-to generate useful diagnostic messages from Jam rules.</p>
+describing each shallower level of the call stack, or only last <em>levels</em>
+when the argument is provided. This rule can be used to generate useful
+diagnostic messages from Jam rules.</p>
 </div>
 </div>
 <div class="sect5">
@@ -17073,11 +17049,15 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Fix jam/C&#43;&#43; bind definitions of 4 or more values in a single
-declared argument not actually adding all the definitions.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+<p><strong>New</strong>: Argument lists description provided for all built-in rules,
+GLOB-RECURSIVELY has become an alias of GLOB_RECURSIVELY.</p>
 </li>
 <li>
 <p><strong>New</strong>: Added test for regular expressions with MATCH builtin rule.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix jam/C&#43;&#43; bind definitions of 4 or more values in a single
+declared argument not actually adding all the definitions.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
 </li>
 <li>
 <p>Fix various regexp issues, allowing for mandatory regular expression
