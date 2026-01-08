@@ -54,7 +54,7 @@
 # define FSCTL_GET_REPARSE_POINT 0x000900a8
 #endif
 #ifndef IO_REPARSE_TAG_SYMLINK
-# define IO_REPARSE_TAG_SYMLINK	(0xA000000CL)
+# define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
 #endif
 
 #include <io.h>
@@ -97,9 +97,10 @@
  *  builtin_echo()                - ECHO rule
  *  builtin_exit()                - EXIT rule
  *  builtin_export()              - EXPORT ( MODULE ? : RULES * )
- *  builtin_flags()               - NOCARE, NOTFILE, TEMPORARY rule
+ *  builtin_flags()               - ALWAYS/LEAVES/NOCARE/NOTIME/NOTFILE/NOUPDATE
+ *                                  TEMPORARY/ISFILE/FAIL_EXPECTED/RMOLD rule
  *  builtin_glob()                - GLOB rule
- *  builtin_glob_recursive()      - ???
+ *  builtin_glob_recursive()      - GLOB_RECURSIVELY rule
  *  builtin_hdrmacro()            - ???
  *  builtin_import()              - IMPORT rule
  *  builtin_match()               - MATCH rule, regexp matching
@@ -165,18 +166,27 @@ RULE * duplicate_rule( char const * name_, RULE * other )
 
 void load_builtins()
 {
-    duplicate_rule( "Always",
-      bind_builtin( "ALWAYS",
-                    builtin_flags, T_FLAG_TOUCHED, 0 ) );
+    {
+        char const * args[] = { "targets", "*", 0 };
+        duplicate_rule( "Always",
+          bind_builtin( "ALWAYS",
+                        builtin_flags, T_FLAG_TOUCHED, args ) );
+    }
 
-    duplicate_rule( "Depends",
-      bind_builtin( "DEPENDS",
-                    builtin_depends, 0, 0 ) );
+    {
+        char const * args[] = { "targets1", "*", ":", "targets2", "*", 0 };
+        duplicate_rule( "Depends",
+          bind_builtin( "DEPENDS",
+                        builtin_depends, 0, args ) );
+    }
 
-    duplicate_rule( "echo",
-    duplicate_rule( "Echo",
-      bind_builtin( "ECHO",
-                    builtin_echo, 0, 0 ) ) );
+    {
+        char const * args[] = { "args", "*", 0 };
+        duplicate_rule( "echo",
+        duplicate_rule( "Echo",
+          bind_builtin( "ECHO",
+                        builtin_echo, 0, args ) ) );
+    }
 
     {
         char const * args[] = { "message", "*", ":", "result-value", "?", 0 };
@@ -195,13 +205,17 @@ void load_builtins()
 
     {
         char const * args[] = { "patterns", "*", 0 };
-        bind_builtin( "GLOB-RECURSIVELY",
-                      builtin_glob_recursive, 0, args );
+        duplicate_rule( "GLOB-RECURSIVELY",
+          bind_builtin( "GLOB_RECURSIVELY",
+                        builtin_glob_recursive, 0, args ) );
     }
 
-    duplicate_rule( "Includes",
-      bind_builtin( "INCLUDES",
-                    builtin_depends, 1, 0 ) );
+    {
+        char const * args[] = { "targets1", "*", ":", "targets2", "*", 0 };
+        duplicate_rule( "Includes",
+          bind_builtin( "INCLUDES",
+                        builtin_depends, 1, args ) );
+    }
 
     {
         char const * args[] = { "targets", "*", ":", "targets-to-rebuild", "*",
@@ -210,13 +224,22 @@ void load_builtins()
                       builtin_rebuilds, 0, args );
     }
 
-    duplicate_rule( "Leaves",
-      bind_builtin( "LEAVES",
-                    builtin_flags, T_FLAG_LEAVES, 0 ) );
+    {
+        char const * args[] = { "targets", "*", 0 };
+        duplicate_rule( "Leaves",
+          bind_builtin( "LEAVES",
+                        builtin_flags, T_FLAG_LEAVES, args ) );
+    }
 
-    duplicate_rule( "Match",
-      bind_builtin( "MATCH",
-                    builtin_match, 0, 0 ) );
+    {
+        char const * args[] = { "regexps", "*", ":", "list", "*", ":",
+                                // for backward compatibilty with Boost
+                                // releases (1.69 .. 1.72), see PR #487
+                                "unused", "*", 0 };
+        duplicate_rule( "Match",
+          bind_builtin( "MATCH",
+                        builtin_match, 0, args ) );
+    }
 
     {
         char const * args[] = { "string", ":", "delimiters", 0 };
@@ -224,39 +247,60 @@ void load_builtins()
                       builtin_split_by_characters, 0, args );
     }
 
-    duplicate_rule( "NoCare",
-      bind_builtin( "NOCARE",
-                    builtin_flags, T_FLAG_NOCARE, 0 ) );
+    {
+        char const * args[] = { "targets", "*", 0 };
+        duplicate_rule( "NoCare",
+          bind_builtin( "NOCARE",
+                        builtin_flags, T_FLAG_NOCARE, args ) );
+    }
 
-    duplicate_rule( "NOTIME",
-    duplicate_rule( "NotFile",
-      bind_builtin( "NOTFILE",
-                    builtin_flags, T_FLAG_NOTFILE, 0 ) ) );
+    {
+        char const * args[] = { "targets", "*", 0 };
+        duplicate_rule( "NOTIME",
+        duplicate_rule( "NotFile",
+          bind_builtin( "NOTFILE",
+                        builtin_flags, T_FLAG_NOTFILE, args ) ) );
+    }
 
-    duplicate_rule( "NoUpdate",
-      bind_builtin( "NOUPDATE",
-                    builtin_flags, T_FLAG_NOUPDATE, 0 ) );
+    {
+        char const * args[] = { "targets", "*", 0 };
+        duplicate_rule( "NoUpdate",
+          bind_builtin( "NOUPDATE",
+                        builtin_flags, T_FLAG_NOUPDATE, args ) );
+    }
 
-    duplicate_rule( "Temporary",
-      bind_builtin( "TEMPORARY",
-                    builtin_flags, T_FLAG_TEMP, 0 ) );
+    {
+        char const * args[] = { "targets", "*", 0 };
+        duplicate_rule( "Temporary",
+          bind_builtin( "TEMPORARY",
+                        builtin_flags, T_FLAG_TEMP, args ) );
+    }
 
-      bind_builtin( "ISFILE",
-                    builtin_flags, T_FLAG_ISFILE, 0 );
+    {
+        char const * args[] = { "targets", "*", 0 };
+          bind_builtin( "ISFILE",
+                        builtin_flags, T_FLAG_ISFILE, args );
+    }
 
     duplicate_rule( "HdrMacro",
       bind_builtin( "HDRMACRO",
                     builtin_hdrmacro, 0, 0 ) );
 
-    /* FAIL_EXPECTED is used to indicate that the result of a target build
-     * action should be inverted (ok <=> fail) this can be useful when
-     * performing test runs from Jamfiles.
-     */
-    bind_builtin( "FAIL_EXPECTED",
-                  builtin_flags, T_FLAG_FAIL_EXPECTED, 0 );
+    {
+        /* FAIL_EXPECTED is used to indicate that the result of a target build
+         * action should be inverted (ok <=> fail) this can be useful when
+         * performing test runs from Jamfiles.
+         */
+        char const * args[] = { "targets", "*", 0 };
+        bind_builtin( "FAIL_EXPECTED",
+                      builtin_flags, T_FLAG_FAIL_EXPECTED, args );
+    }
 
-    bind_builtin( "RMOLD",
-                  builtin_flags, T_FLAG_RMOLD, 0 );
+    {
+        char const * args[] = { "targets", "*", 0 };
+        bind_builtin( "RMOLD",
+                      builtin_flags, T_FLAG_RMOLD, args );
+    }
 
     {
         char const * args[] = { "targets", "*", 0 };
@@ -463,10 +507,10 @@ void load_builtins()
 
 #ifdef JAM_DEBUGGER
 
-	{
-		const char * args[] = { "list", "*", 0 };
-		bind_builtin("__DEBUG_PRINT_HELPER__", builtin_debug_print_helper, 0, args);
-	}
+    {
+        const char * args[] = { "list", "*", 0 };
+        bind_builtin("__DEBUG_PRINT_HELPER__", builtin_debug_print_helper, 0, args);
+    }
 
 #endif
 
@@ -927,9 +971,13 @@ LIST * glob_recursive( char const * pattern )
 }
 
 
-/*
- * builtin_glob_recursive() - ???
- */
+//
+// builtin_glob_recursive() - GLOB_RECURSIVELY rule
+//
+// Recursively expands each of the provided patterns (GLOBs) into a list
+// of paths. Each pattern can have different components, one for each
+// directory, for example: */*.test
+//
 
 LIST * builtin_glob_recursive( FRAME * frame, int flags )
 {
