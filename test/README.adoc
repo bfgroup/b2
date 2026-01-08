@@ -311,7 +311,7 @@ time. All the elements in `names` should be relative paths.
 
 . Stores the state of the working directory in `self.previous_tree`.
 . Changes to `subdir`, if it is specified. It is relative to the
-  `original_workdir` or the workdir specified in `__init`.
+  `original_workdir` or the workdir specified in `+__init__+`.
 . Invokes the `b2` executable, passing `extra_args` to it. The binary should be
   located under `<test_invocation_dir>/../src/engine`. This is to make sure
   tests use the version of `b2` build from source.
@@ -376,7 +376,7 @@ The members are:
 * `expect_modification`
 * `expect_nothing`
 
-Note that `expect_modification` is used to check that a either file content or
+Note that `expect_modification` is used to check if the file contents or
 timestamp has changed. The rationale is that some compilers change content even
 if sources does not change, and it's easier to have a method which checks for
 both content and time changes.
