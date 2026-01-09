@@ -509,7 +509,7 @@ local rule probe ( python-cmd )
             {
                 # These variables are expected to be declared local in the
                 # caller, so Jam's dynamic scoping will set their values there.
-                sys.$(s) = [ SUBST $(output) "\\<$(s)=([^$(nl)]+)" $2 ] ;
+                sys.$(s) = [ SUBST $(output) "\\<$(s)=([^$(nl)]+)" $1 ] ;
             }
         }
         return $(output) ;
