@@ -443,7 +443,6 @@ function.cpp \
 glob.cpp \
 hash.cpp \
 hcache.cpp \
-hdrmacro.cpp \
 headers.cpp \
 jam_strings.cpp \
 jam.cpp \
@@ -452,7 +451,6 @@ lists.cpp \
 make.cpp \
 make1.cpp \
 md5.cpp \
-mem.cpp \
 modules.cpp \
 native.cpp \
 output.cpp \
