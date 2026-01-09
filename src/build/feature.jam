@@ -125,8 +125,7 @@ rule feature (
     }
     else
     {
-        local m = [ MATCH (.*=.*) : $(values) ] ;
-        if $(m[1])
+        if [ MATCH (=) : $(values) ]
         {
             error = "feature value may not contain '='" ;
         }
