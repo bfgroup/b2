@@ -77,7 +77,7 @@ struct value
 	static inline void free(value *& v) { v = nullptr; }
 	static void done();
 
-	inline bool has_value() const { return get_type() == type::null; }
+	inline bool has_value() const { return get_type() != type::null; }
 
 	template <typename T>
 	static inline value * as_string(T v)
