@@ -992,6 +992,10 @@ LIST * builtin_glob_recursive( FRAME * frame, int flags )
 }
 
 
+/*
+ * builtin_subst() - SUBST rule, regexp replacing
+ */
+
 LIST * builtin_subst( FRAME * frame, int flags )
 {
     LIST * result = L0;
@@ -1002,9 +1006,14 @@ LIST * builtin_subst( FRAME * frame, int flags )
     if ( iter != end && list_next( iter ) != end && list_next( list_next( iter )
         ) != end )
     {
-        char const * const source = object_str( list_item( iter ) );
-        b2::regex::program re( list_item( list_next( iter ) )->str() );
+        b2::regex::program re;
+        {
+            // compilation errors print a nice error message and exit
+            b2::regex::frame_ctx ctx(frame);
+            re.reset( list_item( list_next( iter ) )->str() );
+        }
 
+        char const * const source = object_str( list_item( iter ) );
         if ( auto re_i = re.search(source) )
         {
             LISTITER subst = list_next( iter );
