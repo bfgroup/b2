@@ -528,7 +528,7 @@ local rule process-explicit-toolset-requests
     for local t in $(option-toolsets) $(feature-toolsets)
     {
         # Parse toolset-version/properties.
-        local toolset = [ MATCH "([^/]+)/?.*" : $(t) ] ;
+        local toolset = [ MATCH "([^/]+)" : $(t) ] ;
         local properties = [ feature.expand-subfeatures <toolset>$(toolset) : true ] ;
         local toolset-property = [ property.select <toolset> : $(properties) ] ;
         local known ;
@@ -1055,7 +1055,7 @@ local rule should-clean-project ( project )
             ;
     }
 
-    # The 'all' pseudo target is not strictly needed expect in the case when we
+    # The 'all' pseudo target is not strictly needed except in the case when we
     # use it below but people often assume they always have this target
     # available and do not declare it themselves before use which may cause
     # build failures with an error message about not being able to build the
