@@ -190,7 +190,7 @@ rule from-command-line ( command-line * )
             # Build request spec either has "=" in it or completely consists of
             # implicit feature values.
             local fs = feature-space ;
-            if [ MATCH "(=)" : $(e) ]
+            if [ MATCH "(.+=.*)" : $(e) ]
                 || [ looks-like-implicit-value $(e:D=) : $(feature-space) ]
             {
                 properties += $(e) ;
