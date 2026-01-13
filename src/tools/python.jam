@@ -183,9 +183,7 @@ local rule is-cygwin-symlink ( path )
             local link = [ SHELL "FIND /OFF \"!<symlink>\" \""$(path)"\" 2>&1" ] ;
             if $(link[2]) != 0
             {
-                local nl = "
-" ;
-                is-symlink = [ MATCH "!<symlink>([^"$(nl)"]*)" : $(link[1]) ] ;
+                is-symlink = [ MATCH "!<symlink>([^\r\n]*)" : $(link[1]) ] ;
                 if $(is-symlink)
                 {
                     is-symlink = [ *nix-path-to-native $(is-symlink) ] ;
@@ -503,13 +501,11 @@ local rule probe ( python-cmd )
         if $(output)
         {
             # Parse the output to get all the results.
-            local nl = "
-" ;
             for s in $(sys-elements)
             {
                 # These variables are expected to be declared local in the
                 # caller, so Jam's dynamic scoping will set their values there.
-                sys.$(s) = [ SUBST $(output) "\\<$(s)=([^$(nl)]+)" $1 ] ;
+                sys.$(s) = [ SUBST $(output) "\\<$(s)=([^\r\n]+)" $1 ] ;
             }
         }
         return $(output) ;
