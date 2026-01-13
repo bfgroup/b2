@@ -79,7 +79,7 @@ rule init ( version ? :  command * : options * )
         }
     }
 
-    local major = [ MATCH "([0-9]+)\\." $(version) ] ;
+    local major = [ MATCH "([0-9]+)\\." : $(version) ] ;
 
     if $(major) = 9 {
       flags intel-darwin.compile OPTIONS $(condition)/<inlining>off : -Ob0 ;
