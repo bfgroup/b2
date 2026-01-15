@@ -72,6 +72,10 @@ trials = [
     (r'"^([0-9]+)\\.([0-9]+)(.*)$"', r'5.4.3beta', r'5 4 .3beta'),
     (r'^@(.*)', r'@my-rule', r'my-rule'),
     (r'^(!)?(.*)', r'"!bla bla"', r'! bla bla'),
+    # portable EOL matching
+    (r'"^([^\r\n]*)"', r'"hello\rworld"', r'hello'), # on Mac value
+    (r'"^([^\r\n]*)"', r'"hello\nworld"', r'hello'), # on *nix value
+    (r'"^([^\r\n]*)"', r'"hello\r\nworld"', r'hello'), # on Windows value
 ]
 
 # Do not change code below !
