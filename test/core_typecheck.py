@@ -8,7 +8,7 @@
 
 import BoostBuild
 
-t = BoostBuild.Tester(["-ffile.jam"], pass_toolset=0)
+t = BoostBuild.Tester(["-ffile.jam"], pass_toolset=False)
 
 t.write("file.jam", """
 module .typecheck
@@ -41,7 +41,6 @@ file.jam:18: in module scope
 * rule do ( [path] a )
 * called with: ( a/b/c )
 * true a
-file.jam:16:see definition of rule 'do' being called
 """)
 
 t.cleanup()
