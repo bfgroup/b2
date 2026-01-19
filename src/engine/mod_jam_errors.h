@@ -140,7 +140,7 @@ void warning(const lists & rest, bind::context_ref_ context_ref);
 
 ====
 [horizontal]
-Jam:: `rule lol->list ( * )`
+Jam:: `rule lol\->list ( * )`
 {CPP}:: `list_ref lol_to_list(const lists & rest);`
 ====
 

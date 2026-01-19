@@ -175,10 +175,10 @@ struct _target
 #define T_FLAG_NOUPDATE 0x0020 /* NOUPDATE applied */
 #define T_FLAG_VISITED 0x0040 /* CWM: Used in debugging */
 
-/* This flag has been added to support a new built-in rule named "RMBAD". It is
+/* This flag has been added to support a new built-in rule named "RMOLD". It is
  * used to force removal of outdated targets whose dependencies fail to build.
  */
-#define T_FLAG_RMOLD 0x0080 /* RMBAD applied */
+#define T_FLAG_RMOLD 0x0080 /* RMOLD applied */
 
 /* This flag was added to support a new built-in rule named "FAIL_EXPECTED" used
  * to indicate that the result of running a given action should be inverted,
