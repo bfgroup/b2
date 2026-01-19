@@ -92,14 +92,16 @@ jobs:
           ${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++ --version
 
       - name: Bootstrap
+        working-directory: b2
         run: |
           ./bootstrap.sh "--cxx=${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++" clang
           echo "using clang : : ${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++ ;" > "${HOME}/user-config.jam"
 
       - name: Test
-        working-directory: test
+        working-directory: b2/test
         env: { PYTHONUTF8: 1 }
         run: ./test_all.py clang
 
       - name: 'No Warnings'
+        working-directory: b2
         run: ./b2 warnings=all warnings-as-errors=on variant=debug,release debug-symbols=off toolset=clang b2
