@@ -89,12 +89,12 @@ jobs:
           cd "${{github.workspace}}"
           wget "https://github.com/pizlonator/fil-c/releases/download/v${{matrix.version}}/filc-${{matrix.version}}-linux-x86_64.tar.xz"
           tar -Jxvf "filc-${{matrix.version}}-linux-x86_64.tar.xz"
-          ./fil-c/build/bin/clang++ --version
+          ${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++ --version
 
       - name: Bootstrap
         run: |
-          ./bootstrap.sh "--cxx=${{github.workspace}}/fil-c/build/bin/clang++" clang
-          echo "using clang : : ${{github.workspace}}/fil-c/build/bin/clang++ ;" > "${HOME}/user-config.jam"
+          ./bootstrap.sh "--cxx=${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++" clang
+          echo "using clang : : ${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++ ;" > "${HOME}/user-config.jam"
 
       - name: Test
         working-directory: test
