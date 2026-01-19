@@ -90,8 +90,7 @@ jobs:
           wget "https://github.com/pizlonator/fil-c/releases/download/v${{matrix.version}}/optfil-${{matrix.version}}-linux-x86_64.tar.xz"
           tar -Jxvf "optfil-${{matrix.version}}-linux-x86_64.tar.xz"
           cd "optfil-${{matrix.version}}-linux-x86_64"
-          sudo ./setup.sh --help
-          sudo ./setup.sh
+          echo "YES" | sudo ./setup.sh
           /opt/fil/bin/fil++ --version
 
       - name: Bootstrap
