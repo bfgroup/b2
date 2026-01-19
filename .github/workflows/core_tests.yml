@@ -92,7 +92,7 @@ jobs:
           cd "optfil-${{matrix.version}}-linux-x86_64"
           echo "YES" | sudo ./setup.sh
           /opt/fil/bin/fil++ --version
-          echo | /opt/fil/bin/fil++ -dM -E -x C++ -
+          echo | /opt/fil/bin/fil++ -dM -E -x c++ -
 
       - name: Bootstrap
         working-directory: b2
