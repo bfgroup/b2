@@ -87,15 +87,18 @@ jobs:
       - name: Install Toolset
         run: |
           cd "${{github.workspace}}"
-          wget "https://github.com/pizlonator/fil-c/releases/download/v${{matrix.version}}/filc-${{matrix.version}}-linux-x86_64.tar.xz"
-          tar -Jxvf "filc-${{matrix.version}}-linux-x86_64.tar.xz"
-          ${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++ --version
+          wget "https://github.com/pizlonator/fil-c/releases/download/v${{matrix.version}}/optfil-${{matrix.version}}-linux-x86_64.tar.xz"
+          tar -Jxvf "optfil-${{matrix.version}}-linux-x86_64.tar.xz"
+          cd "optfil-${{matrix.version}}-linux-x86_64"
+          ./setup.sh --help
+          ./setup.sh
+          /opt/fil/bin/fil++ --version
 
       - name: Bootstrap
         working-directory: b2
         run: |
-          ./bootstrap.sh "--cxx=${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++" clang
-          echo "using clang : : ${{github.workspace}}/filc-${{matrix.version}}-linux-x86_64/build/bin/clang++ ;" > "${HOME}/user-config.jam"
+          ./bootstrap.sh "--cxx=/opt/fil/bin/fil++" clang
+          echo "using clang : : /opt/fil/bin/fil++ ;" > "${HOME}/user-config.jam"
 
       - name: Test
         working-directory: b2/test
