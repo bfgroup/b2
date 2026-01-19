@@ -13,6 +13,9 @@
 * Fix various regexp issues, allowing for mandatory regular expression
   syntax checking, detailed error messages, and improved MATCH rule.
   -- _Paolo Pastori_
+* Fix incorrect and/or inefficient regex expressions throughout all build jam
+  files.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 
