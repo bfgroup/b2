@@ -99,13 +99,19 @@ void regerror(char const * s)
 	}
 	else
 	{
-		backtrace_line( frame->prev );
+		bool has_prev = frame->prev != nullptr;
+		if (has_prev) backtrace_line( frame->prev );
+		else
+		{
+			// TODO
+			// if (frame->file) ...
+			// if (frame->line != -1) ...
+		}
 		out_printf( "*** regexp error\n* rule %s", frame->rulename );
 		out_printf( " called with: ( " );
 		lol_print( frame->args );
 		out_printf( " )\n* %s\n", s );
-		print_source_line( frame );
-		backtrace( frame->prev );
+		if (has_prev) backtrace( frame->prev );
 	}
 	b2::clean_exit( EXITBAD );
 }

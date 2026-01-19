@@ -675,8 +675,7 @@ class installed-shared-lib-generator : generator
             # If the name is in the form NNN.XXX.YYY.ZZZ, where all 'X', 'Y' and
             # 'Z' are numbers, we need to create NNN.XXX and NNN.XXX.YYY
             # symbolic links.
-            local m = [ MATCH
-                "(.*)\\.([0123456789]+)\\.([0123456789]+)\\.([0123456789]+)$" :
+            local m = [ MATCH "(.*)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)$" :
                 [ $(copied).name ] ] ;
             if $(m)
             {

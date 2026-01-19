@@ -3379,7 +3379,6 @@ int32_t is_type_name( char const * s )
 static void argument_error( char const * message, FUNCTION * procedure,
     FRAME * frame, OBJECT * arg )
 {
-    extern void print_source_line( FRAME * );
     LOL * actual = frame->args;
     backtrace_line( frame->prev );
     out_printf( "*** argument error\n* rule %s ( ", frame->rulename );
@@ -3388,9 +3387,7 @@ static void argument_error( char const * message, FUNCTION * procedure,
     out_printf( " )\n* called with: ( " );
     lol_print( actual );
     out_printf( " )\n* %s %s\n", message, arg ? object_str ( arg ) : "" );
-    function_location( procedure, &frame->file, &frame->line );
-    print_source_line( frame );
-    out_printf( "see definition of rule '%s' being called\n", frame->rulename );
+    //function_location( procedure, &frame->file, &frame->line );
     backtrace( frame->prev );
     b2::clean_exit( EXITBAD );
 }
