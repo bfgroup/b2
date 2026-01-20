@@ -97,7 +97,7 @@ jobs:
       - name: Bootstrap
         working-directory: b2
         run: |
-          ./bootstrap.sh "--cxx=/opt/fil/bin/fil++" clang
+          ./bootstrap.sh "--cxx=/opt/fil/bin/fil++" --debug clang
           echo "using clang : : /opt/fil/bin/fil++ ;" > "${HOME}/user-config.jam"
 
       - name: Test
