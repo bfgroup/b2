@@ -695,14 +695,14 @@ rules and not part of the language, like `include`.
 [[jam.language.rules.builtins.utility._glob__]]
 ===== `GLOB`
 
-The `GLOB` rule does filename globing
+The `GLOB` rule does filename globing.
 
 [source]
 ----
 rule GLOB ( directories * : patterns * : downcase-opt ? )
 ----
 
-Using the same wildcards as for the patterns in the switch statement. It
+Using the same wildcards as for the patterns in the `switch` statement. It
 is invoked by being used as an argument to a rule invocation inside of
 "[ ]". For example: `FILES = [ GLOB dir1 dir2 : *.c *.h ]` sets `FILES` to
 the list of C source
@@ -748,6 +748,30 @@ containing the matching symbols are returned. Member and symbol patterns
 are applied as OR conditions, with member patterns taking precedence. On
 unsupported platforms, null is returned when any symbol patterns are
 specified.
+
+[[jam.language.rules.builtins.utility._glob_recursively__]]
+===== `GLOB_RECURSIVELY`
+
+The `GLOB_RECURSIVELY` rule can be thought of as the recursive version of
+the `GLOB` rule.
+
+[source]
+----
+rule GLOB_RECURSIVELY ( patterns * )
+----
+
+The pattern syntax is the same as that used by all globing rules (see
+`switch`.) Unlike `GLOB` which matches the pattern only on files, this rule
+uses the provided pattern(s) to match directories as well.
+This allows you to use patterns where each component corresponds to
+a directory (or file) and all components are expanded recursively,
+e.g. `+*/*.test+`.
+
+Another difference from `GLOB` is that it does not have a _downcase-opt_
+parameter and matching is performed according to OS conventions. The list
+of result paths is also in the canonical OS format.
+
+The results of `GLOB_RECURSIVELY` are stored in a cache to optimize speed.
 
 [[jam.language.rules.builtins.utility._match__]]
 ===== `MATCH`
