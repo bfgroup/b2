@@ -18,12 +18,14 @@
 #include "frames.h"
 #include "lists.h"
 #include "mem.h"
+#include "outerr.h"
+#include "output.h"
 #include "pathsys.h"
 #include "rules.h"
 #include "search.h"
-#include "variable.h"
-#include "output.h"
 #include "startup.h"
+#include "variable.h"
+
 #include "mod_sysinfo.h"
 
 #include <assert.h>
@@ -3356,7 +3358,7 @@ FUNCTION * function_compile_actions( char const * actions, OBJECT * file,
     return (FUNCTION *)result;
 }
 
-static void argument_list_print( struct arg_list * args, int32_t num_args );
+static std::string argument_list_to_string( struct arg_list * args, int32_t num_args );
 
 
 /* Define delimiters for type check elements in argument lists (and return type
@@ -3379,17 +3381,20 @@ int32_t is_type_name( char const * s )
 static void argument_error( char const * message, FUNCTION * procedure,
     FRAME * frame, OBJECT * arg )
 {
-    LOL * actual = frame->args;
-    backtrace_line( frame->prev );
-    out_printf( "*** argument error\n* rule %s ( ", frame->rulename );
-    argument_list_print( procedure->formal_arguments,
-        procedure->num_formal_arguments );
-    out_printf( " )\n* called with: ( " );
-    lol_print( actual );
-    out_printf( " )\n* %s %s\n", message, arg ? object_str ( arg ) : "" );
-    //function_location( procedure, &frame->file, &frame->line );
-    backtrace( frame->prev );
-    b2::clean_exit( EXITBAD );
+    std::vector<std::string> msgs;
+
+    msgs.push_back( std::string("rule ") + frame->rulename + " ( " );
+    msgs.back() += argument_list_to_string( procedure->formal_arguments,
+                                            procedure->num_formal_arguments );
+    msgs.back() += " )";
+
+    msgs.emplace_back( "called with: (" );
+    msgs.back() += b2::args_to_string( frame->args ) + " )";
+
+    msgs.emplace_back( message );
+    if (arg) msgs.back() += std::string(" ") + object_str( arg );
+
+    b2::out_error( "error:", msgs, frame );
 }
 
 static void type_check_range( OBJECT * type_name, LISTITER iter, LISTITER end,
@@ -3842,31 +3847,37 @@ static struct arg_list * arg_list_compile_builtin( char const * * args,
     return 0;
 }
 
-static void argument_list_print( struct arg_list * args, int32_t num_args )
+static std::string argument_list_to_string( struct arg_list * args,
+                                            int32_t num_args )
 {
+    std::string res;
     if ( args )
     {
         int32_t i;
         for ( i = 0; i < num_args; ++i )
         {
             int32_t j;
-            if ( i ) out_printf( " : " );
+            if ( i ) res += " : ";
             for ( j = 0; j < args[ i ].size; ++j )
             {
                 struct argument * formal_arg = &args[ i ].args[ j ];
-                if ( j ) out_printf( " " );
+                if ( j ) res += " ";
                 if ( formal_arg->type_name )
-                    out_printf( "%s ", object_str( formal_arg->type_name ) );
-                out_printf( "%s", object_str( formal_arg->arg_name ) );
+                {
+                    res += object_str( formal_arg->type_name );
+                    res += " ";
+                }
+                res += object_str( formal_arg->arg_name );
                 switch ( formal_arg->flags )
                 {
-                case ARG_OPTIONAL: out_printf( " ?" ); break;
-                case ARG_PLUS:     out_printf( " +" ); break;
-                case ARG_STAR:     out_printf( " *" ); break;
+                case ARG_OPTIONAL: res += " ?"; break;
+                case ARG_PLUS:     res += " +"; break;
+                case ARG_STAR:     res += " *"; break;
                 }
             }
         }
     }
+    return res;
 }
 
 
