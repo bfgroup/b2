@@ -14765,7 +14765,7 @@ rules and not part of the language, like <code>include</code>.</p>
 <div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._glob__"><a class="anchor" href="#jam.language.rules.builtins.utility._glob__"></a><code>GLOB</code></h6>
 <div class="paragraph">
-<p>The <code>GLOB</code> rule does filename globing</p>
+<p>The <code>GLOB</code> rule does filename globing.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -14773,7 +14773,7 @@ rules and not part of the language, like <code>include</code>.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Using the same wildcards as for the patterns in the switch statement. It
+<p>Using the same wildcards as for the patterns in the <code>switch</code> statement. It
 is invoked by being used as an argument to a rule invocation inside of
 "[ ]". For example: <code>FILES = [ GLOB dir1 dir2 : *.c *.h ]</code> sets <code>FILES</code> to
 the list of C source
@@ -14824,6 +14824,34 @@ containing the matching symbols are returned. Member and symbol patterns
 are applied as OR conditions, with member patterns taking precedence. On
 unsupported platforms, null is returned when any symbol patterns are
 specified.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._glob_recursively__"><a class="anchor" href="#jam.language.rules.builtins.utility._glob_recursively__"></a><code>GLOB_RECURSIVELY</code></h6>
+<div class="paragraph">
+<p>The <code>GLOB_RECURSIVELY</code> rule can be thought of as the recursive version of
+the <code>GLOB</code> rule.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule GLOB_RECURSIVELY ( patterns * )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The pattern syntax is the same as that used by all globing rules (see
+<code>switch</code>.) Unlike <code>GLOB</code> which matches the pattern only on files, this rule
+uses the provided pattern(s) to match directories as well.
+This allows you to use patterns where each component corresponds to
+a directory (or file) and all components are expanded recursively,
+e.g. <code>*/*.test</code>.</p>
+</div>
+<div class="paragraph">
+<p>Another difference from <code>GLOB</code> is that it does not have a <em>downcase-opt</em>
+parameter and matching is performed according to OS conventions. The list
+of result paths is also in the canonical OS format.</p>
+</div>
+<div class="paragraph">
+<p>The results of <code>GLOB_RECURSIVELY</code> are stored in a cache to optimize speed.</p>
 </div>
 </div>
 <div class="sect5">
@@ -17062,6 +17090,13 @@ declared argument not actually adding all the definitions.&#8201;&#8212;&#8201;<
 <li>
 <p>Fix various regexp issues, allowing for mandatory regular expression
 syntax checking, detailed error messages, and improved MATCH rule.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix incorrect and/or inefficient regex expressions throughout all build jam
+files.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix argument count mismatch in Jam stack cleanup functions.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
