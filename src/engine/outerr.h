@@ -21,8 +21,12 @@ namespace b2 {
 
 std::string args_to_string(LOL * lol);
 
-void out_error(const std::string & prefix,
-    const std::vector<std::string> & messages, FRAME * frame);
+using message_list_t = std::vector<std::string>;
+
+void out_emit(const std::string & prefix, const message_list_t & messages,
+    FRAME * frame, bool with_backtrace, bool exit);
+
+void out_error(const message_list_t & messages, FRAME * frame);
 
 } // namespace b2
 

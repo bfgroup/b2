@@ -3394,7 +3394,7 @@ static void argument_error( char const * message, FUNCTION * procedure,
     msgs.emplace_back( message );
     if (arg) msgs.back() += std::string(" ") + object_str( arg );
 
-    b2::out_error( "error:", msgs, frame );
+    b2::out_error( msgs, frame );
 }
 
 static void type_check_range( OBJECT * type_name, LISTITER iter, LISTITER end,

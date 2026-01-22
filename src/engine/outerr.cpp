@@ -32,8 +32,9 @@ void backtrace        ( FRAME * );
 /*
  * Error function that try to mimic the b2::jam::errors::backtrace.
  */
-void b2::out_error(const std::string & prefix,
-    const std::vector<std::string> & messages, FRAME * frame)
+void b2::out_emit(const std::string & prefix,
+    const std::vector<std::string> & messages, FRAME * frame,
+    bool with_backtrace, bool exit)
 {
     bool has_prev = false;
     if (frame)
@@ -45,12 +46,16 @@ void b2::out_error(const std::string & prefix,
     auto print_ln = [&prefix](const std::string & ln) {
         if (ln.empty()) return;
         if (!prefix.empty()) out_printf( "%s ", prefix.c_str() );
-        out_printf( "%s", ln.c_str() );
-        out_putc('\n');
+        out_printf( "%s\n", ln.c_str() );
     };
     for (const std::string & msg : messages) print_ln(msg);
 
-    if (frame && has_prev) backtrace( frame->prev );
+    if (with_backtrace && has_prev) backtrace( frame->prev );
 
-    b2::clean_exit( EXITBAD );
+    if (exit) b2::clean_exit( EXITBAD );
+}
+
+void b2::out_error(const std::vector<std::string> & messages, FRAME * frame)
+{
+    out_emit("error:", messages, frame, true, true);
 }

@@ -93,7 +93,7 @@ void regerror(char const * message)
 
 	msgs.emplace_back( message );
 
-	out_error( "error:", msgs, frame );
+	out_error( msgs, frame );
 }
 
 /*
