@@ -33,7 +33,6 @@ LIST *builtin_glob_recursive( FRAME * frame, int flags );
 LIST *builtin_subst( FRAME * frame, int flags );
 LIST *builtin_match( FRAME * frame, int flags );
 LIST *builtin_split_by_characters( FRAME * frame, int flags );
-LIST *builtin_hdrmacro( FRAME * frame, int flags );
 LIST *builtin_rulenames( FRAME * frame, int flags );
 LIST *builtin_varnames( FRAME * frame, int flags );
 LIST *builtin_delete_module( FRAME * frame, int flags );

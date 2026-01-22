@@ -190,7 +190,7 @@ rule from-command-line ( command-line * )
             # Build request spec either has "=" in it or completely consists of
             # implicit feature values.
             local fs = feature-space ;
-            if [ MATCH "(.*=.*)" : $(e) ]
+            if [ MATCH "(.+=.*)" : $(e) ]
                 || [ looks-like-implicit-value $(e:D=) : $(feature-space) ]
             {
                 properties += $(e) ;
@@ -277,7 +277,7 @@ local rule convert-command-line-element ( e )
             parts = ;
         }
 
-        if ! [ MATCH (.*-.*) : $(p) ]
+        if ! [ MATCH (-) : $(p) ]
         {
             # property.validate cannot handle subfeatures, so we avoid the check
             # here.

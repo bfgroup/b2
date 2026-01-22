@@ -1,5 +1,5 @@
 /*
- * regcomp and regexec -- regsub and regerror are elsewhere
+ * regcomp and regexec
  *
  *  Copyright (c) 1986 by University of Toronto.
  *  Written by Henry Spencer.  Not derived from licensed software.
@@ -39,15 +39,21 @@
  *** seiwald@perforce.com, on 20 January 2000, to use function prototypes.
  *** THIS IS AN ALTERED VERSION.  It was altered by René Ferdinand Rivera Morell
  *** on 2023-01, to convert to C++ and to be thread safe.
+ *** THIS IS AN ALTERED VERSION.  It was altered by Paolo Pastori on 2026-01,
+ *** to fix issues with malformed regexps and reshape regerror().
  *
  * Beware that some of this code is subtly aware of the way operator precedence
  * is structured in regular expressions. Serious changes in regular-expression
  * syntax might require a total rethink.
  */
 
-#include "regexp.h"
 #include "jam.h"
+#include "regexp.h"
+
+#include "frames.h"
+#include "lists.h"
 #include "output.h"
+#include "startup.h"
 #include "strview.h"
 
 #include <ctype.h>
@@ -60,6 +66,14 @@
 #include <string>
 #include <unordered_map>
 
+/*
+ * All these forward declarations are only needed for the error function
+ * regerror below.
+ */
+void backtrace_line(FRAME *);
+void backtrace(FRAME *);
+void print_source_line(FRAME *);
+
 namespace b2 { namespace regex {
 
 /*
@@ -68,7 +82,39 @@ namespace b2 { namespace regex {
  */
 #define MAGIC 0234
 
-void regerror(char const * s);
+thread_local FRAME * frame = nullptr;
+
+/*
+ * Handles any error that occur while compiling a regex.
+ * Largely inspired to argument_error() from function.cpp. An alternative,
+ * more structured method of issuing errors would be appropriate,
+ * using stderr would be better too.
+ */
+void regerror(char const * s)
+{
+	// frame comes from the thread_local variable b2::regex::frame
+	if (frame == nullptr)
+	{
+		out_printf("regexp error: %s\n", s);
+	}
+	else
+	{
+		bool has_prev = frame->prev != nullptr;
+		if (has_prev) backtrace_line( frame->prev );
+		else
+		{
+			// TODO
+			// if (frame->file) ...
+			// if (frame->line != -1) ...
+		}
+		out_printf( "*** regexp error\n* rule %s", frame->rulename );
+		out_printf( " called with: ( " );
+		lol_print( frame->args );
+		out_printf( " )\n* %s\n", s );
+		if (has_prev) backtrace( frame->prev );
+	}
+	b2::clean_exit( EXITBAD );
+}
 
 /*
  * The "internal use only" fields in regexp.h are present to pass info from
@@ -167,15 +213,15 @@ void regerror(char const * s);
  * Utility definitions.
  */
 #ifndef CHARBITS
-#define UCHARAT(p) ((int32_t) * (const unsigned char *)(p))
+#define UCHARAT(p) (static_cast<int32_t>( * reinterpret_cast<const unsigned char *>(p)))
 #else
-#define UCHARAT(p) ((int32_t) * (p)&CHARBITS)
+#define UCHARAT(p) (static_cast<int32_t>( * (p)&CHARBITS))
 #endif
 
 #define FAIL(m) \
 { \
 regerror(m); \
-return (NULL); \
+return nullptr; \
 }
 #define ISMULT(c) ((c) == '*' || (c) == '+' || (c) == '?')
 
@@ -188,7 +234,7 @@ return (NULL); \
 #define WORST 0 /* Worst case. */
 
 namespace {
-char regdummy = 0;
+char regdummy = '\0';
 /*
  - regnext - dig the "next" pointer out of a node
  */
@@ -197,10 +243,10 @@ inline C * regnext(C * p)
 {
 	int32_t offset;
 
-	if (p == &regdummy) return (NULL);
+	if (p == &regdummy) return nullptr;
 
 	offset = NEXT(p);
-	if (offset == 0) return (NULL);
+	if (offset == 0) return nullptr;
 
 	if (OP(p) == BACK)
 		return (p - offset);
@@ -213,8 +259,8 @@ inline C * regnext(C * p)
 struct regex_prog
 {
 	std::string regexpr; /* The not-compiled regex.  */
-	char regstart = 0; /* Internal use only. */
-	char reganch = 0; /* Internal use only. */
+	char regstart = '\0'; /* Internal use only. */
+	char reganch = '\0'; /* Internal use only. */
 	const char * regmust = nullptr; /* Internal use only. */
 	int32_t regmlen = 0; /* Internal use only. */
 	std::size_t progsize = 0; // The size of the program.
@@ -260,41 +306,45 @@ struct compiler
 		int32_t len;
 		int32_t flags;
 
-		if (exp == NULL) FAIL("NULL argument");
+		if (exp == nullptr) FAIL("NULL argument");
 
-			/* First pass: determine size, legality. */
+		/* First pass: determine size, legality. */
 #ifdef notdef
 		if (exp[0] == '.' && exp[1] == '*') exp += 2; /* aid grep */
 #endif
-		regparse = (char *)exp;
+		regparse = const_cast<char*>(exp);
 		regnpar = 1;
 		regsize = 0;
 		regcode = &regdummy;
 		regc(MAGIC);
-		if (reg(0, &flags) == NULL) return (NULL);
+		if (reg(0, &flags) == nullptr) return nullptr;
 
 		/* Small enough for pointer-storage convention? */
 		if (regsize >= 32767L) /* Probably could be 65535L. */
 			FAIL("regexp too big");
 
 		/* Allocate space. */
-		r = (regex_prog *)BJAM_MALLOC(sizeof(regex_prog) + regsize);
-		if (r == NULL) FAIL("out of space");
+		r = static_cast<regex_prog *>(BJAM_MALLOC(sizeof(regex_prog) + regsize));
+		if (r == nullptr) FAIL("out of space");
 		b2::jam::ctor_ptr<regex_prog>(r);
 		r->regexpr = exp;
 		r->progsize = regsize;
 
 		/* Second pass: emit code. */
-		regparse = (char *)exp;
+		regparse = const_cast<char*>(exp);
 		regnpar = 1;
 		regcode = r->program;
 		regc(MAGIC);
-		if (reg(0, &flags) == NULL) return (NULL);
+		if (reg(0, &flags) == nullptr)
+		{
+			BJAM_FREE(r);
+			return nullptr;
+		}
 
 		/* Dig out information for optimizations. */
 		r->regstart = '\0'; /* Worst-case defaults. */
-		r->reganch = 0;
-		r->regmust = NULL;
+		r->reganch = '\0';
+		r->regmust = nullptr;
 		r->regmlen = 0;
 		scan = r->program + 1; /* First BRANCH. */
 		if (OP(regnext(scan)) == END)
@@ -317,9 +367,9 @@ struct compiler
 			 */
 			if (flags & SPSTART)
 			{
-				longest = NULL;
+				longest = nullptr;
 				len = 0;
-				for (; scan != NULL; scan = regnext(scan))
+				for (; scan != nullptr; scan = regnext(scan))
 					if (OP(scan) == EXACTLY
 						&& static_cast<int32_t>(strlen(OPERAND(scan))) >= len)
 					{
@@ -363,12 +413,12 @@ struct compiler
 			ret = regnode(OPEN + parno);
 		}
 		else
-			ret = NULL;
+			ret = nullptr;
 
 		/* Pick up the branches, linking them together. */
 		br = regbranch(&flags);
-		if (br == NULL) return (NULL);
-		if (ret != NULL)
+		if (br == nullptr) return nullptr;
+		if (ret != nullptr)
 			regtail(ret, br); /* OPEN -> first. */
 		else
 			ret = br;
@@ -378,7 +428,7 @@ struct compiler
 		{
 			regparse++;
 			br = regbranch(&flags);
-			if (br == NULL) return (NULL);
+			if (br == nullptr) return nullptr;
 			regtail(ret, br); /* BRANCH -> BRANCH. */
 			if (!(flags & HASWIDTH)) *flagp &= ~HASWIDTH;
 			*flagp |= flags & SPSTART;
@@ -389,7 +439,7 @@ struct compiler
 		regtail(ret, ender);
 
 		/* Hook the tails of the branches to the closing node. */
-		for (br = ret; br != NULL; br = regnext(br)) regoptail(br, ender);
+		for (br = ret; br != nullptr; br = regnext(br)) regoptail(br, ender);
 
 		/* Check for proper termination. */
 		if (paren && *regparse++ != ')')
@@ -425,20 +475,20 @@ struct compiler
 		*flagp = WORST; /* Tentatively. */
 
 		ret = regnode(BRANCH);
-		chain = NULL;
+		chain = nullptr;
 		while (*regparse != '\0' && *regparse != ')' && *regparse != '\n'
 			&& *regparse != '|')
 		{
 			latest = regpiece(&flags);
-			if (latest == NULL) return (NULL);
+			if (latest == nullptr) return nullptr;
 			*flagp |= flags & HASWIDTH;
-			if (chain == NULL) /* First piece. */
+			if (chain == nullptr) /* First piece. */
 				*flagp |= flags & SPSTART;
 			else
 				regtail(chain, latest);
 			chain = latest;
 		}
-		if (chain == NULL) /* Loop ran zero times. */
+		if (chain == nullptr) /* Loop ran zero times. */
 			(void)regnode(NOTHING);
 
 		return (ret);
@@ -461,7 +511,7 @@ struct compiler
 		int32_t flags;
 
 		ret = regatom(&flags);
-		if (ret == NULL) return (NULL);
+		if (ret == nullptr) return nullptr;
 
 		op = *regparse;
 		if (!ISMULT(op))
@@ -574,7 +624,7 @@ struct compiler
 			break;
 			case '(':
 				ret = reg(1, &flags);
-				if (ret == NULL) return (NULL);
+				if (ret == nullptr) return nullptr;
 				*flagp |= flags & (HASWIDTH | SPSTART);
 				break;
 			case '\0':
@@ -630,7 +680,7 @@ struct compiler
 
 					regparse--; /* Look at cur char */
 					ret = regnode(EXACTLY);
-					for (regprev = 0;;)
+					for (regprev = nullptr;;)
 					{
 						ch = *regparse++; /* Get current char */
 						switch (*regparse)
@@ -657,7 +707,7 @@ struct compiler
 							case '?':
 							case '+':
 							case '*':
-								if (!regprev) /* If just ch in str, */
+								if (regprev == nullptr) /* If just ch in str, */
 									goto magic; /* use it */
 								/* End mult-char string one early */
 								regparse = regprev; /* Back up parse */
@@ -685,7 +735,7 @@ struct compiler
 				done:
 					regc('\0');
 					*flagp |= HASWIDTH;
-					if (!regprev) /* One char? */
+					if (regprev == nullptr) /* One char? */
 						*flagp |= SIMPLE;
 				}
 				break;
@@ -711,7 +761,7 @@ struct compiler
 		}
 
 		ptr = ret;
-		*ptr++ = op;
+		*ptr++ = static_cast<char>(op);
 		*ptr++ = '\0'; /* Null "next" pointer. */
 		*ptr++ = '\0';
 		regcode = ptr;
@@ -774,7 +824,7 @@ struct compiler
 		for (;;)
 		{
 			temp = regnext(scan);
-			if (temp == NULL) break;
+			if (temp == nullptr) break;
 			scan = temp;
 		}
 
@@ -782,8 +832,8 @@ struct compiler
 			offset = scan - val;
 		else
 			offset = val - scan;
-		*(scan + 1) = (offset >> 8) & 0377;
-		*(scan + 2) = offset & 0377;
+		*(scan + 1) = static_cast<char>((offset >> 8) & 0377);
+		*(scan + 2) = static_cast<char>(offset & 0377);
 	}
 
 	/*
@@ -793,7 +843,7 @@ struct compiler
 	void regoptail(char * p, char * val)
 	{
 		/* "Operandless" and "op != BRANCH" are synonymous in practice. */
-		if (p == NULL || p == &regdummy || OP(p) != BRANCH) return;
+		if (p == nullptr || p == &regdummy || OP(p) != BRANCH) return;
 		regtail(OPERAND(p), val);
 	}
 
@@ -832,7 +882,7 @@ struct executor
 		}
 
 		/* If there is a "must appear" string, look for it. */
-		if (prog.regmust != NULL
+		if (prog.regmust != nullptr
 			&& string.find(prog.regmust, 0, prog.regmlen) == string_view::npos)
 			return false; /* Not present. */
 
@@ -897,7 +947,7 @@ struct executor
 		const char * next; /* Next node. */
 
 		scan = prog;
-		while (scan != NULL)
+		while (scan != nullptr)
 		{
 			next = regnext(scan);
 
@@ -1033,7 +1083,7 @@ struct executor
 							reg_in = save;
 							scan = regnext(scan);
 						}
-						while (scan != NULL && OP(scan) == BRANCH);
+						while (scan != nullptr && OP(scan) == BRANCH);
 						return false;
 						/* NOTREACHED */
 					}
@@ -1112,14 +1162,14 @@ struct executor
 				}
 				break;
 			case ANYOF:
-				while (!scan.empty() && strchr(opnd, scan[0]) != NULL)
+				while (!scan.empty() && strchr(opnd, scan[0]) != nullptr)
 				{
 					count++;
 					scan = scan.substr(1);
 				}
 				break;
 			case ANYBUT:
-				while (!scan.empty() && strchr(opnd, scan[0]) == NULL)
+				while (!scan.empty() && strchr(opnd, scan[0]) == nullptr)
 				{
 					count++;
 					scan = scan.substr(1);
@@ -1145,21 +1195,19 @@ bool regex_exec(
 	return result;
 }
 
-void regerror(char const * s) { out_printf("re error %s\n", s); }
-
-regex_prog & program::compile(const char * pattern)
+regex_prog * program::compile(const char * pattern)
 {
 	static std::unordered_map<std::string, regex_prog_ptr> cache;
 	if (cache.count(pattern) == 0)
 	{
 		cache[pattern] = regex_comp(pattern);
 	}
-	return *cache[pattern];
+	return cache[pattern].get();
 }
 
 program::program(const char * pattern) { reset(pattern); }
 
-void program::reset(const char * pattern) { compiled = &compile(pattern); }
+void program::reset(const char * pattern) { compiled = compile(pattern); }
 
 program::result_iterator::result_iterator(
 	const regex_prog & c, const string_view & s)
@@ -1172,7 +1220,7 @@ program::result_iterator::result_iterator(
 void program::result_iterator::advance()
 {
 	// We start searching for a match at the end of the previous match.
-	if (regex_exec(*compiled, expressions, rest))
+	if ((compiled != nullptr) && regex_exec(*compiled, expressions, rest))
 	{
 		// A match means the subexpressions are filled in and the first entry
 		// is the full match. Advance `rest` to follow the match.

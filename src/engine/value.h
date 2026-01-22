@@ -77,7 +77,7 @@ struct value
 	static inline void free(value *& v) { v = nullptr; }
 	static void done();
 
-	inline bool has_value() const { return get_type() == type::null; }
+	inline bool has_value() const { return get_type() != type::null; }
 
 	template <typename T>
 	static inline value * as_string(T v)
@@ -120,6 +120,9 @@ struct value_ref
 	{}
 	inline value_ref(const std::string & s)
 		: val(value::make(s.c_str()))
+	{}
+	inline value_ref(const string_view & sv)
+		: val(value::make(sv))
 	{}
 
 	inline ~value_ref()

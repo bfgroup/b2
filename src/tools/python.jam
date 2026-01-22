@@ -174,7 +174,7 @@ local rule is-cygwin-symlink ( path )
         local base-pat = [ regex.escape $(path:D=) : "].[()*+?|\\$^" : \\ ] ;
 
         # Extract the file's size from the directory listing.
-        local size-of-system-file = [ MATCH "([0-9]+) "$(base-pat) : $(dir-listing) : 1 ] ;
+        local size-of-system-file = [ MATCH "([0-9]+) "$(base-pat) : $(dir-listing) ] ;
 
         # If the file has a reasonably small size, look for the special symlink
         # identification text.
@@ -183,10 +183,7 @@ local rule is-cygwin-symlink ( path )
             local link = [ SHELL "FIND /OFF \"!<symlink>\" \""$(path)"\" 2>&1" ] ;
             if $(link[2]) != 0
             {
-                local nl = "
-
-" ;
-                is-symlink = [ MATCH ".*!<symlink>([^"$(nl)"]*)" : $(link[1]) : 1 ] ;
+                is-symlink = [ MATCH "!<symlink>([^\r\n]*)" : $(link[1]) ] ;
                 if $(is-symlink)
                 {
                     is-symlink = [ *nix-path-to-native $(is-symlink) ] ;
@@ -287,7 +284,7 @@ local rule windows-to-cygwin-path ( path )
     local p = [ SUBST $(path:T) $(.windows-drive-letter-re) /cygdrive/$1/$2 ] ;
 
     # Else if path is rooted without a drive letter, use the working directory.
-    p ?= [ SUBST $(path:T) ^/(.*) /cygdrive/$(.working-drive-letter:L)/$2 ] ;
+    p ?= [ SUBST $(path:T) ^/(.*) /cygdrive/$(.working-drive-letter:L)/$1 ] ;
 
     # Else return the path unchanged.
     return $(p:E=$(path:T)) ;
@@ -396,7 +393,7 @@ local rule path-to-native ( paths * )
 #
 local rule split-version ( version )
 {
-    local major-minor = [ MATCH "^([0-9]+)\.([0-9]+)(.*)$" : $(version) : 1 2 3 ] ;
+    local major-minor = [ MATCH "^([0-9]+)\\.([0-9]+)(.*)$" : $(version) ] ;
     if ! $(major-minor[2]) || $(major-minor[3])
     {
         ECHO "Warning: \"using python\" expects a two part (major, minor) version number; got" $(version) instead ;
@@ -416,7 +413,7 @@ local rule split-version ( version )
 .version-countdown = ;
 for local v in [ numbers.range 15 34 ]
 {
-    .version-countdown = [ SUBST $(v) (.)(.*) $1.$2 ] $(.version-countdown) ;
+    .version-countdown = [ SUBST $(v) (.)(.+) $1.$2 ] $(.version-countdown) ;
 }
 
 
@@ -504,14 +501,11 @@ local rule probe ( python-cmd )
         if $(output)
         {
             # Parse the output to get all the results.
-            local nl = "
-
-" ;
             for s in $(sys-elements)
             {
                 # These variables are expected to be declared local in the
                 # caller, so Jam's dynamic scoping will set their values there.
-                sys.$(s) = [ SUBST $(output) "\\<$(s)=([^$(nl)]+)" $1 ] ;
+                sys.$(s) = [ SUBST $(output) "\\<$(s)=([^\r\n]+)" $1 ] ;
             }
         }
         return $(output) ;

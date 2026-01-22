@@ -70,3 +70,41 @@ jobs:
 
       - name: 'No Warnings'
         run: ./b2 warnings=all warnings-as-errors=on variant=debug,release debug-symbols=off toolset=${{matrix.toolset}} b2
+
+  filc:
+    name: Fil-C
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - 0.677
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with: { path: "b2" }
+
+      - name: Install Toolset
+        run: |
+          cd "${{github.workspace}}"
+          wget "https://github.com/pizlonator/fil-c/releases/download/v${{matrix.version}}/optfil-${{matrix.version}}-linux-x86_64.tar.xz"
+          tar -Jxvf "optfil-${{matrix.version}}-linux-x86_64.tar.xz"
+          cd "optfil-${{matrix.version}}-linux-x86_64"
+          echo "YES" | sudo ./setup.sh
+          /opt/fil/bin/fil++ --version
+          echo | /opt/fil/bin/fil++ -dM -E -x c++ -
+
+      - name: Bootstrap
+        working-directory: b2
+        run: |
+          ./bootstrap.sh "--cxx=/opt/fil/bin/fil++" clang
+          echo "using clang : : /opt/fil/bin/fil++ ;" > "${HOME}/user-config.jam"
+
+      - name: Test
+        working-directory: b2/test
+        env: { PYTHONUTF8: 1 }
+        run: ./test_all.py clang
+
+      - name: 'No Warnings'
+        working-directory: b2
+        run: ./b2 warnings=all warnings-as-errors=on variant=debug,release debug-symbols=off toolset=clang b2
