@@ -10,10 +10,10 @@
 
 #include "config.h"
 #include "constants.h"
-#include "object.h"
 #include "psnip_debug_trap.h"
-#include "output.h"
 
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
 
 typedef struct profile_info
 {

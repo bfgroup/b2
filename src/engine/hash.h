@@ -21,9 +21,14 @@
 #include "config.h"
 
 #include "mem.h"
-#include "object.h"
 
 #include <mutex>
+
+namespace b2 {
+struct value;
+typedef value * value_ptr;
+}
+typedef b2::value OBJECT;
 
 /*
  * An opaque struct representing an item in the hash table. The first element of

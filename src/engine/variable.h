@@ -18,13 +18,14 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include "config.h"
 #include "lists.h"
-#include "modules.h"
 #include "object.h"
 #include "value.h"
 
 #include <string>
 
 struct module_t;
+module_t * bindmodule( OBJECT * name );
+module_t * root_module();
 
 void var_defines(struct module_t *, const char * const * e, int preprocess);
 LIST * var_get(struct module_t *, OBJECT * symbol);

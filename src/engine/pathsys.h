@@ -28,11 +28,12 @@ Distributed under the Boost Software License, Version 1.0.
 #define PATHSYS_VP_20020211_H
 
 #include "config.h"
-#include "jam_strings.h"
-#include "lists.h"
-#include "object.h"
 
 #include <string>
+
+typedef struct string string;
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
 
 typedef struct _pathpart
 {

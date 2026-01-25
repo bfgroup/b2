@@ -12,9 +12,14 @@
 #define HEADERS_SW20111118_H
 
 #include "config.h"
-#include "object.h"
-#include "rules.h"
-#include "regexp.h"
+
+namespace b2 {
+struct value;
+namespace regex { struct program; }
+}
+typedef b2::value OBJECT;
+struct LIST;
+typedef struct _target TARGET;
 
 void headers( TARGET * t );
 

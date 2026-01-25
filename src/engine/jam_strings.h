@@ -9,7 +9,6 @@
 #define JAM_STRINGS_DWA20011024_H
 
 #include "config.h"
-#include <stddef.h>
 
 typedef struct string
 {

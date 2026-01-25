@@ -45,10 +45,11 @@
 
 #include "config.h"
 
-#include "jam.h"
-#include "object.h"
 #include "output.h"
 #include "value.h"
+
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
 
 /*
  * LIST - list of strings
