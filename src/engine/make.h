@@ -13,6 +13,8 @@
 
 #include "config.h"
 
+#include <cstdint>
+
 namespace b2 { struct value; }
 typedef b2::value OBJECT;
 struct LIST;

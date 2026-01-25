@@ -18,6 +18,8 @@
 #include "config.h"
 #include "timestamp.h"
 
+#include <cstdint>
+
 struct LIST;
 typedef struct string string;
 
