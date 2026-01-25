@@ -10,6 +10,8 @@
 
 #include "config.h"
 
+#include <cstdint>
+
 typedef struct string
 {
     char * value;
