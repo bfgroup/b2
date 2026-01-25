@@ -49,7 +49,9 @@
 
 #ifdef OS_VMS
 
+#include "object.h"
 #include "pathsys.h"
+#include "jam_strings.h"
 
 #include <assert.h>
 #include <stdlib.h>

@@ -12,7 +12,9 @@
 #define BOOST_JAM_CONSTANTS_H
 
 #include "config.h"
-#include "object.h"
+
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
 
 void constants_init( void );
 void constants_done( void );

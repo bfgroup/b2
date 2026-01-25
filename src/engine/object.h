@@ -11,7 +11,7 @@
 #include "config.h"
 #include "value.h"
 
-using OBJECT = b2::value;
+typedef b2::value OBJECT;
 inline b2::value_ptr object_new_range(const char * string, int32_t size)
 {
 	return b2::value::make(string, size);

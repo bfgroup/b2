@@ -9,10 +9,7 @@
 
 #include "config.h"
 
-#include "mem.h"
 #include "strview.h"
-#include "types.h"
-#include "value.h"
 
 #include <functional>
 #include <memory>

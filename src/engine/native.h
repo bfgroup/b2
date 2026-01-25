@@ -9,9 +9,9 @@
 
 #include "config.h"
 #include "function.h"
-#include "frames.h"
-#include "lists.h"
-#include "object.h"
+
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
 
 typedef struct native_rule_t
 {
