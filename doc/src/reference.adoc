@@ -949,7 +949,7 @@ will create the files for `a` in `bin/subdir/gcc-4.6.1/debug`
 
 A _feature_ is a normalized (toolset-independent) aspect of a build
 configuration, such as whether inlining is enabled. Feature names may
-not contain the '`>`' character.
+not contain the ‘`>`’ character.
 
 Each feature in a build configuration has one or more associated
 __value__s. Feature values for non-free features may not contain the
