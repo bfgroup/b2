@@ -8680,7 +8680,7 @@ C&#43;&#43;
 Jam
 </td>
 <td class="hdlist2">
-<p><code>rule lol&#8594;list ( * )</code></p>
+<p><code>rule lol-&gt;list ( * )</code></p>
 </td>
 </tr>
 <tr>
@@ -9112,8 +9112,15 @@ Jam
 C&#43;&#43;
 </td>
 <td class="hdlist2">
-<p><code>void b2::set::add(b2::list_cref elements);</code>, <code>void b2::set::add(const
-b2::set &amp; elements);</code></p>
+<p><code>void b2::set::add(b2::list_cref elements);</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>void b2::set::add(const b2::set &amp; elements);</code></p>
 </td>
 </tr>
 </table>
@@ -9243,7 +9250,7 @@ b2::list_cref set2);</code></p>
 </div>
 </div>
 <div class="paragraph">
-<p>Removes all the items appearing in both <code>set1</code> &amp; <code>set2</code>.</p>
+<p>Returns all the items appearing in both <code>set1</code> &amp; <code>set2</code>.</p>
 </div>
 </div>
 <div class="sect5">
@@ -10693,9 +10700,9 @@ and should not be called directly by users.
 </div>
 </div>
 <div class="paragraph">
-<p>There is 1&lt;&#8594;1 correspondence between identity and value. No two
+<p>There is 1&lt;-&gt;1 correspondence between identity and value. No two
 instances of the class are equal. To maintain this property, the
-'property-set.create' rule should be used to create new instances.
+<code>property-set.create</code> rule should be used to create new instances.
 Instances are immutable.</p>
 </div>
 <div class="openblock">
@@ -10956,7 +10963,7 @@ project&#8217;s build directory. For example,</p>
 <div class="paragraph">
 <p>A <em>feature</em> is a normalized (toolset-independent) aspect of a build
 configuration, such as whether inlining is enabled. Feature names may
-not contain the &#8216;&gt;&#8217; character.</p>
+not contain the ‘<code>&gt;</code>’ character.</p>
 </div>
 <div class="paragraph">
 <p>Each feature in a build configuration has one or more associated
@@ -15608,7 +15615,7 @@ properly specify file paths in VMS-specific commands. For example</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><code>:&#8656;value</code></dt>
+<dt class="hdlist1"><code>:&lt;=value</code></dt>
 <dd>
 <p>After evaluating the expansion of the variable prefixes the given <em>value</em>
 to the elements of the expanded expression values.</p>
