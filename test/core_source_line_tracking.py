@@ -33,10 +33,9 @@ f ;%s""" % __trailing_newline(eof))
     t.run_build_system(["-ffile.jam"], status=1)
     t.expect_output_lines("""\
 file.jam:2: in module scope
-*** argument error
-* rule f ( param )
-* called with: (  )
-* missing argument param""")
+error: rule f ( param )
+error: called with: ( )
+error: missing argument param""")
     t.cleanup()
 
 

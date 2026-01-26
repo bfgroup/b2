@@ -453,6 +453,7 @@ make1.cpp \
 md5.cpp \
 modules.cpp \
 native.cpp \
+outerr.cpp \
 output.cpp \
 parse.cpp \
 pathnt.cpp \

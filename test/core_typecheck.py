@@ -37,10 +37,9 @@ t.run_build_system(["-sARGUMENT=::a/b/c"])
 t.run_build_system(["-sARGUMENT=a/b/c"], status=1, stdout="""\
 Error: a/b/c is not a path
 file.jam:18: in module scope
-*** argument error
-* rule do ( [path] a )
-* called with: ( a/b/c )
-* true a
+error: rule do ( [path] a )
+error: called with: ( a/b/c )
+error: true a
 """)
 
 t.cleanup()
