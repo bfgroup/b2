@@ -92,7 +92,7 @@ implicitly -- when loading a new Jamfiles, or when a new target
 alternative with as-yet unknown name is created. The instances of the
 classes derived from
 link:#b2.reference.class.basic-target[basic-target] are typically
-created when Jamfile calls a metatarget rule, such as such as `exe`.
+created when Jamfile calls a metatarget rule, such as `exe`.
 
 It it permissible to create a custom class derived from
 link:#b2.reference.class.basic-target[basic-target] and create new
@@ -162,7 +162,7 @@ metatargets.
 
 In practice, most files have specific types, and most tools consume and
 produce files of specific type. To take advantage of this fact,
-B2 defines concept of target type and generators generators,
+B2 defines concept of target type and generators,
 and has special metatarget class
 link:#b2.reference.class.typed-target[typed-target]. Target type is
 merely an identifier. It is associated with a set of file extensions
@@ -336,8 +336,8 @@ used for scanning. The parentheses in the regular expression indicate
 which part of the string is the name of the included file. Only the
 first parenthesized group in the regular expression will be recognized;
 if you can't express everything you want that way, you can return
-multiple regular expressions, each of which contains a parenthesized
-group to be matched.
+multiple regular expressions (up to 10 expressions are currently
+supported), each of which contains a parenthesized group to be matched.
 
 After that, we need to register our scanner class:
 
@@ -484,7 +484,7 @@ class itrace-generator : generator {
                 leaves += $(t) ;
             }
         }
-        return [ generator.generated-targets $(sources) $(leafs)
+        return [ generator.generated-targets $(sources) $(leaves)
           : $(property-set) : $(project) $(name) ] ;
     }
 }
