@@ -1590,9 +1590,8 @@ impossible to perform multi-variant builds. Often, change in any build
 property requires a complete reconfiguration of the build tree.</p>
 </div>
 <div class="paragraph">
-<p>In order to support true multi-variant builds, B2 introduces the
-concept of a metatarget definition main target metatarget
-<em>metatarget</em>&#8201;&#8212;&#8201;an object that is created when the build description is
+<p>In order to support true multi-variant builds, B2 introduces the concept
+of <em>metatarget</em>&#8201;&#8212;&#8201;an object that is created when the build description is
 parsed and can be called later with specific build properties to
 generate actual targets.</p>
 </div>
@@ -11567,7 +11566,7 @@ implicitly&#8201;&#8212;&#8201;when loading a new Jamfiles, or when a new target
 alternative with as-yet unknown name is created. The instances of the
 classes derived from
 <a href="#b2.reference.class.basic-target">basic-target</a> are typically
-created when Jamfile calls a metatarget rule, such as such as <code>exe</code>.</p>
+created when Jamfile calls a metatarget rule, such as <code>exe</code>.</p>
 </div>
 <div class="paragraph">
 <p>It it permissible to create a custom class derived from
@@ -11641,7 +11640,7 @@ metatargets.</p>
 <div class="paragraph">
 <p>In practice, most files have specific types, and most tools consume and
 produce files of specific type. To take advantage of this fact,
-B2 defines concept of target type and generators generators,
+B2 defines concept of target type and generators,
 and has special metatarget class
 <a href="#b2.reference.class.typed-target">typed-target</a>. Target type is
 merely an identifier. It is associated with a set of file extensions
@@ -11846,8 +11845,8 @@ used for scanning. The parentheses in the regular expression indicate
 which part of the string is the name of the included file. Only the
 first parenthesized group in the regular expression will be recognized;
 if you can&#8217;t express everything you want that way, you can return
-multiple regular expressions, each of which contains a parenthesized
-group to be matched.</p>
+multiple regular expressions (up to 10 expressions are currently
+supported), each of which contains a parenthesized group to be matched.</p>
 </div>
 <div class="paragraph">
 <p>After that, we need to register our scanner class:</p>
@@ -12011,7 +12010,7 @@ automatically:</p>
                 leaves += $(t) ;
             }
         }
-        return [ generator.generated-targets $(sources) $(leafs)
+        return [ generator.generated-targets $(sources) $(leaves)
           : $(property-set) : $(project) $(name) ] ;
     }
 }
