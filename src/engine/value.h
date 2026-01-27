@@ -27,6 +27,14 @@ struct object
 
 struct value
 {
+	struct str_view
+	{
+		const char * str;
+		std::size_t size;
+		inline const char * begin() const { return str; }
+		inline const char * end() const { return str + size; }
+	};
+
 	enum class type : char
 	{
 		null = '\0',
@@ -41,7 +49,7 @@ struct value
 	virtual type get_type() const = 0;
 	virtual bool equal_to(const value & o) const = 0;
 	virtual int compare_to(const value & o) const = 0;
-	virtual string_view as_string() const = 0;
+	virtual str_view as_string() const = 0;
 	virtual double as_number() const = 0;
 	virtual object * as_object() const = 0;
 	virtual value * to_string() = 0;

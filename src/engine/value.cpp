@@ -86,7 +86,7 @@ namespace b2 {
 struct value_base : value
 {
 	virtual type get_type() const override { return type::null; }
-	virtual string_view as_string() const override { return { nullptr, 0 }; }
+	virtual str_view as_string() const override { return { nullptr, 0 }; }
 	virtual double as_number() const override
 	{
 		using nl = std::numeric_limits<double>;
@@ -124,7 +124,7 @@ struct value_str : value_base
 	{
 		return str_view_cmp(value, size, o.as_string().str, o.as_string().size);
 	}
-	virtual string_view as_string() const override { return { value, size }; }
+	virtual str_view as_string() const override { return { value, size }; }
 	virtual value * to_string() override { return this; }
 
 	std::size_t size;
@@ -210,7 +210,7 @@ struct value_str_view : value_base
 		return str_view_cmp(
 			value, size, o.as_string().str, o.as_string().size);
 	}
-	virtual string_view as_string() const override { return { value, size }; }
+	virtual str_view as_string() const override { return { value, size }; }
 	virtual value * to_string() override { return nullptr; }
 
 	const char * value = nullptr;
