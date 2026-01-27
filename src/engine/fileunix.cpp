@@ -354,7 +354,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
 
         auto name = b2::value::format( "%s", lar_name );
 
-        if ( name->as_string().size > 0 )
+        if ( name->as_string().size() > 0 )
         {
             file_info_t * member = 0;
 
