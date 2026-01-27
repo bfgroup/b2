@@ -419,7 +419,7 @@ static void collect_archive_content_small( int fd, file_archive_info_t * const a
 
         auto name = b2::value::format( "%s", ar_hdr.hdr._ar_name.ar_name );
 
-        if ( name->as_string().size > 0 )
+        if ( name->as_string().size() > 0 )
         {
             file_info_t * member = 0;
 
@@ -474,7 +474,7 @@ static void collect_archive_content_big( int fd, file_archive_info_t * const arc
 
         auto name = b2::value::format( "%s", ar_hdr.hdr._ar_name.ar_name );
 
-        if ( name->as_string().size > 0 )
+        if ( name->as_string().size() > 0 )
         {
             file_info_t * member = 0;
 
