@@ -18,6 +18,7 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include "jam.h"
 #include "mem.h"
+#include "object.h"
 #include "output.h"
 #include "startup.h"
 

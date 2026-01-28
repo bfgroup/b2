@@ -12,6 +12,7 @@
 #include "execcmd.h"
 
 #include "lists.h"
+#include "object.h"
 #include "output.h"
 #include "jam_strings.h"
 #include "startup.h"

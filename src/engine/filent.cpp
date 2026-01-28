@@ -32,7 +32,6 @@
 #ifdef OS_NT
 #include "filesys.h"
 
-#include "object.h"
 #include "pathsys.h"
 #include "jam_strings.h"
 #include "output.h"

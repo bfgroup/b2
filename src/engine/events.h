@@ -9,10 +9,10 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include "config.h"
 
-#include "rules.h"
-
 #include <cstdint>
 #include <functional>
+
+typedef struct _target TARGET;
 
 namespace b2 {
 

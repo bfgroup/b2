@@ -12,13 +12,15 @@
 #define TIMESTAMP_H_SW_2011_11_18
 
 #include "config.h"
-#include "object.h"
 
 #ifdef OS_NT
 # include <windows.h>
 #endif
 
 #include <time.h>
+
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
 
 typedef struct timestamp
 {

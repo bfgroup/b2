@@ -8,7 +8,9 @@
 # define JAM_BUILTINS_H
 
 # include "config.h"
-# include "frames.h"
+
+struct LIST;
+typedef struct frame FRAME;
 
 /*
  * builtins.h - compile parsed jam statements

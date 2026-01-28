@@ -20,10 +20,12 @@
 #define COMPILE_DWA20011022_H
 
 #include "config.h"
-#include "frames.h"
 #include "lists.h"
-#include "object.h"
-#include "rules.h"
+#include "value.h"
+
+typedef b2::value OBJECT;
+typedef struct _rule RULE;
+typedef struct frame FRAME;
 
 void compile_builtins();
 

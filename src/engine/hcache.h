@@ -9,9 +9,10 @@
 #define HCACHE_H
 
 #include "config.h"
-#include "lists.h"
-#include "regexp.h"
-#include "rules.h"
+
+struct LIST;
+namespace b2 { namespace regex { struct program; }}
+typedef struct _target TARGET;
 
 void hcache_init( void );
 void hcache_done( void );

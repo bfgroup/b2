@@ -11,8 +11,9 @@ Distributed under the Boost Software License, Version 1.0.
 #include "config.h"
 #include "lists.h"
 #include "modules.h"
-#include "object.h"
-#include "value.h"
+
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
 
 typedef struct frame FRAME;
 

@@ -18,7 +18,6 @@
 #include "make.h"
 #include "md5.h"
 #include "native.h"
-#include "object.h"
 #include "parse.h"
 #include "pathsys.h"
 #include "regexp.h"

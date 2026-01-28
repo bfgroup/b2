@@ -9,12 +9,10 @@
 #define MODULES_DWA10182001_H
 
 #include "config.h"
-#include "bind.h"
-#include "lists.h"
-#include "object.h"
 
-#include <string>
-#include <vector>
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
+struct LIST;
 
 typedef struct module_t module_t ;
 
