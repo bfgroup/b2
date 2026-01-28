@@ -77,7 +77,9 @@ void var_defines(struct module_t * module, const char * const * e, int preproces
 {
 	for (; *e; ++e)
 	{
-		::b2::string_view def(*e);
+        const char* s = *e;
+        if (!s || *s == '\0') continue;
+        ::b2::string_view def(s);
 		::b2::string_view var(def.begin(), def.find('='));
 		::b2::string_view val(def.begin() + var.size() + 1);
 		b2::jam::variable jam_var { module,
