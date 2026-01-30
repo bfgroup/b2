@@ -282,7 +282,8 @@ local rule identity ( string )
 
 
 args.add-arg abbreviate-paths : --abbreviate-paths
-    : "Compresses target paths by abbreviating each component." ;
+    : "Compresses target paths by abbreviating each component."
+    : flag ;
 if [ args.get-arg abbreviate-paths ]
 {
     .abbrev = abbreviate-dashed ;

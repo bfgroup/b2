@@ -18,6 +18,8 @@
   -- _Paolo Pastori_
 * Fix argument count mismatch in Jam stack cleanup functions.
   -- _René Ferdinand Rivera Morell_
+* Fix `--abbreviate-paths` eating following arg.
+  -- _René Ferdinand Rivera Morell_
 
 == Version 5.4.2
 
