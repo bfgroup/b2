@@ -44,7 +44,7 @@ void b2::out_emit(const char * prefix,
     }
 
     auto print_ln = [prefix](OBJECT * ln) {
-        value::str_view ln_view = ln->as_string();
+        ::b2::value::str_view ln_view = ln->as_string();
         if (ln_view.size == 0) return;
         if (prefix) out_printf( "%s ", prefix );
         out_printf( "%s\n", ln_view.str );
