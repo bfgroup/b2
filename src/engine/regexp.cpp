@@ -50,10 +50,9 @@
 #include "jam.h"
 #include "regexp.h"
 
-#include "frames.h"
 #include "lists.h"
-#include "output.h"
-#include "startup.h"
+#include "frames.h"
+#include "outerr.h"
 #include "strview.h"
 
 #include <ctype.h>
@@ -65,14 +64,6 @@
 
 #include <string>
 #include <unordered_map>
-
-/*
- * All these forward declarations are only needed for the error function
- * regerror below.
- */
-void backtrace_line(FRAME *);
-void backtrace(FRAME *);
-void print_source_line(FRAME *);
 
 namespace b2 { namespace regex {
 
@@ -86,34 +77,24 @@ thread_local FRAME * frame = nullptr;
 
 /*
  * Handles any error that occur while compiling a regex.
- * Largely inspired to argument_error() from function.cpp. An alternative,
- * more structured method of issuing errors would be appropriate,
- * using stderr would be better too.
  */
-void regerror(char const * s)
+void regerror(char const * message)
 {
+	b2::list_ref msgs;
+
 	// frame comes from the thread_local variable b2::regex::frame
-	if (frame == nullptr)
+	if (frame)
 	{
-		out_printf("regexp error: %s\n", s);
+		msgs.push_back(
+			std::string("rule ") + frame->rulename + " called with: ("
+			+ args_to_string( frame->args ) + " )" );
 	}
-	else
-	{
-		bool has_prev = frame->prev != nullptr;
-		if (has_prev) backtrace_line( frame->prev );
-		else
-		{
-			// TODO
-			// if (frame->file) ...
-			// if (frame->line != -1) ...
-		}
-		out_printf( "*** regexp error\n* rule %s", frame->rulename );
-		out_printf( " called with: ( " );
-		lol_print( frame->args );
-		out_printf( " )\n* %s\n", s );
-		if (has_prev) backtrace( frame->prev );
-	}
-	b2::clean_exit( EXITBAD );
+
+	msgs.push_back( "bad regex" );
+
+	msgs.push_back( message );
+
+	out_error( *msgs, frame );
 }
 
 /*
