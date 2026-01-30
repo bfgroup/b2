@@ -6,8 +6,10 @@
 #define CLASS_H_VP_2003_08_01
 
 #include "config.h"
-#include "lists.h"
-#include "frames.h"
+
+namespace b2 { struct value; }
+typedef b2::value OBJECT;
+struct LIST;
 
 OBJECT * make_class_module( LIST * xname, LIST * bases );
 void class_done( void );

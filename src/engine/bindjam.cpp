@@ -8,6 +8,7 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include "class.h"
 #include "function.h"
+#include "frames.h"
 #include "hash.h"
 #include "lists.h"
 #include "modules.h"
