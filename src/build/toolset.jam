@@ -30,7 +30,7 @@ import utility ;
 # This is used only for testing, to make sure we do not get random extra
 # elements in paths.
 args.add-arg ignore-toolset-requirements : --ignore-toolset-requirements
-    : "?" ;
+    : "?" : flag ;
 .ignore-requirements = [ args.get-arg ignore-toolset-requirements ] ;
 
 

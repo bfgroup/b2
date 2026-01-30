@@ -485,7 +485,7 @@ PACKAGE_MANAGER_BUILD_INFO(CONAN) = "conanbuildinfo.jam" ;
 # 3. Environment variable "PACKAGE_MANAGER_BUILD_INFO".
 # 4. Conan, others.
 #
-args.add-arg use-package-manager : --use-package-manage
+args.add-arg use-package-manager : --use-package-manager
     : "Load target definitions from the given package manager." ;
 local .use-package-manager = [ args.get-arg use-package-manager ] ;
 PACKAGE_MANAGER_BUILD_INFO ?= $(PACKAGE_MANAGER_BUILD_INFO($(.use-package-manager:U))) ;
