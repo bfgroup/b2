@@ -44,10 +44,8 @@ void b2::out_emit(const char * prefix,
     }
 
     auto print_ln = [prefix](OBJECT * ln) {
-        ::b2::value::str_view ln_view = ln->as_string();
-        if (ln_view.size == 0) return;
         if (prefix) out_printf( "%s ", prefix );
-        out_printf( "%s\n", ln_view.str );
+        out_printf( "%s\n", ln->str() );
     };
     for (OBJECT * msg : list_cref(messages)) print_ln(msg);
 
