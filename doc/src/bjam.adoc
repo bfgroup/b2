@@ -1357,7 +1357,7 @@ _value_ is specific to either variable or generated file expansion.
 
 On VMS, `$(var:P)` is the parent directory of `$(var:D)`.
 
-`:<=value`::
+`:\<=value`::
 After evaluating the expansion of the variable prefixes the given _value_
 to the elements of the expanded expression values.
 

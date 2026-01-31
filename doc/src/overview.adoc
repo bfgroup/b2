@@ -73,9 +73,8 @@ immediately when the build description is parsed, which makes it
 impossible to perform multi-variant builds. Often, change in any build
 property requires a complete reconfiguration of the build tree.
 
-In order to support true multi-variant builds, B2 introduces the
-concept of a metatarget definition main target metatarget
-_metatarget_ -- an object that is created when the build description is
+In order to support true multi-variant builds, B2 introduces the concept
+of _metatarget_ -- an object that is created when the build description is
 parsed and can be called later with specific build properties to
 generate actual targets.
 

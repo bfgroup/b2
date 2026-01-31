@@ -136,7 +136,7 @@ value_ref b2::regex_escape(
 		 i = result.find_first_of(symbols, i))
 	{
 		result.insert(i, escape_symbol);
-		i += escape_symbol->as_string().size + 1;
+		i += escape_symbol->as_string().size() + 1;
 	}
 	return value_ref(result);
 }

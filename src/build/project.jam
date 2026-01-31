@@ -485,7 +485,7 @@ PACKAGE_MANAGER_BUILD_INFO(CONAN) = "conanbuildinfo.jam" ;
 # 3. Environment variable "PACKAGE_MANAGER_BUILD_INFO".
 # 4. Conan, others.
 #
-args.add-arg use-package-manager : --use-package-manage
+args.add-arg use-package-manager : --use-package-manager
     : "Load target definitions from the given package manager." ;
 local .use-package-manager = [ args.get-arg use-package-manager ] ;
 PACKAGE_MANAGER_BUILD_INFO ?= $(PACKAGE_MANAGER_BUILD_INFO($(.use-package-manager:U))) ;
@@ -764,7 +764,7 @@ rule initialize (
             local cfgs = project site test user all ;
             if ! $(module-name) in $(cfgs)-config
             {
-                # This is a standalone project with known location. Set its
+                # This is a standalone project with unknown location. Set its
                 # source location so it can declare targets. This is needed so
                 # you can put a .jam file with your sources and use it via
                 # 'using'. Standard modules (in the 'tools' subdir) may not

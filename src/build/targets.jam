@@ -149,7 +149,7 @@ class abstract-target
 
 
 args.add-arg debug-building : --debug-building
-    : "Prints what targets are being built and with what properties." ;
+    : "Prints what targets are being built and with what properties." : flag ;
 modules.poke : .debug-building : [ args.get-arg debug-building ] ;
 
 

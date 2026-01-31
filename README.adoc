@@ -16,7 +16,7 @@ Continuously tested on:
 
 * Cygwin 3.1.7 x64
 * Debian 11 GCC 10 (armhf)
-* FreeBSD Clang 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
+* FreeBSD Clang 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
 * FreeBSD GCC 12, 13, 14, 15
 * Linux Clang 3.9, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
 * Linux GCC 4.8, 4.9, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
