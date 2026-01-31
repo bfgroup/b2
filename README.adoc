@@ -14,18 +14,19 @@ file LICENSE.txt or copy at https://www.bfgroup.xyz/b2/LICENSE.txt)
 
 Continuously tested on:
 
-* FreeBSD Clang 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
+* Cygwin 3.1.7 x64
+* Debian 11 GCC 10 (armhf)
+* FreeBSD Clang 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
 * FreeBSD GCC 12, 13, 14, 15
 * Linux Clang 3.9, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
 * Linux GCC 4.8, 4.9, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+* Linux Fil-C
 * macOS Xcode 13.4.1, 14.3.0, 15.4, 16.4, 26.0.1
-* Windows MinGW 8.1.0
-* Windows 2015, 2017, 2019, 2022
-* Windows MSYS2 MinGW64/32 Clang-16, MinGW64/32 GCC-13
-* Cygwin 3.1.7 x64
-* Ubuntu 22.04 GCC 11 (armhf, arm64, ppc64el)
 * Ubuntu 20.04 GCC 9 (armhf, arm64, ppc64el)
-* Debian 11 GCC 10 (armhf)
+* Ubuntu 22.04 GCC 11 (armhf, arm64, ppc64el)
+* Windows 2015, 2017, 2019, 2022
+* Windows MinGW 8.1.0
+* Windows MSYS2 MinGW64/32 Clang-16, MinGW64/32 GCC-13
 
 image:https://img.shields.io/azure-devops/build/bfgroup/3a4e7a7e-c1b4-4e2f-9199-f52918ea06c6/3/main.svg?label=main&logo=azuredevops["Linux/Windows/macOS: main", link="https://dev.azure.com/bfgroup/B2"]
 image:https://img.shields.io/appveyor/build/bfgroup/b2?logo=appveyor["Windows", link="https://ci.appveyor.com/project/bfgroup/b2"]

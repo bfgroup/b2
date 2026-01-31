@@ -195,7 +195,7 @@ void load_builtins()
 
     {
         char const * args[] = { "directories", "*", ":", "patterns", "*", ":",
-            "case-insensitive", "?", 0 };
+            "downcase-opt", "?", 0 };
         duplicate_rule( "Glob",
           bind_builtin( "GLOB", builtin_glob, 0, args ) );
     }
@@ -493,7 +493,7 @@ void load_builtins()
     {
         char const * args[] = { "archives", "*",
                                 ":", "member-patterns", "*",
-                                ":", "case-insensitive", "?",
+                                ":", "downcase-opt", "?",
                                 ":", "symbol-patterns", "*", 0 };
         bind_builtin( "GLOB_ARCHIVE", builtin_glob_archive, 0, args );
     }

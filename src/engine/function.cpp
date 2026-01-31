@@ -304,7 +304,7 @@ struct _stack
             while ( cleanups_size > 0 )
             {
                 cleanups_size -= 1;
-                cleanups[cleanups_size].clean( this );
+                cleanups[cleanups_size].clean( this, nullptr );
             }
         }
         BJAM_FREE( start );
@@ -415,7 +415,7 @@ struct _stack
     void * start = nullptr;
     void * end = nullptr;
     void * data = nullptr;
-    using cleanup_f = void(*)( _stack* );
+    using cleanup_f = void(*)( _stack*, void* );
     struct cleanup_t
     {
         cleanup_f clean = nullptr;

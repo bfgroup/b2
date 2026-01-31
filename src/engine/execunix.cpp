@@ -33,7 +33,7 @@
 
 #include <sys/times.h>
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) || defined(__FILC__)
     #define NO_VFORK
 #endif
 
