@@ -55,7 +55,7 @@ import args ;
 
 
 args.add-arg debug-generators : --debug-generators
-    : "Produces debug output from the generator search process." ;
+    : "Produces debug output from the generator search process." : flag ;
 .debug = [ args.get-arg debug-generators ] ;
 
 

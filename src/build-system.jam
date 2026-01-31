@@ -774,6 +774,7 @@ local rule should-clean-project ( project )
 
     args.add-arg dump-generators : --dump-generators
         : "Display the active build generators."
+        : flag
         ;
     if [ args.get-arg dump-generators ]
     {
