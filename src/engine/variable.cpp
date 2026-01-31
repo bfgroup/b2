@@ -77,7 +77,7 @@ void var_defines(struct module_t * module, const char * const * e, int preproces
 {
 	for (; *e; ++e)
 	{
-        ::b2::string_view def(*e);
+		::b2::string_view def(*e);
 		::b2::string_view var = def;
 		::b2::string_view val;
 		if (auto eq = def.find('='); eq != ::b2::string_view::npos)
