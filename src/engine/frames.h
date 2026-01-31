@@ -9,11 +9,9 @@ Distributed under the Boost Software License, Version 1.0.
 #define B2_FRAMES_H
 
 #include "config.h"
+#include "jam_fwd.h"
 #include "lists.h"
 #include "modules.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
 
 typedef struct frame FRAME;
 

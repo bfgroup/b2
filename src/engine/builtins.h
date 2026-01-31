@@ -5,12 +5,10 @@
  */
 
 #ifndef JAM_BUILTINS_H
-# define JAM_BUILTINS_H
+#define JAM_BUILTINS_H
 
-# include "config.h"
-
-struct LIST;
-typedef struct frame FRAME;
+#include "config.h"
+#include "jam_fwd.h"
 
 /*
  * builtins.h - compile parsed jam statements

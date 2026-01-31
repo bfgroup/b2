@@ -16,12 +16,10 @@
 #define EXECCMD_H
 
 #include "config.h"
+#include "jam_fwd.h"
 #include "timestamp.h"
 
 #include <cstdint>
-
-struct LIST;
-typedef struct string string;
 
 typedef struct timing_info
 {

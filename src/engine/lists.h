@@ -44,12 +44,9 @@
 #define B2_LISTS_H
 
 #include "config.h"
-
+#include "jam_fwd.h"
 #include "output.h"
 #include "value.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
 
 /*
  * LIST - list of strings

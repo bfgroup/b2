@@ -12,14 +12,7 @@
 #define HEADERS_SW20111118_H
 
 #include "config.h"
-
-namespace b2 {
-struct value;
-namespace regex { struct program; }
-}
-typedef b2::value OBJECT;
-struct LIST;
-typedef struct _target TARGET;
+#include "jam_fwd.h"
 
 void headers( TARGET * t );
 

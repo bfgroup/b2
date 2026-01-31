@@ -9,13 +9,10 @@
 #define DEBUGGER_SW20150314_H
 
 #include "config.h"
+#include "jam_fwd.h"
 #include "lists.h"
 
 #include <setjmp.h>
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-typedef struct frame FRAME;
 
 #ifdef JAM_DEBUGGER
 

@@ -12,13 +12,9 @@
 #define MAKE_SW20111118_H
 
 #include "config.h"
+#include "jam_fwd.h"
 
 #include <cstdint>
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-struct LIST;
-typedef struct _target TARGET;
 
 int32_t make( LIST * targets, bool anyhow );
 int32_t make1( LIST * t );

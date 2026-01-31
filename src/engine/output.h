@@ -8,10 +8,7 @@
 #define BJAM_OUTPUT_H
 
 #include "config.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-typedef struct timestamp timestamp;
+#include "jam_fwd.h"
 
 #define EXIT_OK 0
 #define EXIT_FAIL 1

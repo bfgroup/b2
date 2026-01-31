@@ -9,10 +9,7 @@
 #define MODULES_DWA10182001_H
 
 #include "config.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-struct LIST;
+#include "jam_fwd.h"
 
 typedef struct module_t module_t ;
 

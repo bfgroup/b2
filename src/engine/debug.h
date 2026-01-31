@@ -9,11 +9,9 @@
 #define BJAM_DEBUG_H
 
 #include "config.h"
+#include "jam_fwd.h"
 #include "constants.h"
 #include "psnip_debug_trap.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
 
 typedef struct profile_info
 {

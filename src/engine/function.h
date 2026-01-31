@@ -10,17 +10,11 @@
 #define B2_FUNCTION_H
 
 #include "config.h"
+#include "jam_fwd.h"
 #include "lists.h"
 
 #include <functional>
 #include <string>
-
-typedef struct string string;
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-typedef struct frame FRAME;
-typedef struct _PARSE PARSE;
-typedef struct module_t module_t ;
 
 typedef struct _function FUNCTION;
 

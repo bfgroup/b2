@@ -19,16 +19,10 @@
 #define BOOST_JAM_HASH_H
 
 #include "config.h"
-
+#include "jam_fwd.h"
 #include "mem.h"
 
 #include <mutex>
-
-namespace b2 {
-struct value;
-typedef value * value_ptr;
-}
-typedef b2::value OBJECT;
 
 /*
  * An opaque struct representing an item in the hash table. The first element of

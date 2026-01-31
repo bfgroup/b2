@@ -8,15 +8,9 @@ Distributed under the Boost Software License, Version 1.0.
 #define B2_BINDJAM_H
 
 #include "bind.h"
+#include "jam_fwd.h"
 
-typedef struct frame FRAME;
-
-namespace b2 {
-
-struct value;
-typedef value * value_ptr;
-
-namespace jam {
+namespace b2 { namespace jam {
 
 /*
 Context for Jam calls.

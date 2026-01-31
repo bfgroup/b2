@@ -9,10 +9,7 @@
 #define HCACHE_H
 
 #include "config.h"
-
-struct LIST;
-namespace b2 { namespace regex { struct program; }}
-typedef struct _target TARGET;
+#include "jam_fwd.h"
 
 void hcache_init( void );
 void hcache_done( void );

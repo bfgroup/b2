@@ -18,10 +18,7 @@
 #define PARSE_DWA20011020_H
 
 #include "config.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-typedef struct frame FRAME;
+#include "jam_fwd.h"
 
 
 #define PARSE_APPEND    0

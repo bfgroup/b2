@@ -19,17 +19,13 @@
 #define FILESYS_DWA20011025_H
 
 #include "config.h"
+#include "jam_fwd.h"
 #include "lists.h"
 #include "object.h"
 #include "timestamp.h"
 
 #include <memory>
 #include <string>
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-typedef struct string string;
-typedef struct _pathname PATHNAME;
 
 struct file_info_t
 {

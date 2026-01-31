@@ -12,10 +12,7 @@
 #define SEARCH_SW20111118_H
 
 #include "config.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-typedef struct timestamp timestamp;
+#include "jam_fwd.h"
 
 void set_explicit_binding( OBJECT * target, OBJECT * locate );
 OBJECT * search( OBJECT * target, timestamp * const time,

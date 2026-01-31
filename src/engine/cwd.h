@@ -13,11 +13,9 @@
 #define CWD_H
 
 #include "config.h"
+#include "jam_fwd.h"
 
 #include <string>
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
 
 /* cwd() - returns the current working folder */
 OBJECT * cwd( void );

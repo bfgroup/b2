@@ -32,16 +32,12 @@
 #define RULES_DWA_20011020_H
 
 #include "config.h"
+#include "jam_fwd.h"
 #include "mem.h"
 #include "lists.h"
 #include "timestamp.h"
 
 #include <utility>
-
-typedef struct _function FUNCTION;
-typedef FUNCTION * function_ptr;
-typedef struct module_t module_t;
-typedef module_t * module_ptr;
 
 typedef struct _rule RULE;
 typedef struct _target TARGET;

@@ -8,11 +8,10 @@ Distributed under the Boost Software License, Version 1.0.
 #define B2_EVENTS_H
 
 #include "config.h"
+#include "jam_fwd.h"
 
 #include <cstdint>
 #include <functional>
-
-typedef struct _target TARGET;
 
 namespace b2 {
 

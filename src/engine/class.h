@@ -6,10 +6,7 @@
 #define CLASS_H_VP_2003_08_01
 
 #include "config.h"
-
-namespace b2 { struct value; }
-typedef b2::value OBJECT;
-struct LIST;
+#include "jam_fwd.h"
 
 OBJECT * make_class_module( LIST * xname, LIST * bases );
 void class_done( void );

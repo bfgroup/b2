@@ -30,14 +30,7 @@ Distributed under the Boost Software License, Version 1.0.
  */
 
 #include "config.h"
-
-struct LIST;
-typedef LIST * list_ptr;
-namespace b2 {
-struct value;
-typedef value * value_ptr;
-}
-typedef struct _PARSE PARSE;
+#include "jam_fwd.h"
 
 /*
  * YYSTYPE - value of a lexical token
