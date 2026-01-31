@@ -80,10 +80,11 @@ void var_defines(struct module_t * module, const char * const * e, int preproces
 		::b2::string_view def(*e);
 		::b2::string_view var = def;
 		::b2::string_view val;
-		if (auto eq = def.find('='); eq != ::b2::string_view::npos)
+		auto eq = def.find('=');
+		if (eq != ::b2::string_view::npos)
 		{
 			var = ::b2::string_view(def.begin(), eq);
-			val = ::b2::string_view(def.begin() + var.size() + 1);
+			val = ::b2::string_view(def.begin() + eq + 1);
 		}
 		b2::jam::variable jam_var { module,
 			std::string { var.begin(), var.end() }.c_str() };
