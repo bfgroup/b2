@@ -24,7 +24,7 @@ import numbers ;
 
 .debug-configuration = [ args.get-arg debug-configuration ] ;
 
-args.add-arg show-configuration : --show-configuration : "?" ;
+args.add-arg show-configuration : --show-configuration : "?" : flag ;
 .show-configuration = [ args.get-arg show-configuration ] ;
 
 # Configurations
