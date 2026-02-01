@@ -20,6 +20,9 @@
   -- _René Ferdinand Rivera Morell_
 * Fix `--abbreviate-paths` eating following arg.
   -- _René Ferdinand Rivera Morell_
+* Fix crash when reflecting environment variables that happen to have an empty
+  value.
+  -- _zyk2507_
 
 == Version 5.4.2
 
