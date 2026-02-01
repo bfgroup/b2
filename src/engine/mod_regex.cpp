@@ -8,6 +8,7 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include "filesys.h"
 #include "mem.h"
+#include "pathsys.h"
 #include "regexp.h"
 #include "tasks.h"
 

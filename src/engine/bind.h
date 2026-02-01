@@ -8,11 +8,9 @@ Distributed under the Boost Software License, Version 1.0.
 #define B2_BIND_H
 
 #include "config.h"
-#include <functional>
+
 #include <string>
 #include <tuple>
-#include <type_traits>
-#include <utility>
 
 /** tag::binder[]
 

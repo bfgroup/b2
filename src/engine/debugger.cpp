@@ -5,14 +5,20 @@
  * https://www.bfgroup.xyz/b2/LICENSE.txt)
  */
 
+#include "jam.h"
 #include "debugger.h"
+
 #include "constants.h"
-#include "jam_strings.h"
-#include "pathsys.h"
 #include "cwd.h"
 #include "function.h"
+#include "frames.h"
 #include "mem.h"
+#include "object.h"
+#include "parse.h"
+#include "pathsys.h"
 #include "startup.h"
+#include "jam_strings.h"
+
 #include <assert.h>
 #include <stdarg.h>
 #include <stdlib.h>

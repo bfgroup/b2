@@ -9,12 +9,7 @@
 #define MODULES_DWA10182001_H
 
 #include "config.h"
-#include "bind.h"
-#include "lists.h"
-#include "object.h"
-
-#include <string>
-#include <vector>
+#include "jam_fwd.h"
 
 typedef struct module_t module_t ;
 
