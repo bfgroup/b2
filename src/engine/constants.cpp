@@ -17,6 +17,8 @@
 
 #include "constants.h"
 
+#include "object.h"
+
 
 void constants_init( void )
 {

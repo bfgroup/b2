@@ -31,13 +31,16 @@
 #include "jam.h"
 #include "rules.h"
 
+#include "function.h"
 #include "hash.h"
 #include "lists.h"
+#include "modules.h"
 #include "object.h"
 #include "output.h"
 #include "parse.h"
 #include "pathsys.h"
 #include "search.h"
+#include "jam_strings.h"
 #include "variable.h"
 
 

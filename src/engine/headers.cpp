@@ -27,6 +27,7 @@
 #include "headers.h"
 
 #include "compile.h"
+#include "frames.h"
 #include "lists.h"
 #include "modules.h"
 #include "object.h"

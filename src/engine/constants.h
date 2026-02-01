@@ -12,7 +12,7 @@
 #define BOOST_JAM_CONSTANTS_H
 
 #include "config.h"
-#include "object.h"
+#include "jam_fwd.h"
 
 void constants_init( void );
 void constants_done( void );
