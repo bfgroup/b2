@@ -58,6 +58,6 @@ typedef value * value_ptr;
 }
 
 // object.h
-typedef b2::value OBJECT;
+using OBJECT = b2::value;
 
 #endif
