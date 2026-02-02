@@ -4,6 +4,7 @@
  * https://www.bfgroup.xyz/b2/LICENSE.txt)
  */
 
+#include "frames.h"
 #include "lists.h"
 #include "mem.h"
 #include "native.h"

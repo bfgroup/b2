@@ -7,11 +7,10 @@ Distributed under the Boost Software License, Version 1.0.
 #ifndef B2_OUTERR_H
 #define B2_OUTERR_H
 
-#include <string>
+#include "config.h"
+#include "jam_fwd.h"
 
-typedef struct _lol LOL;
-struct LIST;
-typedef struct frame FRAME;
+#include <string>
 
 namespace b2 {
 

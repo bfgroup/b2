@@ -27,6 +27,8 @@
 #include "builtins.h"
 #include "class.h"
 #include "constants.h"
+#include "function.h"
+#include "frames.h"
 #include "hash.h"
 #include "make.h"
 #include "modules.h"

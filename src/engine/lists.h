@@ -44,9 +44,7 @@
 #define B2_LISTS_H
 
 #include "config.h"
-
-#include "jam.h"
-#include "object.h"
+#include "jam_fwd.h"
 #include "output.h"
 #include "value.h"
 

@@ -16,6 +16,7 @@
 #include "execcmd.h"
 #include "filesys.h"
 #include "frames.h"
+#include "hash.h"
 #include "lists.h"
 #include "mem.h"
 #include "outerr.h"
@@ -23,9 +24,11 @@
 #include "pathsys.h"
 #include "rules.h"
 #include "search.h"
-#include "startup.h"
 #include "variable.h"
-
+#include "output.h"
+#include "parse.h"
+#include "startup.h"
+#include "jam_strings.h"
 #include "mod_sysinfo.h"
 
 #include <assert.h>
