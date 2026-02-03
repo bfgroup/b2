@@ -52,12 +52,8 @@ update x2 ;
 """.format('{', script, '}'))
 
 t.run_build_system()
-
-# workaround for windows error
-# 'File x1 not added as expected'
-if os.name != "nt":
-    t.expect_addition('x1')
-    t.expect_addition('x2')
+t.expect_addition('x1')
+t.expect_addition('x2')
 t.expect_output_lines('PARALLEL SLEEP')
 t.expect_nothing_more()
 
@@ -88,11 +84,7 @@ update x2
 '''
 
 t.run_build_system(stdout=expected_output)
-
-# workaround for windows error
-# 'File x1 not added as expected'
-if os.name != "nt":
-    t.expect_addition('x1')
-    t.expect_addition('x2')
+t.expect_addition('x1')
+t.expect_addition('x2')
 
 t.cleanup()

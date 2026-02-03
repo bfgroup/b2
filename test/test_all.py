@@ -427,7 +427,6 @@ tests = [
     "rescan_header",
     "resolution",
     "rootless",
-    "semaphore",
     "scanner_causing_rebuilds",
     "searched_lib",
     "skipping",
@@ -463,6 +462,7 @@ tests = [
 ]
 
 if os.name == "posix":
+    tests.append("semaphore")
     tests.append("symlink")
     # On Windows, library order is not important, so skip this test. Besides,
     # it fails ;-). Further, the test relies on the fact that on Linux, one can
