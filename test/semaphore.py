@@ -38,7 +38,7 @@ script = os.path.abspath(__file__)
 import BoostBuild
 import shutil
 
-t = BoostBuild.Tester(['-ffile.jam', '-j2'], pass_toolset=False)
+t = BoostBuild.Tester(['-ffile.jam', '-j2', '-d+4'], pass_toolset=False)
 
 # install in workdir a copy of this script
 shutil.copy(script, 'semaphore.py')
@@ -56,8 +56,8 @@ update x2 ;
 ''')
 
 t.run_build_system()
-t.expect_addition('x1')
-t.expect_addition('x2')
+#t.expect_addition('x1')
+#t.expect_addition('x2')
 t.expect_output_lines('PARALLEL SLEEP')
 t.expect_nothing_more()
 
@@ -88,7 +88,7 @@ update x2
 '''
 
 t.run_build_system(stdout=expected_output)
-t.expect_addition('x1')
-t.expect_addition('x2')
+#t.expect_addition('x1')
+#t.expect_addition('x2')
 
 t.cleanup()

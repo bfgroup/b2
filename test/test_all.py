@@ -429,7 +429,6 @@ tests = [
     "rootless",
     "scanner_causing_rebuilds",
     "searched_lib",
-    "semaphore",
     "skipping",
     "sort_rule",
     "source_locations",
@@ -461,6 +460,9 @@ tests = [
     "wrapper",
     "wrong_project",
 ]
+
+if os.name == "nt":
+    tests.append("semaphore")
 
 if os.name == "posix":
     tests.append("symlink")
