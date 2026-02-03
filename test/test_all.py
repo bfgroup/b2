@@ -427,6 +427,7 @@ tests = [
     "rescan_header",
     "resolution",
     "rootless",
+    "semaphore",
     "scanner_causing_rebuilds",
     "searched_lib",
     "skipping",
