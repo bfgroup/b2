@@ -429,6 +429,7 @@ tests = [
     "rootless",
     "scanner_causing_rebuilds",
     "searched_lib",
+    "semaphore",
     "skipping",
     "sort_rule",
     "source_locations",
@@ -462,7 +463,6 @@ tests = [
 ]
 
 if os.name == "posix":
-    tests.append("semaphore")
     tests.append("symlink")
     # On Windows, library order is not important, so skip this test. Besides,
     # it fails ;-). Further, the test relies on the fact that on Linux, one can

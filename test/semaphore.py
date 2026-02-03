@@ -36,20 +36,24 @@ import os.path
 script = os.path.abspath(__file__)
 
 import BoostBuild
+import shutil
 
 t = BoostBuild.Tester(['-ffile.jam', '-j2'], pass_toolset=False)
 
+# install in workdir a copy of this script
+shutil.copy(script, 'semaphore.py')
+
 # First test parallel execution of update
-t.write('file.jam', """\
+t.write('file.jam', '''\
 DEPENDS all : x1 x2 ;
 actions update
-{}
-    "{}" sentry 1 $(<)
-{}
+{
+    "./semaphore.py" sentry 1 $(<)
+}
 
 update x1 ;
 update x2 ;
-""".format('{', script, '}'))
+''')
 
 t.run_build_system()
 t.expect_addition('x1')
@@ -61,18 +65,18 @@ t.rm('x1')
 t.rm('x2')
 
 # Then test parallel execution suppression by JAM_SEMAPHORE
-t.write('file.jam', """\
+t.write('file.jam', '''\
 DEPENDS all : x1 x2 ;
 actions update
-{}
-    "{}" sentry 1 $(<)
-{}
+{
+    "./semaphore.py" sentry 1 $(<)
+}
 
 JAM_SEMAPHORE on x1 x2 = <s>update_sem ;
 
 update x1 ;
 update x2 ;
-""".format('{', script, '}'))
+''')
 
 expected_output = '''\
 ...found 3 targets...
