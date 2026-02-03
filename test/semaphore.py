@@ -57,8 +57,14 @@ t.expect_addition('x2')
 t.expect_output_lines('PARALLEL SLEEP')
 t.expect_nothing_more()
 
-t.rm('x1')
-t.rm('x2')
+# workaround for windows error
+# 'File x1 not added as expected'
+if os.name == "nt":
+    t.cleanup()
+    t = BoostBuild.Tester(['-ffile.jam', '-j2'], pass_toolset=False)
+else:
+    t.rm('x1')
+    t.rm('x2')
 
 # Then test parallel execution suppression by JAM_SEMAPHORE
 t.write('file.jam', """\
