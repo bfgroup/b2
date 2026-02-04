@@ -22,7 +22,7 @@ def touch(fname):
 
 def update(sentry, secs, target):
     from os.path import isfile
-    if isfile(sentry): print('PARALLEL SLEEP')
+    if isfile(sentry): print('PARALLEL UPDATE')
     else: touch(sentry)
     from time import sleep
     sleep(int(secs))
@@ -31,7 +31,7 @@ def update(sentry, secs, target):
     try:
         unlink(sentry)
     except FileNotFoundError:
-        print('PARALLEL SLEEP')
+        print('PARALLEL UPDATE')
     except:
         pass
 
@@ -68,7 +68,7 @@ update x2 ;
 t.run_build_system()
 t.expect_addition('x1')
 t.expect_addition('x2')
-t.expect_output_lines('PARALLEL SLEEP')
+t.expect_output_lines('PARALLEL UPDATE')
 
 t.rm('x1')
 t.rm('x2')
