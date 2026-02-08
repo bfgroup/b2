@@ -582,8 +582,10 @@ actions inline-file
 We first define a new feature. Then, the `flags` invocation says that
 whenever verbatim.inline-file action is run, the value of the
 `verbatim-options` feature will be added to the `OPTIONS` variable, and
-can be used inside the action body. You'd need to consult online help
-(--help) to find all the features of the `toolset.flags` rule.
+can be used inside the action body. Note that this example currently only
+works on Posix platforms (i.e. not on Windows), where the shell used by
+B2 can execute a command like `"./inline-file.py"`. You'd need to consult
+online help (--help) to find all the features of the `toolset.flags` rule.
 
 Although you can define any set of features and interpret their values
 in any way, B2 suggests the following coding standard for
@@ -601,8 +603,7 @@ allow the user to pass any value to the command line parameters for a
 particular tool, if so desired. For example, the `<cxxflags>` feature
 allows you to pass any command line options to a {CPP} compiler. The
 `<include>` feature allows you to pass any string preceded by `-I` and
-the interpretation is tool-specific. (See <<b2.faq.external>>
-for an example of very smart usage of that feature). Of course one
+the interpretation is tool-specific. Of course one
 should always strive to use portable features, but these are still be
 provided as a backdoor just to make sure B2 does not take away
 any control from the user.
@@ -694,7 +695,8 @@ rule link
 }
 ----
 +
-This is a workaround for a bug in B2 engine, which will
+This is a workaround for a bug in B2 engine (due to dependency features
+that do not actually create a dependency on their values), which will
 hopefully be fixed one day.
 
 *Variants and composite features.*

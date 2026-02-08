@@ -268,7 +268,7 @@ int guarded_main(int argc, char * argv[])
 	cli |= lyra::opt(globs.pipe_action, "x")
 			   .name("-p")
 			   .help(
-				   "x=0, pipes action stdout and stderr"
+				   "x=0, pipes action stdout and stderr "
 				   "merged into action output.")
 			   .choices([](int val) { return 0 <= val && val <= 3; });
 
@@ -309,7 +309,7 @@ int guarded_main(int argc, char * argv[])
 	cli |= lyra::opt(globs.timeout, "x")
 			   .name("-l")
 			   .help(
-				   "Limit actions to x number of seconds"
+				   "Limit actions to x number of seconds "
 				   "after which they are stopped.");
 
 	cli |= lyra::opt(
@@ -319,7 +319,7 @@ int guarded_main(int argc, char * argv[])
 		"x")
 			   .name("-m")
 			   .help(
-				   "Maximum target output saved (kb),"
+				   "Maximum target output saved (kb), "
 				   "default is to save all output.");
 
 	cli |= lyra ::opt(
