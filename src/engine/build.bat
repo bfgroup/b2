@@ -33,7 +33,7 @@ ECHO ###     vc12, vc14, vc141, vc142, vc143, vc145
 ECHO ###
 ECHO ### If you have Visual Studio 2017 installed you will need to either update
 ECHO ### the Visual Studio 2017 installer or run from VS 2017 Command Prompt
-ECHO ### as we where unable to detect your toolset installation.
+ECHO ### as we were unable to detect your toolset installation.
 ECHO ###
 call :Set_Error
 endlocal
