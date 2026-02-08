@@ -176,7 +176,7 @@ rule check-init-parameters ( toolset requirement * : * )
             # because in that case it will be impossible to register versionless
             # intel-linux and intel-win toolsets of a specific version.
             local t = $(toolset) ;
-            local m = [ MATCH "([^-]*)-" : $(toolset) ] ;
+            local m = [ MATCH "([^-]+)-" : $(toolset) ] ;
             if $(m)
             {
                 t = $(m[1]) ;
