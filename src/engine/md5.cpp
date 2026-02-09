@@ -57,7 +57,7 @@
 #include "md5.h"
 #include <cstring>
 
-#undef BYTE_ORDER   /* 1 = big-endian, -1 = little-endian, 0 = unknown */
+#undef BYTE_ORDER       /* 1 = big-endian, -1 = little-endian, 0 = unknown */
 #ifdef ARCH_IS_BIG_ENDIAN
 #  define BYTE_ORDER (ARCH_IS_BIG_ENDIAN ? 1 : -1)
 #else
@@ -158,7 +158,7 @@ md5_process(md5_state_t *pms, const md5_byte_t *data /*[64]*/)
 
         if (*((const md5_byte_t *)&w)) /* dynamic little-endian */
 #endif
-#if BYTE_ORDER <= 0     /* little-endian */
+#if BYTE_ORDER <= 0             /* little-endian */
         {
             /*
              * On little-endian machines, we can process properly aligned
@@ -169,15 +169,15 @@ md5_process(md5_state_t *pms, const md5_byte_t *data /*[64]*/)
                 X = (const md5_word_t *)data;
             } else {
                 /* not aligned */
-                memcpy(xbuf, data, 64);
+                std::memcpy(xbuf, data, 64);
                 X = xbuf;
             }
         }
 #endif
 #if BYTE_ORDER == 0
-        else            /* dynamic big-endian */
+        else                    /* dynamic big-endian */
 #endif
-#if BYTE_ORDER >= 0     /* big-endian */
+#if BYTE_ORDER >= 0             /* big-endian */
         {
             /*
              * On big-endian machines, we must arrange the bytes in the
@@ -187,9 +187,9 @@ md5_process(md5_state_t *pms, const md5_byte_t *data /*[64]*/)
             int i;
 
 #  if BYTE_ORDER == 0
-            X = xbuf;       /* (dynamic only) */
+            X = xbuf;           /* (dynamic only) */
 #  else
-#    define xbuf X      /* (static only) */
+#    define xbuf X              /* (static only) */
 #  endif
             for (i = 0; i < 16; ++i, xp += 4)
                 xbuf[i] = xp[0] + (xp[1] << 8) + (xp[2] << 16) + (xp[3] << 24);
@@ -323,11 +323,11 @@ md5_init(md5_state_t *pms)
 }
 
 void
-md5_append(md5_state_t *pms, const md5_byte_t *data, size_t nbytes)
+md5_append(md5_state_t *pms, const md5_byte_t *data, std::size_t nbytes)
 {
     const md5_byte_t *p = data;
-    size_t left = nbytes;
-    size_t offset = (pms->count[0] >> 3) & 63;
+    std::size_t left = nbytes;
+    std::size_t offset = (pms->count[0] >> 3) & 63;
     md5_word_t nbits = (md5_word_t)(nbytes << 3);
 
     if (nbytes <= 0)
@@ -341,9 +341,9 @@ md5_append(md5_state_t *pms, const md5_byte_t *data, size_t nbytes)
 
     /* Process an initial partial block. */
     if (offset) {
-        size_t copy = (offset + nbytes > 64 ? 64 - offset : nbytes);
+        std::size_t copy = (offset + nbytes > 64 ? 64 - offset : nbytes);
 
-        memcpy(pms->buf + offset, p, copy);
+        std::memcpy(pms->buf + offset, p, copy);
         if (offset + copy < 64)
             return;
         p += copy;
@@ -357,7 +357,7 @@ md5_append(md5_state_t *pms, const md5_byte_t *data, size_t nbytes)
 
     /* Process a final partial block. */
     if (left)
-        memcpy(pms->buf, p, left);
+        std::memcpy(pms->buf, p, left);
 }
 
 void
