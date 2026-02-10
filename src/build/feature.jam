@@ -5,9 +5,7 @@
 # (See accompanying file LICENSE.txt or copy at
 # https://www.bfgroup.xyz/b2/LICENSE.txt)
 
-import assert : * ;
-import "class" : * ;
-import indirect ;
+import assert ;
 import modules ;
 import regex ;
 import sequence ;
