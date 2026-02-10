@@ -968,18 +968,9 @@ class project-attributes
         }
         else if $(attribute) = "requirements"
         {
-            local result = [ property-set.refine-from-user-input
+            self.requirements = [ property-set.refine-from-user-input
                 $(self.requirements) : $(specification)
                 : $(self.project-module) : $(self.location) ] ;
-
-            if $(result[1]) = "@error"
-            {
-                import errors : error : errors.error ;
-                errors.error Requirements for project at '$(self.location)'
-                    conflict with parent's. : "Explanation:" $(result[2-]) ;
-            }
-
-            self.requirements = $(result) ;
         }
         else if $(attribute) = "usage-requirements"
         {
