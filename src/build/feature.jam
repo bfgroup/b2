@@ -5,9 +5,7 @@
 # (See accompanying file LICENSE.txt or copy at
 # https://www.bfgroup.xyz/b2/LICENSE.txt)
 
-import assert : * ;
-import "class" : * ;
-import indirect ;
+import assert ;
 import modules ;
 import regex ;
 import sequence ;
@@ -332,12 +330,12 @@ local rule validate-feature ( feature )
 # feature, returns a property set consisting of all component subfeatures and
 # their values. For example all the following calls:
 #
-#   expand-subfeatures-aux <toolset>gcc-2.95.2-linux-x86
-#   expand-subfeatures-aux gcc-2.95.2-linux-x86
+#   expand-subfeatures-aux <toolset>gcc-2.95.2-linux
+#   expand-subfeatures-aux gcc-2.95.2-linux
 #
 # return:
 #
-#   <toolset>gcc <toolset-version>2.95.2 <toolset-os>linux <toolset-cpu>x86
+#   <toolset>gcc <toolset-gcc:version>2.95.2 <toolset-gcc:os>linux
 #
 local rule expand-subfeatures-aux (
       feature ?        # Feature name or empty if value corresponds to an
@@ -398,12 +396,12 @@ local rule expand-subfeatures-aux (
 # and express all subfeature values as separate properties in their own right.
 # For example, all of the following properties
 #
-#    gcc-2.95.2-linux-x86
-#    <toolset>gcc-2.95.2-linux-x86
+#    gcc-2.95.2-linux
+#    <toolset>gcc-2.95.2-linux
 #
 # might expand to
 #
-#   <toolset>gcc <toolset-version>2.95.2 <toolset-os>linux <toolset-cpu>x86
+#   <toolset>gcc <toolset-gcc:version>2.95.2 <toolset-gcc:os>linux
 #
 rule expand-subfeatures (
     properties *       # Property set with elements of the form
@@ -466,18 +464,14 @@ rule validate-value-string ( feature value-string )
 {
     if ! (
         free in $($(feature).attributes)
-        || ( $(value-string) in $(feature).values )
+        || ( $(value-string) in $($(feature).values) )
     )
     {
         local values = $(value-string) ;
 
         if $($(feature).subfeatures)
         {
-            if ! $(value-string) in $($(feature).values)
-                $($(feature).subfeatures)
-            {
-                values = [ regex.split $(value-string) - ] ;
-            }
+            values = [ regex.split $(value-string) - ] ;
         }
 
         if ! ( $(values[1]) in $($(feature).values) ) &&
@@ -502,8 +496,16 @@ rule validate-value-string ( feature value-string )
 # A helper that computes:
 #  * name(s) of module-local variable(s) used to record the correspondence
 #    between subvalue(s) and a subfeature
-#  * value of that variable when such a subfeature/subvalue has been defined and
+#  * value of that variable(s) when such a subfeature/subvalue has been defined
 # returns a list consisting of the latter followed by the former.
+#
+# For example the following call:
+#
+#   subvalue-var <toolset> gcc : version : 2.95.2
+#
+# return:
+#
+#   gcc:version <toolset>gcc<>2.95.2.subfeature
 #
 local rule subvalue-var (
     feature         # Main feature name.
@@ -646,7 +648,7 @@ rule subfeature (
     feature = [ grist $(feature) ] ;
     validate-feature $(feature) ;
 
-    # Add grist to the subfeature name if a value-string was supplied.
+    # The subfeature name follows value-string if supplied.
     local subfeature-name = [ get-subfeature-name $(subfeature) $(value-string) ] ;
 
     if $(subfeature-name) in $($(feature).subfeatures)
@@ -681,7 +683,6 @@ rule compose ( composite-property : component-properties * )
         errors.error "$(feature)" is not a composite feature ;
     }
 
-    $(composite-property).components ?= ;
     if $($(composite-property).components)
     {
         import errors ;
@@ -692,7 +693,8 @@ rule compose ( composite-property : component-properties * )
     if $(composite-property) in $(component-properties)
     {
         import errors ;
-        errors.error composite property "$(composite-property)" cannot have itself as a component ;
+        errors.error composite property "$(composite-property)"
+            cannot have itself as a component ;
     }
     $(composite-property).components = $(component-properties) ;
 
@@ -868,7 +870,14 @@ local rule select-subproperties ( parent-property : properties * )
 rule expand ( properties * )
 {
     local expanded = [ expand-subfeatures $(properties) ] ;
-    return [ expand-composites $(expanded) ] ;
+    local expanded2 = [ expand-composites $(expanded) ] ;
+    while $(expanded2) != $(expanded)
+    {
+        # check for composites expanding to subfeatures
+        expanded = [ expand-subfeatures $(expanded2) ] ;
+        expanded2 = [ expand-composites $(expanded) ] ;
+    }
+    return $(expanded2) ;
 }
 
 
@@ -988,8 +997,6 @@ rule minimize ( properties * )
 #
 rule compress-subproperties ( properties * )
 {
-    local all-subs ;
-    local matched-subs ;
     local result ;
 
     for local p in $(properties)
@@ -1005,15 +1012,9 @@ rule compress-subproperties ( properties * )
             local subs = [ sequence.insertion-sort
                 [ sequence.filter is-subproperty-of $(p) : $(properties) ] ] ;
 
-            matched-subs += $(subs) ;
-
             local subvalues = -$(subs:G=:J=-) ;
             subvalues ?= "" ;
             result += $(p)$(subvalues) ;
-        }
-        else
-        {
-            all-subs += $(p) ;
         }
     }
     return $(result) ;
@@ -1276,6 +1277,12 @@ rule __test__ ( )
 
     assert.result <toolset>gcc <toolset-gcc:version>3.0.1
         : expand <toolset>gcc <toolset-gcc:version>3.0.1  ;
+
+    feature mixed : : composite free ;
+    compose <mixed>some : <toolset>gcc-3.0.1 <stdlib>native ;
+
+    assert.result <mixed>some <stdlib>native <toolset>gcc <toolset-gcc:version>3.0.1
+        : expand <mixed>some ;
 
     assert.result <define>foo=x-y
         : expand-subfeatures <define>foo=x-y ;

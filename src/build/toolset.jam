@@ -55,7 +55,7 @@ rule using ( toolset-module : * )
 
 
 # Expands subfeatures in each property sets, e.g. '<toolset>gcc-3.2' will be
-# converted to '<toolset>gcc/<toolset-version>3.2'.
+# converted to '<toolset>gcc/<toolset-gcc:version>3.2'.
 #
 local rule normalize-condition ( property-sets * )
 {
