@@ -21,11 +21,6 @@ if $(NT)
 {
     actions sleeper
     {
-        echo [$(<:S)] 0
-        call sleep.bat 1
-        echo [$(<:S)] 1
-        call sleep.bat 1
-        echo [$(<:S)] 2
         call sleep.bat $(<:B)
     }
 }
@@ -33,11 +28,6 @@ else
 {
     actions sleeper
     {
-        echo "[$(<:S)] 0"
-        sleep 1
-        echo "[$(<:S)] 1"
-        sleep 1
-        echo "[$(<:S)] 2"
         sleep $(<:B)
     }
 }
@@ -62,41 +52,18 @@ DEPENDS bottom : 1.b 2.b 3.b 4.b ;
 DEPENDS all : bottom ;
 """)
 
-t.run_build_system(["-ffile.jam", "-j4"], stdout="""\
+t.run_build_system(["-ffile.jam", "-j4"])
+t.expect_output_lines("""\
 ...found 12 targets...
 ...updating 8 targets...
-sleeper 1.a
-[.a] 0
-[.a] 1
-[.a] 2
-sleeper 2.a
-[.a] 0
-[.a] 1
-[.a] 2
-sleeper 3.a
-[.a] 0
-[.a] 1
-[.a] 2
-sleeper 4.a
-[.a] 0
-[.a] 1
-[.a] 2
-sleeper 1.b
-[.b] 0
-[.b] 1
-[.b] 2
-sleeper 2.b
-[.b] 0
-[.b] 1
-[.b] 2
-sleeper 3.b
-[.b] 0
-[.b] 1
-[.b] 2
-sleeper 4.b
-[.b] 0
-[.b] 1
-[.b] 2
+sleeper [1-4].a
+sleeper [1-4].a
+sleeper [1-4].a
+sleeper [1-4].a
+sleeper [1-4].b
+sleeper [1-4].b
+sleeper [1-4].b
+sleeper [1-4].b
 
 ...updated 8 targets...
 """)
