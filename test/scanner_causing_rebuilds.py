@@ -130,3 +130,4 @@ t.run_build_system()
 # should not cause any files to be affected.
 t.run_build_system()
 t.expect_nothing_more()
+t.cleanup()
