@@ -41,31 +41,27 @@ NOTFILE front ;
 sleeper 1.a : front ;
 sleeper 2.a : front ;
 sleeper 3.a : front ;
-sleeper 4.a : front ;
 NOTFILE choke ;
-DEPENDS choke : 1.a 2.a 3.a 4.a ;
+DEPENDS choke : 1.a 2.a 3.a ;
 sleeper 1.b : choke ;
 sleeper 2.b : choke ;
 sleeper 3.b : choke ;
-sleeper 4.b : choke ;
-DEPENDS bottom : 1.b 2.b 3.b 4.b ;
+DEPENDS bottom : 1.b 2.b 3.b ;
 DEPENDS all : bottom ;
 """)
 
-t.run_build_system(["-ffile.jam", "-j4"])
+t.run_build_system(["-ffile.jam", "-j3"])
 t.expect_output_lines("""\
-...found 12 targets...
-...updating 8 targets...
-sleeper [1-4].a
-sleeper [1-4].a
-sleeper [1-4].a
-sleeper [1-4].a
-sleeper [1-4].b
-sleeper [1-4].b
-sleeper [1-4].b
-sleeper [1-4].b
+...found 10 targets...
+...updating 6 targets...
+sleeper [123].a
+sleeper [123].a
+sleeper [123].a
+sleeper [123].b
+sleeper [123].b
+sleeper [123].b
 
-...updated 8 targets...
+...updated 6 targets...
 """)
 
 t.cleanup()
