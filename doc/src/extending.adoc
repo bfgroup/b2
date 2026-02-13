@@ -238,6 +238,10 @@ actions inline-file
 }
 ----
 
+Note that this action currently only works on Posix platforms (i.e. not
+on Windows), where the shell used by B2 can execute a command like
+`"./inline-file.py"` (on Windows you have to invoke the Python interpreter,
+i.e. use the syntax `python inline-file.py $(<) $(>)`.)
 Now, we're ready to tie it all together. Put all the code above in file
 `verbatim.jam`, add `import verbatim ;` to `Jamroot.jam`, and it's
 possible to write the following in your Jamfile:
@@ -582,10 +586,8 @@ actions inline-file
 We first define a new feature. Then, the `flags` invocation says that
 whenever verbatim.inline-file action is run, the value of the
 `verbatim-options` feature will be added to the `OPTIONS` variable, and
-can be used inside the action body. Note that this example currently only
-works on Posix platforms (i.e. not on Windows), where the shell used by
-B2 can execute a command like `"./inline-file.py"`. You'd need to consult
-online help (--help) to find all the features of the `toolset.flags` rule.
+can be used inside the action body. You'd need to consult online help
+(--help) to find all the features of the `toolset.flags` rule.
 
 Although you can define any set of features and interpret their values
 in any way, B2 suggests the following coding standard for
