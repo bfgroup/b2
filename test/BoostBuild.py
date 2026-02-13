@@ -226,6 +226,7 @@ class Tester(TestCmd.TestCmd):
     Optional arguments:
 
     `arguments`                   - Arguments passed to the run executable.
+                                    Use a list to pass all needed arguments.
     `executable`                  - Name of the executable to invoke.
     `match`                       - Function to use for compating actual and
                                     expected file contents.
@@ -802,8 +803,8 @@ class Tester(TestCmd.TestCmd):
     def expect_output_lines(self, lines, expected=True):
         self.__expect_lines(self.stdout(), lines, expected)
 
-    def expect_content_lines(self, filename, line, expected=True):
-        self.__expect_lines(self.read_and_strip(filename), line, expected)
+    def expect_content_lines(self, filename, lines, expected=True):
+        self.__expect_lines(self.read_and_strip(filename), lines, expected)
 
     def expect_content(self, name, content, exact=False):
         actual = self.read(name)
