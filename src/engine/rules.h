@@ -32,10 +32,11 @@
 #define RULES_DWA_20011020_H
 
 #include "config.h"
-#include "function.h"
+#include "jam_fwd.h"
 #include "mem.h"
-#include "modules.h"
+#include "lists.h"
 #include "timestamp.h"
+
 #include <utility>
 
 typedef struct _rule RULE;

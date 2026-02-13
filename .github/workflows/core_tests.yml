@@ -78,7 +78,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - 0.677
+          - 0.678
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -90,7 +90,7 @@ jobs:
           wget "https://github.com/pizlonator/fil-c/releases/download/v${{matrix.version}}/optfil-${{matrix.version}}-linux-x86_64.tar.xz"
           tar -Jxvf "optfil-${{matrix.version}}-linux-x86_64.tar.xz"
           cd "optfil-${{matrix.version}}-linux-x86_64"
-          echo "YES" | sudo ./setup.sh
+          sudo ./setup.sh -u
           /opt/fil/bin/fil++ --version
           echo | /opt/fil/bin/fil++ -dM -E -x c++ -
 
