@@ -238,6 +238,10 @@ actions inline-file
 }
 ----
 
+Note that this action currently only works on Posix platforms (i.e. not
+on Windows), where the shell used by B2 can execute a command like
+`"./inline-file.py"` (on Windows you have to invoke the Python interpreter,
+i.e. use the syntax `python inline-file.py $(<) $(>)`.)
 Now, we're ready to tie it all together. Put all the code above in file
 `verbatim.jam`, add `import verbatim ;` to `Jamroot.jam`, and it's
 possible to write the following in your Jamfile:
@@ -601,8 +605,7 @@ allow the user to pass any value to the command line parameters for a
 particular tool, if so desired. For example, the `<cxxflags>` feature
 allows you to pass any command line options to a {CPP} compiler. The
 `<include>` feature allows you to pass any string preceded by `-I` and
-the interpretation is tool-specific. (See <<b2.faq.external>>
-for an example of very smart usage of that feature). Of course one
+the interpretation is tool-specific. Of course one
 should always strive to use portable features, but these are still be
 provided as a backdoor just to make sure B2 does not take away
 any control from the user.
@@ -694,7 +697,8 @@ rule link
 }
 ----
 +
-This is a workaround for a bug in B2 engine, which will
+This is a workaround for a bug in B2 engine (due to dependency features
+that do not actually create a dependency on their values), which will
 hopefully be fixed one day.
 
 *Variants and composite features.*
