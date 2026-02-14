@@ -141,6 +141,7 @@ class ac-library : basic-target
     import configure ;
     import config-cache ;
     import os ;
+    import project ;
 
     rule __init__ ( name : project : requirements * : include-path ? : library-path ? : library-name ? )
     {

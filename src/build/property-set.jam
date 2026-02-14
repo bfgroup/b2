@@ -183,15 +183,8 @@ class property-set
     {
         if ! $(self.refined.$(ps))
         {
-            local r = [ property.refine $(self.raw) : [ $(ps).raw ] ] ;
-            if $(r[1]) != "@error"
-            {
-                self.refined.$(ps) = [ property-set.create $(r) ] ;
-            }
-            else
-            {
-                self.refined.$(ps) = $(r) ;
-            }
+            self.refined.$(ps) = [ property-set.create
+                [ property.refine $(self.raw) : [ $(ps).raw ] ] ] ;
         }
         return $(self.refined.$(ps)) ;
     }
