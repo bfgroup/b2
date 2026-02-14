@@ -11735,7 +11735,11 @@ make that transformation. That&#8217;s done with an <code>actions</code> declara
 </div>
 </div>
 <div class="paragraph">
-<p>Now, we&#8217;re ready to tie it all together. Put all the code above in file
+<p>Note that this action currently only works on Posix platforms (i.e. not
+on Windows), where the shell used by B2 can execute a command like
+<code>"./inline-file.py"</code> (on Windows you have to invoke the Python interpreter,
+i.e. use the syntax <code>python inline-file.py $(&lt;) $(&gt;)</code>.)
+Now, we&#8217;re ready to tie it all together. Put all the code above in file
 <code>verbatim.jam</code>, add <code>import verbatim ;</code> to <code>Jamroot.jam</code>, and it&#8217;s
 possible to write the following in your Jamfile:</p>
 </div>
@@ -12135,8 +12139,7 @@ allow the user to pass any value to the command line parameters for a
 particular tool, if so desired. For example, the <code>&lt;cxxflags&gt;</code> feature
 allows you to pass any command line options to a C&#43;&#43; compiler. The
 <code>&lt;include&gt;</code> feature allows you to pass any string preceded by <code>-I</code> and
-the interpretation is tool-specific. (See <a href="#b2.faq.external">Can I get capture external program output using a Boost.Jam variable?</a>
-for an example of very smart usage of that feature). Of course one
+the interpretation is tool-specific. Of course one
 should always strive to use portable features, but these are still be
 provided as a backdoor just to make sure B2 does not take away
 any control from the user.</p>
@@ -12272,7 +12275,8 @@ strange symbol that is not likely to make sense for the linker.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This is a workaround for a bug in B2 engine, which will
+<p>This is a workaround for a bug in B2 engine (due to dependency features
+that do not actually create a dependency on their values), which will
 hopefully be fixed one day.</p>
 </div>
 </li>
