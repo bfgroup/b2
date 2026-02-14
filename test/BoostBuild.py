@@ -498,7 +498,9 @@ class Tester(TestCmd.TestCmd):
             kw["program"] += self.program
             if extra_args:
                 kw["program"] += extra_args
-            if not extra_args or not any(a.startswith("-j") for a in extra_args):
+            if ((not extra_args
+                 or not any(a.startswith("-j") for a in extra_args))
+                and not any(a.startswith("-j") for a in self.program[1:])):
                 kw["program"] += ["-j1"]
             if stdout is None and not any(a.startswith("-d") for a in kw["program"]):
                 kw["program"] += self.verbosity

@@ -42,14 +42,14 @@ def update(mode, sentry, secs, target):
         # parallel action ran, ignoring the semaphore.
         if secs > 0:
             raise RuntimeError
-    # Indicate we completed, and create our result target.
-    unlink(sentry + target)
+    # Create our result target and indicate we completed.
     touch(target)
+    unlink(sentry + target)
 
 
 if len(sys.argv) == 5:
     # called by jam update action
-    # python semaphore.py <sentry_fname> <sleep_secs> <target_fname>
+    # python semaphore.py <mode> <sentry_prefix> <sleep_secs> <target_fname>
     update(*sys.argv[1:])
     sys.exit()
 
@@ -60,7 +60,7 @@ script = os.path.abspath(__file__)
 
 import BoostBuild
 
-t = BoostBuild.Tester(["-ffile.jam"], pass_toolset=False)
+t = BoostBuild.Tester(["-ffile.jam", "-j2"], pass_toolset=False)
 
 # 1. test parallel execution of update
 t.write(
@@ -68,17 +68,17 @@ t.write(
     """\
 actions update
 {{
-    "{0}" "{1}" parallel sentry 1 $(<)
+    "{}" "{}" parallel sentry 1 $(<)
 }}
 update x1 ;
 update x2 ;
 DEPENDS all : x1 x2 ;
 """.format(
         sys.executable, script
-    ),
+    )
 )
 
-t.run_build_system(extra_args=["-j2"])
+t.run_build_system()
 t.expect_addition("x1")
 t.expect_addition("x2")
 t.expect_output_lines("PARALLEL UPDATE")
@@ -92,7 +92,7 @@ t.write(
     """\
 actions update
 {{
-    "{0}" "{1}" semaphore sentry 1 $(<)
+    "{}" "{}" semaphore sentry 1 $(<)
 }}
 JAM_SEMAPHORE on x1 x2 = <s>update_sem ;
 update x1 ;
@@ -100,7 +100,7 @@ update x2 ;
 DEPENDS all : x1 x2 ;
 """.format(
         sys.executable, script
-    ),
+    )
 )
 
 expected_output = """\
@@ -112,7 +112,7 @@ update x2
 ...updated 2 targets...
 """
 
-t.run_build_system(stdout=expected_output, extra_args=["-j2"])
+t.run_build_system(stdout=expected_output)
 t.expect_addition("x1")
 t.expect_addition("x2")
 
