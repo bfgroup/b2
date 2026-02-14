@@ -297,9 +297,7 @@ int guarded_main(int argc, char * argv[])
 				   {
 					   err_printf("Invalid value for the '-j' option.\n");
 					   b2::clean_exit(EXITBAD);
-					   return false;
 				   }
-				   globs.jobs = val;
 				   return true;
 			   });
 
