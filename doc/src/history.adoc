@@ -27,6 +27,9 @@
   -- _Paolo Pastori_
 * Fix finding an assembler when using plain LLVM for clang-win.
   -- _René Ferdinand Rivera Morell_
+* Fix HDRRULE builtin rule to work in modules loaded by build system.
+  Added searching-only interfaces to modules and targets.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 
