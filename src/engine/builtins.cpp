@@ -1375,10 +1375,12 @@ void print_source_line( FRAME * frame )
     char const * file;
     int line;
     get_source_line( frame, &file, &line );
-    if ( line < 0 )
-        out_printf( "(builtin):" );
-    else
+    if ( line > 0 )
         out_printf( "%s:%d:", file, line );
+    else if ( line == 0 )
+        out_printf( "%s:", file );
+    else
+        out_printf( "(builtin):" );
 }
 
 

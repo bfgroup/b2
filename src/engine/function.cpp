@@ -4830,15 +4830,28 @@ LIST * function_run( FUNCTION * function_, FRAME * frame )
             LIST * vars = s->pop<LIST *>();
             LISTITER iter = list_begin( targets );
             LISTITER const end = list_end( targets );
+            bool not_in_root_m = frame->module != root_module();
             for ( ; iter != end; iter = list_next( iter ) )
             {
-                TARGET * t = bindtarget( list_item( iter ) );
+                b2::target_ref tr( bindtarget( list_item( iter ) ) );
                 LISTITER vars_iter = list_begin( vars );
                 LISTITER const vars_end = list_end( vars );
                 for ( ; vars_iter != vars_end; vars_iter = list_next( vars_iter
                     ) )
-                    t->settings = addsettings( t->settings, VAR_SET, list_item(
-                        vars_iter ), list_copy( value ) );
+                {
+                    // when setting an HDRULE on some target which is not
+                    // on root module decorate the target with module
+                    // information to allow next retrieval of the rule,
+                    // as a workaround for issue #502
+                    if (not_in_root_m &&
+                        object_equal(list_item(vars_iter), constant_HDRRULE))
+                    {
+                        if (frame->file)
+                            tr.on_set( constant_FILENAME, frame->file );
+                        tr.on_set( constant_MODULE, frame->module->name );
+                    }
+                    tr.on_set( list_item( vars_iter ), value );
+                }
             }
             list_free( vars );
             list_free( targets );
