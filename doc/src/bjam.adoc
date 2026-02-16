@@ -471,7 +471,8 @@ any new Jam code you write.
 `B2` has a growing set of built-in rules, all of which are pure
 procedure rules without updating actions. They are in three groups: the
 first builds the dependency graph; the second modifies it; and the third
-are just utility rules.
+are just utility rules. A fourth set of rules relating to modules are
+described in link:#jam.language.modules[Modules].
 
 [[jam.language.rules.builtins.dependency_building]]
 ==== Dependency Building
@@ -663,8 +664,18 @@ WARNING: This is currently not fully implemented.
 [[jam.language.rules.builtins.utility]]
 ==== Utility
 
-The two rules `ECHO` and `EXIT` are utility rules, used only in ``b2``s
-parsing phase.
+[[jam.language.rules.builtins.utility._backtrace__]]
+===== `BACKTRACE`
+
+[source]
+----
+rule BACKTRACE ( levels ? )
+----
+
+Returns a list of quadruples: _filename_ _line_ _module_ _rulename_...,
+describing each shallower level of the call stack, or only last _levels_
+when the argument is provided. This rule can be used to generate useful
+diagnostic messages from Jam rules.
 
 [[jam.language.rules.builtins.utility._echo__]]
 ===== `ECHO`
@@ -691,6 +702,20 @@ _result-value_.
 `Echo`, `echo`, `Exit`, and `exit` are accepted as aliases for
 `ECHO` and `EXIT`, since it is hard to tell that these are built-in
 rules and not part of the language, like `include`.
+
+[[jam.language.rules.builtins.utility._file_open__]]
+===== `FILE_OPEN`
+
+[source]
+----
+rule FILE_OPEN ( filename : mode )
+----
+
+The `FILE_OPEN` rule opens the specified file and returns a file
+descriptor if the _mode_ parameter is either "w" or "r". Note that at
+present, only the `UPDATE_NOW` rule can use the resulting file
+descriptor number. If the _mode_ parameter is "t" this opens the file as a
+text file and returns the contents as a single string.
 
 [[jam.language.rules.builtins.utility._glob__]]
 ===== `GLOB`
@@ -787,18 +812,80 @@ Matches the `egrep`(1) style regular expressions _regexps_ against the
 strings in _list_. The result is a list of matching `()` subexpressions
 for each string in _list_, and for each regular expression in _regexps_.
 
-[[jam.language.rules.builtins.utility._backtrace__]]
-===== `BACKTRACE`
+[[jam.language.rules.builtins.utility._md5__]]
+===== `MD5`
 
 [source]
 ----
-rule BACKTRACE ( levels ? )
+rule MD5 ( string )
 ----
 
-Returns a list of quadruples: _filename_ _line_ _module_ _rulename_...,
-describing each shallower level of the call stack, or only last _levels_
-when the argument is provided. This rule can be used to generate useful
-diagnostic messages from Jam rules.
+`MD5` computes the MD5 hash of the string passed as parameter and
+returns it.
+
+[[jam.language.rules.builtins.utility._pad__]]
+===== `PAD`
+
+[source]
+----
+rule PAD ( string : width )
+----
+
+If _string_ is shorter than _width_ characters, pads it with whitespace
+characters on the right, and returns the result. Otherwise, returns
+_string_ unmodified.
+
+[[jam.language.rules.builtins.utility._precious__]]
+===== `PRECIOUS`
+
+[source]
+----
+rule PRECIOUS ( targets * )
+----
+
+The `PRECIOUS` rule specifies that each of the targets passed as the
+arguments should not be removed even if the command updating that target
+fails.
+
+[[jam.language.rules.builtins.utility._shell__]]
+===== `SHELL`
+
+[source]
+----
+rule SHELL ( command : * )
+----
+
+`SHELL` executes _command_, and then returns the standard output of
+_command_. `SHELL` only works on platforms with a `popen()` function in
+the C library. On platforms without a working `popen()` function,
+`SHELL` is implemented as a no-op. `SHELL` works on Unix, MacOS X, and
+most Windows compilers. `SHELL` is a no-op on Metrowerks compilers under
+Windows. There is a variable set of allowed options as additional
+arguments:
+
+`exit-status`::
+  In addition to the output the result status of the executed command is
+  returned as a second element of the result.
+`no-output`::
+  Don't capture the output of the command. Instead an empty ("") string
+  value is returned in place of the output.
+`strip-eol`::
+  Remove trailing end-of-line character from output, if any.
+
+Because the Perforce/Jambase defines a `SHELL` rule which hides the
+builtin rule, `COMMAND` can be used as an alias for `SHELL` in such a
+case.
+
+[[jam.language.rules.builtins.utility._split_by_characters__]]
+===== `SPLIT_BY_CHARACTERS`
+
+[source]
+----
+rule SPLIT_BY_CHARACTERS ( string : delimiters )
+----
+
+`SPLIT_BY_CHARACTERS` splits the specified _string_ on any delimiter
+character present in _delimiters_ and returns the resulting list.
 
 [[jam.language.rules.builtins.utility._update__]]
 ===== `UPDATE`
@@ -827,6 +914,21 @@ it possible to add targets as such:
 local previous-updates = [ UPDATE ] ;
 UPDATE $(previous-updates) a-new-target ;
 ----
+
+[[jam.language.rules.builtins.utility._update_now__]]
+===== `UPDATE_NOW`
+
+[source]
+----
+rule UPDATE_NOW ( targets * : log ? : ignore-minus-n ? )
+----
+
+The `UPDATE_NOW` caused the specified targets to be updated immediately.
+If update was successful, non-empty string is returned. The _log_
+parameter, if present, specifies a descriptor of a file where all output
+from building is redirected. If the _ignore-minus-n_ parameter is
+specified, the targets are updated even if the `-n` parameter is
+specified on the command line.
 
 [[jam.language.rules.builtins.utility._w32_getreg__]]
 ===== `W32_GETREG`
@@ -903,110 +1005,6 @@ for local subkey in $(subkeys)
     }
 }
 ----
-
-[[jam.language.rules.builtins.utility._shell__]]
-===== `SHELL`
-
-[source]
-----
-rule SHELL ( command : * )
-----
-
-`SHELL` executes _command_, and then returns the standard output of
-_command_. `SHELL` only works on platforms with a `popen()` function in
-the C library. On platforms without a working `popen()` function,
-`SHELL` is implemented as a no-op. `SHELL` works on Unix, MacOS X, and
-most Windows compilers. `SHELL` is a no-op on Metrowerks compilers under
-Windows. There is a variable set of allowed options as additional
-arguments:
-
-`exit-status`::
-  In addition to the output the result status of the executed command is
-  returned as a second element of the result.
-`no-output`::
-  Don't capture the output of the command. Instead an empty ("") string
-  value is returned in place of the output.
-`strip-eol`::
-  Remove trailing end-of-line character from output, if any.
-
-Because the Perforce/Jambase defines a `SHELL` rule which hides the
-builtin rule, `COMMAND` can be used as an alias for `SHELL` in such a
-case.
-
-[[jam.language.rules.builtins.utility._md5__]]
-===== `MD5`
-
-[source]
-----
-rule MD5 ( string )
-----
-
-`MD5` computes the MD5 hash of the string passed as parameter and
-returns it.
-
-[[jam.language.rules.builtins.utility._split_by_characters__]]
-===== `SPLIT_BY_CHARACTERS`
-
-[source]
-----
-rule SPLIT_BY_CHARACTERS ( string : delimiters )
-----
-
-`SPLIT_BY_CHARACTERS` splits the specified _string_ on any delimiter
-character present in _delimiters_ and returns the resulting list.
-
-[[jam.language.rules.builtins.utility._precious__]]
-===== `PRECIOUS`
-
-[source]
-----
-rule PRECIOUS ( targets * )
-----
-
-The `PRECIOUS` rule specifies that each of the targets passed as the
-arguments should not be removed even if the command updating that target
-fails.
-
-[[jam.language.rules.builtins.utility._pad__]]
-===== `PAD`
-
-[source]
-----
-rule PAD ( string : width )
-----
-
-If _string_ is shorter than _width_ characters, pads it with whitespace
-characters on the right, and returns the result. Otherwise, returns
-_string_ unmodified.
-
-[[jam.language.rules.builtins.utility._file_open__]]
-===== `FILE_OPEN`
-
-[source]
-----
-rule FILE_OPEN ( filename : mode )
-----
-
-The `FILE_OPEN` rule opens the specified file and returns a file
-descriptor if the _mode_ parameter is either "w" or "r". Note that at
-present, only the `UPDATE_NOW` rule can use the resulting file
-descriptor number. If the _mode_ parameter is "t" this opens the file as a
-text file and returns the contents as a single string.
-
-[[jam.language.rules.builtins.utility._update_now__]]
-===== `UPDATE_NOW`
-
-[source]
-----
-rule UPDATE_NOW ( targets * : log ? : ignore-minus-n ? )
-----
-
-The `UPDATE_NOW` caused the specified targets to be updated immediately.
-If update was successful, non-empty string is returned. The _log_
-parameter, if present, specifies a descriptor of a file where all output
-from building is redirected. If the _ignore-minus-n_ parameter is
-specified, the targets are updated even if the `-n` parameter is
-specified on the command line.
 
 [[jam.language.flow_of_control]]
 === Flow-of-Control
