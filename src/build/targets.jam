@@ -142,7 +142,7 @@ class abstract-target
 
 args.add-arg debug-building : --debug-building
     : "Prints what targets are being built and with what properties." : flag ;
-modules.poke : .debug-building : [ args.get-arg debug-building ] ;
+modules.poke targets : .debug-building : [ args.get-arg debug-building ] ;
 
 
 rule indent ( )
@@ -249,7 +249,7 @@ class project-target : abstract-target
     #
     rule generate ( property-set * )
     {
-        if [ modules.peek : .debug-building ]
+        if [ modules.peek targets : .debug-building ]
         {
             ECHO [ targets.indent ] "building project" [ name ]
                 " ('$(__name__)') with" [ $(property-set).raw ] ;
@@ -1274,7 +1274,7 @@ class basic-target : abstract-target
     #
     rule generate ( property-set )
     {
-        if [ modules.peek : .debug-building ]
+        if [ modules.peek targets : .debug-building ]
         {
             ECHO ;
             local fn = [ full-name ] ;
@@ -1300,7 +1300,7 @@ class basic-target : abstract-target
             local rproperties = [ targets.common-properties $(property-set)
                 $(self.requirements) ] ;
 
-            if [ modules.peek : .debug-building ]
+            if [ modules.peek targets : .debug-building ]
             {
                 ECHO ;
                 ECHO [ targets.indent ] "Common properties:"
@@ -1330,7 +1330,7 @@ class basic-target : abstract-target
                 generate-dependencies $(self.sources) : $(rproperties) :
                     source-targets usage-requirements ;
 
-                if [ modules.peek : .debug-building ]
+                if [ modules.peek targets : .debug-building ]
                 {
                     ECHO ;
                     ECHO [ targets.indent ] "Usage requirements for"
@@ -1354,7 +1354,7 @@ class basic-target : abstract-target
                     usage-requirements = [ property-set.create $(usage-requirements)
                         ] ;
 
-                    if [ modules.peek : .debug-building ]
+                    if [ modules.peek targets : .debug-building ]
                     {
                         ECHO [ targets.indent ] "Build properties:"
                             [ $(rproperties).str ] ;
@@ -1414,7 +1414,7 @@ class basic-target : abstract-target
                         }
                         ur = [ $(ur).add $(gur) ] ;
                         $(s).set-usage-requirements $(ur) ;
-                        if [ modules.peek : .debug-building ]
+                        if [ modules.peek targets : .debug-building ]
                         {
                             ECHO [ targets.indent ] "Usage requirements from"
                                 $(self.name)":" [ $(ur).str ] ;
@@ -1440,7 +1440,7 @@ class basic-target : abstract-target
         }
         else
         {
-            if [ modules.peek : .debug-building ]
+            if [ modules.peek targets : .debug-building ]
             {
                 ECHO [ targets.indent ] "Already built" ;
                 local ur = $(self.generated.$(property-set)) ;
