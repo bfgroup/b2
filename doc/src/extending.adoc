@@ -329,7 +329,7 @@ class verbatim-scanner : common-scanner
 {
     rule pattern ( )
     {
-        return "//###include[ ]*\"([^\"]*)\"" ;
+        return "[ \t]*#[ \t]*include[ \t]*\"([^\"]+)\"" ;
     }
 }
 ----
