@@ -762,6 +762,11 @@ type.register OBFUSCATED_CPP  : ocpp ;
 
 import generators ;
 generators.register-standard obfuscate.file : CPP : OBFUSCATED_CPP ;
+
+actions file
+{
+    # command(s) to obfuscate $(>) and build $(<)
+}
 ----
 
 and import that module, you'll be able to use the rule "obfuscated-cpp"
