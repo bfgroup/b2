@@ -813,7 +813,7 @@ class main-target : abstract-target
         {
             ECHO "error: No best alternative for" [ full-name ] "with" [ $(property-set).raw ] ;
             select-alternatives $(property-set) debug ;
-            return [ property-set.empty ] ;
+            return ;
         }
         else
         {
