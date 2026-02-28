@@ -43,20 +43,6 @@
 
 namespace lyra { namespace detail {
 
-template <class F, class... Args>
-struct is_callable
-{
-	template <class U>
-	static auto test(U * p) -> decltype((*p)(std::declval<Args>()...),
-								void(),
-								std::true_type());
-
-	template <class U>
-	static auto test(...) -> decltype(std::false_type());
-
-	static constexpr bool value = decltype(test<F>(nullptr))::value;
-};
-
 template <class T>
 struct remove_cvref
 {
@@ -77,14 +63,6 @@ struct is_invocable
 	static constexpr bool value
 		= decltype(test<typename remove_cvref<F>::type>(nullptr))::value;
 };
-
-template <typename... Ts>
-struct make_void
-{
-	typedef void type;
-};
-template <typename... Ts>
-using valid_t = typename make_void<Ts...>::type;
 
 template <class T, template <class...> class Primary>
 struct is_specialization_of : std::false_type
@@ -576,8 +554,8 @@ struct NonCopyable
 struct BoundRef : NonCopyable
 {
 	virtual ~BoundRef() = default;
-	virtual auto isContainer() const -> bool { return false; }
-	virtual auto isFlag() const -> bool { return false; }
+	virtual bool isContainer() const { return false; }
+	virtual bool isFlag() const { return false; }
 
 	virtual size_t get_value_count() const { return 0; }
 	virtual std::string get_value(size_t) const { return ""; }
@@ -585,13 +563,13 @@ struct BoundRef : NonCopyable
 
 struct BoundValueRefBase : BoundRef
 {
-	virtual auto setValue(std::string const & arg) -> parser_result = 0;
+	virtual parser_result setValue(std::string const & arg) = 0;
 };
 
 struct BoundFlagRefBase : BoundRef
 {
-	virtual auto setFlag(bool flag) -> parser_result = 0;
-	virtual auto isFlag() const -> bool { return true; }
+	virtual parser_result setFlag(bool flag) = 0;
+	virtual bool isFlag() const { return true; }
 };
 
 template <typename T>
@@ -603,7 +581,7 @@ struct BoundValueRef : BoundValueRefBase
 		: m_ref(ref)
 	{}
 
-	auto setValue(std::string const & arg) -> parser_result override
+	parser_result setValue(std::string const & arg) override
 	{
 		return parse_string(arg, m_ref);
 	}
@@ -630,9 +608,9 @@ struct BoundValueRef<std::vector<T>> : BoundValueRefBase
 		: m_ref(ref)
 	{}
 
-	auto isContainer() const -> bool override { return true; }
+	bool isContainer() const override { return true; }
 
-	auto setValue(std::string const & arg) -> parser_result override
+	parser_result setValue(std::string const & arg) override
 	{
 		T temp;
 		auto str_result = parse_string(arg, temp);
@@ -661,7 +639,7 @@ struct BoundFlagRef : BoundFlagRefBase
 		: m_ref(ref)
 	{}
 
-	auto setFlag(bool flag) -> parser_result override
+	parser_result setFlag(bool flag) override
 	{
 		m_ref = flag;
 		return parser_result::ok(parser_result_type::matched);
@@ -686,7 +664,7 @@ struct BoundLambda : BoundValueRefBase
 		: m_lambda(lambda)
 	{}
 
-	auto setValue(std::string const & arg) -> parser_result override
+	parser_result setValue(std::string const & arg) override
 	{
 		return invokeLambda<typename unary_lambda_traits<L>::ArgType>(
 			m_lambda, arg);
@@ -708,7 +686,7 @@ struct BoundFlagLambda : BoundFlagRefBase
 		: m_lambda(lambda)
 	{}
 
-	auto setFlag(bool flag) -> parser_result override
+	parser_result setFlag(bool flag) override
 	{
 		return LambdaInvoker<
 			typename unary_lambda_traits<L>::ReturnType>::invoke(m_lambda,
@@ -1048,75 +1026,6 @@ enum class token_type
 	argument
 };
 
-template <typename Char, class Traits = std::char_traits<Char>>
-class basic_token_name
-{
-	public:
-	using traits_type = Traits;
-	using value_type = Char;
-	using pointer = value_type *;
-	using const_pointer = const value_type *;
-	using reference = value_type &;
-	using const_reference = const value_type &;
-	using size_type = std::size_t;
-	using difference_type = std::ptrdiff_t;
-	using const_iterator = const_pointer;
-	using iterator = const_iterator;
-	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-	using reverse_iterator = const_reverse_iterator;
-	using string_type = std::basic_string<value_type, traits_type>;
-
-	basic_token_name() noexcept
-		: str { nullptr }
-		, len { 0 }
-	{}
-
-	basic_token_name(const basic_token_name &) noexcept = default;
-
-	basic_token_name(const_pointer s) noexcept
-		: str { s }
-		, len { traits_type::length(s) }
-	{}
-
-	basic_token_name(const_pointer s, size_type count) noexcept
-		: str { s }
-		, len { count }
-	{}
-
-	basic_token_name & operator=(const basic_token_name &) noexcept = default;
-
-	void swap(basic_token_name & other) noexcept
-	{
-		auto tmp = *this;
-		*this = other;
-		other = tmp;
-	}
-
-	const_iterator begin() const noexcept { return this->str; }
-	const_iterator end() const noexcept { return this->str + this->len; }
-	const_iterator cbegin() const noexcept { return this->str; }
-	const_iterator cend() const noexcept { return this->str + this->len; }
-
-	size_type size() const noexcept { return this->len; }
-	size_type length() const noexcept { return this->len; }
-	bool empty() const noexcept { return this->len == 0; }
-
-	friend string_type to_string(const basic_token_name & t)
-	{
-		return { t.str, t.len };
-	}
-
-	friend string_type operator+(
-		const_pointer lhs, const basic_token_name & rhs)
-	{
-		return lhs + to_string(rhs);
-	}
-
-	private:
-	const_pointer str;
-	size_type len;
-};
-
 using token_name = std::string;
 
 struct token
@@ -1230,7 +1139,8 @@ class token_iterator
 		if (has_short_option_prefix()
 			&& (args_i->find_first_of(style.value_delimiters)
 				== (style.short_option_size + 1)))
-			return token(token_type::argument, args_i->substr(3));
+			return token(token_type::argument,
+				args_i->substr(style.short_option_size + 2));
 		else if (has_long_option_prefix() && has_value_delimiter())
 			return token(token_type::argument,
 				args_i->substr(
@@ -1941,6 +1851,7 @@ class bound_parser : public composable_parser<Derived>
 	{
 		return m_ref->get_value(i);
 	}
+	bool is_flag() const { return m_ref->isFlag(); } // added for #562
 };
 
 /* tag::reference[]
@@ -2122,7 +2033,7 @@ lyra::opt& lyra::bound_parser<Derived>::choices(Lambda const &check_choice)
 ----
 
 Limit the allowed values of an argument. In the first form the value is
-limited to the ones listed in the call (two or more values). In the second
+limited to the ones listed in the call (one or more values). In the second
 form the `check_choice` function is called with the parsed value and returns
 `true` if it's an allowed value.
 
@@ -2339,6 +2250,7 @@ p.add_argument(lyra::opt(where, "where").name("--where")
 ----
 
 */ // end::reference[]
+class cli; // forward added for #562
 class arguments : public parser
 {
 	public:
@@ -2699,6 +2611,9 @@ class arguments : public parser
 				q.print_help_text_details(p, s);
 			});
 	}
+
+	// added for #562
+	friend bool has_option(const cli*, std::string const &, bool);
 };
 
 /* tag::reference[]
@@ -3532,6 +3447,9 @@ class cli : protected arguments
 		else
 			return "";
 	}
+
+	// added for #562
+	friend bool has_option(const cli*, std::string const &, bool);
 };
 
 /* tag::reference[]
@@ -4384,9 +4302,7 @@ class opt : public bound_parser<opt>
 		return make_clone<opt>(this);
 	}
 
-	protected:
-	std::vector<std::string> opt_names;
-
+	// made public for #562
 	bool is_match(
 		std::string const & opt_name, const option_style & style) const
 	{
@@ -4397,6 +4313,9 @@ class opt : public bound_parser<opt>
 		}
 		return false;
 	}
+
+	protected:
+	std::vector<std::string> opt_names;
 
 	std::string normalize_opt(
 		std::string const & opt_name, const option_style & style) const
@@ -4797,7 +4716,7 @@ the type of argument created and added:
 
 Specify either `-<name>` or `--<name>` to add a `lyra::opt`. You can specify as
 many option names following the first name. A name that doesn't follow the
-option syntax is considered the as the help text for the option.
+option syntax is considered as the help text for the option.
 
 Specify a non `-` prefixed name as the first item to signify a positional
 `lyra::arg`.
@@ -4844,7 +4763,7 @@ main & main::operator()(
 	{
 		arg a(std::move(bound_val), *arg_names.begin());
 		a.optional();
-		if (arg_names.size() > 2) a.help(*(arg_names.begin() + 1));
+		if (arg_names.size() > 1) a.help(*(arg_names.begin() + 1));
 		cli::add_argument(a);
 	}
 	return *this;

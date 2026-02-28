@@ -230,6 +230,10 @@ int guarded_main(int argc, char * argv[])
 	module_t * environ_module;
 	b2::system_info sys_info;
 
+	/* Set default parallel jobs to match cpu threads. This can be overridden
+	the usual way with -jX or PARALLELISM env var. */
+	globs.jobs = sys_info.cpu_thread_count();
+
 	auto & cli = b2::args::lyra_cli().relaxed();
 
 	cli |= lyra::arg(args_data.extra_args, "request")
@@ -279,7 +283,7 @@ int guarded_main(int argc, char * argv[])
 
 	cli |= lyra::opt(
 		[](const std::string & v) {
-			globs.quitquick = (v == "on" || v == "yes" || v == "true");
+			globs.quitquick = (v == "off" || v == "no" || v == "false");
 		},
 		"x")
 			   .name("--keep-going")
@@ -386,10 +390,6 @@ int guarded_main(int argc, char * argv[])
 			   .name(debugger_opt)
 			   .help("Internal debugger.")
 			   .cardinality(0, 2);
-
-	/* Set default parallel jobs to match cpu threads. This can be overridden
-	the usual way with -jX or PARALLELISM env var. */
-	globs.jobs = sys_info.cpu_thread_count();
 
 	// Set up options.
 	b2::args::set_args(arg_c, arg_v);

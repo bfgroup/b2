@@ -25,6 +25,14 @@
   -- _zyk2507_
 * Fix testing of JAM_SEMAPHORE.
   -- _Paolo Pastori_
+* Fix various problems with build system command line argument processing
+  (e.g. spurious targets deduction), safer and more robust option processing
+  algorithm implemented.
+  -- _Paolo Pastori_
+* Fixed broken `--out-xml`, ignoring value `--durations`, and inverted
+  logic `--keep-going` options.
+  -- _Paolo Pastori_
+
 
 == Version 5.4.2
 

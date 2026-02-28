@@ -1,5 +1,6 @@
 /*
 Copyright 2024 René Ferdinand Rivera Morell
+Copyright 2026 Paolo Pastori
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
 */
@@ -17,6 +18,41 @@ Distributed under the Boost Software License, Version 1.0.
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+namespace lyra {
+/*
+ * Added for #562
+ *
+ * This addiction to Lyra allow querying of configured options
+ * (e.g. "-v" or "--jobs") using the same matching criteria in
+ * use by passed in cli first argument.
+ *
+ * If the not_a_flag argument is true then only not flag options, that
+ * is options taking a value argument like "--jobs" are considered,
+ * otherwise the query is intended to search for all options.
+ *
+ * NOTE: Command line argument parsing using this function has
+ *       quadratic cost with respect to the number of options.
+ */
+bool has_option(const cli *clip, std::string const & option, bool not_a_flag)
+{
+	const option_style & style = clip->get_option_style();
+
+	for (auto & p : clip->parsers)
+	{
+		lyra::opt *optp = dynamic_cast<lyra::opt*>(p.get());
+		if (optp)
+		{
+			if (not_a_flag && optp->is_flag())
+				continue;
+			if (optp->is_match(option, style))
+				return true;
+		}
+	}
+	return false;
+}
+
+} // namespace lyra
 
 namespace b2 { namespace args {
 
@@ -119,6 +155,14 @@ list_ref get_arg(const value_ref & name)
 }
 
 bool has_arg(const value_ref & name) { return args_reg::ref().has_opt(name); }
+
+bool has_opt(list_cref option_noflag)
+{
+	auto argn = option_noflag.size();
+	return (argn > 0) ?
+		lyra::has_option(&args_reg::ref().cli, option_noflag[0]->str(), argn > 1)
+		: false;
+}
 
 void set_args(int argc, char ** argv) { args_reg::ref().set_args(argc, argv); }
 
