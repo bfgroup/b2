@@ -56,7 +56,7 @@ def print_annotation(name, value, xml):
         print("}}}")
     else:
         print(name + " {{{")
-        print(str(value).encode('utf8'))
+        print(str(value))
         print("}}}")
 
 
