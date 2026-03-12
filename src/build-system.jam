@@ -655,17 +655,13 @@ local rule should-clean-project ( project )
         else
         {
             default-toolset = gcc ;
-            if [ os.name ] = NT
+            switch [ os.name ]
             {
-                default-toolset = msvc ;
-            }
-            else if [ os.name ] = VMS
-            {
-                default-toolset = vmsdecc ;
-            }
-            else if [ os.name ] = MACOSX || [ os.name ] = FREEBSD || [ os.name ] = OPENBSD
-            {
-                default-toolset = clang ;
+                case FREEBSD : default-toolset = clang ;
+                case MACOSX  : default-toolset = clang ;
+                case NT      : default-toolset = msvc ;
+                case OPENBSD : default-toolset = clang ;
+                case VMS     : default-toolset = vmsdecc ;
             }
         }
 
