@@ -154,6 +154,18 @@ void rule_free( rule_ptr r )
 
 
 /*
+ * find_target() - return pointer to TARGET, or NULL
+ */
+
+target_ptr find_target( b2::value_ptr target_name )
+{
+    if ( targethash )
+        return (target_ptr)hash_find( targethash, target_name );
+    return 0;
+}
+
+
+/*
  * bindtarget() - return pointer to TARGET, creating it if necessary.
  */
 
