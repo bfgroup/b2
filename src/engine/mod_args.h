@@ -80,6 +80,24 @@ Checks if an argument was previously added.
 end::reference[] */
 bool has_arg(const value_ref & name);
 
+/* tag::reference[]
+
+== `b2::args::has_opt`
+
+====
+[horizontal]
+Jam:: `rule has-opt ( option no-flag ? )`
+{CPP}:: `bool has_opt(list_cref option_noflag);`
+====
+
+Checks if an option named `option` was previously added.
+If a value is provided for the `no-flag` argument only options
+declared without the `flag` specification (see link:#_b2argsadd_arg[add-arg])
+are checked for (i.e. options expecting a value, as `--prefix`.)
+
+end::reference[] */
+bool has_opt(list_cref option_noflag);
+
 void set_args(int argc, char ** argv);
 lyra::cli & lyra_cli();
 void process_args(bool silent = false);
@@ -96,7 +114,8 @@ struct args_module : b2::bind::module_<args_module>
 			.def(&add_arg, "add-arg",
 				"name" * _1 | "opts" * _1n | "help" * _1 | "flags" * _n)
 			.def(&get_arg, "get-arg", "name" * _1)
-			.def(&has_arg, "has-arg", "name" * _1);
+			.def(&has_arg, "has-arg", "name" * _1)
+			.def(&has_opt, "has-opt", "option-noflag" * _1n);
 		binder.eval(init_code);
 		binder.loaded();
 	}
