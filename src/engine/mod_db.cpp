@@ -44,7 +44,7 @@ void b2::property_db::emplace(list_cref k, value_ref v)
 
 bool b2::property_db::write_file(value_ref filename, value_ref format)
 {
-	if (!format->has_value())
+	if (!format.has_value())
 	{
 		format = b2::value::make("json");
 	}
@@ -54,7 +54,7 @@ bool b2::property_db::write_file(value_ref filename, value_ref format)
 
 std::string b2::property_db::dump(value_ref format)
 {
-	if (!format->has_value())
+	if (!format.has_value())
 	{
 		format = b2::value::make("json");
 	}
@@ -140,7 +140,7 @@ rule __test__ ( )
 	import "class" : new ;
 
 	local pdb = [ new property-db ] ;
-	assert.result "null" : $(pdb).dump "json" ;
+	assert.result "null" : $(pdb).dump ;
 	$(pdb).emplace "[]" 1 "one" : 1 ;
 	assert.result "[null,{\"one\":\"1\"}]" : $(pdb).dump "json" ;
 	$(pdb).emplace "[]" 0 "zero" "sub" : "qwerty" ;
