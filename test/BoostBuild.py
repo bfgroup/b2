@@ -317,7 +317,7 @@ class Tester(TestCmd.TestCmd):
         self.verbosity = verbosity
 
         if boost_build_path is None:
-            boost_build_path = self.original_workdir + "/.."
+            boost_build_path = os.path.dirname(self.original_workdir)
 
         program_list = []
         if use_default_bjam:
