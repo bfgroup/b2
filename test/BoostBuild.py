@@ -302,7 +302,7 @@ class Tester(TestCmd.TestCmd):
                     os.path.join(srcdir, "engine", jam_build_dir)]
             for d in dirs:
                 if os.path.exists(d):
-                    jam_build_dir = d
+                    jam_build_dir = os.path.abspath(d)
                     break
             else:
                 print("Cannot find built Boost.Jam")
@@ -317,7 +317,7 @@ class Tester(TestCmd.TestCmd):
         self.verbosity = verbosity
 
         if boost_build_path is None:
-            boost_build_path = self.original_workdir + "/.."
+            boost_build_path = os.path.dirname(self.original_workdir)
 
         program_list = []
         if use_default_bjam:
