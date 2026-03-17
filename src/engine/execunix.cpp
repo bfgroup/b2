@@ -294,27 +294,27 @@ void exec_cmd
         if ( globs.pipe_action )
             close( err[ EXECCMD_PIPE_WRITE ] );
 
-        /* restore previous signals */
-        sigprocmask(SIG_SETMASK, &savemask, NULL);
-        sigaction(SIGINT, &saveintr, NULL);
-        sigaction(SIGQUIT, &savequit, NULL);
-
         /* Make this process a process group leader so that when we kill it, all
          * child processes of this process are terminated as well. We use
          * killpg( pid, SIGKILL ) to kill the process group leader and all its
          * children.
          */
+        if (setpgid( 0, 0 ) != 0) {
+            errno_puts( "setpgid(child)" );
+            _exit( 125 );
+        }
+
+        /* restore previous signals */
+        sigprocmask(SIG_SETMASK, &savemask, NULL);
+        sigaction(SIGINT, &saveintr, NULL);
+        sigaction(SIGQUIT, &savequit, NULL);
+
         if ( 0 < globs.timeout )
         {
             struct rlimit r_limit;
             r_limit.rlim_cur = globs.timeout;
             r_limit.rlim_max = globs.timeout;
             setrlimit( RLIMIT_CPU, &r_limit );
-        }
-        /* int const pid = getpid(); */
-        if (setpgid( 0, 0 ) != 0) {
-            errno_puts( "setpgid(child)" );
-            _exit( 125 );
         }
 
         execvp( argv[ 0 ], (char * *)argv );
@@ -325,13 +325,6 @@ void exec_cmd
     /******************/
     /* Parent process */
     /******************/
-
-    /* this call always fails with errno 13 (Permission denied)
-    if (setpgid(cmdtab[ slot ].pid, cmdtab[ slot ].pid) < 0)
-    {
-        errno_puts( "setpgid" );
-        b2::clean_exit( EXITBAD );
-    } */
 
     /* Parent not need the write pipe ends used by the child. */
     close( out[ EXECCMD_PIPE_WRITE ] );
