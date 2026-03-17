@@ -11,6 +11,7 @@ trigger:
     - release
     - feature/*
     - version/*
+    - pr/*
   paths:
     exclude:
     - .circleci/*
