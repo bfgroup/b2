@@ -227,11 +227,8 @@ def execute_tests(executor, tests, max_test_name_len):
         else:
             failures_count += 1
             if failures_count == 1:
-                f = open(os.path.join(invocation_dir, "test_results.txt"), "w")
-                try:
+                with open(os.path.join(invocation_dir, "test_results.txt"), "w") as f:
                     f.write(test)
-                finally:
-                    f.close()
 
         #   Restore the current directory, which might have been changed by the
         # test.
@@ -287,11 +284,8 @@ def execute_tests(executor, tests, max_test_name_len):
 def last_failed_test():
     "Returns the name of the last failed test or None."
     try:
-        f = open("test_results.txt")
-        try:
+        with open("test_results.txt") as f:
             return f.read().strip()
-        finally:
-            f.close()
     except Exception:
         return None
 
@@ -406,7 +400,6 @@ tests = [
     "flags",
     "generator_selection",
     "generators_test",
-    "grep",
     "implicit_dependency",
     "indirect_conditional",
     "inherit_toolset",
@@ -530,6 +523,12 @@ if toolset.startswith("clang") and "-win" not in toolset or "darwin" in toolset:
 # Disable on OSX as it doesn't seem to work for unknown reasons.
 if sys.platform != "darwin":
     tests.append("builtin_glob_archive")
+
+# Run in exclusive mode to avoid interpreter hang on macOS (Xcode) and FreeBSD
+if sys.platform == "darwin" or sys.platform.startswith("freebsd"):
+    exclusive_tests.append("grep")
+else:
+    tests.append("grep")
 
 if "--extras" in sys.argv:
     tests.append("boostbook")
