@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <unistd.h>  /* vfork(), _exit(), STDOUT_FILENO and such */
-#include <fcntl.h>
 #include <sys/resource.h>
 #include <sys/times.h>
 #include <sys/wait.h>
@@ -216,8 +215,8 @@ void exec_cmd
     }
 
     /* Create pipes for collecting child output. */
-    if ( pipe2( out, O_CLOEXEC ) < 0
-        || ( globs.pipe_action && pipe2( err, O_CLOEXEC ) < 0 ) )
+    if ( pipe( out ) < 0
+        || ( globs.pipe_action && pipe( err ) < 0 ) )
     {
         errno_puts( "pipe" );
         b2::clean_exit( EXITBAD );
@@ -274,6 +273,11 @@ void exec_cmd
         /* Child process */
         /*****************/
 
+        /* Child does not need the read pipe ends used by the parent. */
+        close( out[ EXECCMD_PIPE_READ ] );
+        if ( globs.pipe_action )
+            close( err[ EXECCMD_PIPE_READ ] );
+
         /* Redirect stdout and stderr to pipes inherited from the parent. */
         if (dup2( globs.pipe_action ? err[ EXECCMD_PIPE_WRITE ] :
                 out[ EXECCMD_PIPE_WRITE ], STDERR_FILENO ) < 0)
@@ -286,6 +290,9 @@ void exec_cmd
             errno_puts( "dup2(child)" );
             _exit( 126 );
         }
+        close( out[ EXECCMD_PIPE_WRITE ] );
+        if ( globs.pipe_action )
+            close( err[ EXECCMD_PIPE_WRITE ] );
 
         /* restore previous signals */
         sigprocmask(SIG_SETMASK, &savemask, NULL);
