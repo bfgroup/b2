@@ -55,13 +55,8 @@
 #include "outerr.h"
 #include "strview.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#ifndef ultrix
-#include <stdlib.h>
-#endif
-#include <string.h>
-
+#include <cctype>
+#include <cstring>
 #include <string>
 #include <unordered_map>
 
@@ -86,8 +81,10 @@ void regerror(char const * message)
 	if (frame)
 	{
 		msgs.push_back(
-			std::string("rule ") + frame->rulename + " called with: ("
-			+ args_to_string( frame->args ) + " )" );
+			std::string(frame->rulename)
+			// TODO: use constant_HDRSCAN
+			+ (std::strncmp(frame->rulename, "HDRSCAN", 7) ? "" : " =")
+			+ args_to_string( frame->args ) );
 	}
 
 	msgs.push_back( "bad regex" );
@@ -352,10 +349,10 @@ struct compiler
 				len = 0;
 				for (; scan != nullptr; scan = regnext(scan))
 					if (OP(scan) == EXACTLY
-						&& static_cast<int32_t>(strlen(OPERAND(scan))) >= len)
+						&& static_cast<int32_t>(std::strlen(OPERAND(scan))) >= len)
 					{
 						longest = OPERAND(scan);
-						len = static_cast<int32_t>(strlen(OPERAND(scan)));
+						len = static_cast<int32_t>(std::strlen(OPERAND(scan)));
 					}
 				r->regmust = longest;
 				r->regmlen = len;
@@ -942,18 +939,18 @@ struct executor
 					break;
 				case WORDA:
 					/* Must be looking at a letter, digit, or _ */
-					if (!reg_in.empty() && (!isalnum(reg_in[0]))
+					if (!reg_in.empty() && (!std::isalnum(reg_in[0]))
 						&& reg_in[0] != '_')
 						return false;
 					/* Prev must be BOL or nonword */
 					if (reg_in.begin() > reg_bol
-						&& (isalnum(reg_in.begin()[-1])
+						&& (std::isalnum(reg_in.begin()[-1])
 							|| reg_in.begin()[-1] == '_'))
 						return false;
 					break;
 				case WORDZ:
 					/* Must be looking at non letter, digit, or _ */
-					if (reg_in.empty() || isalnum(reg_in[0])
+					if (reg_in.empty() || std::isalnum(reg_in[0])
 						|| reg_in[0] == '_')
 						return false;
 					/* We don't care what the previous char was */
@@ -970,7 +967,7 @@ struct executor
 					opnd = OPERAND(scan);
 					/* Inline the first character, for speed. */
 					if (reg_in.empty() || *opnd != reg_in[0]) return false;
-					len = strlen(opnd);
+					len = std::strlen(opnd);
 					if (len > 1 && reg_in.compare(0, len, opnd) != 0)
 						return false;
 					reg_in = reg_in.substr(len);
@@ -978,13 +975,13 @@ struct executor
 				break;
 				case ANYOF:
 					if (reg_in.empty()
-						|| strchr(OPERAND(scan), reg_in[0]) == NULL)
+						|| std::strchr(OPERAND(scan), reg_in[0]) == NULL)
 						return false;
 					reg_in = reg_in.substr(1);
 					break;
 				case ANYBUT:
 					if (reg_in.empty()
-						|| strchr(OPERAND(scan), reg_in[0]) != NULL)
+						|| std::strchr(OPERAND(scan), reg_in[0]) != NULL)
 						return false;
 					reg_in = reg_in.substr(1);
 					break;
@@ -1143,14 +1140,14 @@ struct executor
 				}
 				break;
 			case ANYOF:
-				while (!scan.empty() && strchr(opnd, scan[0]) != nullptr)
+				while (!scan.empty() && std::strchr(opnd, scan[0]) != nullptr)
 				{
 					count++;
 					scan = scan.substr(1);
 				}
 				break;
 			case ANYBUT:
-				while (!scan.empty() && strchr(opnd, scan[0]) == nullptr)
+				while (!scan.empty() && std::strchr(opnd, scan[0]) == nullptr)
 				{
 					count++;
 					scan = scan.substr(1);

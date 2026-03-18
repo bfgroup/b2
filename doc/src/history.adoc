@@ -25,6 +25,9 @@
   -- _zyk2507_
 * Fix testing of JAM_SEMAPHORE.
   -- _Paolo Pastori_
+* Fix HDRRULE builtin rule to work in modules loaded by build system.
+  Added searching-only interfaces to modules and targets.
+  -- _Paolo Pastori_
 * Fix finding an assembler when using plain LLVM for clang-win.
   -- _René Ferdinand Rivera Morell_
 
