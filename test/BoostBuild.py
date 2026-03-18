@@ -56,7 +56,7 @@ def print_annotation(name, value, xml):
         print("}}}")
     else:
         print(name + " {{{")
-        print(str(value).encode('utf8'))
+        print(str(value))
         print("}}}")
 
 
@@ -297,7 +297,7 @@ class Tester(TestCmd.TestCmd):
 
             # Find where jam_src is located. Try for the debug version if it is
             # lying around.
-            srcdir = os.path.join(os.path.dirname(__file__), "..", "src")
+            srcdir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "src")
             dirs = [os.path.join(srcdir, "engine", jam_build_dir + ".debug"),
                     os.path.join(srcdir, "engine", jam_build_dir)]
             for d in dirs:
@@ -317,7 +317,7 @@ class Tester(TestCmd.TestCmd):
         self.verbosity = verbosity
 
         if boost_build_path is None:
-            boost_build_path = self.original_workdir + "/.."
+            boost_build_path = os.path.dirname(self.original_workdir)
 
         program_list = []
         if use_default_bjam:
@@ -498,7 +498,9 @@ class Tester(TestCmd.TestCmd):
             kw["program"] += self.program
             if extra_args:
                 kw["program"] += extra_args
-            if not extra_args or not any(a.startswith("-j") for a in extra_args):
+            if ((not extra_args
+                 or not any(a.startswith("-j") for a in extra_args))
+                and not any(a.startswith("-j") for a in self.program[1:])):
                 kw["program"] += ["-j1"]
             if stdout is None and not any(a.startswith("-d") for a in kw["program"]):
                 kw["program"] += self.verbosity
