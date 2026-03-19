@@ -154,7 +154,7 @@ def run_tests(critical_tests, other_tests, exclusive_tests):
 
     # Erase the file on success.
     if failures_count == 0:
-        open("test_results.txt", "w").close()
+        os.remove("test_results.txt")
 
     if not xml:
         print(
@@ -494,8 +494,8 @@ tests = [
 ]
 
 exclusive_tests = [
-    "semaphore",
     "grep",
+    "semaphore",
 ]
 
 if os.name == "posix":
