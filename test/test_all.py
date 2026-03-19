@@ -406,8 +406,6 @@ tests = [
     "flags",
     "generator_selection",
     "generators_test",
-    # FIXME: Disabled to test macOS Xcode CI issues
-    #         "grep",
     "implicit_dependency",
     "indirect_conditional",
     "inherit_toolset",
@@ -497,6 +495,7 @@ tests = [
 
 exclusive_tests = [
     "semaphore",
+    "grep",
 ]
 
 if os.name == "posix":
