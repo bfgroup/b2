@@ -154,7 +154,7 @@ def run_tests(critical_tests, other_tests, exclusive_tests):
 
     # Erase the file on success.
     if failures_count == 0:
-        os.remove("test_results.txt")
+        open("test_results.txt", "w").close()
 
     if not xml:
         print(
