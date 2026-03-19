@@ -406,7 +406,8 @@ tests = [
     "flags",
     "generator_selection",
     "generators_test",
-    "grep",
+    # FIXME: Disabled to test macOS Xcode CI issues
+    #         "grep",
     "implicit_dependency",
     "indirect_conditional",
     "inherit_toolset",
