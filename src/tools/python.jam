@@ -621,14 +621,15 @@ local rule candidate-interpreters ( version ? : prefix ? : target-os )
 local rule gcc-use-libutil ( )
 {
     local glibc ;
-    # Determine the toolset in use
-    local toolset = [ feature.values <toolset> ] ;
-    if $(toolset) = gcc
+    # Determine ldd presence, on Linux/*BSD this is a shell script
+    # while on Cygwin/MSYS2 is an executable
+    local ldd = [ common.find-tool ldd ] ;
+    if $(ldd) && [ feature.values <toolset> ] = gcc
     {
         # Use ldd to determine the libc version, assuming
         # that GNU ldd has the same version than libc
         local null = [ common.null-device ] ;
-        local ldv = [ SPLIT_BY_CHARACTERS [ SHELL "ldd --version 2>$(null)" ] : "\r\n" ] ;
+        local ldv = [ SPLIT_BY_CHARACTERS [ SHELL "$(ldd) --version 2>$(null)" ] : "\r\n" ] ;
         glibc = [ MATCH "([0-9.]+)$" : $(ldv[1]) ] ;
         if $(glibc)
         {
