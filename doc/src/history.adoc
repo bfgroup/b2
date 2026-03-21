@@ -30,6 +30,8 @@
 * Fix HDRRULE builtin rule to work in modules loaded by build system.
   Added searching-only interfaces to modules and targets.
   -- _Paolo Pastori_
+* Fix python linking to missing libutil.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 
