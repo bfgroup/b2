@@ -31,6 +31,7 @@ import path ;
 import feature ;
 import property-set ;
 import args ;
+import version ;
 
 
 # Make this module a project.
@@ -615,6 +616,33 @@ local rule candidate-interpreters ( version ? : prefix ? : target-os )
 }
 
 
+# Starting with GNU libc 2.34 libpthread, libdl, libutil, and libanl have been
+# merged into main library, so they could be no more available (fix issue #456)
+local rule gcc-use-libutil ( )
+{
+    local glibc ;
+    # Determine the toolset in use
+    local toolset = [ feature.values <toolset> ] ;
+    if $(toolset) = gcc
+    {
+        # Use ldd to determine the libc version, assuming
+        # that GNU ldd has the same version than libc
+        local null = [ common.null-device ] ;
+        local ldv = [ SPLIT_BY_CHARACTERS [ SHELL "ldd --version 2>$(null)" ] : "\r\n" ] ;
+        glibc = [ MATCH "([0-9.]+)$" : $(ldv[1]) ] ;
+        if $(glibc)
+        {
+            glibc = [ SPLIT_BY_CHARACTERS $(glibc) : . ] ;
+        }
+    }
+    # If cannot determine the libc version or libc < 2.34 must
+    # add "<library>util" to the usage requirements for gcc toolset
+    if ! $(glibc) || [ version.version-less $(glibc) : 2 34 ]
+    {
+        return <toolset>gcc:<library>util ;
+    }
+}
+
 # Compute system library dependencies for targets linking with static Python
 # libraries.
 #
@@ -668,7 +696,7 @@ local rule system-library-dependencies ( target-os )
         case aix : return  <library>pthread <library>dl ;
 
         case * : return  <library>pthread <library>dl
-            <toolset>gcc:<library>util <toolset-intel:platform>linux:<library>util ;
+            [ gcc-use-libutil ] <toolset-intel:platform>linux:<library>util ;
     }
 }
 
