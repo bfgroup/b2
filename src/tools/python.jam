@@ -19,7 +19,6 @@ import type ;
 import testing ;
 import generators ;
 import project ;
-import errors ;
 import targets ;
 import "class" : new ;
 import os ;
@@ -27,13 +26,9 @@ import common ;
 import toolset ;
 import regex ;
 import numbers ;
-import string ;
-import property ;
 import sequence ;
 import path ;
 import feature ;
-import set ;
-import builtin ;
 import property-set ;
 import args ;
 
@@ -1167,8 +1162,6 @@ type.register RUN_PYD : : TEST ;
 
 class python-test-generator : generator
 {
-    import set ;
-
     rule __init__ ( * : * )
     {
         generator.__init__ $(1) : $(2) : $(3) : $(4) : $(5) : $(6) : $(7) : $(8) : $(9) ;
