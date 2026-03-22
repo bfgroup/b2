@@ -1168,8 +1168,12 @@ The first two forms set _variable_ globally. The third and forth forms
 set a target-specific variable. The `=` operator replaces any previous
 elements of _variable_ with _elements_; the `+=` operation adds
 _elements_ to _variable_'s list of elements. The final two forms are
-synonymous: they set _variable_ globally, but only if it was previously
+synonymous: they set _variable_ globally, but `?=` only if it was previously
 unset.
+
+NOTE: the `?=` operator does not short-circuit, that is in
+`some-var ?= [ some-rule ]` the `some-rule` is always called,
+regardless of whether the variable is set or not.
 
 Variables referenced in updating commands will be replaced with their
 values; target-specific values take precedence over global values.
