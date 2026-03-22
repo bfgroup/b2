@@ -1530,10 +1530,11 @@ platform:
 `JAMUNAME`::
   Output of uname(1) command (Unix only)
 `JAMVERSION`::
-  `b2` version, as a sematic triplet "X.Y.Z".
+  `b2` version, as a semantic triplet "X.Y.Z".
 `JAM_VERSION`::
-  A predefined global variable with two elements indicates the version
-  number of Boost Jam. Boost Jam versions start at `03` `00`.
+  A predefined global variable with elements indicating the version
+  number of Boost Jam. Boost Jam versions start at `3` `0` but nowadays
+  it is composed of three elements (e.g. `5` `5` `0`.)
   Earlier versions of `Jam` do not automatically define `JAM_VERSION`.
 
 [[jam.language.variables.builtins.jamshell]]
