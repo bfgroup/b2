@@ -621,19 +621,32 @@ local rule candidate-interpreters ( version ? : prefix ? : target-os )
 local rule gcc-use-libutil ( )
 {
     local glibc ;
-    # Determine ldd presence, on Linux/*BSD this is a shell script
-    # while on Cygwin/MSYS2 is an executable
-    local ldd = [ common.find-tool ldd ] ;
-    if $(ldd) && [ feature.values <toolset> ] = gcc
+    if [ feature.values <toolset> ] = gcc
     {
-        # Use ldd to determine the libc version, assuming
-        # that GNU ldd has the same version than libc
-        local null = [ common.null-device ] ;
-        local ldv = [ SPLIT_BY_CHARACTERS [ SHELL "$(ldd) --version 2>$(null)" ] : "\r\n" ] ;
-        glibc = [ MATCH "([0-9.]+)$" : $(ldv[1]) ] ;
-        if $(glibc)
+        debug-message Checking glibc (ldd) version... ;
+        # Determine ldd presence, on Linux/*BSD this is a shell script
+        # while on Cygwin/MSYS2 is an executable
+        local ldd = [ common.find-tool ldd ] ;
+        if $(ldd)
         {
-            glibc = [ SPLIT_BY_CHARACTERS $(glibc) : . ] ;
+            # Use ldd to determine the libc version, assuming
+            # that GNU ldd has the same version than libc
+            local output = [ SPLIT_BY_CHARACTERS [ shell-cmd $(ldd)" --version" ] : "\r\n" ] ;
+            debug-message found ldd '$(output[1])' ;
+            glibc = [ MATCH "([0-9.]+)$" : $(output[1]) ] ;
+            if $(glibc)
+            {
+                debug-message found glibc $(glibc) ;
+                glibc = [ SPLIT_BY_CHARACTERS $(glibc) : . ] ;
+            }
+            else
+            {
+                debug-message cannot determine glibc version ;
+            }
+        }
+        else
+        {
+            debug-message cannot found ldd ;
         }
     }
     # If cannot determine the libc version or libc < 2.34 must
