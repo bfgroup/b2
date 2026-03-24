@@ -646,7 +646,7 @@ local rule gcc-use-libutil ( )
         }
         else
         {
-            debug-message cannot found ldd ;
+            debug-message cannot find ldd ;
         }
     }
     # If cannot determine the libc version or libc < 2.34 must
