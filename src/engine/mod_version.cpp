@@ -5,8 +5,6 @@ Distributed under the Boost Software License, Version 1.0.
 */
 
 #include "mod_version.h"
-#include "modules.h"
-#include <algorithm>
 
 namespace b2 {
 
