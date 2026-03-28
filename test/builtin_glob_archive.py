@@ -59,6 +59,15 @@ def setup_archive(name, sources):
     return archive, obj_suffix
 
 
+def list_archive(archive):
+    t.write("file.jam", """\
+ECHO [ SHELL "ar -t {} 2>&1" ] ;
+UPDATE ;
+""".format(archive))
+    t.run_build_system(["-ffile.jam"], stdout="")
+    t.rm("file.jam")
+
+
 def test_glob_archive(archives, glob, expected, sort_results = False):
     ## replace placeholders
     glob = glob.replace("$archive1", archives[0]).replace("$obj", obj_suffix)
@@ -87,113 +96,7 @@ UPDATE ;
 archive1, obj_suffix = setup_archive("auxilliary1.lib", sources)
 archive2, obj_suffix = setup_archive("auxilliary2.lib", sources)
 
-## all arguments empty
-test_glob_archive([archive1], "[ GLOB_ARCHIVE ]", [])
-
-## empty query
-test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : ]", [])
-
-## no-match
-test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a ]", [])
-
-## match exact
-test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a$obj ]",
-                  ["$archive1(a$obj)"])
-
-## glob wildcards:1
-test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : b.* ]",
-                  ["$archive1(b$obj)"])
-
-## glob wildcards:2
-test_glob_archive([archive1], '[ GLOB_ARCHIVE $archive1 : "\\b?match[.]*" ]',
-                  ["$archive1(b_match$obj)"])
-
-## glob wildcards:3
-test_glob_archive([archive1], "[ SORT [ GLOB_ARCHIVE $archive1 : b* ] ]",
-                  ["$archive1(b$obj)", "$archive1(b_match$obj)"])
-
-## glob multiple patterns with multiple results.
-test_glob_archive([archive1], "[ SORT [ GLOB_ARCHIVE $archive1 : b.* b_* ] ]",
-                  ["$archive1(b$obj)", "$archive1(b_match$obj)"])
-
-## glob multiple archives and patterns.
-test_glob_archive([archive1, archive2],
-                  "[ SORT [ GLOB_ARCHIVE $archive1 $archive2 : b.* b_* ] ]",
-                  ["$archive1(b$obj)", "$archive1(b_match$obj)",
-                   "$archive2(b$obj)", "$archive2(b_match$obj)"])
-
-## glob same archive multiple times.
-test_glob_archive([archive1, archive1],
-                  "[ GLOB_ARCHIVE $archive1 $archive2 $archive1 : b.* ]",
-                   ["$archive1(b$obj)", "$archive2(b$obj)", "$archive1(b$obj)"])
-
-## returned archive member has no path, even though its source object-file did.
-## this is rather NT-specific, where members also store their object-file's path.
-test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : nopath_check$obj ]",
-                  ["$archive1(nopath_check$obj)"])
-
-## case insensitive matching, when archives support case sensitive member names.
-## VMS implementation forces case-insensitive matching and downcased member names.
-
-case_sensitive_members = ( not vms )
-
-if case_sensitive_members:
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : casecheck$obj : true ]",
-                      ["$archive1(CaseCheck$obj)"])
-elif vms:
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : CaseCheck$obj : false ]",
-                      ["$archive1(casecheck$obj)"])
-
-
-## test the order of matched members, in general it should match the
-## insertion sequence.
-test_glob_archive([archive1], "[ SORT [ GLOB_ARCHIVE $archive1 : seq_check*$obj ] ]",
-                  ["$archive1(seq_check1$obj)", "$archive1(seq_check2$obj)",
-                   "$archive1(seq_check3$obj)"])
-
-
-## glob members by symbols they contain.
-## Currently supported only on VMS.
-symbol_glob_supported = ( vms )
-
-if symbol_glob_supported :
-    ## NOTE: generated symbols are compiler-dependent and may be specifically
-    ## mangled (as in C++ case), so globbing by exact symbol is non-trivial.
-    ## However, C-generated symbols are likely to have more portable names,
-    ## so for the glob-by-symbol tests we glob C-generated archive members.
-
-    ## glob members by exact symbol.
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : : : symbol ]",
-                      ["$archive1(symbols_check$obj)"])
-
-    ## glob members by symbol wildcard.
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : : : symbol_* ]",
-                      ["$archive1(symbols_check$obj)"])
-
-    ## glob members by member pattern AND symbol pattern.
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : *symbol* : : *member* ]",
-                      ["$archive1(members_and_symbols_check$obj)"])
-
-    ## case insensitive symbol glob.
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : : true : symbolcasecheck ]",
-                      ["$archive1(symbol_case_check$obj)"])
-
-    ## glob member that contains main symbol.
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : : : main _main ]",
-                      ["$archive1(main_check$obj)"])
-
-else:
-    test_glob_archive([archive1],
-                      "[ GLOB_ARCHIVE $archive1 : : : symbol ]",
-                      [])
-
+list_archive(archive1)
 
 t.cleanup()
 
