@@ -215,9 +215,18 @@ void exec_cmd
     }
 
     /* Create pipes for collecting child output. */
-    if ( pipe( out ) < 0 || ( globs.pipe_action && pipe( err ) < 0 ) )
+    if ( pipe( out ) < 0
+        || ( globs.pipe_action && pipe( err ) < 0 ) )
     {
         errno_puts( "pipe" );
+        b2::clean_exit( EXITBAD );
+    }
+    /* Set both pipe read file descriptors to non-blocking. */
+    if ( fcntl( out[ EXECCMD_PIPE_READ ], F_SETFL, O_NONBLOCK ) < 0
+        || ( globs.pipe_action
+            && (fcntl( err[ EXECCMD_PIPE_READ ], F_SETFL, O_NONBLOCK ) < 0 ) ) )
+    {
+        errno_puts( "fcntl" );
         b2::clean_exit( EXITBAD );
     }
 
@@ -236,11 +245,6 @@ void exec_cmd
         /* Make a global, only do this once. */
         if ( !tps ) tps = sysconf( _SC_CLK_TCK );
     }
-
-    /* Child does not need the read pipe ends used by the parent. */
-    fcntl( out[ EXECCMD_PIPE_READ ], F_SETFD, FD_CLOEXEC );
-    if ( globs.pipe_action )
-        fcntl( err[ EXECCMD_PIPE_READ ], F_SETFD, FD_CLOEXEC );
 
     /* ignore SIGINT and SIGQUIT */
     ignore.sa_handler = SIG_IGN;
@@ -268,17 +272,24 @@ void exec_cmd
         /*****************/
         /* Child process */
         /*****************/
-        int const pid = getpid();
 
-        /* restore previous signals */
-        sigaction(SIGINT, &saveintr, NULL);
-        sigaction(SIGQUIT, &savequit, NULL);
-        sigprocmask(SIG_SETMASK, &savemask, NULL);
+        /* Child does not need the read pipe ends used by the parent. */
+        close( out[ EXECCMD_PIPE_READ ] );
+        if ( globs.pipe_action )
+            close( err[ EXECCMD_PIPE_READ ] );
 
         /* Redirect stdout and stderr to pipes inherited from the parent. */
-        dup2( out[ EXECCMD_PIPE_WRITE ], STDOUT_FILENO );
-        dup2( globs.pipe_action ? err[ EXECCMD_PIPE_WRITE ] :
-            out[ EXECCMD_PIPE_WRITE ], STDERR_FILENO );
+        if (dup2( globs.pipe_action ? err[ EXECCMD_PIPE_WRITE ] :
+                out[ EXECCMD_PIPE_WRITE ], STDERR_FILENO ) < 0)
+        {
+            out_printf("[errno %d] dup2(child) (%s)\n", errno, strerror(errno));
+            _exit( 126 );
+        }
+        if (dup2( out[ EXECCMD_PIPE_WRITE ], STDOUT_FILENO ) < 0)
+        {
+            errno_puts( "dup2(child)" );
+            _exit( 126 );
+        }
         close( out[ EXECCMD_PIPE_WRITE ] );
         if ( globs.pipe_action )
             close( err[ EXECCMD_PIPE_WRITE ] );
@@ -288,6 +299,16 @@ void exec_cmd
          * killpg( pid, SIGKILL ) to kill the process group leader and all its
          * children.
          */
+        if (setpgid( 0, 0 ) != 0) {
+            errno_puts( "setpgid(child)" );
+            _exit( 125 );
+        }
+
+        /* restore previous signals */
+        sigprocmask(SIG_SETMASK, &savemask, NULL);
+        sigaction(SIGINT, &saveintr, NULL);
+        sigaction(SIGQUIT, &savequit, NULL);
+
         if ( 0 < globs.timeout )
         {
             struct rlimit r_limit;
@@ -295,10 +316,7 @@ void exec_cmd
             r_limit.rlim_max = globs.timeout;
             setrlimit( RLIMIT_CPU, &r_limit );
         }
-        if (0 != setpgid( pid, pid )) {
-            errno_puts("setpgid(child)");
-            /* b2::clean_exit( EXITBAD ); */
-        }
+
         execvp( argv[ 0 ], (char * *)argv );
         errno_puts( "execvp" );
         _exit( 127 );
@@ -308,18 +326,10 @@ void exec_cmd
     /* Parent process */
     /******************/
 
-    /* redundant call, ignore return value */
-    setpgid(cmdtab[ slot ].pid, cmdtab[ slot ].pid);
-
     /* Parent not need the write pipe ends used by the child. */
     close( out[ EXECCMD_PIPE_WRITE ] );
     if ( globs.pipe_action )
         close( err[ EXECCMD_PIPE_WRITE ] );
-
-    /* Set both pipe read file descriptors to non-blocking. */
-    fcntl( out[ EXECCMD_PIPE_READ ], F_SETFL, O_NONBLOCK );
-    if ( globs.pipe_action )
-        fcntl( err[ EXECCMD_PIPE_READ ], F_SETFL, O_NONBLOCK );
 
     /* Parent reads from out[ EXECCMD_PIPE_READ ]. */
     cmdtab[ slot ].fd[ OUT ] = out[ EXECCMD_PIPE_READ ];
@@ -353,9 +363,9 @@ void exec_cmd
     cmdtab[ slot ].closure = closure;
 
     /* restore previous signals */
+    sigprocmask(SIG_SETMASK, &savemask, NULL);
     sigaction(SIGINT, &saveintr, NULL);
     sigaction(SIGQUIT, &savequit, NULL);
-    sigprocmask(SIG_SETMASK, &savemask, NULL);
 }
 
 #undef EXECCMD_PIPE_READ
