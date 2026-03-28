@@ -520,16 +520,15 @@ if (
 if toolset.startswith("clang") and "-win" not in toolset or "darwin" in toolset:
     tests.append("lang_objc")
 
-if sys.platform == "darwin":
-    # Run in exclusive mode to avoid interpreter hung on macOS Xcode
+# Disable on OSX as it doesn't seem to work for unknown reasons.
+if sys.platform != "darwin":
+    tests.append("builtin_glob_archive")
+
+# Run in exclusive mode to avoid interpreter hung on macOS (Xcode) and FreeBSD
+if sys.platform == "darwin" or sys.platform.startswith("freebsd"):
     exclusive_tests.append("grep")
 else:
-    # Disable on OSX as it doesn't seem to work for unknown reasons.
-    tests.append("builtin_glob_archive")
-    if sys.platform.startswith("freebsd"):
-        exclusive_tests.append("grep")
-    else:
-        tests.append("grep")
+    tests.append("grep")
 
 if "--extras" in sys.argv:
     tests.append("boostbook")
