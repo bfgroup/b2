@@ -526,7 +526,10 @@ if sys.platform == "darwin":
 else:
     # Disable on OSX as it doesn't seem to work for unknown reasons.
     tests.append("builtin_glob_archive")
-    tests.append("grep")
+    if sys.platform.startswith("freebsd"):
+        exclusive_tests.append("grep")
+    else:
+        tests.append("grep")
 
 if "--extras" in sys.argv:
     tests.append("boostbook")
