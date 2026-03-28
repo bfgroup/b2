@@ -52,7 +52,7 @@ def setup_archive(name, sources):
     t.write("lib/jamfile.jam", "\n".join(jl))
     create_sources("lib", sources)
     t.run_build_system(subdir="lib")
-    built_archive = "lib/bin/$toolset/debug*/%s" % name
+    built_archive = "lib/bin/$toolset/debug*/" + name
     t.expect_addition(built_archive)
     t.copy(built_archive, name)
     t.rm("lib")
