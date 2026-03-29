@@ -100,9 +100,6 @@ struct ar_hdr  /* archive file member header - printable ascii */
 #  define __AR_BIG__
 # endif
 # include <ar.h>
-# ifdef AR_EFMT1
-#  define SAR_EFMT1  3  /* strlen("#1/"); */
-# endif
 #endif
 
 
@@ -309,9 +306,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
         long   lar_date;
         long   lar_size;
         long   lar_offset;
-#ifdef AR_EFMT1
-        long   lar_name_size;
-#endif
+        long   ext_name_size;
         char * c;
         char * src;
         char * dest;
@@ -349,8 +344,8 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
                 *dest = '/';
             }
         }
-#ifdef AR_EFMT1
-        else if ( ! strncmp( AR_EFMT1, ar_hdr.ar_name, SAR_EFMT1 ) )
+
+        if ( ! strncmp( "#1/", ar_hdr.ar_name, 3 ) )
             /* BSD Extended filename format.
              * File names that are either longer than 16 bytes or which contain
              * embedded spaces are stored immediately after the archive header
@@ -360,24 +355,24 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
              * https://man.freebsd.org/cgi/man.cgi?query=ar&sektion=5
              */
         {
-            lar_name_size = atoi( lar_name + SAR_EFMT1 );
-            if ( ( lar_name_size > 255 ) ||
-                ( read( fd, lar_name, lar_name_size ) != lar_name_size ) )
+            ext_name_size = atoi( lar_name + 3 );
+            if ( ( ext_name_size > 255 ) ||
+                ( read( fd, lar_name, ext_name_size ) != ext_name_size ) )
             {
                 out_printf("error reading archive name\n");
-                lar_name_size = 0;
+                ext_name_size = 0;
             }
-            *(lar_name + lar_name_size) = '\0';
+            *(lar_name + ext_name_size) = '\0';
         }
-#else
-
-        /* SVR4/GNU File names that are up to 15 characters long are stored
-         * directly in the ar_name field of the header, terminated by a "/".
-         */
-        c = lar_name - 1;
-        while ( ( *++c != ' ' ) && ( *c != '/' ) );
-        *c = '\0';
-#endif
+        else
+        {
+            /* SVR4/GNU File names that are up to 15 characters long are stored
+             * directly in the ar_name field of the header, terminated by a "/".
+             */
+            c = lar_name - 1;
+            while ( ( *++c != ' ' ) && ( *c != '/' ) );
+            *c = '\0';
+        }
 
         if ( is_debug_bindscan() )
             out_printf( "archive name %s found\n", lar_name );
