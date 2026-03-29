@@ -118,7 +118,7 @@ UPDATE ;
 #                  ["$archive1(a$obj)"])
 
 #list_dir("/")
-find("/usr", "ar.h")
+find("/Library", "ar.h")
 
 t.cleanup()
 
