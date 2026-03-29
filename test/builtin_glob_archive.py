@@ -128,7 +128,8 @@ UPDATE ;
 #list_dir("/")
 #find("/Library", "ar.h")
 #cat_file("/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/include/ar.h")
-find("/Library", "_bounds.h")
+#find("/Library", "_bounds.h")
+cat_file("/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/include/_bounds.h")
 
 t.cleanup()
 
