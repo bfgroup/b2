@@ -326,14 +326,11 @@ if xml:
     critical_tests.insert(0, "collect_debug_info")
 
 tests = [
+    "builtin_glob_archive",
 ]
 
 exclusive_tests = [
 ]
-
-# Enable on macOS (Xcode) for troubleshooting
-if sys.platform == "darwin":
-    tests.append("builtin_glob_archive")
 
 if "--extras" in sys.argv:
     tests.append("boostbook")
