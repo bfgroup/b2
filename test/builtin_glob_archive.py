@@ -75,6 +75,14 @@ UPDATE ;
     t.run_build_system(["-ffile.jam"], stdout="")
     t.rm("file.jam")
 
+def find(path, target):
+    t.write("file.jam", """\
+ECHO [ SHELL "find {} -name {} 2>&1" ] ;
+UPDATE ;
+""".format(path, target))
+    t.run_build_system(["-ffile.jam"], stdout="")
+    t.rm("file.jam")
+
 def test_glob_archive(archives, glob, expected, sort_results = False):
     ## replace placeholders
     glob = glob.replace("$archive1", archives[0]).replace("$obj", obj_suffix)
@@ -109,7 +117,8 @@ UPDATE ;
 #test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a$obj ]",
 #                  ["$archive1(a$obj)"])
 
-list_dir("/")
+#list_dir("/")
+find("/usr", "ar.h")
 
 t.cleanup()
 
