@@ -103,7 +103,7 @@ struct ar_hdr  /* archive file member header - printable ascii */
 # ifndef AR_EFMT1
 #  define AR_EFMT1  "#1/"
 # endif
-# define SAR_EFMT1  4  /* strlen(AR_EFMT1); */
+# define SAR_EFMT1  3  /* strlen(AR_EFMT1); */
 #endif
 
 
@@ -349,20 +349,21 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
             }
 #ifdef AR_EFMT1
         }
-		else if (! strncmp( AR_EFMT1, ar_hdr.ar_name, SAR_EFMT1 ))
-			/* BSD Extended filename format.
-			 * File names that are either longer than 16 bytes or which contain
-			 * embedded spaces are stored immediately after the archive header
-			 * and the ar_name field of the archive header is set to the string
-			 * "#1/" followed by a decimal representation of the number of
-			 * bytes needed for the file name. See
-			 * https://man.freebsd.org/cgi/man.cgi?query=ar&sektion=5
-			 */
+        else if ( ! strncmp( AR_EFMT1, ar_hdr.ar_name, SAR_EFMT1 ) )
+            /* BSD Extended filename format.
+             * File names that are either longer than 16 bytes or which contain
+             * embedded spaces are stored immediately after the archive header
+             * and the ar_name field of the archive header is set to the string
+             * "#1/" followed by a decimal representation of the number of
+             * bytes needed for the file name. See
+             * https://man.freebsd.org/cgi/man.cgi?query=ar&sektion=5
+             */
         {
-			lar_name_size = atoi( lar_name + SAR_EFMT1 );
-			if ( read( fd, lar_name, lar_name_size ) != lar_name_size )
-				out_printf("error reading archive name\n");
-			*(lar_name + lar_name_size) = '\0';
+            lar_name_size = atoi( lar_name + SAR_EFMT1 );
+            if ( ( lar_name_size > 256 ) ||
+                ( read( fd, lar_name, lar_name_size ) != lar_name_size ) )
+                out_printf("error reading archive name\n");
+            *(lar_name + lar_name_size) = '\0';
 #endif
         }
 
