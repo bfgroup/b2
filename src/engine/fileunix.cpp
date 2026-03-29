@@ -291,7 +291,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
     offset = SARMAG;
 
     if ( is_debug_bindscan() )
-        out_printf( "scan archive %s\n", path );
+        out_printf( "A scan archive %s\n", path );
 
     while ( ( read( fd, &ar_hdr, SARHDR ) == SARHDR ) &&
         !( memcmp( ar_hdr.ar_fmag, ARFMAG, SARFMAG )
@@ -349,7 +349,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
         *c = '\0';
 
         if ( is_debug_bindscan() )
-            out_printf( "archive name %s found\n", lar_name );
+            out_printf( "A archive name %s found\n", lar_name );
 
         auto name = b2::value::format( "%s", lar_name );
 
@@ -399,7 +399,7 @@ static void collect_archive_content_small( int fd, file_archive_info_t * const a
     sscanf( fl_hdr.fl_fstmoff, "%ld", &offset );
 
     if ( is_debug_bindscan() )
-        out_printf( "scan archive %s\n", path );
+        out_printf( "B scan archive %s\n", path );
 
     while ( offset > 0 && lseek( fd, offset, 0 ) >= 0 &&
         read( fd, &ar_hdr, sizeof( ar_hdr ) ) >= (int)sizeof( ar_hdr.hdr ) )
@@ -454,7 +454,7 @@ static void collect_archive_content_big( int fd, file_archive_info_t * const arc
     sscanf( fl_hdr.fl_fstmoff, "%lld", &offset );
 
     if ( is_debug_bindscan() )
-        out_printf( "scan archive %s\n", path );
+        out_printf( "C scan archive %s\n", path );
 
     while ( offset > 0 && lseek( fd, offset, 0 ) >= 0 &&
         read( fd, &ar_hdr, sizeof( ar_hdr ) ) >= sizeof( ar_hdr.hdr ) )

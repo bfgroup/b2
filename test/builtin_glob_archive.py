@@ -88,7 +88,7 @@ UPDATE ;
 """.format(glob))
     ## run test jamfile and match against expected results
     if sort_results : expected.sort()
-    t.run_build_system(["-ffile.jam", "-d+14"], stdout="\n".join(expected + [""]))
+    t.run_build_system(["-ffile.jam", "-d+6", "-d+14"], stdout="\n".join(expected + [""]))
     t.rm("file.jam")
 
 
