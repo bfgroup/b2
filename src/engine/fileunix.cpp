@@ -100,10 +100,9 @@ struct ar_hdr  /* archive file member header - printable ascii */
 #  define __AR_BIG__
 # endif
 # include <ar.h>
-# ifndef AR_EFMT1
-#  define AR_EFMT1  "#1/"
+# ifdef AR_EFMT1
+#  define SAR_EFMT1  3  /* strlen("#1/"); */
 # endif
-# define SAR_EFMT1  3  /* strlen(AR_EFMT1); */
 #endif
 
 
@@ -347,8 +346,8 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
                     *dest++ = *src++;
                 *dest = '/';
             }
-#ifdef AR_EFMT1
         }
+#ifdef AR_EFMT1
         else if ( ! strncmp( AR_EFMT1, ar_hdr.ar_name, SAR_EFMT1 ) )
             /* BSD Extended filename format.
              * File names that are either longer than 16 bytes or which contain
@@ -360,16 +359,23 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
              */
         {
             lar_name_size = atoi( lar_name + SAR_EFMT1 );
-            if ( ( lar_name_size > 256 ) ||
+            if ( ( lar_name_size > 255 ) ||
                 ( read( fd, lar_name, lar_name_size ) != lar_name_size ) )
+            {
                 out_printf("error reading archive name\n");
+                lar_name_size = 0;
+            }
             *(lar_name + lar_name_size) = '\0';
-#endif
         }
+#else
 
+        /* SVR4/GNU File names that are up to 15 characters long are stored
+         * directly in the ar_name field of the header, terminated by a "/".
+         */
         c = lar_name - 1;
         while ( ( *++c != ' ' ) && ( *c != '/' ) );
         *c = '\0';
+#endif
 
         if ( is_debug_bindscan() )
             out_printf( "archive name %s found\n", lar_name );
