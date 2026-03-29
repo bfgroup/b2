@@ -455,7 +455,7 @@
 
 /* Jam private definitions below. */
 
-#define DEBUG_MAX 14
+#define DEBUG_MAX 15
 
 struct global_config
 {
@@ -548,6 +548,8 @@ inline bool is_debug_parse() { return globs.debug[11]; }
 inline bool is_debug_graph() { return globs.debug[12]; }
 /* show fate changes in make0() */
 inline bool is_debug_fate() { return globs.debug[13]; }
+/* custom debug for develop purposes */
+inline bool is_debug_devel() { return globs.debug[14]; }
 
 /* Everyone gets the memory definitions. */
 #include "mem.h"

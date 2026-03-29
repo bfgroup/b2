@@ -2169,6 +2169,7 @@ static void builtin_glob_archive_back( void * closure, OBJECT * member,
     LIST * symbols, int status, timestamp const * const time )
 {
     PROFILE_ENTER( BUILTIN_GLOB_ARCHIVE_BACK );
+    if (is_debug_devel()) out_printf("member '%s'\n", object_str( member ));
 
     struct globbing2 * const globbing = (struct globbing2 *)closure;
     PATHNAME f;

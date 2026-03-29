@@ -88,15 +88,19 @@ UPDATE ;
 """.format(glob))
     ## run test jamfile and match against expected results
     if sort_results : expected.sort()
-    t.run_build_system(["-ffile.jam"], stdout="\n".join(expected + [""]))
+    t.run_build_system(["-ffile.jam", "-d+14"], stdout="\n".join(expected + [""]))
     t.rm("file.jam")
 
 
 ## RUN TESTS
 archive1, obj_suffix = setup_archive("auxilliary1.lib", sources)
-archive2, obj_suffix = setup_archive("auxilliary2.lib", sources)
 
-list_archive(archive1)
+## list archive contents
+#list_archive(archive1)
+
+## match exact
+test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a$obj ]",
+                  ["$archive1(a$obj)"])
 
 t.cleanup()
 
