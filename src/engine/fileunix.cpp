@@ -100,6 +100,10 @@ struct ar_hdr  /* archive file member header - printable ascii */
 #  define __AR_BIG__
 # endif
 # include <ar.h>
+# ifndef AR_EFMT1
+#  define AR_EFMT1  "#1/"
+# endif
+# define SAR_EFMT1  4  /* strlen(AR_EFMT1); */
 #endif
 
 
@@ -291,7 +295,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
     offset = SARMAG;
 
     if ( is_debug_bindscan() )
-        out_printf( "A scan archive %s\n", path );
+        out_printf( "scan archive %s\n", path );
 
     while ( ( read( fd, &ar_hdr, SARHDR ) == SARHDR ) &&
         !( memcmp( ar_hdr.ar_fmag, ARFMAG, SARFMAG )
@@ -306,6 +310,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
         long   lar_date;
         long   lar_size;
         long   lar_offset;
+        long   lar_name_size;
         char * c;
         char * src;
         char * dest;
@@ -342,6 +347,23 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
                     *dest++ = *src++;
                 *dest = '/';
             }
+#ifdef AR_EFMT1
+        }
+		else if (! strncmp( AR_EFMT1, ar_hdr.ar_name, SAR_EFMT1 ))
+			/* BSD Extended filename format.
+			 * File names that are either longer than 16 bytes or which contain
+			 * embedded spaces are stored immediately after the archive header
+			 * and the ar_name field of the archive header is set to the string
+			 * "#1/" followed by a decimal representation of the number of
+			 * bytes needed for the file name. See
+			 * https://man.freebsd.org/cgi/man.cgi?query=ar&sektion=5
+			 */
+        {
+			lar_name_size = atoi( lar_name + SAR_EFMT1 );
+			if ( read( fd, lar_name, lar_name_size ) != lar_name_size )
+				out_printf("error reading archive name\n");
+			*(lar_name + lar_name_size) = '\0';
+#endif
         }
 
         c = lar_name - 1;
@@ -349,7 +371,7 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
         *c = '\0';
 
         if ( is_debug_bindscan() )
-            out_printf( "A archive name %s found\n", lar_name );
+            out_printf( "archive name %s found\n", lar_name );
 
         auto name = b2::value::format( "%s", lar_name );
 
@@ -399,7 +421,7 @@ static void collect_archive_content_small( int fd, file_archive_info_t * const a
     sscanf( fl_hdr.fl_fstmoff, "%ld", &offset );
 
     if ( is_debug_bindscan() )
-        out_printf( "B scan archive %s\n", path );
+        out_printf( "scan archive %s\n", path );
 
     while ( offset > 0 && lseek( fd, offset, 0 ) >= 0 &&
         read( fd, &ar_hdr, sizeof( ar_hdr ) ) >= (int)sizeof( ar_hdr.hdr ) )
@@ -454,7 +476,7 @@ static void collect_archive_content_big( int fd, file_archive_info_t * const arc
     sscanf( fl_hdr.fl_fstmoff, "%lld", &offset );
 
     if ( is_debug_bindscan() )
-        out_printf( "C scan archive %s\n", path );
+        out_printf( "scan archive %s\n", path );
 
     while ( offset > 0 && lseek( fd, offset, 0 ) >= 0 &&
         read( fd, &ar_hdr, sizeof( ar_hdr ) ) >= sizeof( ar_hdr.hdr ) )
