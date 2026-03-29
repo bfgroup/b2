@@ -83,6 +83,14 @@ UPDATE ;
     t.run_build_system(["-ffile.jam"], stdout="")
     t.rm("file.jam")
 
+def cat_file(path):
+    t.write("file.jam", """\
+ECHO [ SHELL "cat {} 2>&1" ] ;
+UPDATE ;
+""".format(path))
+    t.run_build_system(["-ffile.jam"], stdout="")
+    t.rm("file.jam")
+
 def test_glob_archive(archives, glob, expected, sort_results = False):
     ## replace placeholders
     glob = glob.replace("$archive1", archives[0]).replace("$obj", obj_suffix)
@@ -118,7 +126,8 @@ UPDATE ;
 #                  ["$archive1(a$obj)"])
 
 #list_dir("/")
-find("/Library", "ar.h")
+#find("/Library", "ar.h")
+cat_file("/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/include/ar.h")
 
 t.cleanup()
 
