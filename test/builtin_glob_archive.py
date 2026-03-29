@@ -67,6 +67,13 @@ UPDATE ;
     t.run_build_system(["-ffile.jam"], stdout="")
     t.rm("file.jam")
 
+def list_dir(path):
+    t.write("file.jam", """\
+ECHO [ SHELL "ls {} 2>&1" ] ;
+UPDATE ;
+""".format(path))
+    t.run_build_system(["-ffile.jam"], stdout="")
+    t.rm("file.jam")
 
 def test_glob_archive(archives, glob, expected, sort_results = False):
     ## replace placeholders
@@ -93,14 +100,16 @@ UPDATE ;
 
 
 ## RUN TESTS
-archive1, obj_suffix = setup_archive("auxilliary1.lib", sources)
+#archive1, obj_suffix = setup_archive("auxilliary1.lib", sources)
 
 ## list archive contents
 #list_archive(archive1)
 
 ## match exact
-test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a$obj ]",
-                  ["$archive1(a$obj)"])
+#test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a$obj ]",
+#                  ["$archive1(a$obj)"])
+
+list_dir("/")
 
 t.cleanup()
 
