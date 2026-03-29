@@ -116,20 +116,20 @@ UPDATE ;
 
 
 ## RUN TESTS
-#archive1, obj_suffix = setup_archive("auxilliary1.lib", sources)
+archive1, obj_suffix = setup_archive("auxilliary1.lib", sources)
 
 ## list archive contents
 #list_archive(archive1)
 
 ## match exact
-#test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a$obj ]",
-#                  ["$archive1(a$obj)"])
+test_glob_archive([archive1], "[ GLOB_ARCHIVE $archive1 : a$obj ]",
+                  ["$archive1(a$obj)"])
 
 #list_dir("/")
 #find("/Library", "ar.h")
 #cat_file("/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/include/ar.h")
 #find("/Library", "_bounds.h")
-cat_file("/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/include/_bounds.h")
+#cat_file("/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk/usr/include/_bounds.h")
 
 t.cleanup()
 
