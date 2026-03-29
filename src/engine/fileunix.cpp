@@ -309,7 +309,9 @@ int file_collect_archive_content_( file_archive_info_t * const archive )
         long   lar_date;
         long   lar_size;
         long   lar_offset;
+#ifdef AR_EFMT1
         long   lar_name_size;
+#endif
         char * c;
         char * src;
         char * dest;
