@@ -15,7 +15,7 @@ def split_stdin_stdout(text):
     the next newline.  Everything else is stdout.  stdout
     may contain regular expressions enclosed in {{}}."""
     prompt = re.escape('(gdb) \n')
-    pattern = re.compile('(?<=%s)((?:\d*-.*)\n)' % prompt)
+    pattern = re.compile('(?<=%s)((?:\\d*-.*)\n)' % prompt)
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
     outside_pattern = re.compile(r'(?:\A|(?<=\}\}))(?:[^\{]|(?:\{(?!\{)))*(?:(?=\{\{)|\Z)')
@@ -43,13 +43,13 @@ def test_exec_run():
 
     run(t, """\
 =thread-group-added,id="i1"
-(gdb)
+(gdb) 
 72-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 72^running
-(gdb)
+(gdb) 
 *stopped,reason="exited-normally"
-(gdb)
+(gdb) 
 73-gdb-exit
 73^exit
 """)
@@ -63,14 +63,14 @@ def test_exit_status():
     """)
     run(t, """\
 =thread-group-added,id="i1"
-(gdb)
+(gdb) 
 72-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 72^running
-(gdb)
+(gdb) 
 
 *stopped,reason="exited",exit-code="1"
-(gdb)
+(gdb) 
 73-gdb-exit
 73^exit
 """)
@@ -93,31 +93,31 @@ def test_exec_step():
     """)
     run(t, """\
 =thread-group-added,id="i1"
-(gdb)
+(gdb) 
 -break-insert f
 ^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",func="f"}
-(gdb)
+(gdb) 
 72-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 72^running
-(gdb)
+(gdb) 
 *stopped,reason="breakpoint-hit",bkptno="1",disp="keep",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="8"},thread-id="1",stopped-threads="all"
-(gdb)
+(gdb) 
 1-exec-step
 1^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="g",args=[],file="test.jam",fullname="{{.*}}test.jam",line="3"},thread-id="1"
-(gdb)
+(gdb) 
 2-exec-step
 2^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="g",args=[],file="test.jam",fullname="{{.*}}test.jam",line="4"},thread-id="1"
-(gdb)
+(gdb) 
 3-exec-step
 3^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="9"},thread-id="1"
-(gdb)
+(gdb) 
 73-gdb-exit
 73^exit
 """)
@@ -146,36 +146,36 @@ def test_exec_next():
     """)
     run(t, """\
 =thread-group-added,id="i1"
-(gdb)
+(gdb) 
 -break-insert f
 ^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",func="f"}
-(gdb)
+(gdb) 
 72-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 72^running
-(gdb)
+(gdb) 
 *stopped,reason="breakpoint-hit",bkptno="1",disp="keep",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="7"},thread-id="1",stopped-threads="all"
-(gdb)
+(gdb) 
 1-exec-next
 1^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="8"},thread-id="1"
-(gdb)
+(gdb) 
 2-exec-next
 2^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="9"},thread-id="1"
-(gdb)
+(gdb) 
 3-exec-next
 3^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="h",args=[],file="test.jam",fullname="{{.*}}test.jam",line="14"},thread-id="1"
-(gdb)
+(gdb) 
 4-exec-next
 4^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="module scope",args=[],file="test.jam",fullname="{{.*}}test.jam",line="17"},thread-id="1"
-(gdb)
+(gdb) 
 73-gdb-exit
 73^exit
 """)
@@ -208,31 +208,31 @@ def test_exec_finish():
     """)
     run(t, """\
 =thread-group-added,id="i1"
-(gdb)
+(gdb) 
 -break-insert f
 ^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",func="f"}
-(gdb)
+(gdb) 
 72-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 72^running
-(gdb)
+(gdb) 
 *stopped,reason="breakpoint-hit",bkptno="1",disp="keep",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="3"},thread-id="1",stopped-threads="all"
-(gdb)
+(gdb) 
 1-exec-finish
 1^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="g",args=[],file="test.jam",fullname="{{.*}}test.jam",line="8"},thread-id="1"
-(gdb)
+(gdb) 
 2-exec-finish
 2^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="h",args=[],file="test.jam",fullname="{{.*}}test.jam",line="14"},thread-id="1"
-(gdb)
+(gdb) 
 3-exec-finish
 3^running
-(gdb)
+(gdb) 
 *stopped,reason="end-stepping-range",frame={func="module scope",args=[],file="test.jam",fullname="{{.*}}test.jam",line="21"},thread-id="1"
-(gdb)
+(gdb) 
 73-gdb-exit
 73^exit
 """)
@@ -264,55 +264,55 @@ def test_breakpoints():
     """)
     run(t, """\
 =thread-group-added,id="i1"
-(gdb)
+(gdb) 
 -break-insert f
 ^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",func="f"}
-(gdb)
+(gdb) 
 72-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 72^running
-(gdb)
+(gdb) 
 *stopped,reason="breakpoint-hit",bkptno="1",disp="keep",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="3"},thread-id="1",stopped-threads="all"
-(gdb)
+(gdb) 
 -interpreter-exec console kill
 ^done
-(gdb)
+(gdb) 
 -break-insert g
 ^done,bkpt={number="2",type="breakpoint",disp="keep",enabled="y",func="g"}
-(gdb)
+(gdb) 
 -break-disable 1
 ^done
-(gdb)
+(gdb) 
 73-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 73^running
-(gdb)
+(gdb) 
 *stopped,reason="breakpoint-hit",bkptno="2",disp="keep",frame={func="g",args=[],file="test.jam",fullname="{{.*}}test.jam",line="7"},thread-id="1",stopped-threads="all"
-(gdb)
+(gdb) 
 -interpreter-exec console kill
 ^done
-(gdb)
+(gdb) 
 -break-enable 1
 ^done
-(gdb)
+(gdb) 
 74-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 74^running
-(gdb)
+(gdb) 
 *stopped,reason="breakpoint-hit",bkptno="1",disp="keep",frame={func="f",args=[],file="test.jam",fullname="{{.*}}test.jam",line="3"},thread-id="1",stopped-threads="all"
-(gdb)
+(gdb) 
 -interpreter-exec console kill
 ^done
-(gdb)
+(gdb) 
 -break-delete 1
 ^done
-(gdb)
+(gdb) 
 75-exec-run -ftest.jam
 =thread-created,id="1",group-id="i1"
 75^running
-(gdb)
+(gdb) 
 *stopped,reason="breakpoint-hit",bkptno="2",disp="keep",frame={func="g",args=[],file="test.jam",fullname="{{.*}}test.jam",line="7"},thread-id="1",stopped-threads="all"
-(gdb)
+(gdb) 
 76-gdb-exit
 76^exit
 """)
