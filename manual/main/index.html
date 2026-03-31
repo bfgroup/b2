@@ -3342,7 +3342,7 @@ lib b : : &lt;name&gt;b &lt;search&gt;/pool/debug ;</code></pre>
 </div>
 <div class="paragraph">
 <p>If /pool/release/a.so, /pool/release/b.so, /pool/debug/a.so, and
-/pool/release/b.so all exist, the linker will probably take both <code>a</code> and
+/pool/debug/b.so all exist, the linker will probably take both <code>a</code> and
 <code>b</code> from the same directory, instead of finding <code>a</code> in /pool/release and
 <code>b</code> in /pool/debug. If you need to distinguish between multiple
 libraries with the same name, it&#8217;s safer to use <code>file</code>.</p>
@@ -11483,7 +11483,7 @@ used inside the command line patterns.</p>
 <div class="title">⚠</div>
 </td>
 <td class="content">
-All of the Boost.Jam target-related builtin functions, like
+All of the Boost.Jam target-related builtin rules, like
 <code>DEPENDS</code> or <code>ALWAYS</code> operate on jam targets. Applying them to metatargets or
 concrete targets has no effect.
 </td>
@@ -11520,8 +11520,8 @@ instance of <a href="#b2.reference.class.property-set">property-set</a>)</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s possible to lookup a metatarget by target-id using the
-<code>targets.resolve-reference</code> function, and the
-<code>targets.generate-from-reference</code> function can both lookup and generate
+<code>targets.resolve-reference</code> rule, and the
+<code>targets.generate-from-reference</code> rule can both lookup and generate
 a metatarget.</p>
 </div>
 <div class="paragraph">
@@ -11616,7 +11616,7 @@ targets, we can repeat the second line several times.</p>
 than once with the same properties. Returning two different instances of
 <code>file-target</code> that correspond to the same file clearly will result in
 problems. Therefore, whenever returning targets you should pass them via
-the <code>virtual-target.register</code> function, besides allowing B2 to
+the <code>virtual-target.register</code> rule, besides allowing B2 to
 track which virtual targets got created for each metatarget, this will
 also replace targets with previously created identical ones, as
 necessary.<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> Here are a couple of examples:</p>
@@ -11838,7 +11838,7 @@ be assigned to a target type.</p>
 {
     rule pattern ( )
     {
-        return "//###include[ ]*\"([^\"]*)\"" ;
+        return "[ \t]*#[ \t]*include[ \t]*\"([^\"]+)\"" ;
     }
 }</code></pre>
 </div>
@@ -11944,12 +11944,12 @@ target type. For example, the first generator invoked when building an
 linker.</p>
 </div>
 <div class="paragraph">
-<p>You should also know about two specific functions for registering
+<p>You should also know about two specific rules for registering
 generators: <code>generators.register-c-compiler</code> and
 <code>generators.register-linker</code>. The first sets up header dependency
 scanning for C files, and the seconds handles various complexities like
 searched libraries. For that reason, you should always use those
-functions when adding support for compilers and linkers.</p>
+rules when adding support for compilers and linkers.</p>
 </div>
 <div class="paragraph">
 <p>(Need a note about UNIX)</p>
@@ -12352,7 +12352,12 @@ example, if you create a module <code>obfuscate.jam</code> containing:</p>
 type.register OBFUSCATED_CPP  : ocpp ;
 
 import generators ;
-generators.register-standard obfuscate.file : CPP : OBFUSCATED_CPP ;</code></pre>
+generators.register-standard obfuscate.file : CPP : OBFUSCATED_CPP ;
+
+actions file
+{
+    # command(s) to obfuscate $(&gt;) and build $(&lt;)
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -14516,7 +14521,8 @@ any new Jam code you write.</p>
 <p><code>B2</code> has a growing set of built-in rules, all of which are pure
 procedure rules without updating actions. They are in three groups: the
 first builds the dependency graph; the second modifies it; and the third
-are just utility rules.</p>
+are just utility rules. A fourth set of rules relating to modules are
+described in <a href="#jam.language.modules">Modules</a>.</p>
 </div>
 <div class="sect4">
 <h5 id="jam.language.rules.builtins.dependency_building"><a class="anchor" href="#jam.language.rules.builtins.dependency_building"></a>Dependency Building</h5>
@@ -14740,9 +14746,19 @@ This is currently not fully implemented.
 </div>
 <div class="sect4">
 <h5 id="jam.language.rules.builtins.utility"><a class="anchor" href="#jam.language.rules.builtins.utility"></a>Utility</h5>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._backtrace__"><a class="anchor" href="#jam.language.rules.builtins.utility._backtrace__"></a><code>BACKTRACE</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule BACKTRACE ( levels ? )</code></pre>
+</div>
+</div>
 <div class="paragraph">
-<p>The two rules <code>ECHO</code> and <code>EXIT</code> are utility rules, used only in <code>b2</code>s
-parsing phase.</p>
+<p>Returns a list of quadruples: <em>filename</em> <em>line</em> <em>module</em> <em>rulename</em>&#8230;&#8203;,
+describing each shallower level of the call stack, or only last <em>levels</em>
+when the argument is provided. This rule can be used to generate useful
+diagnostic messages from Jam rules.</p>
+</div>
 </div>
 <div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._echo__"><a class="anchor" href="#jam.language.rules.builtins.utility._echo__"></a><code>ECHO</code></h6>
@@ -14771,6 +14787,21 @@ if no <em>result-value</em> is given, otherwise it exits with the given
 <p><code>Echo</code>, <code>echo</code>, <code>Exit</code>, and <code>exit</code> are accepted as aliases for
 <code>ECHO</code> and <code>EXIT</code>, since it is hard to tell that these are built-in
 rules and not part of the language, like <code>include</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._file_open__"><a class="anchor" href="#jam.language.rules.builtins.utility._file_open__"></a><code>FILE_OPEN</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule FILE_OPEN ( filename : mode )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>FILE_OPEN</code> rule opens the specified file and returns a file
+descriptor if the <em>mode</em> parameter is either "w" or "r". Note that at
+present, only the <code>UPDATE_NOW</code> rule can use the resulting file
+descriptor number. If the <em>mode</em> parameter is "t" this opens the file as a
+text file and returns the contents as a single string.</p>
 </div>
 </div>
 <div class="sect5">
@@ -14882,17 +14913,93 @@ for each string in <em>list</em>, and for each regular expression in <em>regexps
 </div>
 </div>
 <div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._backtrace__"><a class="anchor" href="#jam.language.rules.builtins.utility._backtrace__"></a><code>BACKTRACE</code></h6>
+<h6 id="jam.language.rules.builtins.utility._md5__"><a class="anchor" href="#jam.language.rules.builtins.utility._md5__"></a><code>MD5</code></h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule BACKTRACE ( levels ? )</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule MD5 ( string )</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Returns a list of quadruples: <em>filename</em> <em>line</em> <em>module</em> <em>rulename</em>&#8230;&#8203;,
-describing each shallower level of the call stack, or only last <em>levels</em>
-when the argument is provided. This rule can be used to generate useful
-diagnostic messages from Jam rules.</p>
+<p><code>MD5</code> computes the MD5 hash of the string passed as parameter and
+returns it.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._pad__"><a class="anchor" href="#jam.language.rules.builtins.utility._pad__"></a><code>PAD</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule PAD ( string : width )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <em>string</em> is shorter than <em>width</em> characters, pads it with whitespace
+characters on the right, and returns the result. Otherwise, returns
+<em>string</em> unmodified.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._precious__"><a class="anchor" href="#jam.language.rules.builtins.utility._precious__"></a><code>PRECIOUS</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule PRECIOUS ( targets * )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>PRECIOUS</code> rule specifies that each of the targets passed as the
+arguments should not be removed even if the command updating that target
+fails.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._shell__"><a class="anchor" href="#jam.language.rules.builtins.utility._shell__"></a><code>SHELL</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule SHELL ( command : * )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>SHELL</code> executes <em>command</em>, and then returns the standard output of
+<em>command</em>. <code>SHELL</code> only works on platforms with a <code>popen()</code> function in
+the C library. On platforms without a working <code>popen()</code> function,
+<code>SHELL</code> is implemented as a no-op. <code>SHELL</code> works on Unix, MacOS X, and
+most Windows compilers. <code>SHELL</code> is a no-op on Metrowerks compilers under
+Windows. There is a variable set of allowed options as additional
+arguments:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>exit-status</code></dt>
+<dd>
+<p>In addition to the output the result status of the executed command is
+returned as a second element of the result.</p>
+</dd>
+<dt class="hdlist1"><code>no-output</code></dt>
+<dd>
+<p>Don&#8217;t capture the output of the command. Instead an empty ("") string
+value is returned in place of the output.</p>
+</dd>
+<dt class="hdlist1"><code>strip-eol</code></dt>
+<dd>
+<p>Remove trailing end-of-line character from output, if any.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Because the Perforce/Jambase defines a <code>SHELL</code> rule which hides the
+builtin rule, <code>COMMAND</code> can be used as an alias for <code>SHELL</code> in such a
+case.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._split_by_characters__"><a class="anchor" href="#jam.language.rules.builtins.utility._split_by_characters__"></a><code>SPLIT_BY_CHARACTERS</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule SPLIT_BY_CHARACTERS ( string : delimiters )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>SPLIT_BY_CHARACTERS</code> splits the specified <em>string</em> on any delimiter
+character present in <em>delimiters</em> and returns the resulting list.</p>
 </div>
 </div>
 <div class="sect5">
@@ -14930,6 +15037,22 @@ it possible to add targets as such:</p>
 <pre class="highlight"><code class="language-jam" data-lang="jam">local previous-updates = [ UPDATE ] ;
 UPDATE $(previous-updates) a-new-target ;</code></pre>
 </div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._update_now__"><a class="anchor" href="#jam.language.rules.builtins.utility._update_now__"></a><code>UPDATE_NOW</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule UPDATE_NOW ( targets * : log ? : ignore-minus-n ? )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>UPDATE_NOW</code> caused the specified targets to be updated immediately.
+If update was successful, non-empty string is returned. The <em>log</em>
+parameter, if present, specifies a descriptor of a file where all output
+from building is redirected. If the <em>ignore-minus-n</em> parameter is
+specified, the targets are updated even if the <code>-n</code> parameter is
+specified on the command line.</p>
 </div>
 </div>
 <div class="sect5">
@@ -15028,127 +15151,6 @@ for local subkey in $(subkeys)
     }
 }</code></pre>
 </div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._shell__"><a class="anchor" href="#jam.language.rules.builtins.utility._shell__"></a><code>SHELL</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule SHELL ( command : * )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>SHELL</code> executes <em>command</em>, and then returns the standard output of
-<em>command</em>. <code>SHELL</code> only works on platforms with a <code>popen()</code> function in
-the C library. On platforms without a working <code>popen()</code> function,
-<code>SHELL</code> is implemented as a no-op. <code>SHELL</code> works on Unix, MacOS X, and
-most Windows compilers. <code>SHELL</code> is a no-op on Metrowerks compilers under
-Windows. There is a variable set of allowed options as additional
-arguments:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><code>exit-status</code></dt>
-<dd>
-<p>In addition to the output the result status of the executed command is
-returned as a second element of the result.</p>
-</dd>
-<dt class="hdlist1"><code>no-output</code></dt>
-<dd>
-<p>Don&#8217;t capture the output of the command. Instead an empty ("") string
-value is returned in place of the output.</p>
-</dd>
-<dt class="hdlist1"><code>strip-eol</code></dt>
-<dd>
-<p>Remove trailing end-of-line character from output, if any.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>Because the Perforce/Jambase defines a <code>SHELL</code> rule which hides the
-builtin rule, <code>COMMAND</code> can be used as an alias for <code>SHELL</code> in such a
-case.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._md5__"><a class="anchor" href="#jam.language.rules.builtins.utility._md5__"></a><code>MD5</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule MD5 ( string )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>MD5</code> computes the MD5 hash of the string passed as parameter and
-returns it.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._split_by_characters__"><a class="anchor" href="#jam.language.rules.builtins.utility._split_by_characters__"></a><code>SPLIT_BY_CHARACTERS</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule SPLIT_BY_CHARACTERS ( string : delimiters )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>SPLIT_BY_CHARACTERS</code> splits the specified <em>string</em> on any delimiter
-character present in <em>delimiters</em> and returns the resulting list.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._precious__"><a class="anchor" href="#jam.language.rules.builtins.utility._precious__"></a><code>PRECIOUS</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule PRECIOUS ( targets * )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>PRECIOUS</code> rule specifies that each of the targets passed as the
-arguments should not be removed even if the command updating that target
-fails.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._pad__"><a class="anchor" href="#jam.language.rules.builtins.utility._pad__"></a><code>PAD</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule PAD ( string : width )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If <em>string</em> is shorter than <em>width</em> characters, pads it with whitespace
-characters on the right, and returns the result. Otherwise, returns
-<em>string</em> unmodified.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._file_open__"><a class="anchor" href="#jam.language.rules.builtins.utility._file_open__"></a><code>FILE_OPEN</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule FILE_OPEN ( filename : mode )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>FILE_OPEN</code> rule opens the specified file and returns a file
-descriptor if the <em>mode</em> parameter is either "w" or "r". Note that at
-present, only the <code>UPDATE_NOW</code> rule can use the resulting file
-descriptor number. If the <em>mode</em> parameter is "t" this opens the file as a
-text file and returns the contents as a single string.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._update_now__"><a class="anchor" href="#jam.language.rules.builtins.utility._update_now__"></a><code>UPDATE_NOW</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule UPDATE_NOW ( targets * : log ? : ignore-minus-n ? )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>UPDATE_NOW</code> caused the specified targets to be updated immediately.
-If update was successful, non-empty string is returned. The <em>log</em>
-parameter, if present, specifies a descriptor of a file where all output
-from building is redirected. If the <em>ignore-minus-n</em> parameter is
-specified, the targets are updated even if the <code>-n</code> parameter is
-specified on the command line.</p>
 </div>
 </div>
 </div>
@@ -15369,8 +15371,22 @@ variable ?= elements ;</code></pre>
 set a target-specific variable. The <code>=</code> operator replaces any previous
 elements of <em>variable</em> with <em>elements</em>; the <code>+=</code> operation adds
 <em>elements</em> to <em>variable</em>'s list of elements. The final two forms are
-synonymous: they set <em>variable</em> globally, but only if it was previously
+synonymous: they set <em>variable</em> globally, but <code>?=</code> only if it was previously
 unset.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+the <code>?=</code> operator does not short-circuit, that is in
+<code>some-var ?= [ some-rule ]</code> the <code>some-rule</code> is always called,
+regardless of whether the variable is set or not.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Variables referenced in updating commands will be replaced with their
@@ -15856,12 +15872,13 @@ platform:</p>
 </dd>
 <dt class="hdlist1"><code>JAMVERSION</code></dt>
 <dd>
-<p><code>b2</code> version, as a sematic triplet "X.Y.Z".</p>
+<p><code>b2</code> version, as a semantic triplet "X.Y.Z".</p>
 </dd>
 <dt class="hdlist1"><code>JAM_VERSION</code></dt>
 <dd>
-<p>A predefined global variable with two elements indicates the version
-number of Boost Jam. Boost Jam versions start at <code>03</code> <code>00</code>.
+<p>A predefined global variable with elements indicating the version
+number of Boost Jam. Boost Jam versions start at <code>3</code> <code>0</code> but nowadays
+it is composed of three elements (e.g. <code>5</code> <code>5</code> <code>0</code>.)
 Earlier versions of <code>Jam</code> do not automatically define <code>JAM_VERSION</code>.</p>
 </dd>
 </dl>
