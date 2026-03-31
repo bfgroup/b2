@@ -32,6 +32,8 @@
   -- _Paolo Pastori_
 * Fix python linking to missing libutil.
   -- _Paolo Pastori_
+* Fix properties minimization during target configuration.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 

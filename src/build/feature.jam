@@ -925,7 +925,7 @@ local rule move-subfeatures-to-the-end ( properties * )
 rule minimize ( properties * )
 {
     # Precondition checking
-    local implicits = [ set.intersection $(p:G=) : $(p:G) ] ;
+    local implicits = [ set.intersection $(properties:G=) : $(properties) ] ;
     if $(implicits)
     {
         import errors ;
@@ -1066,16 +1066,16 @@ local rule split-top-feature ( feature-plus )
 #
 rule add-defaults ( properties * )
 {
-    for local v in $(properties:G=)
+    # Precondition checking
+    local implicits = [ set.intersection $(properties:G=) : $(properties) ] ;
+    if $(implicits)
     {
-        if $(v) in $(properties)
-        {
-            import errors ;
-            errors.error add-defaults requires explicitly specified features,
-                but \"$(v)\" appears to be the value of an un-expanded implicit
-                feature ;
-        }
+        import errors ;
+        errors.error add-defaults requires explicitly specified features,
+            but \"$(implicits[1])\" appears to be the value of an un-expanded
+            implicit feature ;
     }
+
     local missing-top = [ set.difference $(.all-top-features) : $(properties:G) ] ;
     local more =  [ defaults $(missing-top) ] ;
 
@@ -1383,6 +1383,18 @@ rule __test__ ( )
         expand release <optimization>off <optimization>on ;
     }
     catch explicitly-specified values of non-free feature <optimization> conflict ;
+
+    try ;
+    {
+        minimize debug <variant>debug ;
+    }
+    catch minimize requires an expanded property set, but \"debug\" appears to be the value of an un-expanded implicit feature ;
+
+    try ;
+    {
+        add-defaults debug <variant>debug ;
+    }
+    catch add-defaults requires explicitly specified features, but \"debug\" appears to be the value of an un-expanded implicit feature ;
 
     try ;
     {
