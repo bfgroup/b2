@@ -524,7 +524,7 @@ if toolset.startswith("clang") and "-win" not in toolset or "darwin" in toolset:
 if sys.platform != "darwin":
     tests.append("builtin_glob_archive")
 
-# Run in exclusive mode to avoid interpreter hung on macOS (Xcode) and FreeBSD
+# Run in exclusive mode to avoid interpreter hang on macOS (Xcode) and FreeBSD
 if sys.platform == "darwin" or sys.platform.startswith("freebsd"):
     exclusive_tests.append("grep")
 else:
