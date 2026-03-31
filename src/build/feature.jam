@@ -925,7 +925,7 @@ local rule move-subfeatures-to-the-end ( properties * )
 rule minimize ( properties * )
 {
     # Precondition checking
-    local implicits = [ set.intersection $(p:G=) : $(p:G) ] ;
+    local implicits = [ set.intersection $(properties:G=) : $(properties) ] ;
     if $(implicits)
     {
         import errors ;
@@ -1383,6 +1383,12 @@ rule __test__ ( )
         expand release <optimization>off <optimization>on ;
     }
     catch explicitly-specified values of non-free feature <optimization> conflict ;
+
+    try ;
+    {
+        minimize debug <variant>debug ;
+    }
+    catch minimize requires an expanded property set, but \"debug\" appears to be the value of an un-expanded implicit feature ;
 
     try ;
     {
