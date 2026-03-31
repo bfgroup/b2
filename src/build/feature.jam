@@ -1066,16 +1066,16 @@ local rule split-top-feature ( feature-plus )
 #
 rule add-defaults ( properties * )
 {
-    for local v in $(properties:G=)
+    # Precondition checking
+    local implicits = [ set.intersection $(properties:G=) : $(properties) ] ;
+    if $(implicits)
     {
-        if $(v) in $(properties)
-        {
-            import errors ;
-            errors.error add-defaults requires explicitly specified features,
-                but \"$(v)\" appears to be the value of an un-expanded implicit
-                feature ;
-        }
+        import errors ;
+        errors.error add-defaults requires explicitly specified features,
+            but \"$(implicits[1])\" appears to be the value of an un-expanded
+            implicit feature ;
     }
+
     local missing-top = [ set.difference $(.all-top-features) : $(properties:G) ] ;
     local more =  [ defaults $(missing-top) ] ;
 
@@ -1389,6 +1389,12 @@ rule __test__ ( )
         minimize debug <variant>debug ;
     }
     catch minimize requires an expanded property set, but \"debug\" appears to be the value of an un-expanded implicit feature ;
+
+    try ;
+    {
+        add-defaults debug <variant>debug ;
+    }
+    catch add-defaults requires explicitly specified features, but \"debug\" appears to be the value of an un-expanded implicit feature ;
 
     try ;
     {
