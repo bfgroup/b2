@@ -376,8 +376,7 @@ tests = [
     "core_variables_in_actions",
     "custom_generator",
     "debugger",
-    # Newly broken?
-    #         "debugger-mi",
+    "debugger-mi",
     "default_build",
     "default_features",
     "default_toolset",
