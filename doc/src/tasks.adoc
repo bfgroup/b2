@@ -91,7 +91,7 @@ lib b : : <name>b <search>/pool/debug ;
 ----
 
 If /pool/release/a.so, /pool/release/b.so, /pool/debug/a.so, and
-/pool/release/b.so all exist, the linker will probably take both `a` and
+/pool/debug/b.so all exist, the linker will probably take both `a` and
 `b` from the same directory, instead of finding `a` in /pool/release and
 `b` in /pool/debug. If you need to distinguish between multiple
 libraries with the same name, it's safer to use `file`.

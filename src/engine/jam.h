@@ -219,6 +219,9 @@
 	|| defined(__gnu_linux__)
 #define OSMINOR "OS=LINUX"
 #define OS_LINUX
+#ifndef unix
+#define unix
+#endif
 #endif
 #ifdef __Lynx__
 #define OSMINOR "OS=LYNX"

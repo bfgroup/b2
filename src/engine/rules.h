@@ -54,8 +54,8 @@ typedef ACTIONS * actions_ptr;
 typedef SETTINGS * settings_ptr;
 
 typedef RULE & rule_ref;
-typedef TARGET & target_ref;
-typedef TARGETS & targets_ref;
+//typedef TARGET & target_ref;
+//typedef TARGETS & targets_ref;
 typedef ACTION & action_ref;
 typedef ACTIONS & actions_ref;
 typedef SETTINGS & settings_ref;
@@ -291,6 +291,7 @@ void rule_free(rule_ptr);
 
 /* Target related functions. */
 void bind_explicitly_located_targets();
+target_ptr find_target(b2::value_ptr);
 target_ptr bindtarget(b2::value_ptr const);
 targets_uptr targetchain(targets_uptr, targets_uptr);
 void targetentry(targets_uptr &, target_ptr);
@@ -311,6 +312,10 @@ struct target_ref
 {
 	target_ref(value_ref name)
 		: target(bindtarget(name))
+	{}
+
+	target_ref(target_ptr t)
+		: target(t)
 	{}
 
 	operator TARGET *() const { return target; }

@@ -27,7 +27,7 @@ process that creates concrete targets from metatargets. Extending
 metatarget level is rarely required. The jam targets are typically only
 used inside the command line patterns.
 
-WARNING: All of the Boost.Jam target-related builtin functions, like
+WARNING: All of the Boost.Jam target-related builtin rules, like
 `DEPENDS` or `ALWAYS` operate on jam targets. Applying them to metatargets or
 concrete targets has no effect.
 
@@ -54,8 +54,8 @@ instance of link:#b2.reference.class.property-set[property-set])
 `virtual-target` class.)
 
 It's possible to lookup a metatarget by target-id using the
-`targets.resolve-reference` function, and the
-`targets.generate-from-reference` function can both lookup and generate
+`targets.resolve-reference` rule, and the
+`targets.generate-from-reference` rule can both lookup and generate
 a metatarget.
 
 The link:#b2.reference.class.abstract-target[abstract-target] class
@@ -137,7 +137,7 @@ In some cases, code that creates concrete targets may be invoked more
 than once with the same properties. Returning two different instances of
 `file-target` that correspond to the same file clearly will result in
 problems. Therefore, whenever returning targets you should pass them via
-the `virtual-target.register` function, besides allowing B2 to
+the `virtual-target.register` rule, besides allowing B2 to
 track which virtual targets got created for each metatarget, this will
 also replace targets with previously created identical ones, as
 necessary.footnote:[This create-then-register pattern is caused by
@@ -329,7 +329,7 @@ class verbatim-scanner : common-scanner
 {
     rule pattern ( )
     {
-        return "//###include[ ]*\"([^\"]*)\"" ;
+        return "[ \t]*#[ \t]*include[ \t]*\"([^\"]+)\"" ;
     }
 }
 ----
@@ -423,12 +423,12 @@ target type. For example, the first generator invoked when building an
 `exe` target is a composing generator corresponding to the proper
 linker.
 
-You should also know about two specific functions for registering
+You should also know about two specific rules for registering
 generators: `generators.register-c-compiler` and
 `generators.register-linker`. The first sets up header dependency
 scanning for C files, and the seconds handles various complexities like
 searched libraries. For that reason, you should always use those
-functions when adding support for compilers and linkers.
+rules when adding support for compilers and linkers.
 
 (Need a note about UNIX)
 
@@ -762,6 +762,11 @@ type.register OBFUSCATED_CPP  : ocpp ;
 
 import generators ;
 generators.register-standard obfuscate.file : CPP : OBFUSCATED_CPP ;
+
+actions file
+{
+    # command(s) to obfuscate $(>) and build $(<)
+}
 ----
 
 and import that module, you'll be able to use the rule "obfuscated-cpp"

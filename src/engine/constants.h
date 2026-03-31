@@ -65,5 +65,7 @@ extern OBJECT * constant_FILE_ARCHIVESCAN;          /* "FILE_ARCHIVESCAN" */
 extern OBJECT * constant_BUILTIN_GLOB_ARCHIVE_BACK; /* "BUILTIN_GLOB_ARCHIVE_BACK" */
 
 extern OBJECT * constant_RESPONSE_FILE_SUB; // "RESPONSE_FILE_SUB"
+extern OBJECT * constant_FILENAME;          // "__FILENAME__"
+extern OBJECT * constant_MODULE;            // "__MODULE__"
 
 #endif
