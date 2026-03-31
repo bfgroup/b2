@@ -294,16 +294,23 @@ else
 }
 
 
-# Returns a path representing the given expanded property set.
+# Returns a path representing the given property set.
 #
-rule as-path ( properties * )
+rule as-path (
+    properties *
+    : dont-minimize ?  # IF set, do not try to minimize properties,
+                       # which are likely to be unexpanded.
+)
 {
     local entry = .result.$(properties:J=-) ;
 
     if ! $($(entry))
     {
         # Trim redundancy.
-        properties = [ feature.minimize $(properties) ] ;
+        if ! $(dont-minimize)
+        {
+            properties = [ feature.minimize $(properties) ] ;
+        }
 
         # Sort according to path-order.
         properties = [ sequence.insertion-sort $(properties) : path-order ] ;
