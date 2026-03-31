@@ -27,6 +27,8 @@
   -- _Paolo Pastori_
 * Fix finding an assembler when using plain LLVM for clang-win.
   -- _René Ferdinand Rivera Morell_
+* Fix properties minimization during target configuration.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 
