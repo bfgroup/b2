@@ -7,7 +7,7 @@
   GLOB-RECURSIVELY has become an alias of GLOB_RECURSIVELY.
 * *New*: Added test for regular expressions with MATCH builtin rule.
   -- _Paolo Pastori_
-* Fix jam/{CPP} bind definitions of 4 or more values in a single
+* Fix Jam/{CPP} bind definitions of 4 or more values in a single
   declared argument not actually adding all the definitions.
   -- _Paolo Pastori_
 * Fix various regexp issues, allowing for mandatory regular expression
@@ -33,6 +33,8 @@
 * Fix python linking to missing libutil.
   -- _Paolo Pastori_
 * Fix properties minimization during target configuration.
+  -- _Paolo Pastori_
+* Fix GLOB_ARCHIVE builtin rule to work with BSD archive (ar).
   -- _Paolo Pastori_
 
 == Version 5.4.2
