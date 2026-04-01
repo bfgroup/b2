@@ -442,8 +442,8 @@ class Tester(TestCmd.TestCmd):
             n = glob.glob(self.native_file_name(name))
             if n: n = n[0]
             if not n:
-                n = self.glob_file(name.replace("$toolset", self.expanded_toolset + "*")
-                    )
+                n = self.glob_file(
+                    name.replace("$toolset", self.expanded_toolset + "*"))
             if n:
                 if os.path.isdir(n):
                     shutil.rmtree(n, ignore_errors=False)
@@ -602,8 +602,7 @@ class Tester(TestCmd.TestCmd):
                     break
         if not result:
             result = glob.glob(self.__native_file_name(name))
-            if result:
-                result = result[0]
+            result = result[0] if result else None
         return result
 
     def __read(self, name, binary=False):
@@ -613,9 +612,8 @@ class Tester(TestCmd.TestCmd):
                 openMode += "b"
             elif sys.version_info[0] < 3:
                 openMode += "U"
-            f = open(name, openMode)
-            result = f.read()
-            f.close()
+            with open(name, openMode) as f:
+                result = f.read()
             return result
         except Exception as e:
             annotation("failure", "Could not open '%s': %s" % (name, e))
@@ -624,15 +622,15 @@ class Tester(TestCmd.TestCmd):
             return ""
 
     def read(self, name, binary=False):
-        name = self.glob_file(name)
-        return self.__read(name, binary=binary)
+        n = self.glob_file(name)
+        return self.__read(n or name, binary=binary)
 
     def read_and_strip(self, name):
-        if not self.glob_file(name):
+        n = self.glob_file(name)
+        if not n:
             return ""
-        f = open(self.glob_file(name), "rb")
-        lines = f.readlines()
-        f.close()
+        with open(n, "rb") as f:
+            lines = f.readlines()
         result = "\n".join(x.decode().rstrip() for x in lines)
         if lines and lines[-1][-1] != "\n":
             return result + "\n"
