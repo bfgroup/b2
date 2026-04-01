@@ -340,6 +340,7 @@ tests = [
     "builtin_echo",
     "builtin_exit",
     "builtin_glob",
+    "builtin_glob_archive",
     "builtin_readlink",
     "builtin_split_by_characters",
     "bzip2",
@@ -526,10 +527,6 @@ if (
 # Clang includes Objective-C driver everywhere, but GCC usually in a separate gobj package
 if toolset.startswith("clang") and "-win" not in toolset or "darwin" in toolset:
     tests.append("lang_objc")
-
-# Disable on OSX as it doesn't seem to work for unknown reasons.
-if sys.platform != "darwin":
-    tests.append("builtin_glob_archive")
 
 if "--extras" in sys.argv:
     tests.append("boostbook")
