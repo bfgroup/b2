@@ -407,7 +407,6 @@ tests = [
     "flags",
     "generator_selection",
     "generators_test",
-    "grep",
     "implicit_dependency",
     "indirect_conditional",
     "inherit_toolset",
@@ -527,6 +526,12 @@ if (
 # Clang includes Objective-C driver everywhere, but GCC usually in a separate gobj package
 if toolset.startswith("clang") and "-win" not in toolset or "darwin" in toolset:
     tests.append("lang_objc")
+
+# Run in exclusive mode to avoid interpreter hang on macOS (Xcode) and FreeBSD
+if sys.platform == "darwin" or sys.platform.startswith("freebsd"):
+    exclusive_tests.append("grep")
+else:
+    tests.append("grep")
 
 if "--extras" in sys.argv:
     tests.append("boostbook")
