@@ -11,6 +11,7 @@ rule trim-leading-zeroes ( value )
 }
 
 
+# Check for non-negative numbers.
 rule check ( numbers * )
 {
     for local n in $(numbers)
@@ -19,7 +20,7 @@ rule check ( numbers * )
         {
             case *[^0-9]* :
                 import errors ;
-                errors.error $(n) "in" $(numbers) : is not a number ;
+                errors.error $(n) "in" $(numbers) is not a number ;
         }
     }
 }
@@ -85,12 +86,12 @@ rule __test__ ( )
     import assert ;
     import errors : try catch ;
 
-    assert.result 0 : increment -1 ; # NOTE: unplanned
+    #assert.result 0 : increment -1 ; # NOTE: unplanned
     assert.result 1 : increment 0 ;
     assert.result 2 : increment 1 ;
     assert.result 1 : decrement 2 ;
     assert.result 0 : decrement 1 ;
-    assert.result -1 : decrement 0 ; # NOTE: unplanned
+    #assert.result -1 : decrement 0 ; # NOTE: unplanned
     assert.result 50 : increment 49 ;
     assert.result 49 : decrement 50 ;
     assert.result 99 : increment 98 ;
@@ -141,7 +142,7 @@ rule __test__ ( )
     {
         check foo ;
     }
-    catch foo "in" foo ;
+    catch foo "in" foo is not a number ;
 
     for local x in [ range 75 110 : 5 ]
     {
