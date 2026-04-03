@@ -2,6 +2,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
 
+import args ;
 import "class" : new ;
 import sequence ;
 import set ;
@@ -166,29 +167,43 @@ local rule looks-like-implicit-value ( v )
 }
 
 
+local rule missing-value-error ( opt : command-line + )
+{
+    import errors ;
+    errors.error "No value provided for" '$(opt)' option
+        : "in command" "\"$(command-line:J= )\"". ;
+}
+
 # Takes the command line tokens (such as taken from the ARGV rule) and
 # constructs a build request from them. Returns a vector of two vectors (where
 # "vector" means container.jam's "vector"). First is the set of targets
 # specified in the command line, and second is the set of requested build
 # properties. Expects all the project files to already be loaded.
 #
-rule from-command-line ( command-line * )
+rule from-command-line ( command-line + )
 {
     local targets ;
     local properties ;
 
-    command-line = $(command-line[2-]) ;
+    local cur-opt = ;
     local skip-next = ;
-    for local e in $(command-line)
+    for local e in $(command-line[2-])
     {
         if $(skip-next)
         {
+            # Check for missing option value. This is not effective for
+            # arguments that are not options, such arguments are always
+            # assumed to be values for the option that precedes them.
+            if [ args.has-opt $(e) ]
+            {
+                missing-value-error $(cur-opt) : $(command-line) ;
+            }
             skip-next = ;
         }
         else if ! [ MATCH ^(-) : $(e) ]
         {
-            # Build request spec either has "=" in it or completely consists of
-            # implicit feature values.
+            # Build request spec either has "=" in it or completely consists
+            # of implicit feature values.
             local fs = feature-space ;
             if [ MATCH "(.+=.*)" : $(e) ]
                 || [ looks-like-implicit-value $(e:D=) : $(feature-space) ]
@@ -200,10 +215,17 @@ rule from-command-line ( command-line * )
                 targets += $(e) ;
             }
         }
-        else if [ MATCH "^(-[-ldjfsto])$" : $(e) ]
+        # Skip all option values.
+        else if [ args.has-opt $(e) no-flag ]
         {
+            cur-opt = $(e) ;
             skip-next = true ;
         }
+    }
+    # Check for missing option value.
+    if $(skip-next)
+    {
+        missing-value-error $(cur-opt) : $(command-line) ;
     }
     return [ new vector
         [ new vector $(targets) ]
@@ -234,7 +256,7 @@ local rule convert-command-line-element ( e )
     while $(parts)
     {
         local p = $(parts[1]) ;
-        local m = [ MATCH "([^=]*)=(.*)" : $(p) ] ;
+        local m = [ MATCH "([^=]+)=(.*)" : $(p) ] ;
         local lresult ;
         local feature ;
         local values ;
