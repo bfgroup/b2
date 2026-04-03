@@ -865,7 +865,7 @@ static const char * debug_format_message( const char * format, va_list vargs )
         #endif
         va_end( args );
         if ( 0 <= result && result < sz )
-	    return buf;
+            return buf;
         free( buf );
         if ( result < 0 )
             return 0;
@@ -1153,7 +1153,7 @@ static void debug_start_child( int argc, const char * * argv )
     string_append( command_line, debugger_opt );
     string_append( command_line, b2::value::format( "=%p", pipe2[ 1 ] )->str() );
     /* Pass the rest of the command line. */
-	{
+    {
         int i;
         for ( i = 1; i < argc; ++i )
         {
@@ -1628,7 +1628,7 @@ static const char * const help_text[][2] =
     {
         "break",
         "break <location>\n"
-        "Sets a breakpoint at <location>.  <location> can be either a the name of a\nfunction or <filename>:<lineno>\n"
+        "Sets a breakpoint at <location>.  <location> can be either the name of a\nfunction or <filename>:<lineno>\n"
     },
     {
         "disable",
