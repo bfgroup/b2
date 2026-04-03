@@ -13,13 +13,13 @@ namespace mp
 
 // Simulate C++14 (make_)index_sequence..
 
-template <std::size_t... Ns>
+template <std::size_t...>
 struct index_sequence
 {
     using type = index_sequence;
 };
 
-template <typename A, typename B>
+template <typename, typename>
 struct merge_index_sequence;
 template <std::size_t... A, std::size_t... B>
 struct merge_index_sequence<
