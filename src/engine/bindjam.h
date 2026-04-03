@@ -59,7 +59,7 @@ struct jam_binder : b2::bind::binder_<jam_binder>
 		::b2::bind::args_<A...> args);
 
 	/*
-	Bind the given method of a class. THe function can be any invocable whose
+	Bind the given method of a class. The function can be any invocable whose
 	interface will be reflected to Jam.
 	*/
 	template <class Function, class... A>
@@ -84,7 +84,7 @@ struct jam_binder : b2::bind::binder_<jam_binder>
 	void eval_data(const char * module_name, const char * data);
 
 	/*
-	Mark the module as loaded. Future attempts at loading, with `module.load`,
+	Mark the module as loaded. Future attempts at loading, with `modules.load`,
 	will fail (as noop).
 	*/
 	void set_loaded(const char * module_name);
