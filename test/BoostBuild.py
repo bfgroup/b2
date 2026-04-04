@@ -427,8 +427,7 @@ class Tester(TestCmd.TestCmd):
             else:
                 os.utime(path, None)
 
-    @staticmethod
-    def rm_error(func, path, excinfo):
+    def rm_error(self, func, path, excinfo):
         # TODO: Ignore attempt to delete working dir error.
         raise excinfo[1]
 
@@ -436,8 +435,7 @@ class Tester(TestCmd.TestCmd):
         if not type(names) == list:
             names = [names]
 
-        del_workdir = names == ["."]
-        if del_workdir:
+        if names == ["."]:
             # If we are deleting the entire workspace, there is no need to wait
             # for a clock tick.
             self.last_build_timestamp = 0
@@ -453,7 +451,7 @@ class Tester(TestCmd.TestCmd):
             if n:
                 if os.path.isdir(n):
                     shutil.rmtree(n, ignore_errors=False,
-                        onerror=Tester.rm_error if del_workdir else None)
+                        onerror=self.rm_error)
                 else:
                     os.unlink(n)
 
