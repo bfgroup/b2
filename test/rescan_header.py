@@ -22,6 +22,8 @@ import os.path
 # remember this script absolute pathname
 script = os.path.abspath(__file__)
 
+sleep_s = 0.1
+
 import BoostBuild
 
 t = BoostBuild.Tester(["-j2"])
@@ -173,11 +175,11 @@ t.write("jamroot.jam", """\
 import common ;
 
 rule copy {{ common.copy $(<) : $(>) ; }}
-actions copy {{ "{}" "{}" sleep 0.2 }}
+actions copy {{ "{}" "{}" sleep {} }}
 
 make header3.h : header3.in : @copy ;
 exe test : test2.cpp test1.cpp : <implicit-dependency>header3.h ;
-""".format(sys.executable, script))
+""".format(sys.executable, script, sleep_s))
 
 t.run_build_system(["test"])
 t.expect_addition("bin/header3.h")
@@ -230,11 +232,11 @@ t.write("jamroot.jam", """\
 import common ;
 
 rule copy {{ common.copy $(<) : $(>) ; }}
-actions copy {{ "{}" "{}" sleep 0.2 }}
+actions copy {{ "{}" "{}" sleep {} }}
 
 make header2.h : header2.in : @copy ;
 exe test : test2.cpp test1.cpp : <implicit-dependency>header2.h <include>. ;
-""".format(sys.executable, script))
+""".format(sys.executable, script, sleep_s))
 
 t.run_build_system(["test"])
 t.expect_addition("bin/header2.h")
