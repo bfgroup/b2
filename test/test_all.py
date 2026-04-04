@@ -297,7 +297,247 @@ def reorder_tests(tests, first_test):
     except ValueError:
         return tests
 
-tests = [ "rescan_header" ] * 66
+
+critical_tests = [
+    "docs",
+    "unit_tests",
+    "module_actions",
+    "core_d12",
+    "core_typecheck",
+    "core_delete_module",
+    "core_language",
+    "core_arguments",
+    "core_varnames",
+    "core_import_module",
+]
+
+# We want to collect debug information about the test site before running any
+# of the tests, but only when not running the tests interactively. Then the
+# user can easily run this always-failing test directly to see what it would
+# have returned and there is no need to have it spoil a possible 'all tests
+# passed' result.
+if xml:
+    critical_tests.insert(0, "collect_debug_info")
+
+tests = [
+    "abs_workdir",
+    "absolute_sources",
+    "alias",
+    "alternatives",
+    "always",
+    "assert",
+    "bad_dirname",
+    "build_dir",
+    "build_file",
+    "build_hooks",
+    "build_no",
+    "builtin_echo",
+    "builtin_exit",
+    "builtin_glob",
+    "builtin_glob_archive",
+    "builtin_readlink",
+    "builtin_split_by_characters",
+    "bzip2",
+    "c_file",
+    "chain",
+    "clean",
+    "cli_property_expansion",
+    "command_line_properties",
+    "composite",
+    "conditionals_multiple",
+    "conditionals",
+    "conditionals2",
+    "conditionals3",
+    "conditionals4",
+    "configuration",
+    "configure",
+    "copy_time",
+    "core_action_output",
+    "core_action_status",
+    "core_actions_quietly",
+    "core_at_file",
+    "core_bindrule",
+    "core_dependencies",
+    "core_fail_expected",
+    "core_jamshell",
+    "core_modifiers",
+    "core_multifile_actions",
+    "core_nt_cmd_line",
+    "core_option_d2",
+    "core_option_l",
+    "core_option_n",
+    "core_parallel_actions",
+    "core_parallel_multifile_actions_1",
+    "core_parallel_multifile_actions_2",
+    "core_scanner",
+    "core_source_line_tracking",
+    "core_syntax_error_exit_status",
+    "core_update_now",
+    "core_variables_in_actions",
+    "custom_generator",
+    "debugger",
+    # Newly broken?
+    #         "debugger-mi",
+    "default_build",
+    "default_features",
+    "default_toolset",
+    "dependency_property",
+    "dependency_test",
+    "disambiguation",
+    "dll_path",
+    "double_loading",
+    "duplicate",
+    "escaping_dollar_before_round_bracket",
+    "example_libraries",
+    "example_make",
+    "exit_status",
+    "expansion",
+    "explicit",
+    "feature_cxxflags",
+    "feature_implicit_dependency",
+    "feature_relevant",
+    "feature_suppress_import_lib",
+    "file_types",
+    "flags",
+    "generator_selection",
+    "generators_test",
+    "implicit_dependency",
+    "indirect_conditional",
+    "inherit_toolset",
+    "inherited_dependency",
+    "inline",
+    "install_build_no",
+    "lang_asm",
+    "lib_source_property",
+    "lib_zlib",
+    "libjpeg",
+    "liblzma",
+    "libpng",
+    "library_chain",
+    "library_property",
+    "libtiff",
+    "libzstd",
+    "link",
+    "load_order",
+    "loop",
+    "make_rule",
+    "match_list",
+    "message",
+    "ndebug",
+    "no_type",
+    "notfile",
+    "ordered_include",
+    # FIXME: Disabled due to bug in B2
+    #         "ordered_properties",
+    "out_of_tree",
+    "package",
+    "param",
+    "path_features",
+    "path_specials",
+    "prebuilt",
+    "preprocessor",
+    "print",
+    "project_dependencies",
+    "project_glob",
+    "project_id",
+    "project_root_constants",
+    "project_root_rule",
+    "project_sub_resolution",
+    "project_test3",
+    "project_test4",
+    "property_expansion",
+    # FIXME: Disabled due lack of qt5 detection
+    #         "qt5",
+    "rebuilds",
+    "relative_sources",
+    "remove_requirement",
+    "rescan_header",
+    "resolution",
+    "rootless",
+    "scanner_causing_rebuilds",
+    "searched_lib",
+    "skipping",
+    "sort_rule",
+    "source_locations",
+    "source_order",
+    "stage",
+    "standalone",
+    "static_and_shared_library",
+    "suffix",
+    "tag",
+    "test_rc",
+    "test1",
+    "test2",
+    "testing",
+    "timedata",
+    "toolset_clang_darwin",
+    "toolset_clang_linux",
+    "toolset_clang_vxworks",
+    "toolset_darwin",
+    "toolset_defaults",
+    "toolset_gcc",
+    "toolset_intel_darwin",
+    "toolset_msvc",
+    "toolset_requirements",
+    "transitive_skip",
+    "unit_test",
+    "unused",
+    "use_requirements",
+    "using",
+    "wrapper",
+    "wrong_project",
+]
+
+exclusive_tests = [
+    "semaphore",
+]
+
+if os.name == "posix":
+    tests.append("symlink")
+    # On Windows, library order is not important, so skip this test. Besides,
+    # it fails ;-). Further, the test relies on the fact that on Linux, one can
+    # build a shared library with unresolved symbols. This is not true on
+    # Windows, even with cygwin gcc.
+
+#   Disable this test until we figure how to address failures due to --as-needed being default now.
+#    if "CYGWIN" not in os.uname()[0]:
+#        tests.append("library_order")
+
+if toolset.startswith("gcc") and os.name != "nt":
+    # On Windows it's allowed to have a static runtime with gcc. But this test
+    # assumes otherwise. Hence enable it only when not on Windows.
+    tests.append("gcc_runtime")
+
+if (
+    toolset.startswith("clang")
+    or toolset.startswith("gcc")
+    or toolset.startswith("msvc")
+):
+    if not sys.platform.startswith("freebsd"):
+        tests.append("pch")
+    tests.append("feature_force_include")
+
+# Clang includes Objective-C driver everywhere, but GCC usually in a separate gobj package
+if toolset.startswith("clang") and "-win" not in toolset or "darwin" in toolset:
+    tests.append("lang_objc")
+
+# Run in exclusive mode to avoid interpreter hang on macOS (Xcode) and FreeBSD
+if sys.platform == "darwin" or sys.platform.startswith("freebsd"):
+    exclusive_tests.append("grep")
+else:
+    tests.append("grep")
+
+if "--extras" in sys.argv:
+    tests.append("boostbook")
+    tests.append("qt4")
+    tests.append("qt5")
+    tests.append("example_qt4")
+    # Requires ./whatever.py to work, so is not guaranteed to work everywhere.
+    tests.append("example_customization")
+    # Requires gettext tools.
+    tests.append("example_gettext")
+elif not xml and __name__ == "__main__":
+    print("Note: skipping extra tests")
 
 if __name__ == "__main__":
-    run_tests([], tests, [])
+    run_tests(critical_tests, tests, exclusive_tests)
