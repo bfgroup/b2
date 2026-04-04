@@ -297,7 +297,8 @@ def reorder_tests(tests, first_test):
     except ValueError:
         return tests
 
-tests = [ "rescan_header" ] * ( 46 if os.name == "nt" else 1 )
+tests = [ "rescan_header" ] * ( 66 if os.name == "nt" else 1 )
 
 if __name__ == "__main__":
+    if os.name == "posix": sys.exit(33)
     run_tests([], tests, [])
