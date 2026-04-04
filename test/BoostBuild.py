@@ -427,14 +427,19 @@ class Tester(TestCmd.TestCmd):
             else:
                 os.utime(path, None)
 
+    @staticmethod
+    def rm_error(func, path, excinfo):
+        raise ValueError(repr(path))
+
     def rm(self, names):
         if not type(names) == list:
             names = [names]
 
-        #if names == ["."]:
+        del_workdir = names == ["."]
+        if del_workdir:
             # If we are deleting the entire workspace, there is no need to wait
             # for a clock tick.
-            #self.last_build_timestamp = 0
+            self.last_build_timestamp = 0
 
         # Avoid attempts to remove the current directory.
         os.chdir(self.original_workdir)
@@ -446,7 +451,8 @@ class Tester(TestCmd.TestCmd):
                     name.replace("$toolset", self.expanded_toolset + "*"))
             if n:
                 if os.path.isdir(n):
-                    shutil.rmtree(n, ignore_errors=False)
+                    shutil.rmtree(n, ignore_errors=False,
+                        onerror=Tester.rm_error if del_workdir else None)
                 else:
                     os.unlink(n)
 
