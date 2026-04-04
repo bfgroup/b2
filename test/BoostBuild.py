@@ -431,10 +431,10 @@ class Tester(TestCmd.TestCmd):
         if not type(names) == list:
             names = [names]
 
-        if names == ["."]:
+        #if names == ["."]:
             # If we are deleting the entire workspace, there is no need to wait
             # for a clock tick.
-            self.last_build_timestamp = 0
+            #self.last_build_timestamp = 0
 
         # Avoid attempts to remove the current directory.
         os.chdir(self.original_workdir)
