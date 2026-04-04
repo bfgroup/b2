@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
 # Copyright 2012 Steven Watanabe
+# Copyright 2026 Paolo Pastori
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
 
 import BoostBuild
+import sys
 
-t = BoostBuild.Tester()
+sleep_s = 0.2
+
+t = BoostBuild.Tester(["-j2"])
 
 # Test a header loop that depends on (but does not contain) a generated header.
 t.write("test.cpp", '#include "header1.h"\n')
@@ -107,11 +111,6 @@ t.write("header3.in", """\
 t.write("jamroot.jam", """\
 import common ;
 
-actions copy {
-    sleep 1
-    cp $(>) $(<)
-}
-
 make header1.h : header1.in : @common.copy ;
 make header2.h : header2.in : @common.copy ;
 make header3.h : header3.in : @common.copy ;
@@ -156,32 +155,15 @@ t.write("header2.h", """\
 
 t.write("header3.in", "\n")
 
-t.write("sleep.bat", """\
-::@timeout /T %1 /NOBREAK >nul
-@ping 127.0.0.1 -n 2 -w 1000 >nul
-@ping 127.0.0.1 -n %1 -w 1000 >nul
-@exit /B 0
-""")
-
 t.write("jamroot.jam", """\
 import common ;
-import os ;
 
-if [ os.name ] = NT
-{
-    SLEEP = call sleep.bat ;
-}
-else
-{
-    SLEEP = sleep ;
-}
-
-rule copy { common.copy $(<) : $(>) ; }
-actions copy { $(SLEEP) 1 }
+rule copy {{ common.copy $(<) : $(>) ; }}
+actions copy {{ "{}" -c "import time; time.sleep({})" }}
 
 make header3.h : header3.in : @copy ;
 exe test : test2.cpp test1.cpp : <implicit-dependency>header3.h ;
-""")
+""".format(sys.executable, sleep_s))
 
 t.run_build_system(["test"])
 t.expect_addition("bin/header3.h")
@@ -230,32 +212,15 @@ t.write("header3.h", """\
 #endif
 """)
 
-t.write("sleep.bat", """\
-::@timeout /T %1 /NOBREAK >nul
-@ping 127.0.0.1 -n 2 -w 1000 >nul
-@ping 127.0.0.1 -n %1 -w 1000 >nul
-@exit /B 0
-""")
-
 t.write("jamroot.jam", """\
 import common ;
-import os ;
 
-if [ os.name ] = NT
-{
-    SLEEP = call sleep.bat ;
-}
-else
-{
-    SLEEP = sleep ;
-}
-
-rule copy { common.copy $(<) : $(>) ; }
-actions copy { $(SLEEP) 1 }
+rule copy {{ common.copy $(<) : $(>) ; }}
+actions copy {{ "{}" -c "import time; time.sleep({})" }}
 
 make header2.h : header2.in : @copy ;
 exe test : test2.cpp test1.cpp : <implicit-dependency>header2.h <include>. ;
-""")
+""".format(sys.executable, sleep_s))
 
 t.run_build_system(["test"])
 t.expect_addition("bin/header2.h")
