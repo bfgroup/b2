@@ -22,7 +22,7 @@ import os.path
 # remember this script absolute pathname
 script = os.path.abspath(__file__)
 
-sleep_s = 0.1
+sleep_s = 0.2
 
 import BoostBuild
 

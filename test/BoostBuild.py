@@ -1,6 +1,7 @@
 # Copyright 2002-2005 Vladimir Prus.
 # Copyright 2002-2003 Dave Abrahams.
 # Copyright 2006 Rene Ferdinand Rivera Morell.
+# Copyright 2026 Paolo Pastori
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or copy at
 # https://www.bfgroup.xyz/b2/LICENSE.txt)
@@ -428,8 +429,11 @@ class Tester(TestCmd.TestCmd):
                 os.utime(path, None)
 
     def rm_error(self, func, path, excinfo):
-        # TODO: Ignore attempt to delete working dir error.
-        raise excinfo[1]
+        # Ignore errors due to removal of working dir attempts. This is a
+        # workaround for PermissionError on Windows (VS 2022), caused by race
+        # conditions among an exiting shell and a self.rm("."), see #580.
+        if not os.path.samefile(self.workdir, path):
+            raise excinfo[1]
 
     def rm(self, names):
         if not type(names) == list:
@@ -451,7 +455,7 @@ class Tester(TestCmd.TestCmd):
             if n:
                 if os.path.isdir(n):
                     shutil.rmtree(n, ignore_errors=False,
-                        onerror=self.rm_error)
+                        onerror=self.rm_error if "." in names else None)
                 else:
                     os.unlink(n)
 
