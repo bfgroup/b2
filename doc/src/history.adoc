@@ -6,6 +6,7 @@
 * *New*: Argument lists description provided for all built-in rules,
   GLOB-RECURSIVELY has become an alias of GLOB_RECURSIVELY.
 * *New*: Added test for regular expressions with MATCH builtin rule.
+* *New*: Improved control of source module by IMPORT and EXPORT rules.
   -- _Paolo Pastori_
 * Fix Jam/{CPP} bind definitions of 4 or more values in a single
   declared argument not actually adding all the definitions.
