@@ -5,26 +5,10 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
 
+import BoostBuild
 import sys
 
-def sleep(secs):
-    from time import sleep
-    sleep(float(secs))
-
-if len(sys.argv) == 3 and sys.argv[1] == 'sleep':
-    # called by jam update action
-    # python rescan_header.py sleep <sleep_secs>
-    sleep(sys.argv[2])
-    sys.exit()
-
-import os.path
-
-# remember this script absolute pathname
-script = os.path.abspath(__file__)
-
 sleep_s = 0.2
-
-import BoostBuild
 
 t = BoostBuild.Tester(["-j2"])
 
@@ -175,11 +159,11 @@ t.write("jamroot.jam", """\
 import common ;
 
 rule copy {{ common.copy $(<) : $(>) ; }}
-actions copy {{ "{}" "{}" sleep {} }}
+actions copy {{ "{}" -c "import time; time.sleep({})" }}
 
 make header3.h : header3.in : @copy ;
 exe test : test2.cpp test1.cpp : <implicit-dependency>header3.h ;
-""".format(sys.executable, script, sleep_s))
+""".format(sys.executable, sleep_s))
 
 t.run_build_system(["test"])
 t.expect_addition("bin/header3.h")
@@ -232,11 +216,11 @@ t.write("jamroot.jam", """\
 import common ;
 
 rule copy {{ common.copy $(<) : $(>) ; }}
-actions copy {{ "{}" "{}" sleep {} }}
+actions copy {{ "{}" -c "import time; time.sleep({})" }}
 
 make header2.h : header2.in : @copy ;
 exe test : test2.cpp test1.cpp : <implicit-dependency>header2.h <include>. ;
-""".format(sys.executable, script, sleep_s))
+""".format(sys.executable, sleep_s))
 
 t.run_build_system(["test"])
 t.expect_addition("bin/header2.h")
