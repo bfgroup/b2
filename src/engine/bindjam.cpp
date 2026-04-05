@@ -112,6 +112,28 @@ value_ref from_jam<value_ref>(value_ptr v)
 	return value_ref(v);
 }
 
+template <>
+unsigned long from_jam<unsigned long>(value_ptr jv)
+{
+	return std::stoul(from_jam<string_t>(jv));
+}
+template <>
+value_ptr to_jam(unsigned long v)
+{
+	return to_jam(std::to_string(v));
+}
+
+template <>
+unsigned long long from_jam<unsigned long long>(value_ptr jv)
+{
+	return std::stoull(from_jam<string_t>(jv));
+}
+template <>
+value_ptr to_jam(unsigned long long v)
+{
+	return to_jam(std::to_string(v));
+}
+
 // General marshaling of one jam value list. Default converts the first item
 // to/from the list.
 template <class CxxValue>
