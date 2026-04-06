@@ -1234,7 +1234,7 @@ module_t * try_bind_module(LIST * module_list, FRAME * frame, bool miss_is_error
                 b2::rule_and_args_to_string( frame ) );
             msgs.push_back(
                 std::string("module \"") + mod_name->str() + "\" not found"
-                + (miss_is_error ? "." : ", using global module.") );
+                + (miss_is_error ? "." : ", using root module.") );
 
             if ( miss_is_error ) b2::out_error( *msgs, frame );
             else b2::out_warning( *msgs, frame );
@@ -1258,7 +1258,7 @@ module_t * try_bind_module(LIST * module_list, FRAME * frame, bool miss_is_error
  *
  * Imports rules from the SOURCE_MODULE into the TARGET_MODULE as local rules.
  * If either SOURCE_MODULE or TARGET_MODULE is not supplied, it refers to the
- * global module. SOURCE_RULES specifies which rules from the SOURCE_MODULE to
+ * root module. SOURCE_RULES specifies which rules from the SOURCE_MODULE to
  * import; TARGET_RULES specifies the names to give those rules in
  * TARGET_MODULE. If SOURCE_RULES contains a name that does not correspond to
  * a rule in SOURCE_MODULE, or if it contains a different number of items than
@@ -1335,7 +1335,7 @@ LIST * builtin_import( FRAME * frame, int flags )
  * builtin_export() - EXPORT ( MODULE ? : RULES * )
  *
  * The EXPORT rule marks RULES from the MODULE as non-local (and thus
- * exportable). If MODULE is not supplied, it refers to the global module.
+ * exportable). If MODULE is not supplied, it refers to the root module.
  * If MODULE is not found, or an element of RULES does not name a rule
  * in MODULE, an error is issued.
  */

@@ -70,9 +70,9 @@ void unknown_rule_error( FRAME * frame, module_t * modul, OBJECT * rule_name )
         + "\" unknown in ";
     msgs.push_back( modul->name
         ? msg + "module \"" + modul->name->str() + "\"."
-        : msg + "global module." );
+        : msg + "root module." );
 
-    b2::out_error(*msgs, frame);
+    b2::out_error( *msgs, frame );
 }
 
 
