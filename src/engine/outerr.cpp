@@ -53,7 +53,7 @@ void backtrace_line( FRAME * frame )
 void backtrace( FRAME * frame )
 {
     if ( !frame ) return;
-    while ( ( frame = frame->prev ) )
+    while ( frame = frame->prev )
         backtrace_line( frame );
 }
 

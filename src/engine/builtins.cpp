@@ -1136,32 +1136,53 @@ LIST * builtin_split_by_characters( FRAME * frame, int flags )
 
 
 /*
- * builtin_rulenames() - RULENAMES ( MODULE ? )
- *
- * Returns a list of the non-local rule names in the given MODULE. If MODULE is
- * not supplied, returns the list of rule names in the global module.
+ * Search for an optional module, when no name is supplied
+ * return the root module. When the supplied name is not found
+ * emit an error (and exit) or a warning (and return the root module)
+ * according to the value of miss_is_error.
  */
-
-static void add_rule_name( void * r_, void * result_ )
+module_t * try_bind_module(LIST * module_list, FRAME * frame, bool miss_is_error)
 {
-    RULE * const r = (RULE *)r_;
-    LIST * * const result = (LIST * *)result_;
-    if ( r->exported )
-        *result = list_push_back( *result, object_copy( r->name ) );
+    OBJECT * mod_name = ( list_empty( module_list )
+        ? nullptr : list_front( module_list ) );
+    module_t * mod = nullptr;
+    if ( mod_name )
+    {
+        mod = find_module( mod_name );
+        if ( ! mod )
+        {
+            b2::list_ref msgs;
+
+            msgs.push_back(
+                b2::rule_and_args_to_string( frame ) );
+            msgs.push_back(
+                std::string("module \"") + mod_name->str() + "\" not found"
+                + (miss_is_error ? "." : ", using root module.") );
+
+            if ( miss_is_error ) b2::out_error( *msgs, frame );
+            else b2::out_warning( *msgs, frame );
+        }
+    }
+    if ( ! mod ) mod = root_module();
+    return mod;
 }
 
 
+/*
+ * builtin_rulenames() - RULENAMES ( MODULE ? )
+ *
+ * Returns a list of the non-local rule names in the given MODULE. If MODULE
+ * is not supplied, returns the list of rule names in the root module.
+ * If MODULE is not found, an error is issued.
+ */
+
 LIST * builtin_rulenames( FRAME * frame, int flags )
 {
-    LIST * arg0 = lol_get( frame->args, 0 );
-    LIST * result = L0;
-    module_t * const source_module = bindmodule( list_empty( arg0 )
-        ? 0
-        : list_front( arg0 ) );
+    LIST * module_list = lol_get( frame->args, 0 );
+    module_t * module = try_bind_module( module_list, frame,
+            true /* emit an error on missing module */ );
 
-    if ( source_module->rules )
-        hashenumerate( source_module->rules, add_rule_name, &result );
-    return result;
+    return module_rules( module );
 }
 
 
@@ -1212,37 +1233,6 @@ LIST * builtin_delete_module( FRAME * frame, int flags )
     return L0;
 }
 
-/*
- * Search for an optional module, when no name is supplied
- * return the root module. When the supplied name is not found
- * emit an error (and exit) or a warning (and return the root module)
- * according to the value of miss_is_error.
- */
-module_t * try_bind_module(LIST * module_list, FRAME * frame, bool miss_is_error)
-{
-    OBJECT * mod_name = ( list_empty( module_list )
-        ? nullptr : list_front( module_list ) );
-    module_t * mod = nullptr;
-    if ( mod_name )
-    {
-        mod = find_module( mod_name );
-        if ( ! mod )
-        {
-            b2::list_ref msgs;
-
-            msgs.push_back(
-                b2::rule_and_args_to_string( frame ) );
-            msgs.push_back(
-                std::string("module \"") + mod_name->str() + "\" not found"
-                + (miss_is_error ? "." : ", using root module.") );
-
-            if ( miss_is_error ) b2::out_error( *msgs, frame );
-            else b2::out_warning( *msgs, frame );
-        }
-    }
-    if ( ! mod ) mod = root_module();
-    return mod;
-}
 
 /*
  * builtin_import() - IMPORT rule
