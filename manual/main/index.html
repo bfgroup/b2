@@ -16605,7 +16605,7 @@ follows random access container behavior.</p>
 	// construct/copy/destroy
 	list_cref() = default;
 	list_cref(const list_cref &amp;) = default;
-	list_cref(list_cref &amp;&amp; other);
+	list_cref(list_cref &amp;&amp; other) B2_NOEXCEPT;
 	explicit list_cref(LIST * l);
 	list_cref &amp; operator=(const list_cref &amp;) = default;
 
@@ -16626,6 +16626,8 @@ follows random access container behavior.</p>
 	list_ref slice(size_type i, size_type j = -1) const;
 	bool operator==(const list_cref &amp; b) const;
 	bool operator==(const list_ref &amp; b) const;
+	bool starts_with(const list_cref &amp; b) const;
+	bool starts_with(const list_ref &amp; b) const;
 
 	// data access
 	LIST * data() const B2_NOEXCEPT;
@@ -16729,11 +16731,20 @@ inline bool list_cref::operator==(const list_ref &amp; b) const</code></pre>
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_b2list_crefstarts_with"><a class="anchor" href="#_b2list_crefstarts_with"></a><code>b2::list_cref::starts_with</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline bool starts_with(const list_cref &amp; b) const;
+inline bool starts_with(const list_ref &amp; b) const;</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_b2list_cref_data_access"><a class="anchor" href="#_b2list_cref_data_access"></a>13.1.7. <code>b2::list_cref</code> Data Access</h4>
 <div class="sect4">
-<h5 id="_b2list_crefoperator_3"><a class="anchor" href="#_b2list_crefoperator_3"></a><code>b2::list_cref::operator==</code></h5>
+<h5 id="_b2list_crefdata"><a class="anchor" href="#_b2list_crefdata"></a><code>b2::list_cref::data</code></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LIST * list_cref::data() const B2_NOEXCEPT
@@ -16769,12 +16780,13 @@ allocate, copy, move <code>LIST</code> objects as needed.</p>
 	using list_cref::operator[];
 	using list_cref::contains;
 	using list_cref::operator==;
+	using list_cref::starts_with;
 	using list_cref::data;
 	using list_cref::operator*;
 
 	// construct/copy/destroy
 	list_ref() = default;
-	list_ref(list_ref &amp;&amp; other);
+	list_ref(list_ref &amp;&amp; other) B2_NOEXCEPT;
 	list_ref(const list_cref &amp; other);
 	list_ref(const list_ref &amp; other);
 	explicit list_ref(value_ref o);
@@ -16795,7 +16807,8 @@ allocate, copy, move <code>LIST</code> objects as needed.</p>
 	template &lt;typename T&gt;
 	list_ref &amp; operator+(T value);
 	list_ref &amp; pop_front();
-	list_ref &amp; operator=(list_ref &amp;&amp; other);
+	list_ref &amp; operator=(list_ref &amp;&amp; other) B2_NOEXCEPT;
+	list_ref &amp; pop_back();
 
 	// list operations
 	inline list_ref &amp; slice(size_type i, size_type j = -1);
@@ -16908,6 +16921,14 @@ chaining.</p>
 </div>
 </div>
 <div class="sect4">
+<h5 id="_b2list_refpop_back"><a class="anchor" href="#_b2list_refpop_back"></a><code>b2::list_ref::pop_back</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref &amp; list_ref::pop_back()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="_b2list_refoperator_assign"><a class="anchor" href="#_b2list_refoperator_assign"></a><code>b2::list_ref::operator=</code>, assign</h5>
 <div class="listingblock">
 <div class="content">
@@ -16953,7 +16974,7 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 
 	// construct/copy/destroy
 	lists();
-	lists(lists &amp;&amp; other);
+	lists(lists &amp;&amp; other) B2_NOEXCEPT;
 	~lists();
 
 	// capacity
