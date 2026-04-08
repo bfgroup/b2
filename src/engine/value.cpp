@@ -15,6 +15,7 @@ Distributed under the Boost Software License, Version 1.0.
 
 #include <algorithm>
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <limits>
@@ -153,7 +154,12 @@ struct value_number : value_base
 		return 1;
 	}
 	double as_number() const override { return value; }
-	value * to_string() override { return value::make(std::to_string(value)); }
+	value * to_string() override
+	{
+		char buffer[32];
+		std::snprintf(buffer, 32, "%.6f", value);
+		return value::make(buffer);
+	}
 	double value;
 };
 
@@ -195,7 +201,7 @@ struct value_str_view : value_base
 	{
 		hash_fnv1a(hash64, (void *)v, n);
 	}
-	virtual ~value_str_view() {}
+	virtual ~value_str_view() { }
 	bool equal_to(const value & o) const override
 	{
 		return str_view_equal(
