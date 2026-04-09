@@ -9520,6 +9520,12 @@ second version, <code>rhs</code>.</p>
 <p>Container for values structured as a tree with keys that are the tree path to
 the value. Arrays and objects (named fields) are supported.</p>
 </div>
+<div class="paragraph">
+<p>Values are indexed with a variable, i.e. a list of values, path. The path can
+contain two kinds of position items: an array index or an object member. An
+array index is <code>"[]" <em>n</em></code>. Where the <code>"[]"</code> indicates that a zero based index
+in the array, <code><em>n</em></code> follows. Anything else is treated as a member field name.</p>
+</div>
 <div class="sect5">
 <h6 id="_b2property_dbemplace"><a class="anchor" href="#_b2property_dbemplace"></a><code>b2::property_db::emplace</code></h6>
 <div class="exampleblock">
@@ -9531,7 +9537,7 @@ the value. Arrays and objects (named fields) are supported.</p>
 Jam
 </td>
 <td class="hdlist2">
-<p><code>rule emplace ( key + : value )</code></p>
+<p><code>rule emplace ( key * : value )</code></p>
 </td>
 </tr>
 <tr>
@@ -9547,10 +9553,68 @@ C&#43;&#43;
 </div>
 </div>
 <div class="paragraph">
-<p>Set, or add, element at path <code>key</code> with <code>value</code>. The path can contain two kinds
-of position items: an array index or an object member. An array index is
-<code>"[]" <em>n</em></code>. Where the <code>"[]"</code> indicates that a zero based index in the array,
-<code><em>n</em></code> follows. Anything else is treated as a member field name.</p>
+<p>Set, or add, element at path <code>key</code> with <code>value</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbget"><a class="anchor" href="#_b2property_dbget"></a><code>b2::property_db::get</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule get ( key * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>list_ref get(list_cref k) const;</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Get element at path <code>key</code>. If the key is not found returns an empty list.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbsize"><a class="anchor" href="#_b2property_dbsize"></a><code>b2::property_db::size</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule size ( key * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>std::size_t size(list_cref k);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Get the count of direct children at path <code>key</code>. If the key is not found returns
+zero (<code>0</code>).</p>
 </div>
 </div>
 <div class="sect5">
@@ -9613,6 +9677,101 @@ C&#43;&#43;
 <div class="paragraph">
 <p>Writes out a representation of the data as a string formatted as <code>format</code>.
 Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbdump_2"><a class="anchor" href="#_b2property_dbdump_2"></a><code>b2::property_db::dump</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule dump ( format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>std::string dump(value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Writes out a representation of the data as a string formatted as <code>format</code>.
+Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbread_file"><a class="anchor" href="#_b2property_dbread_file"></a><code>b2::property_db::read_file</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule read-file ( filename : format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>void read_file(value_ref filename, value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Reads from the given <code>filename</code> file formatted as <code>format</code> adding the data
+to this database. Supported formats are: <code>JSON</code>. Returns a boolean result
+on success. On failure the database may have partial data added to it.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbparse"><a class="anchor" href="#_b2property_dbparse"></a><code>b2::property_db::parse</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule parse ( content : format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>bool parse(value_ref content, value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Reads the given <code>content</code> data formatted as <code>format</code> adding the data
+to this database. Supported formats are: <code>JSON</code>. Returns a boolean result
+on success. On failure the database may have partial data added to it.</p>
 </div>
 </div>
 </div>
@@ -17131,6 +17290,10 @@ GLOB-RECURSIVELY has become an alias of GLOB_RECURSIVELY.</p>
 </li>
 <li>
 <p><strong>New</strong>: Added test for regular expressions with MATCH builtin rule.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add reading/parsing of property database from JSON data to base CPS
+support from.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
 <p>Fix Jam/C&#43;&#43; bind definitions of 4 or more values in a single
