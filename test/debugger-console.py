@@ -18,18 +18,20 @@ import re
 def split_stdin_stdout(text, b2_exe):
     # stdin is all text after the prompt up to and including
     # the next newline.  Everything else is stdout.  stdout
-    # may contain regular expressions enclosed in {{}}.
+    # may contain regular expressions enclosed in {{}}, except
+    # for {{b2}} which is a placeholder for running executable
     win = os.name == "nt"
     if win: b2_exe = b2_exe.replace("/", "\\")
-    text = text.replace("{{b2}}", re.escape(b2_exe))
+    text = text.replace("{{b2}}", b2_exe)
     pattern = re.compile(r'(?<=\(b2db\) )(.*\n)')
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
     outside_pattern = re.compile(r'(?:\A|(?<=\}\}))(?:[^{]|(?:\{(?!\{)))*(?:(?=\{\{)|\Z)')
 
     def escape_line(line):
-        if not win and line.startswith("(b2db) "):
-            line = line[7:]
+        if not win:
+            while line.startswith("(b2db) "):
+                line = line[7:]
         line = re.sub(outside_pattern, lambda m: m.group(0), line)
         return re.sub(r'\{\{|\}\}', '', line)
 
@@ -398,6 +400,265 @@ Child {{\\d+}} exited with status 0
 """)
     t.cleanup()
 
+def test_breakpoints_running():
+    # Tests that breakpoints can be added and modified
+    # while the program is running.
+    t = make_tester()
+    t.write("test.jam", """\
+rule f ( )
+{
+    a = 1 ;
+}
+rule g ( )
+{
+    b = 2 ;
+}
+rule h ( )
+{
+    c = 3 ;
+    d = 4 ;
+}
+f ;
+g ;
+h ;
+UPDATE ;
+""")
+    run(t, """\
+(b2db) break test.jam:14
+Breakpoint 1 set at test.jam:14
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:14
+14	f ;
+(b2db) break f
+Breakpoint 2 set at f
+(b2db) continue
+Breakpoint 2, f \\( \\) at test.jam:3
+3	    a = 1 ;
+(b2db) kill
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:14
+14	f ;
+(b2db) break g
+Breakpoint 3 set at g
+(b2db) disable 2
+(b2db) continue
+Breakpoint 3, g \\( \\) at test.jam:7
+7	    b = 2 ;
+(b2db) kill
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:14
+14	f ;
+(b2db) enable 2
+(b2db) continue
+Breakpoint 2, f \\( \\) at test.jam:3
+3	    a = 1 ;
+(b2db) kill
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:14
+14	f ;
+(b2db) delete 2
+(b2db) continue
+Breakpoint 3, g \\( \\) at test.jam:7
+7	    b = 2 ;
+(b2db) kill
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:14
+14	f ;
+(b2db) break test.jam:12
+Breakpoint 4 set at test.jam:12
+(b2db) clear g
+Deleted breakpoint 3
+(b2db) continue
+Breakpoint 4, h \\( \\) at test.jam:12
+12	    d = 4 ;
+(b2db) kill
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:14
+14	f ;
+(b2db) clear test.jam:12
+Deleted breakpoint 4
+(b2db) continue
+Child {{\\d+}} exited with status 0
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_backtrace():
+    t = make_tester()
+    t.write("test.jam", """\
+rule f ( x * : y * : z * )
+{
+    return $(x) ;
+}
+rule g ( x * : y * : z * )
+{
+    return [ f $(x) : $(y) : $(z) ] ;
+}
+g 1 : 2 : 3 ;
+""")
+    run(t, """\
+(b2db) break f
+Breakpoint 1 set at f
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, f \\( 1 : 2 : 3 \\) at test.jam:3
+3	    return \\$\\(x\\) ;
+(b2db) backtrace
+#0  in f \\( 1 : 2 : 3 \\) at test.jam:3
+#1  in g \\( 1 : 2 : 3 \\) at test.jam:7
+#2  in module scope at test.jam:9
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_print():
+    t = make_tester()
+    t.write("test.jam", """\
+rule f ( args * )
+{
+    return $(args) ;
+}
+f x ;
+f x y ;
+""")
+    run(t, """\
+(b2db) break f
+Breakpoint 1 set at f
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, f \\( x \\) at test.jam:3
+3	    return \\$\\(args\\) ;
+(b2db) print $(args)
+x
+(b2db) continue
+Breakpoint 1, f \\( x y \\) at test.jam:3
+3	    return \\$\\(args\\) ;
+(b2db) print $(args)
+x y
+(b2db) disable 1
+(b2db) print [ f z ]
+z
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_run_running():
+    t = make_tester()
+    t.write("test.jam", """\
+UPDATE ;
+""")
+    run(t, """\
+(b2db) break test.jam:1
+Breakpoint 1 set at test.jam:1
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:1
+1	UPDATE ;
+(b2db) run -ftest.jam
+Child {{\\d+}} exited with status 0
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:1
+1	UPDATE ;
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_error_not_running():
+    t = make_tester()
+    run(t, """\
+(b2db) continue
+The program is not being run.
+(b2db) step
+The program is not being run.
+(b2db) next
+The program is not being run.
+(b2db) finish
+The program is not being run.
+(b2db) kill
+The program is not being run.
+(b2db) backtrace
+The program is not being run.
+(b2db) print 1
+The program is not being run.
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_bad_arguments():
+    t = make_tester()
+    t.write("test.jam", """\
+UPDATE ;
+""")
+    run(t, """\
+(b2db) break test.jam:1
+Breakpoint 1 set at test.jam:1
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, module scope at test.jam:1
+1	UPDATE ;
+(b2db) continue 1
+Too many arguments to continue.
+(b2db) step 1
+Too many arguments to step.
+(b2db) next 1
+Too many arguments to next.
+(b2db) finish 1
+Too many arguments to finish.
+(b2db) break
+Missing argument to break.
+(b2db) break x y
+Too many arguments to break.
+(b2db) disable
+Missing argument to disable.
+(b2db) disable 1 2
+Too many arguments to disable.
+(b2db) disable x
+Invalid breakpoint number x.
+(b2db) disable 2
+Unknown breakpoint 2.
+(b2db) enable
+Missing argument to enable.
+(b2db) enable 1 2
+Too many arguments to enable.
+(b2db) enable x
+Invalid breakpoint number x.
+(b2db) enable 2
+Unknown breakpoint 2.
+(b2db) delete
+Missing argument to delete.
+(b2db) delete 1 2
+Too many arguments to delete.
+(b2db) delete x
+Invalid breakpoint number x.
+(b2db) delete 2
+Unknown breakpoint 2.
+(b2db) clear
+Missing argument to clear.
+(b2db) clear test.jam:1 test.jam:1
+Too many arguments to clear.
+(b2db) clear test.jam:2
+No breakpoint at test.jam:2.
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_unknown_command():
+    t = make_tester()
+    run(t, """\
+(b2db) xyzzy
+Unknown command: xyzzy
+(b2db) gnusto rezrov
+Unknown command: gnusto
+(b2db) quit
+""")
+    t.cleanup()
+
 
 test_run()
 test_exit_status()
@@ -407,4 +668,11 @@ test_next_breakpoint()
 test_finish()
 test_finish_breakpoints()
 test_continue_breakpoints()
-#test_breakpoints()
+test_breakpoints()
+test_breakpoints_running()
+test_backtrace()
+test_print()
+test_run_running()
+test_error_not_running()
+test_bad_arguments()
+test_unknown_command()
