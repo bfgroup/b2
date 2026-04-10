@@ -103,6 +103,11 @@
  *
  */
 
+#include "config.h"
+
+// do not compile on Windows
+#ifndef NT
+
 #include <termios.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -1760,3 +1765,5 @@ int linenoiseHistoryLoad(const char *filename) {
     fclose(fp);
     return 0;
 }
+
+#endif // #ifndef NT
