@@ -15,18 +15,20 @@ import TestCmd
 import os
 import re
 
-def split_stdin_stdout(text):
+def split_stdin_stdout(text, b2_exe):
     # stdin is all text after the prompt up to and including
     # the next newline.  Everything else is stdout.  stdout
     # may contain regular expressions enclosed in {{}}.
-    text = text.replace("{{b2}}", "{{.*}}b2{{(?:\\.exe)?}}")
+    win = os.name == "nt"
+    if win: b2_exe = b2_exe.replace("/", "\\")
+    text = text.replace("{{b2}}", re.escape(b2_exe))
     pattern = re.compile(r'(?<=\(b2db\) )(.*\n)')
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
     outside_pattern = re.compile(r'(?:\A|(?<=\}\}))(?:[^{]|(?:\{(?!\{)))*(?:(?=\{\{)|\Z)')
 
-    def escape_line(line, nix):
-        if nix and line.startswith("(b2db) "):
+    def escape_line(line):
+        if not win and line.startswith("(b2db) "):
             line = line[7:]
         line = re.sub(outside_pattern, lambda m: m.group(0), line)
         return re.sub(r'\{\{|\}\}', '', line)
@@ -34,12 +36,11 @@ def split_stdin_stdout(text):
     # On Windows the debugger do not make use of linenoise library and
     # always emit a prompt, while linenoise does for interactive input
     # only, i.e. when input comes from a tty (not from a file or pipe.)
-    nix = os.name != "nt"
-    stdout = '\n'.join([escape_line(line, nix) for line in stdout.split('\n')])
+    stdout = '\n'.join([escape_line(line) for line in stdout.split('\n')])
     return (stdin, stdout)
 
 def run(tester, io):
-    (input, output) = split_stdin_stdout(io)
+    (input, output) = split_stdin_stdout(io, tester.program[0])
     tester.run_build_system(stdin=input, stdout=output, match=TestCmd.match_re)
 
 def make_tester():
