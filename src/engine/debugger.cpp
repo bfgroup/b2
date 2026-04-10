@@ -19,6 +19,10 @@
 #include "startup.h"
 #include "jam_strings.h"
 
+#ifndef NT
+#include "ext_linenoise.h"
+#endif
+
 #include <assert.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -908,7 +912,7 @@ static void debug_parent_child_exited( int pid, int exit_code )
     }
 }
 
-#if !NT
+#ifndef NT
 
 static void debug_parent_child_signalled( int pid, int id )
 {
@@ -2611,10 +2615,31 @@ int debugger( void )
         printf( "=thread-group-added,id=\"i1\"\n(gdb) \n" );
     while ( 1 )
     {
+#ifdef NT
         if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
             printf("(b2db) ");
         fflush( stdout );
         read_command();
+#else
+        if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
+        {
+            /* Add support for command history, command line editing,
+             * and more, see https://github.com/antirez/linenoise
+             */
+            char *cmdline = linenoise( "(b2db) " );
+            if ( cmdline == NULL ) break;
+
+            process_command( cmdline );
+
+            linenoiseHistoryAdd( cmdline );
+            linenoiseFree( cmdline );
+        }
+        else
+        {
+            fflush( stdout );
+            read_command();
+        }
+#endif
     }
     return 0;
 }
