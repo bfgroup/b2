@@ -12,15 +12,14 @@ library support (Linux, MacOS, *BSD), or without (Windows.)
 
 import BoostBuild
 import TestCmd
-from pathlib import Path
 import os
 import re
 
-def split_stdin_stdout(text, b2_exe):
+def split_stdin_stdout(text):
     # stdin is all text after the prompt up to and including
     # the next newline.  Everything else is stdout.  stdout
     # may contain regular expressions enclosed in {{}}.
-    text = text.replace("{{b2}}", str(Path(b2_exe)))
+    text = text.replace("{{b2}}", "{{.*}}b2{{(?:\\.exe)?}}")
     pattern = re.compile(r'(?<=\(b2db\) )(.*\n)')
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
@@ -40,7 +39,7 @@ def split_stdin_stdout(text, b2_exe):
     return (stdin, stdout)
 
 def run(tester, io):
-    (input, output) = split_stdin_stdout(io, tester.program[0])
+    (input, output) = split_stdin_stdout(io)
     tester.run_build_system(stdin=input, stdout=output, match=TestCmd.match_re)
 
 def make_tester():
