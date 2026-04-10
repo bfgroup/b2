@@ -12,6 +12,7 @@ library support (Linux, MacOS, *BSD), or without (Windows.)
 
 import BoostBuild
 import TestCmd
+from pathlib import Path
 import os
 import re
 
@@ -19,7 +20,7 @@ def split_stdin_stdout(text, b2_exe):
     # stdin is all text after the prompt up to and including
     # the next newline.  Everything else is stdout.  stdout
     # may contain regular expressions enclosed in {{}}.
-    text = text.replace("{{b2}}", b2_exe)
+    text = text.replace("{{b2}}", str(Path(b2_exe)))
     pattern = re.compile(r'(?<=\(b2db\) )(.*\n)')
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
