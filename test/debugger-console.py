@@ -19,6 +19,7 @@ def split_stdin_stdout(text):
     # the next newline.  Everything else is stdout.  stdout
     # may contain regular expressions enclosed in {{}}.
     pattern = re.compile(r'(?<=\(b2db\)\n)((?:.*)\n)')
+    text = text.replace("{{bjam}}", "{{.+}}b2{{(?:\\.exe)?}}")
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
     outside_pattern = re.compile(r'(?:\A|(?<=\}\}))(?:[^{]|(?:\{(?!\{)))*(?:(?=\{\{)|\Z)')
@@ -48,11 +49,11 @@ def test_exec_run():
 UPDATE ;
     """)
     run(t, """\
-Starting program: {} -ftest.jam
-Child {{{{[0-9]+}}}} exited with status 0
+Starting program: {{bjam}} -ftest.jam
+Child {{\\d+}} exited with status 0
 (b2db)
 run -ftest.jam
-""".format(t.program[0]))
+""")
     t.cleanup()
 
 
@@ -62,12 +63,12 @@ def test_exit_status():
 EXIT : 1 ;
     """)
     run(t, """\
-Starting program: {} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 
-Child {{{{[0-9]+}}}} exited with status 1
+Child {{\\d+}} exited with status 1
 (b2db)
 run -ftest.jam
-""".format(t.program[0]))
+""")
     t.cleanup()
 
 def test_exec_step():
@@ -89,7 +90,7 @@ f ;
 Breakpoint 1 set at f
 (b2db)
 break f
-Starting program: {} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:8
 (b2db)
 run -ftest.jam
@@ -104,10 +105,10 @@ step
 step
 9	    c = 3 ;
 don't know how to make all
-Child {{{{[0-9]+}}}} exited with status 1
+Child {{\\d+}} exited with status 1
 (b2db)
 step
-""".format(t.program[0]))
+""")
     t.cleanup()
 
 def test_exec_next():
@@ -135,7 +136,7 @@ d = 4 ;
 Breakpoint 1 set at f
 (b2db)
 break f
-Starting program: {} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:7
 (b2db)
 run -ftest.jam
@@ -154,7 +155,7 @@ next
 17	d = 4 ;
 (b2db)
 quit
-""".format(t.program[0]))
+""")
     t.cleanup()
 
 def test_exec_finish():
@@ -186,7 +187,7 @@ d = 4 ;
 Breakpoint 1 set at f
 (b2db)
 break f
-Starting program: {} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:3
 (b2db)
 run -ftest.jam
@@ -202,7 +203,7 @@ finish
 21	d = 4 ;
 (b2db)
 quit
-""".format(t.program[0]))
+""")
     t.cleanup()
 
 def test_breakpoints():
@@ -232,7 +233,7 @@ UPDATE ;
 Breakpoint 1 set at f
 (b2db)
 break f
-Starting program: {0} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:3
 (b2db)
 run -ftest.jam
@@ -244,7 +245,7 @@ Breakpoint 2 set at g
 break g
 (b2db)
 disable 1
-Starting program: {0} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 Breakpoint 2, g \\( \\) at test.jam:7
 (b2db)
 run -ftest.jam
@@ -253,7 +254,7 @@ run -ftest.jam
 kill
 (b2db)
 enable 1
-Starting program: {0} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:3
 (b2db)
 run -ftest.jam
@@ -262,14 +263,14 @@ run -ftest.jam
 kill
 (b2db)
 delete 1
-Starting program: {0} -ftest.jam
+Starting program: {{bjam}} -ftest.jam
 Breakpoint 2, g \\( \\) at test.jam:7
 (b2db)
 run -ftest.jam
 7	    b = 2 ;
 (b2db)
 quit
-""".format(t.program[0]))
+""")
     t.cleanup()
 
 
