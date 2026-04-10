@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# Copyright 2016 Steven Watanabe
 # Copyright 2026 Paolo Pastori
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or https://www.bfgroup.xyz/b2/LICENSE.txt)
@@ -14,45 +15,46 @@ import TestCmd
 import os
 import re
 
-def split_stdin_stdout(text):
+def split_stdin_stdout(text, b2_exe):
     # stdin is all text after the prompt up to and including
     # the next newline.  Everything else is stdout.  stdout
     # may contain regular expressions enclosed in {{}}.
-    pattern = re.compile(r'(?<=\(b2db\)\n)((?:.*)\n)')
-    text = text.replace("{{bjam}}", "{{.+}}b2{{(?:\\.exe)?}}")
+    text = text.replace("{{b2}}", b2_exe)
+    pattern = re.compile(r'(?<=\(b2db\) )(.*\n)')
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
     outside_pattern = re.compile(r'(?:\A|(?<=\}\}))(?:[^{]|(?:\{(?!\{)))*(?:(?=\{\{)|\Z)')
 
-    def escape_line(line):
+    def escape_line(line, nix):
+        if nix and line.startswith("(b2db) "):
+            line = line[7:]
         line = re.sub(outside_pattern, lambda m: m.group(0), line)
         return re.sub(r'\{\{|\}\}', '', line)
 
     # On Windows the debugger do not make use of linenoise library and
     # always emit a prompt, while linenoise does for interactive input
     # only, i.e. when input comes from a tty (not from a file or pipe.)
-    win = os.name == "nt"
-    stdout = '\n'.join([escape_line(line)
-        for line in stdout.split('\n') if win or line != '(b2db)'])
+    nix = os.name != "nt"
+    stdout = '\n'.join([escape_line(line, nix) for line in stdout.split('\n')])
     return (stdin, stdout)
 
 def run(tester, io):
-    (input, output) = split_stdin_stdout(io)
+    (input, output) = split_stdin_stdout(io, tester.program[0])
     tester.run_build_system(stdin=input, stdout=output, match=TestCmd.match_re)
 
 def make_tester():
     return BoostBuild.Tester(["-dconsole"], pass_toolset=False)
 
-def test_exec_run():
+def test_run():
     t = make_tester()
     t.write("test.jam", """\
 UPDATE ;
-    """)
+""")
     run(t, """\
-Starting program: {{bjam}} -ftest.jam
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Child {{\\d+}} exited with status 0
-(b2db)
-run -ftest.jam
+(b2db) quit
 """)
     t.cleanup()
 
@@ -61,17 +63,17 @@ def test_exit_status():
     t = make_tester()
     t.write("test.jam", """\
 EXIT : 1 ;
-    """)
+""")
     run(t, """\
-Starting program: {{bjam}} -ftest.jam
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 
 Child {{\\d+}} exited with status 1
-(b2db)
-run -ftest.jam
+(b2db) quit
 """)
     t.cleanup()
 
-def test_exec_step():
+def test_step():
     t = make_tester()
     t.write("test.jam", """\
 rule g ( )
@@ -87,31 +89,26 @@ rule f ( )
 f ;
 """)
     run(t, """\
+(b2db) break f
 Breakpoint 1 set at f
-(b2db)
-break f
-Starting program: {{bjam}} -ftest.jam
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:8
-(b2db)
-run -ftest.jam
 8	    g ;
-(b2db)
-step
+(b2db) step
 3	    a = 1 ;
-(b2db)
-step
+(b2db) step
 4	    b = 2 ;
-(b2db)
-step
+(b2db) step
 9	    c = 3 ;
-don't know how to make all
-Child {{\\d+}} exited with status 1
-(b2db)
-step
+(b2db) quit
 """)
     t.cleanup()
 
-def test_exec_next():
+# Note: step doesn't need to worry about breakpoints,
+# as it always stops at the next line executed.
+
+def test_next():
     t = make_tester()
     t.write("test.jam", """\
 rule g ( )
@@ -133,32 +130,70 @@ h ;
 d = 4 ;
 """)
     run(t, """\
+(b2db) break f
 Breakpoint 1 set at f
-(b2db)
-break f
-Starting program: {{bjam}} -ftest.jam
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:7
-(b2db)
-run -ftest.jam
 7	    g ;
-(b2db)
-next
+(b2db) next
 8	    b = 2 ;
-(b2db)
-next
+(b2db) next
 9	    c = 3 ;
-(b2db)
-next
+(b2db) next
 14	    g ;
-(b2db)
-next
+(b2db) next
 17	d = 4 ;
-(b2db)
-quit
+(b2db) quit
 """)
     t.cleanup()
 
-def test_exec_finish():
+def test_next_breakpoint():
+    # next should stop if it encounters a breakpoint.
+    # If the normal end point happens to be a breakpoint,
+    # then it should be reported as normal stepping.
+    t = make_tester()
+    t.write("test.jam", """\
+rule f ( recurse ? )
+{
+    if $(recurse) { f ; }
+    a = 1 ;
+}
+rule g ( )
+{
+    b = 2 ;
+}
+f true ;
+g ;
+""")
+    run(t, """\
+(b2db) break f
+Breakpoint 1 set at f
+(b2db) break g
+Breakpoint 2 set at g
+(b2db) break test.jam:4
+Breakpoint 3 set at test.jam:4
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, f \\( true \\) at test.jam:3
+3	    if \\$\\(recurse\\) { f ; }
+(b2db) next
+Breakpoint 1, f \\( \\) at test.jam:3
+3	    if \\$\\(recurse\\) { f ; }
+(b2db) next
+4	    a = 1 ;
+(b2db) next
+4	    a = 1 ;
+(b2db) next
+11	g ;
+(b2db) next
+Breakpoint 2, g \\( \\) at test.jam:8
+8	    b = 2 ;
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_finish():
     t = make_tester()
     t.write("test.jam", """\
 rule f ( )
@@ -184,31 +219,118 @@ h ;
 d = 4 ;
 """)
     run(t, """\
+(b2db) break f
 Breakpoint 1 set at f
-(b2db)
-break f
-Starting program: {{bjam}} -ftest.jam
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:3
-(b2db)
-run -ftest.jam
 3	    a = 1 ;
-(b2db)
-finish
+(b2db) finish
 8	    b = 2 ;
-(b2db)
-finish
+(b2db) finish
 14	    i ;
-(b2db)
-finish
+(b2db) finish
 21	d = 4 ;
-(b2db)
-quit
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_finish_breakpoints():
+    # finish should stop when it reaches a breakpoint.
+    t = make_tester()
+    t.write("test.jam", """\
+rule f ( recurse * )
+{
+    if $(recurse)
+    {
+        a = [ f $(recurse[2-]) ] ;
+    }
+}
+rule g ( list * )
+{
+    for local v in $(list)
+    {
+        x = $(v) ;
+    }
+}
+f 1 2 ;
+g 1 2 ;
+""")
+    run(t, """\
+(b2db) break test.jam:5
+Breakpoint 1 set at test.jam:5
+(b2db) break test.jam:12
+Breakpoint 2 set at test.jam:12
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, f \\( 1 2 \\) at test.jam:5
+5	        a = \\[ f \\$\\(recurse\\[2-\\]\\) \\] ;
+(b2db) finish
+Breakpoint 1, f \\( 2 \\) at test.jam:5
+5	        a = \\[ f \\$\\(recurse\\[2-\\]\\) \\] ;
+(b2db) finish
+5	        a = \\[ f \\$\\(recurse\\[2-\\]\\) \\] ;
+(b2db) finish
+16	g 1 2 ;
+(b2db) finish
+Breakpoint 2, g \\( 1 2 \\) at test.jam:12
+12	        x = \\$\\(v\\) ;
+Breakpoint 2, g \\( 1 2 \\) at test.jam:12
+(b2db) finish
+12	        x = \\$\\(v\\) ;
+(b2db) quit
+""")
+    t.cleanup()
+
+def test_continue_breakpoints():
+    # continue should stop when it reaches a breakpoint
+    t = make_tester()
+    t.write("test.jam", """\
+rule f ( recurse * )
+{
+    if $(recurse)
+    {
+        a = [ f $(recurse[2-]) ] ;
+    }
+}
+rule g ( list * )
+{
+    for local v in $(list)
+    {
+        x = $(v) ;
+    }
+}
+f 1 2 ;
+g 1 2 ;
+""")
+    run(t, """\
+(b2db) break test.jam:5
+Breakpoint 1 set at test.jam:5
+(b2db) break test.jam:12
+Breakpoint 2 set at test.jam:12
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 1, f \\( 1 2 \\) at test.jam:5
+5	        a = \\[ f \\$\\(recurse\\[2-\\]\\) \\] ;
+(b2db) continue
+Breakpoint 1, f \\( 2 \\) at test.jam:5
+5	        a = \\[ f \\$\\(recurse\\[2-\\]\\) \\] ;
+(b2db) continue
+Breakpoint 1, f \\( 1 2 \\) at test.jam:5
+5	        a = \\[ f \\$\\(recurse\\[2-\\]\\) \\] ;
+(b2db) continue
+Breakpoint 2, g \\( 1 2 \\) at test.jam:12
+12	        x = \\$\\(v\\) ;
+(b2db) continue
+Breakpoint 2, g \\( 1 2 \\) at test.jam:12
+12	        x = \\$\\(v\\) ;
+(b2db) quit
 """)
     t.cleanup()
 
 def test_breakpoints():
-    """Tests the interaction between the following commands:
-    break, clear, delete, disable, enable"""
+    # Tests the interaction between the following commands:
+    # break, clear, delete, disable, enable
     t = make_tester()
     t.write("test.jam", """\
 rule f ( )
@@ -230,53 +352,58 @@ h ;
 UPDATE ;
 """)
     run(t, """\
+(b2db) break f
 Breakpoint 1 set at f
-(b2db)
-break f
-Starting program: {{bjam}} -ftest.jam
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:3
-(b2db)
-run -ftest.jam
 3	    a = 1 ;
-(b2db)
-kill
+(b2db) kill
+(b2db) break g
 Breakpoint 2 set at g
-(b2db)
-break g
-(b2db)
-disable 1
-Starting program: {{bjam}} -ftest.jam
+(b2db) disable 1
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Breakpoint 2, g \\( \\) at test.jam:7
-(b2db)
-run -ftest.jam
 7	    b = 2 ;
-(b2db)
-kill
-(b2db)
-enable 1
-Starting program: {{bjam}} -ftest.jam
+(b2db) kill
+(b2db) enable 1
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Breakpoint 1, f \\( \\) at test.jam:3
-(b2db)
-run -ftest.jam
 3	    a = 1 ;
-(b2db)
-kill
-(b2db)
-delete 1
-Starting program: {{bjam}} -ftest.jam
+(b2db) kill
+(b2db) delete 1
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
 Breakpoint 2, g \\( \\) at test.jam:7
-(b2db)
-run -ftest.jam
 7	    b = 2 ;
-(b2db)
-quit
+(b2db) kill
+(b2db) break test.jam:12
+Breakpoint 3 set at test.jam:12
+(b2db) clear g
+Deleted breakpoint 2
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Breakpoint 3, h \\( \\) at test.jam:12
+12	    d = 4 ;
+(b2db) kill
+(b2db) clear test.jam:12
+Deleted breakpoint 3
+(b2db) run -ftest.jam
+Starting program: {{b2}} -ftest.jam
+Child {{\\d+}} exited with status 0
+(b2db) quit
 """)
     t.cleanup()
 
 
-test_exec_run()
+test_run()
 test_exit_status()
-test_exec_step()
-test_exec_next()
-test_exec_finish()
-test_breakpoints()
+test_step()
+test_next()
+test_next_breakpoint()
+test_finish()
+test_finish_breakpoints()
+test_continue_breakpoints()
+#test_breakpoints()
