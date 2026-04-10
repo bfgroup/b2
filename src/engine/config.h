@@ -24,8 +24,7 @@ https://www.bfgroup.xyz/b2/LICENSE.txt)
 // Autodetect various operating systems..
 
 #if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) \
-	|| defined(__TOS_WIN__) || defined(__WINDOWS__) \
-	|| defined(__MSYS__) || defined(__ucrt__)
+	|| defined(__TOS_WIN__) || defined(__WINDOWS__)
 #define NT 1
 #endif
 
