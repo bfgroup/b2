@@ -15,21 +15,20 @@ import TestCmd
 import os
 import re
 
-def split_stdin_stdout(text, b2_exe):
+def split_stdin_stdout(text):
     # stdin is all text after the prompt up to and including
     # the next newline.  Everything else is stdout.  stdout
     # may contain regular expressions enclosed in {{}}, except
-    # for {{b2}} which is a placeholder for running executable
-    win = os.name == "nt"
-    if win: b2_exe = b2_exe.replace("/", "\\")
-    text = text.replace("{{b2}}", b2_exe)
+    # for {{b2}} which is a placeholder for running executable.
+    text = text.replace("{{b2}}", "{{\\S+}}")
     pattern = re.compile(r'(?<=\(b2db\) )(.*\n)')
     stdin = ''.join(re.findall(pattern, text))
     stdout = re.sub(pattern, '', text)
     outside_pattern = re.compile(r'(?:\A|(?<=\}\}))(?:[^{]|(?:\{(?!\{)))*(?:(?=\{\{)|\Z)')
 
+    nix = os.name != "nt"
     def escape_line(line):
-        if not win:
+        if nix:
             while line.startswith("(b2db) "):
                 line = line[7:]
         line = re.sub(outside_pattern, lambda m: m.group(0), line)
@@ -42,7 +41,7 @@ def split_stdin_stdout(text, b2_exe):
     return (stdin, stdout)
 
 def run(tester, io):
-    (input, output) = split_stdin_stdout(io, tester.program[0])
+    (input, output) = split_stdin_stdout(io)
     tester.run_build_system(stdin=input, stdout=output, match=TestCmd.match_re)
 
 def make_tester():
