@@ -218,7 +218,7 @@ def match_re(lines=None, res=None):
         res = res.split("\n")
     for i in range(min(len(lines), len(res))):
         if not re.compile("^" + res[i] + "$").search(lines[i]):
-            print("************ match_re.range REAL error ************")
+            print("************ match_re.range REAL error on %r" % os.name)
             print(repr(res[i]))
             print(repr(lines[i]))
             return MatchError("Mismatch at line %d\n- %s\n+ %s\n" %

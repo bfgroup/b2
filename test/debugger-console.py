@@ -32,7 +32,7 @@ def split_stdin_stdout(text):
             while line.startswith("(b2db) "):
                 line = line[7:]
         else:
-            line.replace("(b2db)", "\\(b2db\\)")
+            line.replace("(b2db)", "[(]b2db[)]")
         line = re.sub(outside_pattern, lambda m: m.group(0), line)
         return re.sub(r'\{\{|\}\}', '', line)
 
