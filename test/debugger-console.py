@@ -90,7 +90,7 @@ Breakpoint 1 set at f
 (b2db)
 break f
 Starting program: {} -ftest.jam
-Breakpoint 1, f \( \) at test.jam:8
+Breakpoint 1, f \\( \\) at test.jam:8
 (b2db)
 run -ftest.jam
 8	    g ;
@@ -136,7 +136,7 @@ Breakpoint 1 set at f
 (b2db)
 break f
 Starting program: {} -ftest.jam
-Breakpoint 1, f \( \) at test.jam:7
+Breakpoint 1, f \\( \\) at test.jam:7
 (b2db)
 run -ftest.jam
 7	    g ;
@@ -187,7 +187,7 @@ Breakpoint 1 set at f
 (b2db)
 break f
 Starting program: {} -ftest.jam
-Breakpoint 1, f \( \) at test.jam:3
+Breakpoint 1, f \\( \\) at test.jam:3
 (b2db)
 run -ftest.jam
 3	    a = 1 ;
@@ -233,7 +233,7 @@ Breakpoint 1 set at f
 (b2db)
 break f
 Starting program: {0} -ftest.jam
-Breakpoint 1, f \( \) at test.jam:3
+Breakpoint 1, f \\( \\) at test.jam:3
 (b2db)
 run -ftest.jam
 3	    a = 1 ;
@@ -245,7 +245,7 @@ break g
 (b2db)
 disable 1
 Starting program: {0} -ftest.jam
-Breakpoint 2, g \( \) at test.jam:7
+Breakpoint 2, g \\( \\) at test.jam:7
 (b2db)
 run -ftest.jam
 7	    b = 2 ;
@@ -254,7 +254,7 @@ kill
 (b2db)
 enable 1
 Starting program: {0} -ftest.jam
-Breakpoint 1, f \( \) at test.jam:3
+Breakpoint 1, f \\( \\) at test.jam:3
 (b2db)
 run -ftest.jam
 3	    a = 1 ;
@@ -263,7 +263,7 @@ kill
 (b2db)
 delete 1
 Starting program: {0} -ftest.jam
-Breakpoint 2, g \( \) at test.jam:7
+Breakpoint 2, g \\( \\) at test.jam:7
 (b2db)
 run -ftest.jam
 7	    b = 2 ;

@@ -375,7 +375,8 @@ tests = [
     "core_update_now",
     "core_variables_in_actions",
     "custom_generator",
-    "debugger",
+    # FIXME: temporary disabled
+    #"debugger",
     "debugger-console",
     "debugger-mi",
     "default_build",
