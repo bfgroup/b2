@@ -2627,11 +2627,12 @@ int debugger( void )
              * and more, see https://github.com/antirez/linenoise
              */
             char *cmdline = linenoise( "(b2db) " );
-            if ( cmdline == NULL ) break;
+            if ( cmdline == NULL ) break; /* out of memory */
+
+            linenoiseHistoryAdd( cmdline );
 
             process_command( cmdline );
 
-            linenoiseHistoryAdd( cmdline );
             linenoiseFree( cmdline );
         }
         else
