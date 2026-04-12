@@ -130,7 +130,9 @@ static rule_ptr define_rule( module_ptr src_module, b2::value_ptr rulename,
     rule_ptr const r = enter_rule( rulename, target_module );
     if ( r->module != src_module )
     {
-        /* If the rule was imported from elsewhere, clear it now. */
+        /* If the rule was imported from elsewhere, clear it now. This can
+         * can happen, for example, when an imported rule does an overwrite
+         */
         set_rule_body( r, 0 );
         set_rule_actions( r, 0 );
         /* r will be executed in the source module. */
