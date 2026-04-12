@@ -2643,7 +2643,7 @@ int debugger( void )
             linenoiseSetCompletionCallback( completion );
 
             char *cmdline = linenoise( "(b2db) " );
-            if ( cmdline == NULL ) break; /* out of memory */
+            if ( cmdline == NULL ) break; /* CTRL-C, CTRL-D, out of memory.. */
 
             linenoiseHistoryAdd( cmdline );
 
