@@ -888,6 +888,27 @@ rule SPLIT_BY_CHARACTERS ( string : delimiters )
 `SPLIT_BY_CHARACTERS` splits the specified _string_ on any delimiter
 character present in _delimiters_ and returns the resulting list.
 
+[[jam.language.rules.builtins.utility._subst__]]
+===== `SUBST`
+
+The `SUBST` rule does pattern matching and substitution.
+
+[source]
+----
+rule SUBST ( string regexp replacements + )
+----
+
+Replaces the _string_ matching the _regexp_ with all _replacements_.
+The _regexp_ argument accepts a regular expression of the same type
+as those used by the `MATCH` rule.
+In _replacements_, the placeholders `\0` and `$0` are replaced with the full
+matched string, while `\N` and `$N` are replaced with the substring matched
+by group (`()` regexp subexpression) N-th.  Currently only 9 groups are
+supported, so '$10' in a replacement is interpreted as '$1' followed by
+a '0' character.
+Note that unlike `MATCH`, _regexp_ does not have to contain a group
+for a result to be returned.
+
 [[jam.language.rules.builtins.utility._update__]]
 ===== `UPDATE`
 
