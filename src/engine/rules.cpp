@@ -592,7 +592,7 @@ static rule_ptr global_rule( rule_ptr r )
 /*
  * new_rule_body() - make a new rule named rulename in the given module, with
  * the given argument list and procedure. If exported is true, the rule is
- * exported to the global module as modulename.rulename.
+ * a Jam "non local" rule, i.e. is supposed to appear in the global module.
  */
 
 rule_ptr new_rule_body( module_ptr m, b2::value_ptr rulename, function_ptr procedure,
