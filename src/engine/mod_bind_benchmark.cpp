@@ -18,7 +18,7 @@ Distributed under the Boost Software License, Version 1.0.
 template<unsigned shift>
 struct WatchedCounter
 {
-    static_assert(shift < 32);
+    static_assert(shift < 32, "");
     static constexpr size_t mask = 1 << shift;
     bool last_masked = false;
     size_t counter = 0;
@@ -26,7 +26,7 @@ struct WatchedCounter
     size_t exit_count;
 
     /*
-     * Exit program after n reports.
+     * Exit program after num reports.
      */
     WatchedCounter(unsigned num = 1) : exit_count(mask * num) { t0 = clock(); }
     void tick()
