@@ -39,6 +39,8 @@
   -- _Paolo Pastori_
 * Fix GLOB_ARCHIVE builtin rule to work with BSD archive (ar).
   -- _Paolo Pastori_
+* Fix SUBST builtin rule eating chars in replacement, test added.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 
