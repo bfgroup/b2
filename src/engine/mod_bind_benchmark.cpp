@@ -28,7 +28,7 @@ struct WatchedCounter
     /*
      * Exit program after num reports.
      */
-    WatchedCounter(unsigned num = 1) : exit_count(mask * num) { t0 = clock(); }
+    WatchedCounter(unsigned num = 1) : exit_count(num << shift) { t0 = clock(); }
     void tick()
     {
         if (bool(++counter & mask) != last_masked)
