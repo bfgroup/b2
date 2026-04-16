@@ -10,6 +10,10 @@
 * *New*: Add reading/parsing of property database from JSON data to base CPS
   support from.
   -- _René Ferdinand Rivera Morell_
+* *New*: Added readline capabilities, command history, cmdline editing, etc,
+  to internal debugger (not on Windows), thanks to *linenoise* by
+  _Salvatore Sanfilippo_ (repo at https://github.com/antirez/linenoise.)
+  -- _Paolo Pastori_
 * Fix Jam/{CPP} bind definitions of 4 or more values in a single
   declared argument not actually adding all the definitions.
   -- _Paolo Pastori_

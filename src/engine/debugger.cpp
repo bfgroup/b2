@@ -8,6 +8,10 @@
 #include "jam.h"
 #include "debugger.h"
 
+#ifndef NT
+#include "ext_linenoise.h"
+#endif
+
 #include "constants.h"
 #include "cwd.h"
 #include "function.h"
@@ -908,7 +912,7 @@ static void debug_parent_child_exited( int pid, int exit_code )
     }
 }
 
-#if !NT
+#ifndef NT
 
 static void debug_parent_child_signalled( int pid, int id )
 {
@@ -1740,21 +1744,21 @@ static void debug_mi_interpreter_exec( int argc, const char * * argv );
 
 static struct command_elem parent_commands[] =
 {
-    { "run", &debug_parent_run },
-    { "continue", &debug_parent_continue },
-    { "kill", &debug_parent_kill },
-    { "step", &debug_parent_step },
-    { "next", &debug_parent_next },
-    { "finish", &debug_parent_finish },
+    { "backtrace", &debug_parent_backtrace },
     { "break", &debug_parent_break },
+    { "clear", &debug_parent_clear },
+    { "continue", &debug_parent_continue },
+    { "delete", &debug_parent_delete },
     { "disable", &debug_parent_disable },
     { "enable", &debug_parent_enable },
-    { "delete", &debug_parent_delete },
-    { "clear", &debug_parent_clear },
-    { "print", &debug_parent_print },
-    { "backtrace", &debug_parent_backtrace },
-    { "quit", &debug_parent_quit },
+    { "finish", &debug_parent_finish },
     { "help", &debug_parent_help },
+    { "kill", &debug_parent_kill },
+    { "next", &debug_parent_next },
+    { "print", &debug_parent_print },
+    { "quit", &debug_parent_quit },
+    { "run", &debug_parent_run },
+    { "step", &debug_parent_step },
     { "-break-insert", &debug_mi_break_insert },
     { "-break-delete", &debug_mi_break_delete },
     { "-break-disable", &debug_mi_break_disable },
@@ -2602,6 +2606,19 @@ static void debug_mi_interpreter_exec( int argc, const char * * argv )
     process_command( (char *)argv[ 2 ] );
 }
 
+#ifndef NT
+/* for Linenoise command completion using TAB */
+void completion( const char *cmdbuf, linenoiseCompletions *lc ) {
+    size_t buflen = strlen( cmdbuf );
+    for ( struct command_elem & pci : parent_commands )
+    {
+        if ( pci.key[0] == '-' ) break; /* end of user commands reached */
+        if ( !buflen || !strncmp(cmdbuf, pci.key, buflen) )
+            linenoiseAddCompletion( lc, pci.key );
+    }
+}
+#endif
+
 /* The debugger's main loop. */
 int debugger( void )
 {
@@ -2611,10 +2628,35 @@ int debugger( void )
         printf( "=thread-group-added,id=\"i1\"\n(gdb) \n" );
     while ( 1 )
     {
+#ifdef NT
         if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
             printf("(b2db) ");
         fflush( stdout );
         read_command();
+#else
+        if ( globs.debug_interface == DEBUG_INTERFACE_CONSOLE )
+        {
+            /* Add support for command history, command line
+             * editing, command completion, and more, see
+             * https://github.com/antirez/linenoise
+             */
+            linenoiseSetCompletionCallback( completion );
+
+            char *cmdline = linenoise( "(b2db) " );
+            if ( cmdline == NULL ) break; /* CTRL-C, CTRL-D, out of memory.. */
+
+            linenoiseHistoryAdd( cmdline );
+
+            process_command( cmdline );
+
+            linenoiseFree( cmdline );
+        }
+        else
+        {
+            fflush( stdout );
+            read_command();
+        }
+#endif
     }
     return 0;
 }
