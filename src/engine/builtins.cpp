@@ -511,6 +511,8 @@ void load_builtins()
     init_property_set();
     init_sequence();
     init_order();
+    void init_benchmark();
+    init_benchmark();
 }
 
 

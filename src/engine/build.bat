@@ -195,6 +195,7 @@ set B2_SOURCES=%B2_SOURCES% mod_string.cpp
 set B2_SOURCES=%B2_SOURCES% mod_summary.cpp
 set B2_SOURCES=%B2_SOURCES% mod_sysinfo.cpp
 set B2_SOURCES=%B2_SOURCES% mod_version.cpp
+set B2_SOURCES=%B2_SOURCES% mod_bind_benchmark.cpp
 
 set B2_CXXFLAGS=%B2_CXXFLAGS% -DNDEBUG
 
