@@ -24,7 +24,7 @@ Continuously tested on:
 * macOS Xcode 13.4.1, 14.3.0, 15.4, 16.4, 26.0.1
 * Ubuntu 20.04 GCC 9 (armhf, arm64, ppc64el)
 * Ubuntu 22.04 GCC 11 (armhf, arm64, ppc64el)
-* Windows 2015, 2017, 2019, 2022
+* Windows 2015, 2017, 2019, 2022, 2026
 * Windows MinGW 8.1.0
 * Windows MSYS2 MinGW64/32 Clang-16, MinGW64/32 GCC-13
 

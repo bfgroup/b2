@@ -34,12 +34,12 @@ pr:
 variables:
 - { name: linux_latest_vm, value: 'ubuntu-24.04' }
 - { name: linux_latest_os, value: 'noble' }
-- { name: windows_latest_vm, value: 'windows-2025' }
+- { name: windows_latest_vm, value: 'windows-2025-vs2026' }
 - { name: clang_latest, value: '22' }
 - { name: clang_latest_libstdcxx, value: '12' }
 - { name: gcc_latest, value: '14' }
-- { name: vc_latest, value: 'vc143' }
-- { name: vs_latest, value: '2022' }
+- { name: vc_latest, value: 'vc145' }
+- { name: vs_latest, value: '2026' }
 - { name: xc_latest, value: '16.4' }
 - { name: macos_latest_vm, value: 'macOS-15' }
 - { name: co_options, value: '--name container' }
@@ -318,6 +318,7 @@ stages:
   - job: 'Windows'
     strategy:
       matrix:
+        VS 2025: {TOOLSET: vc145, TEST_TOOLSET: msvc, VM_IMAGE: 'windows-2025-vs2026'}
         VS 2022: {TOOLSET: vc143, TEST_TOOLSET: msvc, VM_IMAGE: 'windows-2025'}
         # VS 2019: {TOOLSET: vc142, TEST_TOOLSET: msvc, VM_IMAGE: 'windows-2019'}
         # MinGW 8.1.0: {TOOLSET: mingw, TEST_TOOLSET: gcc, VM_IMAGE: 'windows-2022'}
