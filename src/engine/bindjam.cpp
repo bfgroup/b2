@@ -35,6 +35,7 @@ Distributed under the Boost Software License, Version 1.0.
 #include "mod_string.h"
 #include "mod_sysinfo.h"
 #include "mod_version.h"
+#include "mod_bind_benchmark.h"
 
 #include <cstddef>
 #include <cstdint>
@@ -850,7 +851,8 @@ void bind_jam(FRAME * f)
 		.bind(version_module())
 		.bind(db_module())
 		.bind(command_db_module())
-		.bind(b2::args::args_module());
+		.bind(b2::args::args_module())
+		.bind(benchmark_module());
 }
 
 }} // namespace b2::jam
