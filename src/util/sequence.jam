@@ -60,7 +60,7 @@ rule less ( a b )
     }
 }
 
-# Insertion-sort 's' using the BinaryPredicate 'ordered' or
+# Insertion-sort 's' using the 'ordered' predicate or
 # lexicagraphically (i.e. using '<') when no predicate is supplied.
 #
 rule insertion-sort ( s * : ordered * )
