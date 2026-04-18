@@ -13,7 +13,7 @@ import modules ;
 # to be passed is simply appended before the call.
 
 
-# Return the elements e of $(sequence) for which [ $(predicate) e ] has a
+# Return the elements e of 'sequence' for which [ $(predicate) e ] has a
 # non-null value.
 #
 rule filter ( predicate + : sequence * )
@@ -31,7 +31,7 @@ rule filter ( predicate + : sequence * )
     return $(result) ;
 }
 
-# Return a new sequence consisting of [ $(function) $(e) ] for each
+# Return a new sequence consisting of [ $(function) e ] for each
 # element e of 'sequence'.
 #
 # rule transform ( function + : sequence * )
