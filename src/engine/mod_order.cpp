@@ -23,6 +23,23 @@ using vec_graph = std::vector<node_vec>;
 enum node_state { TO_VISIT, VISITING, VISITED };
 using state_vec = std::vector<char>;
 
+
+/* Use quite klugy approach: when we add order dependency from 'a' to 'b',
+ * just append 'b' to of value of variable 'a'.  NOTE: This is still here
+ * only for backward compatibility reasons since latest order.jam use a
+ * normal class method rule instead of this.
+ */
+LIST * add_pair( FRAME * frame, int32_t flags )
+{
+    LIST * arg = lol_get( frame->args, 0 );
+    LISTITER iter = list_begin( arg );
+    LISTITER const end = list_end( arg );
+    var_set( frame->module, list_item( iter ), list_copy_range( arg, list_next(
+        iter ), end ), VAR_APPEND );
+    return L0;
+}
+
+
 /* Given a list and a value, returns position of that value in the list, or -1
  * if not found.
  */
@@ -104,6 +121,11 @@ LIST * order( FRAME * frame, int32_t flags )
 
 void init_order()
 {
+    {   // for backward compatibility, see #593
+        char const * args[] = { "first", "second", 0 };
+        declare_native_rule( "class@order", "add-pair", args, add_pair, 1 );
+    }
+
     {
         char const * args[] = { "objects", "*", 0 };
         declare_native_rule( "class@order", "order", args, order, 1 );
