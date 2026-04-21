@@ -34,9 +34,22 @@ rule filter ( predicate + : sequence * )
 # Return a new sequence consisting of [ $(function) e ] for each
 # element e of 'sequence'.
 #
-# rule transform ( function + : sequence * )
+rule transform ( function + : sequence * )
+{
+    local caller = [ CALLER_MODULE ] ;
+    local result ;
 
-NATIVE_RULE sequence : transform ;
+    for local e in $(sequence)
+    {
+        result += [ modules.call-in $(caller) : $(function) $(e) ] ;
+    }
+    return $(result) ;
+}
+
+if [ HAS_NATIVE_RULE sequence : transform : 1 ]
+{
+    NATIVE_RULE sequence : transform ;
+}
 
 # Returns the elements of 's' in reverse order.
 rule reverse ( s * )
