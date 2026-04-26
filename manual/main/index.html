@@ -9885,6 +9885,36 @@ C&#43;&#43;
 <p>Checks if an argument was previously added.</p>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_b2argsextra_args"><a class="anchor" href="#_b2argsextra_args"></a><code>b2::args::extra_args</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule extra_args ( )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>list_ref extra_args();</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Retrieve "extra" arguments, i.e. those not parsed as options.</p>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="b2.reference.modules.path"><a class="anchor" href="#b2.reference.modules.path"></a>6.5.10. path</h4>
@@ -17335,6 +17365,12 @@ Added searching-only interfaces to modules and targets.&#8201;&#8212;&#8201;<em>
 </li>
 <li>
 <p>Fix GLOB_ARCHIVE builtin rule to work with BSD archive (ar).&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix parsing of options to not conflict with command line build request.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix inversion of logic for <code>--keep-going</code> option.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
 </li>
 </ul>
 </div>
