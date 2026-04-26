@@ -39,6 +39,10 @@
   -- _Paolo Pastori_
 * Fix GLOB_ARCHIVE builtin rule to work with BSD archive (ar).
   -- _Paolo Pastori_
+* Fix parsing of options to not conflict with command line build request.
+  -- _René Ferdinand Rivera Morell_
+* Fix inversion of logic for `--keep-going` option.
+  -- _Paolo Pastori_
 
 == Version 5.4.2
 

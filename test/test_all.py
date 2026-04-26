@@ -357,6 +357,7 @@ tests = [
     "core_actions_quietly",
     "core_at_file",
     "core_bindrule",
+    "core_cmd_line",
     "core_dependencies",
     "core_fail_expected",
     "core_jamshell",

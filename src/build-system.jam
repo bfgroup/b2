@@ -1,5 +1,5 @@
 # Copyright 2003, 2005, 2007 Dave Abrahams
-# Copyright 2006, 2007 Rene Rivera
+# Copyright 2006-2026 René Ferdinand Rivera Morell
 # Copyright 2003, 2004, 2005, 2006 Vladimir Prus
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or copy at
@@ -38,9 +38,6 @@ import virtual-target ;
 # Module global data.
 #
 ################################################################################
-
-# Shortcut used in this module for accessing used command-line parameters.
-.argv = [ modules.peek : ARGV ] ;
 
 # Flag indicating we should display additional debugging information related to
 # locating and loading Boost Build configuration files.
@@ -523,7 +520,7 @@ local rule process-explicit-toolset-requests
     local extra-properties ;
 
     local option-toolsets  = [ regex.split-list [ args.get-arg toolsets ] : "," ] ;
-    local feature-toolsets = [ regex.split-list [ MATCH ^toolset=(.*)$ : $(.argv) ] : "," ] ;
+    local feature-toolsets = [ regex.split-list [ MATCH ^toolset=(.*)$ : [ args.extra-args ] ] : "," ] ;
 
     for local t in $(option-toolsets) $(feature-toolsets)
     {
@@ -564,7 +561,7 @@ local rule process-explicit-toolset-requests
         # Make sure we get an appropriate property into the build request in
         # case toolset has been specified using the "--toolset=..." command-line
         # option form.
-        if ! $(t) in $(.argv) $(feature-toolsets)
+        if ! $(t) in [ args.extra-args ] $(feature-toolsets)
         {
             if $(.debug-config)
             {
@@ -683,7 +680,7 @@ local rule should-clean-project ( project )
     # target ids containing explicit project references. See what to do about
     # those as such 'lazy loading' may cause problems that are then extremely
     # difficult to debug.
-    local build-request = [ build-request.from-command-line $(.argv)
+    local build-request = [ build-request.from-extra-args [ args.extra-args ]
         $(extra-properties) ] ;
     local target-ids = [ $(build-request).get-at 1 ] ;
     local properties = [ $(build-request).get-at 2 ] ;
@@ -895,7 +892,7 @@ local rule should-clean-project ( project )
             local os        = [ modules.peek : OS OSPLAT JAMUNAME ] "" ;
             local timestamp = [ modules.peek : JAMDATE ] ;
             local cwd       = [ PWD ] ;
-            local command   = $(.argv) ;
+            local command   = [ modules.peek : ARGV ] ;
             local bb-version = [ version.boost-build ] ;
             .header on $(xml-file) =
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>"

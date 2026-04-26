@@ -14,7 +14,7 @@
 
 /* This file is ALSO:
  * Copyright 2001-2004 David Abrahams.
- * Copyright 2018-2025 Rene Rivera
+ * Copyright 2018-2026 René Ferdinand Rivera Morell
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE.txt or copy at
  * https://www.bfgroup.xyz/b2/LICENSE.txt)
@@ -222,6 +222,18 @@ struct args_data
 	std::string out_filename;
 } args_data;
 
+namespace b2 { namespace args {
+list_ref extra_args()
+{
+	list_ref result;
+	for (auto const & a : args_data.extra_args)
+	{
+		result.push_back(a);
+	}
+	return result;
+}
+}} // namespace b2::args
+
 int guarded_main(int argc, char * argv[])
 {
 	int status = 0;
@@ -230,7 +242,17 @@ int guarded_main(int argc, char * argv[])
 	module_t * environ_module;
 	b2::system_info sys_info;
 
+	// On each reparse of arguments we need to reset the data we collect of
+	// arguments.
+	b2::args::set_reparse_callback([]() { args_data = { }; });
+
 	auto & cli = b2::args::lyra_cli().relaxed();
+
+	// In specifying options we do validation at the time of parsing the option
+	// value. We need to do it this way as we use the relaxed option parser
+	// which will ignore options it fails on, for example by not being able to
+	// convert the value or otherwise. Hence we do our own parse checks and
+	// failures.
 
 	cli |= lyra::arg(args_data.extra_args, "request")
 			   .help("Targets, requirements, etc.")
@@ -266,12 +288,20 @@ int guarded_main(int argc, char * argv[])
 	/* Undocumented -p3 (acts like both -p1 -p2) means separate pipe action
 	 * stdout and stderr.
 	 */
-	cli |= lyra::opt(globs.pipe_action, "x")
+	cli |= lyra::opt(
+		[](const std::string & v) {
+			if (!lyra::detail::from_string(v, globs.pipe_action)
+				|| globs.pipe_action < 0 || globs.pipe_action > 3)
+			{
+				out_printf("error: Invalid value for the '-p' option.\n");
+				b2::clean_exit(EXITBAD);
+			}
+		},
+		"x")
 			   .name("-p")
 			   .help(
 				   "x=0, pipes action stdout and stderr "
-				   "merged into action output.")
-			   .choices([](int val) { return 0 <= val && val <= 3; });
+				   "merged into action output.");
 
 	cli |= lyra::opt(globs.quitquick)
 			   .name("-q")
@@ -279,27 +309,33 @@ int guarded_main(int argc, char * argv[])
 
 	cli |= lyra::opt(
 		[](const std::string & v) {
-			globs.quitquick = (v == "on" || v == "yes" || v == "true");
+			if (v != "on" && v != "yes" && v != "true" && v != "off"
+				&& v != "no" && v != "false")
+			{
+				out_printf(
+					"error: Invalid value for the '--keep-going' option.\n");
+				b2::clean_exit(EXITBAD);
+			}
+			globs.quitquick = (v == "off" || v == "no" || v == "false");
 		},
 		"x")
 			   .name("--keep-going")
 			   .help(
 				   "Specify if we continue to build after failures or not "
-				   "(--keep-going=no is equivalent to -q)")
-			   .choices("on", "yes", "true", "off", "no", "false");
+				   "(--keep-going=no is equivalent to -q)");
 
-	cli |= lyra::opt(globs.jobs, "x")
+	cli |= lyra::opt(
+		[](const std::string & v) {
+			if (!lyra::detail::from_string(v, globs.jobs) || globs.jobs < 1)
+			{
+				out_printf("error: Invalid value for the '-j' option.\n");
+				b2::clean_exit(EXITBAD);
+			}
+		},
+		"x")
 			   .name("-j")
 			   .name("--jobs")
-			   .help("Run up to x shell commands concurrently.")
-			   .choices([](int val) {
-				   if (val < 1)
-				   {
-					   err_printf("Invalid value for the '-j' option.\n");
-					   b2::clean_exit(EXITBAD);
-				   }
-				   return true;
-			   });
+			   .help("Run up to x shell commands concurrently.");
 
 	cli |= lyra::opt(globs.newestfirst)
 			   .name("-g")
@@ -410,7 +446,6 @@ int guarded_main(int argc, char * argv[])
 		argv[2] = argv[0];
 		arg_v = argv = (argv + 2);
 		globs.debug_interface = global_config::debug_interface_child;
-		args_data = {};
 		b2::args::set_args(arg_c, arg_v);
 		b2::args::process_args(true);
 	}
@@ -429,7 +464,6 @@ int guarded_main(int argc, char * argv[])
 			arg_c = argc = debug_child_data.argc;
 			arg_v = argv = (char **)debug_child_data.argv;
 			globs.debug_interface = global_config::debug_interface_child;
-			args_data = {};
 			b2::args::set_args(arg_c, arg_v);
 			b2::args::process_args(true);
 		}
@@ -605,7 +639,6 @@ int guarded_main(int argc, char * argv[])
 		}
 
 		// Process options.
-		args_data = {};
 		b2::args::set_args(arg_c, arg_v);
 		b2::args::process_args();
 
@@ -675,7 +708,7 @@ struct SetConsoleCodepage
 	UINT orig_console_output_cp = 0;
 };
 
-static const SetConsoleCodepage g_console_codepage_setter {};
+static const SetConsoleCodepage g_console_codepage_setter { };
 
 } // namespace
 #endif
