@@ -222,7 +222,7 @@ local rule convert-command-line-element ( e )
     while $(parts)
     {
         local p = $(parts[1]) ;
-        local m = [ MATCH "([^=]*)=(.*)" : $(p) ] ;
+        local m = [ MATCH "([^=]+)=(.*)" : $(p) ] ;
         local lresult ;
         local feature ;
         local values ;
