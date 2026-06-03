@@ -8935,7 +8935,7 @@ matches.</p>
 Jam
 </td>
 <td class="hdlist2">
-<p><code>rule escape ( string : symbols : escape-symbol )</code></p>
+<p><code>rule escape ( string + : symbols : escape-symbol )</code></p>
 </td>
 </tr>
 <tr>
@@ -8943,8 +8943,15 @@ Jam
 C&#43;&#43;
 </td>
 <td class="hdlist2">
-<p><code>b2::value_ref regex_escape(b2::value_ref string,b2:: value_ref symbols,
-b2::value_ref escape_symbol);</code></p>
+<p>`b2::list_ref regex_escape(b2::list_cref strings,</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+b2
+</td>
+<td class="hdlist2">
+<p>value_ref symbols, b2::value_ref escape_symbol);`</p>
 </td>
 </tr>
 </table>
@@ -8953,7 +8960,7 @@ b2::value_ref escape_symbol);</code></p>
 </div>
 <div class="paragraph">
 <p>Escapes all of the characters in <code>symbols</code> using the escape symbol
-<code>escape-symbol</code> for the given string, and returns the escaped string.</p>
+<code>escape-symbol</code> for the given strings, and returns the escaped strings.</p>
 </div>
 </div>
 <div class="sect4">
@@ -17374,6 +17381,16 @@ Added searching-only interfaces to modules and targets.&#8201;&#8212;&#8201;<em>
 </li>
 <li>
 <p>Fixed broken <code>--out-xml</code>, ignoring value <code>--durations</code> options.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix missing bound native rule argument format checking.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix gcc command-db collection not working with multi-string commands.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Make <code>regex.escape</code> accept a list of strings to escape instead of just one
+string.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 </ul>
 </div>
