@@ -609,11 +609,9 @@ struct jam_arg_spec
 	{
 		count = 0;
 		using std::get;
-#if 0
         bool _[]{
             false,
             append_arg_list_to_spec(get<I>(args.arg))... };
-#endif
 		if (count == 0) spec[count++] = "*";
 		spec[count] = nullptr;
 	}
