@@ -486,6 +486,7 @@ mod_string.cpp \
 mod_summary.cpp \
 mod_sysinfo.cpp \
 mod_version.cpp \
+ext_linenoise.cpp \
  "
 
     if test_true ${B2_DEBUG_OPT} ; then B2_CXXFLAGS="${B2_CXXFLAGS_DEBUG}"
