@@ -1767,7 +1767,7 @@ brackets around the call, like shown on the second line.</p>
 </li>
 <li>
 <p>Comparisons: <code>a operator b</code> where <em>operator</em> is one of <code>=</code>, <code>!=</code>, <code>&lt;</code>,
-<code>&gt;</code>, <code>&#8656;</code> or <code>&gt;=</code>. The comparison is done pairwise between each string
+<code>&gt;</code>, <code>&lt;=</code> or <code>&gt;=</code>. The comparison is done pairwise between each string
 in the left and the right arguments.</p>
 </li>
 <li>
@@ -1818,7 +1818,7 @@ names.</p>
 </div>
 <div id="b2.overview.jam_language.actions" class="paragraph">
 <p>Sometimes, you need to specify the actual command lines to be used when
-creating targets. In the jam language, you use named actions to do this.
+creating targets. In the Jam language, you use named actions to do this.
 For example:</p>
 </div>
 <div class="listingblock">
@@ -2395,7 +2395,7 @@ them.</p>
 </dd>
 <dt class="hdlist1"><code>-s var=value</code></dt>
 <dd>
-<p>Set the variable <code>var</code> to <code>value</code> in the global scope of the jam language
+<p>Set the variable <code>var</code> to <code>value</code> in the global scope of the Jam language
 interpreter, overriding variables imported from the environment.</p>
 </dd>
 <dt class="hdlist1"><code>--command-database=<em>format</em></code></dt>
@@ -4218,7 +4218,7 @@ several default triplets provided by vcpkg are made.</p>
 if you have references to <code>/boost/predef</code> with some minimal configuration B2
 can find the B2 project for it and automatically resolve the reference. The
 searching supports two modes: finding regular B2 project directories, and
-package/config style loading of single jam files.</p>
+package/config style loading of single Jam files.</p>
 </div>
 <div class="sect3">
 <h4 id="b2.tasks.projectsearch.path"><a class="anchor" href="#b2.tasks.projectsearch.path"></a>5.12.1. Search Path</h4>
@@ -4286,7 +4286,7 @@ with that <em>project-id</em> root.</p>
 same. Searching involves either searching for a B2 project directory, i.e.
 a directory containing a jamfile, or searching for a specially named <code>*.jam</code>
 file to include (similar to how the <a href="#b2.tasks.packagemanagers">Package Managers</a> support includes
-jam files).</p>
+Jam files).</p>
 </div>
 <div class="paragraph">
 <p>For a given <em>project-id</em> of the form <code>/d1/d2/../dn</code> we search for the following,
@@ -5031,7 +5031,7 @@ libraries when the target is run.</p>
 </td>
 <td class="content">
 Note that a relative path will be prepended with the directory of the relevant
-<code>jam</code> file - as supplied on the <code>b2</code> command line - thus <em>severely</em> limiting its
+<code>Jam</code> file - as supplied on the <code>b2</code> command line - thus <em>severely</em> limiting its
 practical use!.
 </td>
 </tr>
@@ -7582,7 +7582,7 @@ Otherwise, xsltproc will be searched for in PATH.</p>
 </div>
 <div class="paragraph">
 <p>The xsltproc module provides the following rules. Note that these
-operate on jam targets and are intended to be used by another toolset,
+operate on Jam targets and are intended to be used by another toolset,
 such as boostbook, rather than directly by users.</p>
 </div>
 <div class="dlist">
@@ -10111,25 +10111,24 @@ exist.</p>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
-can be used as function objects. Also note that most predicates can be
-multi-element lists. In that case, all but the first element are
-prepended to the first argument which is passed to the rule named by the
-first element.</p>
+can be used as function objects (predicates.) Also note that predicates can
+be multi-element lists, any further argument to be passed is simply appended
+before the call.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p><code>rule filter ( predicate + : sequence * )</code></p>
 <div class="paragraph">
-<p>Return the elements <code>e</code> of <code>$(sequence)</code> for which <code>[ $(predicate) e ]</code>
+<p>Return the elements <code>e</code> of <code>sequence</code> for which <code>[ $(predicate) e ]</code>
 has a non-null value.</p>
 </div>
 </li>
 <li>
 <p><code>rule transform ( function + : sequence * )</code></p>
 <div class="paragraph">
-<p>Return a new sequence consisting of <code>[ $(function) $(e) ]</code> for each
-element <code>e</code> of <code>$(sequence)</code>.</p>
+<p>Return a new sequence consisting of <code>[ $(function) e ]</code> for each
+element <code>e</code> of <code>sequence</code>.</p>
 </div>
 </li>
 <li>
@@ -10141,20 +10140,28 @@ element <code>e</code> of <code>$(sequence)</code>.</p>
 <li>
 <p><code>rule insertion-sort ( s * : ordered * )</code></p>
 <div class="paragraph">
-<p>Insertion-sort <code>s</code> using the BinaryPredicate <code>ordered</code>.</p>
+<p>Insertion-sort <code>s</code> using the <code>ordered</code> predicate or
+lexicagraphically (i.e. using <code>&lt;</code>) when no predicate is supplied.</p>
 </div>
 </li>
 <li>
 <p><code>rule merge ( s1 * : s2 * : ordered * )</code></p>
 <div class="paragraph">
-<p>Merge two ordered sequences using the BinaryPredicate <code>ordered</code>.</p>
+<p>Merge two ordered sequences using the <code>ordered</code> predicate or
+lexicagraphically (i.e. using <code>&lt;</code>) when no predicate is supplied.</p>
+</div>
+</li>
+<li>
+<p><code>compare ( s1 * : s2 * : ordered * )</code></p>
+<div class="paragraph">
+<p>Compares two sequences using the 'ordered' predicate or
+lexicagraphically (i.e. using <code>&lt;</code>) when no predicate is supplied.</p>
 </div>
 </li>
 <li>
 <p><code>rule join ( s * : joint ? )</code></p>
 <div class="paragraph">
-<p>Join the elements of <code>s</code> into one long string. If <code>joint</code> is supplied,
-it is used as a separator.</p>
+<p>Join the elements of <code>s</code> using <code>joint</code> as separator if supplied.</p>
 </div>
 </li>
 <li>
@@ -10300,7 +10307,7 @@ present in <code>property-set</code>. Otherwise it deduces the package name usin
 root searching for the first project with an id. If none is found, the base
 name of the root project&#8217;s location is used. If <code>project-module</code> is empty, the
 caller module is used (this allows invoking just <code>[ get-package-name $(ps) ]</code>
-in project jam files).</p>
+in project Jam files).</p>
 </div>
 </li>
 </ol>
@@ -11569,8 +11576,11 @@ until the current function returns.</p>
 <p>Breakpoints are set using the <code>break</code> command. The location of the
 breakpoint can be specified as either the name of a function (including
 the module name) or or a file name and line number of the form
-<code>file:line</code>. When a breakpoint is created it is given a unique id which
-is used to identify it for other commands.</p>
+<code>file:line</code> (in this last case the line must contain a Jam statement for the
+breakpoint to be effective, a breakpoint set on an empty line or a line
+with a comment will not work.)
+When a breakpoint is created it is given a unique id which is used to
+refer it in other commands.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -11659,7 +11669,7 @@ with a set of properties to produce concrete targets.</p>
 <dd>
 <p>Object that corresponds to a file or an action.</p>
 </dd>
-<dt class="hdlist1">jam target</dt>
+<dt class="hdlist1">Jam target</dt>
 <dd>
 <p>Low-level concrete target that is specific to Boost.Jam build engine.
 Essentially a string&#8201;&#8212;&#8201;most often a name of file.</p>
@@ -11669,7 +11679,7 @@ Essentially a string&#8201;&#8212;&#8201;most often a name of file.</p>
 <div class="paragraph">
 <p>In most cases, you will only have to deal with concrete targets and the
 process that creates concrete targets from metatargets. Extending
-metatarget level is rarely required. The jam targets are typically only
+metatarget level is rarely required. The Jam targets are typically only
 used inside the command line patterns.</p>
 </div>
 <div class="admonitionblock warning">
@@ -11680,7 +11690,7 @@ used inside the command line patterns.</p>
 </td>
 <td class="content">
 All of the Boost.Jam target-related builtin rules, like
-<code>DEPENDS</code> or <code>ALWAYS</code> operate on jam targets. Applying them to metatargets or
+<code>DEPENDS</code> or <code>ALWAYS</code> operate on Jam targets. Applying them to metatargets or
 concrete targets has no effect.
 </td>
 </tr>
@@ -11800,8 +11810,8 @@ local t = [ new file-target $(name) : CPP : $(project) : $(a) ] ;</code></pre>
 </div>
 <div class="paragraph">
 <p>The first line creates an instance of the <code>action</code> class. The first
-parameter is the list of sources. The second parameter is the name a
-jam-level <a href="#b2.overview.jam_language.actions">action</a>. The third
+parameter is the list of sources. The second parameter is the name of a
+Jam-level <a href="#b2.overview.jam_language.actions">action</a>. The third
 parameter is the property-set applying to this action. The second line
 creates a target. We specify a name, a type and a project. We also pass
 the action object created earlier. If the action creates several
@@ -12824,11 +12834,11 @@ intention in such cases.</p>
 <div class="paragraph">
 <p>Many users would like to use environment variables in Jamfiles, for
 example, to control the location of external libraries. In many cases it
-is better to declare those external libraries in the site-config.jam
+is better to declare those external libraries in the <code>site-config.jam</code>
 file, as documented in the <a href="#b2.recipes.site-config">recipes
 section</a>. However, if the users already have the environment variables
 set up, it may not be convenient for them to set up their
-site-config.jam files as well and using the environment variables might
+<code>site-config.jam</code> files as well and using the environment variables might
 be reasonable.</p>
 </div>
 <div class="paragraph">
@@ -14499,7 +14509,7 @@ used to make a record of that directory.</p>
 <h4 id="jam.language.rules"><a class="anchor" href="#jam.language.rules"></a>12.2.3. Rules</h4>
 <div class="paragraph">
 <p>The basic <code>b2</code> language entity is called a rule. A rule is defined in
-two parts: the procedure and the actions. The procedure is a body of jam
+two parts: the procedure and the actions. The procedure is a body of Jam
 statements to be run when the rule is invoked; the actions are the OS
 shell commands to execute when updating the built targets of the rule.</p>
 </div>
@@ -14693,14 +14703,14 @@ cause <code>b2</code> to exit with an error code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">### argument error
-# rule report ( pronoun index ?  : state  : names + )
-# called with: ( I 2 foo  : sorry  : Joe Dave Pete )
-# extra argument foo
-### argument error
-# rule report ( pronoun index ?  : state  : names + )
-# called with: ( I 2  : sorry )
-# missing argument names</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">...
+error: rule report ( pronoun index ?  : state  : names + )
+error: called with: ( I 2 foo  : sorry  : Joe Dave Pete )
+error: extra argument foo
+...
+error: rule report ( pronoun index ?  : state  : names + )
+error: called with: ( I 2  : sorry )
+error: missing argument names</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -15034,7 +15044,8 @@ Cygwin, and OpenVMS, filenames are always down-cased before matching.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule GLOB_ARCHIVE ( archives * : member-patterns * : downcase-opt ? : symbol-patterns ? )</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule GLOB_ARCHIVE ( archives * : member-patterns *
+                  : downcase-opt ? : symbol-patterns ? )</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -15199,6 +15210,29 @@ character present in <em>delimiters</em> and returns the resulting list.</p>
 </div>
 </div>
 <div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._subst__"><a class="anchor" href="#jam.language.rules.builtins.utility._subst__"></a><code>SUBST</code></h6>
+<div class="paragraph">
+<p>The <code>SUBST</code> rule does pattern matching and substitution.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule SUBST ( string regexp replacements + )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replaces the <em>string</em> matching the <em>regexp</em> with all <em>replacements</em>.
+The <em>regexp</em> argument accepts a regular expression of the same type
+as those used by the <code>MATCH</code> rule.
+In <em>replacements</em>, the placeholders <code>\0</code> and <code>$0</code> are replaced with the full
+matched string, while <code>\N</code> and <code>$N</code> are replaced with the substring matched
+by group (<code>()</code> regexp subexpression) N-th.  Currently only 9 groups are
+supported, so '$10' in a replacement is interpreted as '$1' followed by
+a '0' character.
+Note that unlike <code>MATCH</code>, <em>regexp</em> does not have to contain a group
+for a result to be returned.</p>
+</div>
+</div>
+<div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._update__"><a class="anchor" href="#jam.language.rules.builtins.utility._update__"></a><code>UPDATE</code></h6>
 <div class="listingblock">
 <div class="content">
@@ -15206,7 +15240,7 @@ character present in <em>delimiters</em> and returns the resulting list.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Classic jam treats any non-option element of command line as a name of
+<p>Classic Jam treats any non-option element of command line as a name of
 target to be updated. This prevented more sophisticated handling of
 command line. This is now enabled again but with additional changes to
 the <code>UPDATE</code> rule to allow for the flexibility of changing the list of
@@ -16386,7 +16420,8 @@ have not returned at the time of the <code>VARNAMES</code> invocation.
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-jam" data-lang="jam">rule IMPORT ( source_module ? : source_rules *
-            : target_module ? : target_rules * )</code></pre>
+            : target_module ? : target_rules *
+            : localize ? )</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -16406,6 +16441,12 @@ IMPORT m1 : rule1 : m2 : m1-rule1 ;
 # import all non-local rules from m1 into m2
 IMPORT m1 : [ RULENAMES m1 ] : m2 : [ RULENAMES m1 ] ;</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>If <em>localize</em> is supplied <em>target_rules</em> are executed in <em>target_module</em>,
+with corresponding access to that module&#8217;s local variables.
+Existing rules in <em>target_module</em> are silently overwritten by
+imported <em>target_rules</em>.</p>
 </div>
 </div>
 <div class="sect4">
@@ -16650,7 +16691,7 @@ based on the settings of the target-specific <code>SEARCH</code> and <code>LOCAT
 variables.</p>
 </li>
 <li>
-<p>In addition to local and global variables, jam allows you to set a
+<p>In addition to local and global variables, Jam allows you to set a
 variable <code>on</code> a target. Target-specific variable values can usually not
 be read, and take effect only in the following contexts:</p>
 <div class="ulist">
@@ -16724,7 +16765,7 @@ non-empty, leading &lt;s and trailing &gt;s are added if necessary to form an
 expression of the form &lt;expr2&gt;; &lt;expr2&gt; is then prepended.</p>
 </li>
 <li>
-<p>When Jam is invoked it imports all environment variable settings into
+<p>When bjam is invoked it imports all environment variable settings into
 corresponding Jam variables, followed by all command-line (-s&#8230;&#8203;)
 variable settings. Variables whose name ends in PATH, Path, or path are
 split into string lists on OS-specific path-list separator boundaries
@@ -16744,9 +16785,9 @@ if $(MESSAGE) { ECHO The message is: $(MESSAGE) ; }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If the user wants a specific message, he invokes jam with
+<p>If the user wants a specific message, he invokes bjam with
 <code>-sMESSAGE=message
-            text</code>. If he wants no message, he invokes jam with
+            text</code>. If he wants no message, he invokes bjam with
 <code>-sMESSAGE=</code> and nothing at all is printed.</p>
 </div>
 </li>
