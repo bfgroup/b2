@@ -9515,6 +9515,36 @@ C&#43;&#43;
 second version, <code>rhs</code>.</p>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_b2version_verify"><a class="anchor" href="#_b2version_verify"></a><code>b2::version_verify</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule semver-verify ( semver )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>bool semver_verify(value_ref semver);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns <code>true</code> if the given <code>semver</code> value is a fully valid semantic version.</p>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_db_module"><a class="anchor" href="#_db_module"></a>6.5.8. <code>db</code> module.</h4>
@@ -11340,6 +11370,19 @@ will also link to B. Specifying B as dependency of A is different from
 adding B to the sources of A.</p>
 </div>
 </li>
+<li>
+<p><a id="b2.reference.features.attributes.version"></a> <em>version</em></p>
+<div class="paragraph">
+<p>The value of a version feature is a valid Semantic Version.
+<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> Like free features, the
+set of values are unbounded. When a version feature is specified it will use
+the semnantic versioning rules to match them against each other.</p>
+</div>
+<div class="paragraph">
+<p><em>Note, this is an experimental feature and how it works is subject to future
+changes as use cases get discovered.</em></p>
+</div>
+</li>
 </ul>
 </div>
 <div id="b2.reference.features.attributes.base" class="paragraph">
@@ -11704,7 +11747,7 @@ such as metatarget kind, name, sources and properties, and can be called
 with specific properties to generate concrete targets. At the code level
 it is represented by an instance of class derived from
 <a href="#b2.reference.class.abstract-target">abstract-target</a>.
-<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup></p>
+<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup></p>
 </div>
 <div class="paragraph">
 <p>The <a href="#b2.reference.class.abstract-target.generate">generate</a> method
@@ -11825,7 +11868,7 @@ problems. Therefore, whenever returning targets you should pass them via
 the <code>virtual-target.register</code> rule, besides allowing B2 to
 track which virtual targets got created for each metatarget, this will
 also replace targets with previously created identical ones, as
-necessary.<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> Here are a couple of examples:</p>
+necessary.<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> Here are a couple of examples:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -17378,6 +17421,10 @@ RULENAMES builtin rules.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
 support from.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </li>
 <li>
+<p><strong>New</strong>: Add <code>version</code> feature attribute to tag and manage semantic versioning
+of targets.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
 <p>Fix Jam/C&#43;&#43; bind definitions of 4 or more values in a single
 declared argument not actually adding all the definitions.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
 </li>
@@ -18881,10 +18928,13 @@ based on this CSS.</p>
 <a href="#_footnoteref_3">3</a>. see the definition of "free" in <a href="#b2.reference.features.attributes">the section called “Feature Attributes”</a>.
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. This name is historic, and will be eventually changed to <code>metatarget</code>
+<a href="#_footnoteref_4">4</a>. Semantic Versioning (<a href="https://semver.org/" class="bare">https://semver.org/</a>)
 </div>
 <div class="footnote" id="_footnotedef_5">
-<a href="#_footnoteref_5">5</a>. This create-then-register pattern is caused by limitations of the Boost.Jam language. Python port is likely to never create duplicate targets.
+<a href="#_footnoteref_5">5</a>. This name is historic, and will be eventually changed to <code>metatarget</code>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. This create-then-register pattern is caused by limitations of the Boost.Jam language. Python port is likely to never create duplicate targets.
 </div>
 </div>
 </body>
