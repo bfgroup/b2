@@ -375,10 +375,11 @@ div.table-wrapper {
 }
 
 code,
-pre > code {
+pre > code,
+dd pre {
 	font-family: var(--font-family-code);
 	font-size: 0.9rem;
-	line-height: 1.42;
+	line-height: 1rem;
 	-webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. See https://github.com/edwardtufte/tufte-css/issues/81#issuecomment-261953409 */
 	font-style: normal;
 }
@@ -1590,9 +1591,8 @@ impossible to perform multi-variant builds. Often, change in any build
 property requires a complete reconfiguration of the build tree.</p>
 </div>
 <div class="paragraph">
-<p>In order to support true multi-variant builds, B2 introduces the
-concept of a metatarget definition main target metatarget
-<em>metatarget</em>&#8201;&#8212;&#8201;an object that is created when the build description is
+<p>In order to support true multi-variant builds, B2 introduces the concept
+of <em>metatarget</em>&#8201;&#8212;&#8201;an object that is created when the build description is
 parsed and can be called later with specific build properties to
 generate actual targets.</p>
 </div>
@@ -1767,7 +1767,7 @@ brackets around the call, like shown on the second line.</p>
 </li>
 <li>
 <p>Comparisons: <code>a operator b</code> where <em>operator</em> is one of <code>=</code>, <code>!=</code>, <code>&lt;</code>,
-<code>&gt;</code>, <code>&#8656;</code> or <code>&gt;=</code>. The comparison is done pairwise between each string
+<code>&gt;</code>, <code>&lt;=</code> or <code>&gt;=</code>. The comparison is done pairwise between each string
 in the left and the right arguments.</p>
 </li>
 <li>
@@ -1818,7 +1818,7 @@ names.</p>
 </div>
 <div id="b2.overview.jam_language.actions" class="paragraph">
 <p>Sometimes, you need to specify the actual command lines to be used when
-creating targets. In the jam language, you use named actions to do this.
+creating targets. In the Jam language, you use named actions to do this.
 For example:</p>
 </div>
 <div class="listingblock">
@@ -2395,7 +2395,7 @@ them.</p>
 </dd>
 <dt class="hdlist1"><code>-s var=value</code></dt>
 <dd>
-<p>Set the variable <code>var</code> to <code>value</code> in the global scope of the jam language
+<p>Set the variable <code>var</code> to <code>value</code> in the global scope of the Jam language
 interpreter, overriding variables imported from the environment.</p>
 </dd>
 <dt class="hdlist1"><code>--command-database=<em>format</em></code></dt>
@@ -3342,7 +3342,7 @@ lib b : : &lt;name&gt;b &lt;search&gt;/pool/debug ;</code></pre>
 </div>
 <div class="paragraph">
 <p>If /pool/release/a.so, /pool/release/b.so, /pool/debug/a.so, and
-/pool/release/b.so all exist, the linker will probably take both <code>a</code> and
+/pool/debug/b.so all exist, the linker will probably take both <code>a</code> and
 <code>b</code> from the same directory, instead of finding <code>a</code> in /pool/release and
 <code>b</code> in /pool/debug. If you need to distinguish between multiple
 libraries with the same name, it&#8217;s safer to use <code>file</code>.</p>
@@ -4218,7 +4218,7 @@ several default triplets provided by vcpkg are made.</p>
 if you have references to <code>/boost/predef</code> with some minimal configuration B2
 can find the B2 project for it and automatically resolve the reference. The
 searching supports two modes: finding regular B2 project directories, and
-package/config style loading of single jam files.</p>
+package/config style loading of single Jam files.</p>
 </div>
 <div class="sect3">
 <h4 id="b2.tasks.projectsearch.path"><a class="anchor" href="#b2.tasks.projectsearch.path"></a>5.12.1. Search Path</h4>
@@ -4286,7 +4286,7 @@ with that <em>project-id</em> root.</p>
 same. Searching involves either searching for a B2 project directory, i.e.
 a directory containing a jamfile, or searching for a specially named <code>*.jam</code>
 file to include (similar to how the <a href="#b2.tasks.packagemanagers">Package Managers</a> support includes
-jam files).</p>
+Jam files).</p>
 </div>
 <div class="paragraph">
 <p>For a given <em>project-id</em> of the form <code>/d1/d2/../dn</code> we search for the following,
@@ -4578,7 +4578,7 @@ The function signature is:</p>
 <div class="paragraph">
 <p>This function can only be used when passing requirements or usage
 requirements to a metatarget rule. For example, to make an application
-link to a library if it&#8217;s available, one has use the following:</p>
+link to a library if it&#8217;s available, one has to use the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5031,7 +5031,7 @@ libraries when the target is run.</p>
 </td>
 <td class="content">
 Note that a relative path will be prepended with the directory of the relevant
-<code>jam</code> file - as supplied on the <code>b2</code> command line - thus <em>severely</em> limiting its
+<code>Jam</code> file - as supplied on the <code>b2</code> command line - thus <em>severely</em> limiting its
 practical use!.
 </td>
 </tr>
@@ -7582,7 +7582,7 @@ Otherwise, xsltproc will be searched for in PATH.</p>
 </div>
 <div class="paragraph">
 <p>The xsltproc module provides the following rules. Note that these
-operate on jam targets and are intended to be used by another toolset,
+operate on Jam targets and are intended to be used by another toolset,
 such as boostbook, rather than directly by users.</p>
 </div>
 <div class="dlist">
@@ -7855,8 +7855,8 @@ of X. They won&#8217;t interfere with each other in any way. Similarly,
 importing rules into one module has no effect on any other module.</p>
 </div>
 <div class="paragraph">
-<p>Every module has two special variables. <code>$(<em>file</em>)</code> contains the name
-of the file that the module was loaded from and <code>$(<em>name</em>)</code> contains
+<p>Every module has two special variables. <code>$(__file__)</code> contains the name
+of the file that the module was loaded from and <code>$(__name__)</code> contains
 the name of the module.</p>
 </div>
 <div class="admonitionblock note">
@@ -7866,7 +7866,7 @@ the name of the module.</p>
 <div class="title">ℹ</div>
 </td>
 <td class="content">
-<code>$(<em>file</em>)</code> does not contain the full path to the file. If you need
+<code>$(__file__)</code> does not contain the full path to the file. If you need
 this, use <code>modules.binding</code>.
 </td>
 </tr>
@@ -8184,7 +8184,7 @@ C&#43;&#43;
 </div>
 <div class="paragraph">
 <p>Runs internal B2 unit tests for the specified module. The module&#8217;s
-<code><em>test</em></code> rule is executed in its own module to eliminate any inadvertent
+<code>__test__</code> rule is executed in its own module to eliminate any inadvertent
 effects of testing module dependencies (such as assert) on the module itself.</p>
 </div>
 </div>
@@ -8327,7 +8327,7 @@ C&#43;&#43;
 </div>
 </div>
 <div class="paragraph">
-<p>Instantiates a new instance of the given class and calls the <code><em>init</em></code> with
+<p>Instantiates a new instance of the given class and calls the <code>__init__</code> with
 the given arguments. Returns the instance ID.</p>
 </div>
 </div>
@@ -8517,31 +8517,6 @@ lists &amp; rest, bind::context_ref_ context_ref);</code></p>
 </div>
 <div class="sect4">
 <h5 id="_b2jamerrorstry_catch"><a class="anchor" href="#_b2jamerrorstry_catch"></a><code>b2::jam::errors::try-catch</code></h5>
-<div class="exampleblock">
-<div class="content">
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-Jam
-</td>
-<td class="hdlist2">
-<p><code>rule error-skip-frames ( skip-frames messages * : * )</code></p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-C&#43;&#43;
-</td>
-<td class="hdlist2">
-<p><code>void error_skip_frames(std::tuple&lt;int, list_ref&gt; skip_messages, const
-lists &amp; rest, bind::context_ref_ context_ref);</code></p>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
 <div class="paragraph">
 <p>This is not really an exception-handling mechanism, but it does allow us to
 perform some error-checking on our error-checking. Errors are suppressed
@@ -8705,7 +8680,7 @@ C&#43;&#43;
 Jam
 </td>
 <td class="hdlist2">
-<p><code>rule lol&#8594;list ( * )</code></p>
+<p><code>rule lol-&gt;list ( * )</code></p>
 </td>
 </tr>
 <tr>
@@ -8794,10 +8769,10 @@ user module.</p>
 <p><code>"$"</code> matches the end of the string.</p>
 </li>
 <li>
-<p><code>"&lt;"</code> matches the beginning of a word.</p>
+<p><code>"\&lt;"</code> matches the beginning of a word.</p>
 </li>
 <li>
-<p><code>"&gt;"</code> matches the end of a word.</p>
+<p><code>"\&gt;"</code> matches the end of a word.</p>
 </li>
 </ul>
 </div>
@@ -8823,7 +8798,7 @@ Jam
 C&#43;&#43;
 </td>
 <td class="hdlist2">
-<p><code>b2::list_ref rb2::egex_split(const std::tuple&lt;b2::value_ref,
+<p><code>b2::list_ref b2::regex_split(const std::tuple&lt;b2::value_ref,
 b2::value_ref&gt; &amp; string_separator);</code></p>
 </td>
 </tr>
@@ -8879,7 +8854,7 @@ separator);</code></p>
 </div>
 </div>
 <div class="paragraph">
-<p>Returns the concatenated results of Applying regex.split to every element of
+<p>Returns the concatenated results of applying regex.split to every element of
 the list using the separator pattern.</p>
 </div>
 </div>
@@ -8960,7 +8935,7 @@ matches.</p>
 Jam
 </td>
 <td class="hdlist2">
-<p><code>rule escape ( string : symbols : escape-symbol )</code></p>
+<p><code>rule escape ( string + : symbols : escape-symbol )</code></p>
 </td>
 </tr>
 <tr>
@@ -8968,8 +8943,15 @@ Jam
 C&#43;&#43;
 </td>
 <td class="hdlist2">
-<p><code>b2::value_ref regex_escape(b2::value_ref string,b2:: value_ref symbols,
-b2::value_ref escape_symbol);</code></p>
+<p>`b2::list_ref regex_escape(b2::list_cref strings,</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+b2
+</td>
+<td class="hdlist2">
+<p>value_ref symbols, b2::value_ref escape_symbol);`</p>
 </td>
 </tr>
 </table>
@@ -8978,7 +8960,7 @@ b2::value_ref escape_symbol);</code></p>
 </div>
 <div class="paragraph">
 <p>Escapes all of the characters in <code>symbols</code> using the escape symbol
-<code>escape-symbol</code> for the given string, and returns the escaped string.</p>
+<code>escape-symbol</code> for the given strings, and returns the escaped strings.</p>
 </div>
 </div>
 <div class="sect4">
@@ -9137,8 +9119,15 @@ Jam
 C&#43;&#43;
 </td>
 <td class="hdlist2">
-<p><code>void b2::set::add(b2::list_cref elements);</code>, <code>void b2::set::add(const
-b2::set &amp; elements);</code></p>
+<p><code>void b2::set::add(b2::list_cref elements);</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>void b2::set::add(const b2::set &amp; elements);</code></p>
 </td>
 </tr>
 </table>
@@ -9268,7 +9257,7 @@ b2::list_cref set2);</code></p>
 </div>
 </div>
 <div class="paragraph">
-<p>Removes all the items appearing in both <code>set1</code> &amp; <code>set2</code>.</p>
+<p>Returns all the items appearing in both <code>set1</code> &amp; <code>set2</code>.</p>
 </div>
 </div>
 <div class="sect5">
@@ -9526,6 +9515,36 @@ C&#43;&#43;
 second version, <code>rhs</code>.</p>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_b2version_verify"><a class="anchor" href="#_b2version_verify"></a><code>b2::version_verify</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule semver-verify ( semver )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>bool semver_verify(value_ref semver);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns <code>true</code> if the given <code>semver</code> value is a fully valid semantic version.</p>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_db_module"><a class="anchor" href="#_db_module"></a>6.5.8. <code>db</code> module.</h4>
@@ -9538,6 +9557,12 @@ second version, <code>rhs</code>.</p>
 <p>Container for values structured as a tree with keys that are the tree path to
 the value. Arrays and objects (named fields) are supported.</p>
 </div>
+<div class="paragraph">
+<p>Values are indexed with a variable, i.e. a list of values, path. The path can
+contain two kinds of position items: an array index or an object member. An
+array index is <code>"[]" <em>n</em></code>. Where the <code>"[]"</code> indicates that a zero based index
+in the array, <code><em>n</em></code> follows. Anything else is treated as a member field name.</p>
+</div>
 <div class="sect5">
 <h6 id="_b2property_dbemplace"><a class="anchor" href="#_b2property_dbemplace"></a><code>b2::property_db::emplace</code></h6>
 <div class="exampleblock">
@@ -9549,7 +9574,7 @@ the value. Arrays and objects (named fields) are supported.</p>
 Jam
 </td>
 <td class="hdlist2">
-<p><code>rule emplace ( key + : value )</code></p>
+<p><code>rule emplace ( key * : value )</code></p>
 </td>
 </tr>
 <tr>
@@ -9565,10 +9590,68 @@ C&#43;&#43;
 </div>
 </div>
 <div class="paragraph">
-<p>Set, or add, element at path <code>key</code> with <code>value</code>. The path can contain two kinds
-of position items: an array index or an object member. An array index is
-<code>"[]" <em>n</em></code>. Where the <code>"[]"</code> indicates that a zero based index in the array,
-<code><em>n</em></code> follows. Anything else is treated as a member field name.</p>
+<p>Set, or add, element at path <code>key</code> with <code>value</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbget"><a class="anchor" href="#_b2property_dbget"></a><code>b2::property_db::get</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule get ( key * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>list_ref get(list_cref k) const;</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Get element at path <code>key</code>. If the key is not found returns an empty list.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbsize"><a class="anchor" href="#_b2property_dbsize"></a><code>b2::property_db::size</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule size ( key * )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>std::size_t size(list_cref k);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Get the count of direct children at path <code>key</code>. If the key is not found returns
+zero (<code>0</code>).</p>
 </div>
 </div>
 <div class="sect5">
@@ -9631,6 +9714,101 @@ C&#43;&#43;
 <div class="paragraph">
 <p>Writes out a representation of the data as a string formatted as <code>format</code>.
 Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbdump_2"><a class="anchor" href="#_b2property_dbdump_2"></a><code>b2::property_db::dump</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule dump ( format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>std::string dump(value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Writes out a representation of the data as a string formatted as <code>format</code>.
+Supported formats are: <code>JSON</code>.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbread_file"><a class="anchor" href="#_b2property_dbread_file"></a><code>b2::property_db::read_file</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule read-file ( filename : format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>void read_file(value_ref filename, value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Reads from the given <code>filename</code> file formatted as <code>format</code> adding the data
+to this database. Supported formats are: <code>JSON</code>. Returns a boolean result
+on success. On failure the database may have partial data added to it.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_b2property_dbparse"><a class="anchor" href="#_b2property_dbparse"></a><code>b2::property_db::parse</code></h6>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule parse ( content : format ? )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>bool parse(value_ref content, value_ref format);</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Reads the given <code>content</code> data formatted as <code>format</code> adding the data
+to this database. Supported formats are: <code>JSON</code>. Returns a boolean result
+on success. On failure the database may have partial data added to it.</p>
 </div>
 </div>
 </div>
@@ -9742,6 +9920,36 @@ C&#43;&#43;
 </div>
 <div class="paragraph">
 <p>Checks if an argument was previously added.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_b2argsextra_args"><a class="anchor" href="#_b2argsextra_args"></a><code>b2::args::extra_args</code></h5>
+<div class="exampleblock">
+<div class="content">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Jam
+</td>
+<td class="hdlist2">
+<p><code>rule extra_args ( )</code></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+C&#43;&#43;
+</td>
+<td class="hdlist2">
+<p><code>list_ref extra_args();</code></p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Retrieve "extra" arguments, i.e. those not parsed as options.</p>
 </div>
 </div>
 </div>
@@ -9933,25 +10141,24 @@ exist.</p>
 <div class="paragraph">
 <p>Various useful list functions. Note that algorithms in this module
 execute largely in the caller&#8217;s module namespace, so that local rules
-can be used as function objects. Also note that most predicates can be
-multi-element lists. In that case, all but the first element are
-prepended to the first argument which is passed to the rule named by the
-first element.</p>
+can be used as function objects (predicates.) Also note that predicates can
+be multi-element lists, any further argument to be passed is simply appended
+before the call.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p><code>rule filter ( predicate + : sequence * )</code></p>
 <div class="paragraph">
-<p>Return the elements <code>e</code> of <code>$(sequence)</code> for which <code>[ $(predicate) e ]</code>
+<p>Return the elements <code>e</code> of <code>sequence</code> for which <code>[ $(predicate) e ]</code>
 has a non-null value.</p>
 </div>
 </li>
 <li>
 <p><code>rule transform ( function + : sequence * )</code></p>
 <div class="paragraph">
-<p>Return a new sequence consisting of <code>[ $(function) $(e) ]</code> for each
-element <code>e</code> of <code>$(sequence)</code>.</p>
+<p>Return a new sequence consisting of <code>[ $(function) e ]</code> for each
+element <code>e</code> of <code>sequence</code>.</p>
 </div>
 </li>
 <li>
@@ -9963,20 +10170,28 @@ element <code>e</code> of <code>$(sequence)</code>.</p>
 <li>
 <p><code>rule insertion-sort ( s * : ordered * )</code></p>
 <div class="paragraph">
-<p>Insertion-sort <code>s</code> using the BinaryPredicate <code>ordered</code>.</p>
+<p>Insertion-sort <code>s</code> using the <code>ordered</code> predicate or
+lexicagraphically (i.e. using <code>&lt;</code>) when no predicate is supplied.</p>
 </div>
 </li>
 <li>
 <p><code>rule merge ( s1 * : s2 * : ordered * )</code></p>
 <div class="paragraph">
-<p>Merge two ordered sequences using the BinaryPredicate <code>ordered</code>.</p>
+<p>Merge two ordered sequences using the <code>ordered</code> predicate or
+lexicagraphically (i.e. using <code>&lt;</code>) when no predicate is supplied.</p>
+</div>
+</li>
+<li>
+<p><code>compare ( s1 * : s2 * : ordered * )</code></p>
+<div class="paragraph">
+<p>Compares two sequences using the 'ordered' predicate or
+lexicagraphically (i.e. using <code>&lt;</code>) when no predicate is supplied.</p>
 </div>
 </li>
 <li>
 <p><code>rule join ( s * : joint ? )</code></p>
 <div class="paragraph">
-<p>Join the elements of <code>s</code> into one long string. If <code>joint</code> is supplied,
-it is used as a separator.</p>
+<p>Join the elements of <code>s</code> using <code>joint</code> as separator if supplied.</p>
 </div>
 </li>
 <li>
@@ -10122,7 +10337,7 @@ present in <code>property-set</code>. Otherwise it deduces the package name usin
 root searching for the first project with an id. If none is found, the base
 name of the root project&#8217;s location is used. If <code>project-module</code> is empty, the
 caller module is used (this allows invoking just <code>[ get-package-name $(ps) ]</code>
-in project jam files).</p>
+in project Jam files).</p>
 </div>
 </li>
 </ol>
@@ -10321,7 +10536,7 @@ tries each suffix. E.g. for name of "file.so.1.2" suffixes "2", "1", and
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>rule <em>init</em> ( name : project )</code></p>
+<p><code>rule __init__ ( name : project )</code></p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>name</code></dt>
@@ -10562,7 +10777,7 @@ and handles generation of those dependency targets.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>rule <em>init</em> ( name : project : sources * : requirements * : default-build * : usage-requirements * )</code></p>
+<p><code>rule __init__ ( name : project : sources * : requirements * : default-build * : usage-requirements * )</code></p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>name</code></dt>
@@ -10643,7 +10858,7 @@ automatically for each type.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>rule <em>init</em> ( name : project : type : sources * : requirements * : default-build * : usage-requirements * )</code></p>
+<p><code>rule __init__ ( name : project : type : sources * : requirements * : default-build * : usage-requirements * )</code></p>
 <div class="dlist">
 <dl>
 <dt class="hdlist1"><code>name</code></dt>
@@ -10718,9 +10933,9 @@ and should not be called directly by users.
 </div>
 </div>
 <div class="paragraph">
-<p>There is 1&lt;&#8594;1 correspondence between identity and value. No two
+<p>There is 1&lt;-&gt;1 correspondence between identity and value. No two
 instances of the class are equal. To maintain this property, the
-'property-set.create' rule should be used to create new instances.
+<code>property-set.create</code> rule should be used to create new instances.
 Instances are immutable.</p>
 </div>
 <div class="openblock">
@@ -10981,7 +11196,7 @@ project&#8217;s build directory. For example,</p>
 <div class="paragraph">
 <p>A <em>feature</em> is a normalized (toolset-independent) aspect of a build
 configuration, such as whether inlining is enabled. Feature names may
-not contain the &#8216;&gt;&#8217; character.</p>
+not contain the ‘<code>&gt;</code>’ character.</p>
 </div>
 <div class="paragraph">
 <p>Each feature in a build configuration has one or more associated
@@ -11153,6 +11368,19 @@ additional dependency.</p>
 on library B. As the result, whenever an application will link to A, it
 will also link to B. Specifying B as dependency of A is different from
 adding B to the sources of A.</p>
+</div>
+</li>
+<li>
+<p><a id="b2.reference.features.attributes.version"></a> <em>version</em></p>
+<div class="paragraph">
+<p>The value of a version feature is a valid Semantic Version.
+<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup> Like free features, the
+set of values are unbounded. When a version feature is specified it will use
+the semnantic versioning rules to match them against each other.</p>
+</div>
+<div class="paragraph">
+<p><em>Note, this is an experimental feature and how it works is subject to future
+changes as use cases get discovered.</em></p>
 </div>
 </li>
 </ul>
@@ -11391,8 +11619,11 @@ until the current function returns.</p>
 <p>Breakpoints are set using the <code>break</code> command. The location of the
 breakpoint can be specified as either the name of a function (including
 the module name) or or a file name and line number of the form
-<code>file:line</code>. When a breakpoint is created it is given a unique id which
-is used to identify it for other commands.</p>
+<code>file:line</code> (in this last case the line must contain a Jam statement for the
+breakpoint to be effective, a breakpoint set on an empty line or a line
+with a comment will not work.)
+When a breakpoint is created it is given a unique id which is used to
+refer it in other commands.</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -11481,7 +11712,7 @@ with a set of properties to produce concrete targets.</p>
 <dd>
 <p>Object that corresponds to a file or an action.</p>
 </dd>
-<dt class="hdlist1">jam target</dt>
+<dt class="hdlist1">Jam target</dt>
 <dd>
 <p>Low-level concrete target that is specific to Boost.Jam build engine.
 Essentially a string&#8201;&#8212;&#8201;most often a name of file.</p>
@@ -11491,7 +11722,7 @@ Essentially a string&#8201;&#8212;&#8201;most often a name of file.</p>
 <div class="paragraph">
 <p>In most cases, you will only have to deal with concrete targets and the
 process that creates concrete targets from metatargets. Extending
-metatarget level is rarely required. The jam targets are typically only
+metatarget level is rarely required. The Jam targets are typically only
 used inside the command line patterns.</p>
 </div>
 <div class="admonitionblock warning">
@@ -11501,8 +11732,8 @@ used inside the command line patterns.</p>
 <div class="title">⚠</div>
 </td>
 <td class="content">
-All of the Boost.Jam target-related builtin functions, like
-<code>DEPENDS</code> or <code>ALWAYS</code> operate on jam targets. Applying them to metatargets or
+All of the Boost.Jam target-related builtin rules, like
+<code>DEPENDS</code> or <code>ALWAYS</code> operate on Jam targets. Applying them to metatargets or
 concrete targets has no effect.
 </td>
 </tr>
@@ -11516,7 +11747,7 @@ such as metatarget kind, name, sources and properties, and can be called
 with specific properties to generate concrete targets. At the code level
 it is represented by an instance of class derived from
 <a href="#b2.reference.class.abstract-target">abstract-target</a>.
-<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup></p>
+<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup></p>
 </div>
 <div class="paragraph">
 <p>The <a href="#b2.reference.class.abstract-target.generate">generate</a> method
@@ -11538,8 +11769,8 @@ instance of <a href="#b2.reference.class.property-set">property-set</a>)</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s possible to lookup a metatarget by target-id using the
-<code>targets.resolve-reference</code> function, and the
-<code>targets.generate-from-reference</code> function can both lookup and generate
+<code>targets.resolve-reference</code> rule, and the
+<code>targets.generate-from-reference</code> rule can both lookup and generate
 a metatarget.</p>
 </div>
 <div class="paragraph">
@@ -11585,7 +11816,7 @@ implicitly&#8201;&#8212;&#8201;when loading a new Jamfiles, or when a new target
 alternative with as-yet unknown name is created. The instances of the
 classes derived from
 <a href="#b2.reference.class.basic-target">basic-target</a> are typically
-created when Jamfile calls a metatarget rule, such as such as <code>exe</code>.</p>
+created when Jamfile calls a metatarget rule, such as <code>exe</code>.</p>
 </div>
 <div class="paragraph">
 <p>It it permissible to create a custom class derived from
@@ -11622,8 +11853,8 @@ local t = [ new file-target $(name) : CPP : $(project) : $(a) ] ;</code></pre>
 </div>
 <div class="paragraph">
 <p>The first line creates an instance of the <code>action</code> class. The first
-parameter is the list of sources. The second parameter is the name a
-jam-level <a href="#b2.overview.jam_language.actions">action</a>. The third
+parameter is the list of sources. The second parameter is the name of a
+Jam-level <a href="#b2.overview.jam_language.actions">action</a>. The third
 parameter is the property-set applying to this action. The second line
 creates a target. We specify a name, a type and a project. We also pass
 the action object created earlier. If the action creates several
@@ -11634,10 +11865,10 @@ targets, we can repeat the second line several times.</p>
 than once with the same properties. Returning two different instances of
 <code>file-target</code> that correspond to the same file clearly will result in
 problems. Therefore, whenever returning targets you should pass them via
-the <code>virtual-target.register</code> function, besides allowing B2 to
+the <code>virtual-target.register</code> rule, besides allowing B2 to
 track which virtual targets got created for each metatarget, this will
 also replace targets with previously created identical ones, as
-necessary.<sup class="footnote">[<a id="_footnoteref_5" class="footnote" href="#_footnotedef_5" title="View footnote.">5</a>]</sup> Here are a couple of examples:</p>
+necessary.<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup> Here are a couple of examples:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -11659,7 +11890,7 @@ metatargets.</p>
 <div class="paragraph">
 <p>In practice, most files have specific types, and most tools consume and
 produce files of specific type. To take advantage of this fact,
-B2 defines concept of target type and generators generators,
+B2 defines concept of target type and generators,
 and has special metatarget class
 <a href="#b2.reference.class.typed-target">typed-target</a>. Target type is
 merely an identifier. It is associated with a set of file extensions
@@ -11754,7 +11985,11 @@ make that transformation. That&#8217;s done with an <code>actions</code> declara
 </div>
 </div>
 <div class="paragraph">
-<p>Now, we&#8217;re ready to tie it all together. Put all the code above in file
+<p>Note that this action currently only works on Posix platforms (i.e. not
+on Windows), where the shell used by B2 can execute a command like
+<code>"./inline-file.py"</code> (on Windows you have to invoke the Python interpreter,
+i.e. use the syntax <code>python inline-file.py $(&lt;) $(&gt;)</code>.)
+Now, we&#8217;re ready to tie it all together. Put all the code above in file
 <code>verbatim.jam</code>, add <code>import verbatim ;</code> to <code>Jamroot.jam</code>, and it&#8217;s
 possible to write the following in your Jamfile:</p>
 </div>
@@ -11852,7 +12087,7 @@ be assigned to a target type.</p>
 {
     rule pattern ( )
     {
-        return "//###include[ ]*\"([^\"]*)\"" ;
+        return "[ \t]*#[ \t]*include[ \t]*\"([^\"]+)\"" ;
     }
 }</code></pre>
 </div>
@@ -11864,8 +12099,8 @@ used for scanning. The parentheses in the regular expression indicate
 which part of the string is the name of the included file. Only the
 first parenthesized group in the regular expression will be recognized;
 if you can&#8217;t express everything you want that way, you can return
-multiple regular expressions, each of which contains a parenthesized
-group to be matched.</p>
+multiple regular expressions (up to 10 expressions are currently
+supported), each of which contains a parenthesized group to be matched.</p>
 </div>
 <div class="paragraph">
 <p>After that, we need to register our scanner class:</p>
@@ -11958,12 +12193,12 @@ target type. For example, the first generator invoked when building an
 linker.</p>
 </div>
 <div class="paragraph">
-<p>You should also know about two specific functions for registering
+<p>You should also know about two specific rules for registering
 generators: <code>generators.register-c-compiler</code> and
 <code>generators.register-linker</code>. The first sets up header dependency
 scanning for C files, and the seconds handles various complexities like
 searched libraries. For that reason, you should always use those
-functions when adding support for compilers and linkers.</p>
+rules when adding support for compilers and linkers.</p>
 </div>
 <div class="paragraph">
 <p>(Need a note about UNIX)</p>
@@ -12029,7 +12264,7 @@ automatically:</p>
                 leaves += $(t) ;
             }
         }
-        return [ generator.generated-targets $(sources) $(leafs)
+        return [ generator.generated-targets $(sources) $(leaves)
           : $(property-set) : $(project) $(name) ] ;
     }
 }
@@ -12154,8 +12389,7 @@ allow the user to pass any value to the command line parameters for a
 particular tool, if so desired. For example, the <code>&lt;cxxflags&gt;</code> feature
 allows you to pass any command line options to a C&#43;&#43; compiler. The
 <code>&lt;include&gt;</code> feature allows you to pass any string preceded by <code>-I</code> and
-the interpretation is tool-specific. (See <a href="#b2.faq.external">Can I get capture external program output using a Boost.Jam variable?</a>
-for an example of very smart usage of that feature). Of course one
+the interpretation is tool-specific. Of course one
 should always strive to use portable features, but these are still be
 provided as a backdoor just to make sure B2 does not take away
 any control from the user.</p>
@@ -12291,7 +12525,8 @@ strange symbol that is not likely to make sense for the linker.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This is a workaround for a bug in B2 engine, which will
+<p>This is a workaround for a bug in B2 engine (due to dependency features
+that do not actually create a dependency on their values), which will
 hopefully be fixed one day.</p>
 </div>
 </li>
@@ -12366,7 +12601,12 @@ example, if you create a module <code>obfuscate.jam</code> containing:</p>
 type.register OBFUSCATED_CPP  : ocpp ;
 
 import generators ;
-generators.register-standard obfuscate.file : CPP : OBFUSCATED_CPP ;</code></pre>
+generators.register-standard obfuscate.file : CPP : OBFUSCATED_CPP ;
+
+actions file
+{
+    # command(s) to obfuscate $(&gt;) and build $(&lt;)
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -12637,11 +12877,11 @@ intention in such cases.</p>
 <div class="paragraph">
 <p>Many users would like to use environment variables in Jamfiles, for
 example, to control the location of external libraries. In many cases it
-is better to declare those external libraries in the site-config.jam
+is better to declare those external libraries in the <code>site-config.jam</code>
 file, as documented in the <a href="#b2.recipes.site-config">recipes
 section</a>. However, if the users already have the environment variables
 set up, it may not be convenient for them to set up their
-site-config.jam files as well and using the environment variables might
+<code>site-config.jam</code> files as well and using the environment variables might
 be reasonable.</p>
 </div>
 <div class="paragraph">
@@ -14276,9 +14516,9 @@ targets, but which are not themselves associated with any real file.</p>
 </div>
 <div class="paragraph">
 <p>A file target&#8217;s identifier is generally the file&#8217;s name, which can be
-absolutely rooted, relative to the directory of <code>b2`s invocation, or
+absolutely rooted, relative to the directory of <code>b2</code>s invocation, or
 simply local (no directory). Most often it is the last case, and the
-actual file path is bound using the `$(SEARCH)</code> and <code>$(LOCATE)</code> special
+actual file path is bound using the <code>$(SEARCH)</code> and <code>$(LOCATE)</code> special
 variables. See <a href="#jam.language.variables.builtins.search">SEARCH and
 LOCATE Variables</a> below. A local filename is optionally qualified with
 grist, a string value used to assure uniqueness. A file target with an
@@ -14312,7 +14552,7 @@ used to make a record of that directory.</p>
 <h4 id="jam.language.rules"><a class="anchor" href="#jam.language.rules"></a>12.2.3. Rules</h4>
 <div class="paragraph">
 <p>The basic <code>b2</code> language entity is called a rule. A rule is defined in
-two parts: the procedure and the actions. The procedure is a body of jam
+two parts: the procedure and the actions. The procedure is a body of Jam
 statements to be run when the rule is invoked; the actions are the OS
 shell commands to execute when updating the built targets of the rule.</p>
 </div>
@@ -14402,8 +14642,8 @@ on target $(var) field1 : field2 : ... : fieldN ;
 </div>
 <div class="paragraph">
 <p>The variable&#8217;s value names the rule (or rules) to be invoked. A rule is
-invoked for each element in the list of <code>$(var)`s values. The fields
-`field1 : field2 : &#8230;&#8203;</code> are passed as arguments for each invocation For the [
+invoked for each element in the list of <code>$(var)</code>s values. The fields
+<code>field1 : field2 : &#8230;&#8203;</code> are passed as arguments for each invocation For the [
 &#8230;&#8203; ] forms, the return value is the concatenation of the return values
 for all of the invocations.</p>
 </div>
@@ -14506,14 +14746,14 @@ cause <code>b2</code> to exit with an error code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">### argument error
-# rule report ( pronoun index ?  : state  : names + )
-# called with: ( I 2 foo  : sorry  : Joe Dave Pete )
-# extra argument foo
-### argument error
-# rule report ( pronoun index ?  : state  : names + )
-# called with: ( I 2  : sorry )
-# missing argument names</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">...
+error: rule report ( pronoun index ?  : state  : names + )
+error: called with: ( I 2 foo  : sorry  : Joe Dave Pete )
+error: extra argument foo
+...
+error: rule report ( pronoun index ?  : state  : names + )
+error: called with: ( I 2  : sorry )
+error: missing argument names</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -14530,7 +14770,8 @@ any new Jam code you write.</p>
 <p><code>B2</code> has a growing set of built-in rules, all of which are pure
 procedure rules without updating actions. They are in three groups: the
 first builds the dependency graph; the second modifies it; and the third
-are just utility rules.</p>
+are just utility rules. A fourth set of rules relating to modules are
+described in <a href="#jam.language.modules">Modules</a>.</p>
 </div>
 <div class="sect4">
 <h5 id="jam.language.rules.builtins.dependency_building"><a class="anchor" href="#jam.language.rules.builtins.dependency_building"></a>Dependency Building</h5>
@@ -14754,9 +14995,19 @@ This is currently not fully implemented.
 </div>
 <div class="sect4">
 <h5 id="jam.language.rules.builtins.utility"><a class="anchor" href="#jam.language.rules.builtins.utility"></a>Utility</h5>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._backtrace__"><a class="anchor" href="#jam.language.rules.builtins.utility._backtrace__"></a><code>BACKTRACE</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule BACKTRACE ( levels ? )</code></pre>
+</div>
+</div>
 <div class="paragraph">
-<p>The two rules <code>ECHO</code> and <code>EXIT</code> are utility rules, used only in `b2`s
-parsing phase.</p>
+<p>Returns a list of quadruples: <em>filename</em> <em>line</em> <em>module</em> <em>rulename</em>&#8230;&#8203;,
+describing each shallower level of the call stack, or only last <em>levels</em>
+when the argument is provided. This rule can be used to generate useful
+diagnostic messages from Jam rules.</p>
+</div>
 </div>
 <div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._echo__"><a class="anchor" href="#jam.language.rules.builtins.utility._echo__"></a><code>ECHO</code></h6>
@@ -14788,9 +15039,24 @@ rules and not part of the language, like <code>include</code>.</p>
 </div>
 </div>
 <div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._file_open__"><a class="anchor" href="#jam.language.rules.builtins.utility._file_open__"></a><code>FILE_OPEN</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule FILE_OPEN ( filename : mode )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>FILE_OPEN</code> rule opens the specified file and returns a file
+descriptor if the <em>mode</em> parameter is either "w" or "r". Note that at
+present, only the <code>UPDATE_NOW</code> rule can use the resulting file
+descriptor number. If the <em>mode</em> parameter is "t" this opens the file as a
+text file and returns the contents as a single string.</p>
+</div>
+</div>
+<div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._glob__"><a class="anchor" href="#jam.language.rules.builtins.utility._glob__"></a><code>GLOB</code></h6>
 <div class="paragraph">
-<p>The <code>GLOB</code> rule does filename globing</p>
+<p>The <code>GLOB</code> rule does filename globing.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -14798,7 +15064,7 @@ rules and not part of the language, like <code>include</code>.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Using the same wildcards as for the patterns in the switch statement. It
+<p>Using the same wildcards as for the patterns in the <code>switch</code> statement. It
 is invoked by being used as an argument to a rule invocation inside of
 "[ ]". For example: <code>FILES = [ GLOB dir1 dir2 : *.c *.h ]</code> sets <code>FILES</code> to
 the list of C source
@@ -14821,7 +15087,8 @@ Cygwin, and OpenVMS, filenames are always down-cased before matching.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule GLOB_ARCHIVE ( archives * : member-patterns * : downcase-opt ? : symbol-patterns ? )</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule GLOB_ARCHIVE ( archives * : member-patterns *
+                  : downcase-opt ? : symbol-patterns ? )</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -14852,13 +15119,41 @@ specified.</p>
 </div>
 </div>
 <div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._glob_recursively__"><a class="anchor" href="#jam.language.rules.builtins.utility._glob_recursively__"></a><code>GLOB_RECURSIVELY</code></h6>
+<div class="paragraph">
+<p>The <code>GLOB_RECURSIVELY</code> rule can be thought of as the recursive version of
+the <code>GLOB</code> rule.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule GLOB_RECURSIVELY ( patterns * )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The pattern syntax is the same as that used by all globing rules (see
+<code>switch</code>.) Unlike <code>GLOB</code> which matches the pattern only on files, this rule
+uses the provided pattern(s) to match directories as well.
+This allows you to use patterns where each component corresponds to
+a directory (or file) and all components are expanded recursively,
+e.g. <code>*/*.test</code>.</p>
+</div>
+<div class="paragraph">
+<p>Another difference from <code>GLOB</code> is that it does not have a <em>downcase-opt</em>
+parameter and matching is performed according to OS conventions. The list
+of result paths is also in the canonical OS format.</p>
+</div>
+<div class="paragraph">
+<p>The results of <code>GLOB_RECURSIVELY</code> are stored in a cache to optimize speed.</p>
+</div>
+</div>
+<div class="sect5">
 <h6 id="jam.language.rules.builtins.utility._match__"><a class="anchor" href="#jam.language.rules.builtins.utility._match__"></a><code>MATCH</code></h6>
 <div class="paragraph">
 <p>The <code>MATCH</code> rule does pattern matching.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule MATCH ( regexps + : list * )</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule MATCH ( regexps * : list * )</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -14868,16 +15163,116 @@ for each string in <em>list</em>, and for each regular expression in <em>regexps
 </div>
 </div>
 <div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._backtrace__"><a class="anchor" href="#jam.language.rules.builtins.utility._backtrace__"></a><code>BACKTRACE</code></h6>
+<h6 id="jam.language.rules.builtins.utility._md5__"><a class="anchor" href="#jam.language.rules.builtins.utility._md5__"></a><code>MD5</code></h6>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule BACKTRACE ( )</code></pre>
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule MD5 ( string )</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Returns a list of quadruples: <em>filename</em> <em>line</em> <em>module</em> <em>rulename</em>&#8230;&#8203;,
-describing each shallower level of the call stack. This rule can be used
-to generate useful diagnostic messages from Jam rules.</p>
+<p><code>MD5</code> computes the MD5 hash of the string passed as parameter and
+returns it.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._pad__"><a class="anchor" href="#jam.language.rules.builtins.utility._pad__"></a><code>PAD</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule PAD ( string : width )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <em>string</em> is shorter than <em>width</em> characters, pads it with whitespace
+characters on the right, and returns the result. Otherwise, returns
+<em>string</em> unmodified.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._precious__"><a class="anchor" href="#jam.language.rules.builtins.utility._precious__"></a><code>PRECIOUS</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule PRECIOUS ( targets * )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>PRECIOUS</code> rule specifies that each of the targets passed as the
+arguments should not be removed even if the command updating that target
+fails.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._shell__"><a class="anchor" href="#jam.language.rules.builtins.utility._shell__"></a><code>SHELL</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule SHELL ( command : * )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>SHELL</code> executes <em>command</em>, and then returns the standard output of
+<em>command</em>. <code>SHELL</code> only works on platforms with a <code>popen()</code> function in
+the C library. On platforms without a working <code>popen()</code> function,
+<code>SHELL</code> is implemented as a no-op. <code>SHELL</code> works on Unix, MacOS X, and
+most Windows compilers. <code>SHELL</code> is a no-op on Metrowerks compilers under
+Windows. There is a variable set of allowed options as additional
+arguments:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>exit-status</code></dt>
+<dd>
+<p>In addition to the output the result status of the executed command is
+returned as a second element of the result.</p>
+</dd>
+<dt class="hdlist1"><code>no-output</code></dt>
+<dd>
+<p>Don&#8217;t capture the output of the command. Instead an empty ("") string
+value is returned in place of the output.</p>
+</dd>
+<dt class="hdlist1"><code>strip-eol</code></dt>
+<dd>
+<p>Remove trailing end-of-line character from output, if any.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Because the Perforce/Jambase defines a <code>SHELL</code> rule which hides the
+builtin rule, <code>COMMAND</code> can be used as an alias for <code>SHELL</code> in such a
+case.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._split_by_characters__"><a class="anchor" href="#jam.language.rules.builtins.utility._split_by_characters__"></a><code>SPLIT_BY_CHARACTERS</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule SPLIT_BY_CHARACTERS ( string : delimiters )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>SPLIT_BY_CHARACTERS</code> splits the specified <em>string</em> on any delimiter
+character present in <em>delimiters</em> and returns the resulting list.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._subst__"><a class="anchor" href="#jam.language.rules.builtins.utility._subst__"></a><code>SUBST</code></h6>
+<div class="paragraph">
+<p>The <code>SUBST</code> rule does pattern matching and substitution.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule SUBST ( string regexp replacements + )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replaces the <em>string</em> matching the <em>regexp</em> with all <em>replacements</em>.
+The <em>regexp</em> argument accepts a regular expression of the same type
+as those used by the <code>MATCH</code> rule.
+In <em>replacements</em>, the placeholders <code>\0</code> and <code>$0</code> are replaced with the full
+matched string, while <code>\N</code> and <code>$N</code> are replaced with the substring matched
+by group (<code>()</code> regexp subexpression) N-th.  Currently only 9 groups are
+supported, so '$10' in a replacement is interpreted as '$1' followed by
+a '0' character.
+Note that unlike <code>MATCH</code>, <em>regexp</em> does not have to contain a group
+for a result to be returned.</p>
 </div>
 </div>
 <div class="sect5">
@@ -14888,7 +15283,7 @@ to generate useful diagnostic messages from Jam rules.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Classic jam treats any non-option element of command line as a name of
+<p>Classic Jam treats any non-option element of command line as a name of
 target to be updated. This prevented more sophisticated handling of
 command line. This is now enabled again but with additional changes to
 the <code>UPDATE</code> rule to allow for the flexibility of changing the list of
@@ -14915,6 +15310,22 @@ it possible to add targets as such:</p>
 <pre class="highlight"><code class="language-jam" data-lang="jam">local previous-updates = [ UPDATE ] ;
 UPDATE $(previous-updates) a-new-target ;</code></pre>
 </div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="jam.language.rules.builtins.utility._update_now__"><a class="anchor" href="#jam.language.rules.builtins.utility._update_now__"></a><code>UPDATE_NOW</code></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-jam" data-lang="jam">rule UPDATE_NOW ( targets * : log ? : ignore-minus-n ? )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>UPDATE_NOW</code> caused the specified targets to be updated immediately.
+If update was successful, non-empty string is returned. The <em>log</em>
+parameter, if present, specifies a descriptor of a file where all output
+from building is redirected. If the <em>ignore-minus-n</em> parameter is
+specified, the targets are updated even if the <code>-n</code> parameter is
+specified on the command line.</p>
 </div>
 </div>
 <div class="sect5">
@@ -15013,127 +15424,6 @@ for local subkey in $(subkeys)
     }
 }</code></pre>
 </div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._shell__"><a class="anchor" href="#jam.language.rules.builtins.utility._shell__"></a><code>SHELL</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule SHELL ( command : * )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>SHELL</code> executes <em>command</em>, and then returns the standard output of
-<em>command</em>. <code>SHELL</code> only works on platforms with a <code>popen()</code> function in
-the C library. On platforms without a working <code>popen()</code> function,
-<code>SHELL</code> is implemented as a no-op. <code>SHELL</code> works on Unix, MacOS X, and
-most Windows compilers. <code>SHELL</code> is a no-op on Metrowerks compilers under
-Windows. There is a variable set of allowed options as additional
-arguments:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><code>exit-status</code></dt>
-<dd>
-<p>In addition to the output the result status of the executed command is
-returned as a second element of the result.</p>
-</dd>
-<dt class="hdlist1"><code>no-output</code></dt>
-<dd>
-<p>Don&#8217;t capture the output of the command. Instead an empty ("") string
-value is returned in place of the output.</p>
-</dd>
-<dt class="hdlist1"><code>strip-eol</code></dt>
-<dd>
-<p>Remove trailing end-of-line character from output, if any.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>Because the Perforce/Jambase defines a <code>SHELL</code> rule which hides the
-builtin rule, <code>COMMAND</code> can be used as an alias for <code>SHELL</code> in such a
-case.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._md5__"><a class="anchor" href="#jam.language.rules.builtins.utility._md5__"></a><code>MD5</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule MD5 ( string )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>MD5</code> computes the MD5 hash of the string passed as parameter and
-returns it.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._split_by_characters__"><a class="anchor" href="#jam.language.rules.builtins.utility._split_by_characters__"></a><code>SPLIT_BY_CHARACTERS</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule SPLIT_BY_CHARACTERS ( string : delimiters )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>SPLIT_BY_CHARACTERS</code> splits the specified <em>string</em> on any delimiter
-character present in <em>delimiters</em> and returns the resulting list.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._precious__"><a class="anchor" href="#jam.language.rules.builtins.utility._precious__"></a><code>PRECIOUS</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule PRECIOUS ( targets * )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>PRECIOUS</code> rule specifies that each of the targets passed as the
-arguments should not be removed even if the command updating that target
-fails.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._pad__"><a class="anchor" href="#jam.language.rules.builtins.utility._pad__"></a><code>PAD</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule PAD ( string : width )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If <em>string</em> is shorter than <em>width</em> characters, pads it with whitespace
-characters on the right, and returns the result. Otherwise, returns
-<em>string</em> unmodified.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._file_open__"><a class="anchor" href="#jam.language.rules.builtins.utility._file_open__"></a><code>FILE_OPEN</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule FILE_OPEN ( filename : mode )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>FILE_OPEN</code> rule opens the specified file and returns a file
-descriptor if the <em>mode</em> parameter is either "w" or "r". Note that at
-present, only the <code>UPDATE_NOW</code> rule can use the resulting file
-descriptor number. If the <em>mode</em> parameter is "t" this opens the file as a
-text file and returns the contents as a single string.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="jam.language.rules.builtins.utility._update_now__"><a class="anchor" href="#jam.language.rules.builtins.utility._update_now__"></a><code>UPDATE_NOW</code></h6>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-jam" data-lang="jam">rule UPDATE_NOW ( targets * : log ? : ignore-minus-n ? )</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <code>UPDATE_NOW</code> caused the specified targets to be updated immediately.
-If update was successful, non-empty string is returned. The <em>log</em>
-parameter, if present, specifies a descriptor of a file where all output
-from building is redirected. If the <em>ignore-minus-n</em> parameter is
-specified, the targets are updated even if the <code>-n</code> parameter is
-specified on the command line.</p>
 </div>
 </div>
 </div>
@@ -15354,8 +15644,22 @@ variable ?= elements ;</code></pre>
 set a target-specific variable. The <code>=</code> operator replaces any previous
 elements of <em>variable</em> with <em>elements</em>; the <code>+=</code> operation adds
 <em>elements</em> to <em>variable</em>'s list of elements. The final two forms are
-synonymous: they set <em>variable</em> globally, but only if it was previously
+synonymous: they set <em>variable</em> globally, but <code>?=</code> only if it was previously
 unset.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">ℹ</div>
+</td>
+<td class="content">
+the <code>?=</code> operator does not short-circuit, that is in
+<code>some-var ?= [ some-rule ]</code> the <code>some-rule</code> is always called,
+regardless of whether the variable is set or not.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Variables referenced in updating commands will be replaced with their
@@ -15604,7 +15908,7 @@ properly specify file paths in VMS-specific commands. For example</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><code>:&#8656;value</code></dt>
+<dt class="hdlist1"><code>:&lt;=value</code></dt>
 <dd>
 <p>After evaluating the expansion of the variable prefixes the given <em>value</em>
 to the elements of the expanded expression values.</p>
@@ -15841,12 +16145,13 @@ platform:</p>
 </dd>
 <dt class="hdlist1"><code>JAMVERSION</code></dt>
 <dd>
-<p><code>b2</code> version, as a sematic triplet "X.Y.Z".</p>
+<p><code>b2</code> version, as a semantic triplet "X.Y.Z".</p>
 </dd>
 <dt class="hdlist1"><code>JAM_VERSION</code></dt>
 <dd>
-<p>A predefined global variable with two elements indicates the version
-number of Boost Jam. Boost Jam versions start at <code>03</code> <code>00</code>.
+<p>A predefined global variable with elements indicating the version
+number of Boost Jam. Boost Jam versions start at <code>3</code> <code>0</code> but nowadays
+it is composed of three elements (e.g. <code>5</code> <code>5</code> <code>0</code>.)
 Earlier versions of <code>Jam</code> do not automatically define <code>JAM_VERSION</code>.</p>
 </dd>
 </dl>
@@ -16158,7 +16463,8 @@ have not returned at the time of the <code>VARNAMES</code> invocation.
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-jam" data-lang="jam">rule IMPORT ( source_module ? : source_rules *
-            : target_module ? : target_rules * )</code></pre>
+            : target_module ? : target_rules *
+            : localize ? )</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -16178,6 +16484,12 @@ IMPORT m1 : rule1 : m2 : m1-rule1 ;
 # import all non-local rules from m1 into m2
 IMPORT m1 : [ RULENAMES m1 ] : m2 : [ RULENAMES m1 ] ;</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>If <em>localize</em> is supplied <em>target_rules</em> are executed in <em>target_module</em>,
+with corresponding access to that module&#8217;s local variables.
+Existing rules in <em>target_module</em> are silently overwritten by
+imported <em>target_rules</em>.</p>
 </div>
 </div>
 <div class="sect4">
@@ -16422,7 +16734,7 @@ based on the settings of the target-specific <code>SEARCH</code> and <code>LOCAT
 variables.</p>
 </li>
 <li>
-<p>In addition to local and global variables, jam allows you to set a
+<p>In addition to local and global variables, Jam allows you to set a
 variable <code>on</code> a target. Target-specific variable values can usually not
 be read, and take effect only in the following contexts:</p>
 <div class="ulist">
@@ -16496,7 +16808,7 @@ non-empty, leading &lt;s and trailing &gt;s are added if necessary to form an
 expression of the form &lt;expr2&gt;; &lt;expr2&gt; is then prepended.</p>
 </li>
 <li>
-<p>When Jam is invoked it imports all environment variable settings into
+<p>When bjam is invoked it imports all environment variable settings into
 corresponding Jam variables, followed by all command-line (-s&#8230;&#8203;)
 variable settings. Variables whose name ends in PATH, Path, or path are
 split into string lists on OS-specific path-list separator boundaries
@@ -16516,9 +16828,9 @@ if $(MESSAGE) { ECHO The message is: $(MESSAGE) ; }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If the user wants a specific message, he invokes jam with
+<p>If the user wants a specific message, he invokes bjam with
 <code>-sMESSAGE=message
-            text</code>. If he wants no message, he invokes jam with
+            text</code>. If he wants no message, he invokes bjam with
 <code>-sMESSAGE=</code> and nothing at all is printed.</p>
 </div>
 </li>
@@ -16573,7 +16885,7 @@ follows random access container behavior.</p>
 	// construct/copy/destroy
 	list_cref() = default;
 	list_cref(const list_cref &amp;) = default;
-	list_cref(list_cref &amp;&amp; other);
+	list_cref(list_cref &amp;&amp; other) B2_NOEXCEPT;
 	explicit list_cref(LIST * l);
 	list_cref &amp; operator=(const list_cref &amp;) = default;
 
@@ -16594,6 +16906,8 @@ follows random access container behavior.</p>
 	list_ref slice(size_type i, size_type j = -1) const;
 	bool operator==(const list_cref &amp; b) const;
 	bool operator==(const list_ref &amp; b) const;
+	bool starts_with(const list_cref &amp; b) const;
+	bool starts_with(const list_ref &amp; b) const;
 
 	// data access
 	LIST * data() const B2_NOEXCEPT;
@@ -16697,11 +17011,20 @@ inline bool list_cref::operator==(const list_ref &amp; b) const</code></pre>
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_b2list_crefstarts_with"><a class="anchor" href="#_b2list_crefstarts_with"></a><code>b2::list_cref::starts_with</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline bool starts_with(const list_cref &amp; b) const;
+inline bool starts_with(const list_ref &amp; b) const;</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_b2list_cref_data_access"><a class="anchor" href="#_b2list_cref_data_access"></a>13.1.7. <code>b2::list_cref</code> Data Access</h4>
 <div class="sect4">
-<h5 id="_b2list_crefoperator_3"><a class="anchor" href="#_b2list_crefoperator_3"></a><code>b2::list_cref::operator==</code></h5>
+<h5 id="_b2list_crefdata"><a class="anchor" href="#_b2list_crefdata"></a><code>b2::list_cref::data</code></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-cpp" data-lang="cpp">inline LIST * list_cref::data() const B2_NOEXCEPT
@@ -16737,12 +17060,13 @@ allocate, copy, move <code>LIST</code> objects as needed.</p>
 	using list_cref::operator[];
 	using list_cref::contains;
 	using list_cref::operator==;
+	using list_cref::starts_with;
 	using list_cref::data;
 	using list_cref::operator*;
 
 	// construct/copy/destroy
 	list_ref() = default;
-	list_ref(list_ref &amp;&amp; other);
+	list_ref(list_ref &amp;&amp; other) B2_NOEXCEPT;
 	list_ref(const list_cref &amp; other);
 	list_ref(const list_ref &amp; other);
 	explicit list_ref(value_ref o);
@@ -16763,7 +17087,8 @@ allocate, copy, move <code>LIST</code> objects as needed.</p>
 	template &lt;typename T&gt;
 	list_ref &amp; operator+(T value);
 	list_ref &amp; pop_front();
-	list_ref &amp; operator=(list_ref &amp;&amp; other);
+	list_ref &amp; operator=(list_ref &amp;&amp; other) B2_NOEXCEPT;
+	list_ref &amp; pop_back();
 
 	// list operations
 	inline list_ref &amp; slice(size_type i, size_type j = -1);
@@ -16876,6 +17201,14 @@ chaining.</p>
 </div>
 </div>
 <div class="sect4">
+<h5 id="_b2list_refpop_back"><a class="anchor" href="#_b2list_refpop_back"></a><code>b2::list_ref::pop_back</code></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-cpp" data-lang="cpp">inline list_ref &amp; list_ref::pop_back()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="_b2list_refoperator_assign"><a class="anchor" href="#_b2list_refoperator_assign"></a><code>b2::list_ref::operator=</code>, assign</h5>
 <div class="listingblock">
 <div class="content">
@@ -16921,7 +17254,7 @@ interface allows for inline composition of the <code>LOL</code>.</p>
 
 	// construct/copy/destroy
 	lists();
-	lists(lists &amp;&amp; other);
+	lists(lists &amp;&amp; other) B2_NOEXCEPT;
 	~lists();
 
 	// capacity
@@ -17069,21 +17402,122 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>14. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_5_4_2"><a class="anchor" href="#_version_5_4_2"></a>14.1. Version 5.4.2</h3>
+<h3 id="_version_5_5_0"><a class="anchor" href="#_version_5_5_0"></a>14.1. Version 5.5.0</h3>
+<div class="paragraph">
+<p>This release has a bunch of internal cleanups and bug fixes. But it also has a
+handful of new features. There&#8217;s initial support for the Fil-C compiler,
+the <code>version</code> attribute for features to manage versioning of targets,
+and additional support for JSON data.</p>
+</div>
+<div class="paragraph">
+<p>Special thanks to Paolo Pastori for the many fixes and cleanups in this release.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>New</strong>: Add toolset, and bootstrapping, for Fil-C compiler.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add <code>version</code> feature attribute to tag and manage semantic versioning
+of targets.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Add reading/parsing of property database from JSON data to base CPS
+support from.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Argument lists description provided for all builtin rules,
+GLOB-RECURSIVELY has become an alias of GLOB_RECURSIVELY.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Added test for regular expressions with MATCH builtin rule.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p><strong>New</strong>: Improved control of source module by IMPORT, EXPORT, and
+RULENAMES builtin rules.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix Jam/C&#43;&#43; bind definitions of 4 or more values in a single
+declared argument not actually adding all the definitions.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix various regexp issues, allowing for mandatory regular expression
+syntax checking, detailed error messages, and improved MATCH rule.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix incorrect and/or inefficient regex expressions throughout all build jam
+files.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix argument count mismatch in Jam stack cleanup functions.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix <code>--abbreviate-paths</code> eating following arg.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix crash when reflecting environment variables that happen to have an empty
+value.&#8201;&#8212;&#8201;<em>zyk2507</em></p>
+</li>
+<li>
+<p>Fix testing of JAM_SEMAPHORE.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix finding an assembler when using plain LLVM for clang-win.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix HDRRULE builtin rule to work in modules loaded by build system.
+Added searching-only interfaces to modules and targets.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix python linking to missing libutil.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix properties minimization during target configuration.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix GLOB_ARCHIVE builtin rule to work with BSD archive (ar).&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix parsing of options to not conflict with command line build request.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix inversion of logic for <code>--keep-going</code> option.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fixed broken <code>--out-xml</code>, ignoring value <code>--durations</code> options.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+<li>
+<p>Fix missing bound native rule argument format checking.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix gcc command-db collection not working with multi-string commands.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Make <code>regex.escape</code> accept a list of strings to escape instead of just one
+string.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Fix SUBST builtin rule eating chars in replacement, test added.&#8201;&#8212;&#8201;<em>Paolo Pastori</em></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_5_4_2"><a class="anchor" href="#_version_5_4_2"></a>14.2. Version 5.4.2</h3>
 <div class="paragraph">
 <p>Fix detection of Visual Studio 2026 to account for non-native tools being
 installed by default and hence conflicting with the native tools.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_4_1"><a class="anchor" href="#_version_5_4_1"></a>14.2. Version 5.4.1</h3>
+<h3 id="_version_5_4_1"><a class="anchor" href="#_version_5_4_1"></a>14.3. Version 5.4.1</h3>
 <div class="paragraph">
 <p>Fix error in path environment variables not being properly processed to split
 on path separator.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_4_0"><a class="anchor" href="#_version_5_4_0"></a>14.3. Version 5.4.0</h3>
+<h3 id="_version_5_4_0"><a class="anchor" href="#_version_5_4_0"></a>14.4. Version 5.4.0</h3>
 <div class="paragraph">
 <p>This is the end of year release. Biggest new items are the detection of
 Visual Studio 2026 (aka msvc145).</p>
@@ -17136,7 +17570,7 @@ Fixes <code>--show-libraries</code> in Boost build files.&#8201;&#8212;&#8201;<e
 library.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </li>
 <li>
-<p>Fix building when targetting WASM64 with emscripten.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
+<p>Fix building when targeting WASM64 with emscripten.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
 </li>
 <li>
 <p>Fix resolution of subprojects of rooted projects.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
@@ -17148,7 +17582,7 @@ library.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_3"><a class="anchor" href="#_version_5_3_3"></a>14.4. Version 5.3.3</h3>
+<h3 id="_version_5_3_3"><a class="anchor" href="#_version_5_3_3"></a>14.5. Version 5.3.3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17164,7 +17598,7 @@ library.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_2"><a class="anchor" href="#_version_5_3_2"></a>14.5. Version 5.3.2</h3>
+<h3 id="_version_5_3_2"><a class="anchor" href="#_version_5_3_2"></a>14.6. Version 5.3.2</h3>
 <div class="paragraph">
 <p>Fix regression for handling of the <code>--command-database</code> option. The new command
 line arguments parsing made the output to be reset and cleared causing nothing
@@ -17172,7 +17606,7 @@ to get output for the commands. Thanks to <em>Dmitry Arkhipov</em> for the fix.<
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_1"><a class="anchor" href="#_version_5_3_1"></a>14.6. Version 5.3.1</h3>
+<h3 id="_version_5_3_1"><a class="anchor" href="#_version_5_3_1"></a>14.7. Version 5.3.1</h3>
 <div class="paragraph">
 <p>Fix backward incompatibility of <code>option.get</code> if an argument is not added with
 <code>args.add-arg</code>. When such an argument isn&#8217;t registered we fail to check <code>ARGV</code>
@@ -17182,7 +17616,7 @@ checking if an argument is registered, and if not falling back on the direct
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_0"><a class="anchor" href="#_version_5_3_0"></a>14.7. Version 5.3.0</h3>
+<h3 id="_version_5_3_0"><a class="anchor" href="#_version_5_3_0"></a>14.8. Version 5.3.0</h3>
 <div class="paragraph">
 <p>Biggest changes for this release is the creation of two new toolsets: <code>ibmcxx</code>
 and <code>cc</code>. The former covers all the IBM compilers, and the latter is a generic
@@ -17251,7 +17685,7 @@ latter covers the same support.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_2_1"><a class="anchor" href="#_version_5_2_1"></a>14.8. Version 5.2.1</h3>
+<h3 id="_version_5_2_1"><a class="anchor" href="#_version_5_2_1"></a>14.9. Version 5.2.1</h3>
 <div class="paragraph">
 <p>This patch reverts the change to define <code>_HAS_EXCEPTIONS=0</code> for Dinkumware
 std library. It has the undesired effect of changing the ABI. It&#8217;s better for
@@ -17268,7 +17702,7 @@ initialize msvc.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_2_0"><a class="anchor" href="#_version_5_2_0"></a>14.9. Version 5.2.0</h3>
+<h3 id="_version_5_2_0"><a class="anchor" href="#_version_5_2_0"></a>14.10. Version 5.2.0</h3>
 <div class="paragraph">
 <p>Many fixes in this release from regular contributors Nikita and Dmitry. There
 are a couple of new features.. First the ability to have <code>dll-path</code> in searched
@@ -17347,7 +17781,7 @@ toolchain version 14.40.33807.&#8201;&#8212;&#8201;<em>Dmitry Andric</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_1_0"><a class="anchor" href="#_version_5_1_0"></a>14.10. Version 5.1.0</h3>
+<h3 id="_version_5_1_0"><a class="anchor" href="#_version_5_1_0"></a>14.11. Version 5.1.0</h3>
 <div class="paragraph">
 <p>This is mostly a bugfix release to account for issues impacting Boost Libraries.
 There is one "big" change though. It can be rather difficult to find build
@@ -17387,7 +17821,7 @@ supported, debug symbols option.&#8201;&#8212;&#8201;<em>John McFarlane</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_0_1"><a class="anchor" href="#_version_5_0_1"></a>14.11. Version 5.0.1</h3>
+<h3 id="_version_5_0_1"><a class="anchor" href="#_version_5_0_1"></a>14.12. Version 5.0.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17405,7 +17839,7 @@ native vs. non-native path handling.&#8201;&#8212;&#8201;<em>René Ferdinand Riv
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>14.12. Version 5.0.0</h3>
+<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>14.13. Version 5.0.0</h3>
 <div class="paragraph">
 <p>This is a new era in B2. The drive of this new major version is to move the
 core build system from being implemented in Jam to C&#43;&#43;. This initial release
@@ -17469,7 +17903,7 @@ features became too much. And was taking away from other improvements.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_10_1"><a class="anchor" href="#_version_4_10_1"></a>14.13. Version 4.10.1</h3>
+<h3 id="_version_4_10_1"><a class="anchor" href="#_version_4_10_1"></a>14.14. Version 4.10.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17480,7 +17914,7 @@ toolset in b2 build.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em><
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_10_0"><a class="anchor" href="#_version_4_10_0"></a>14.14. Version 4.10.0</h3>
+<h3 id="_version_4_10_0"><a class="anchor" href="#_version_4_10_0"></a>14.15. Version 4.10.0</h3>
 <div class="paragraph">
 <p>This release contains many bug fixes but along the way also cleanup and
 refactoring of many toolsets, thanks to Nikita.</p>
@@ -17581,7 +18015,7 @@ target and project references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Mo
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>14.15. Version 4.9.6</h3>
+<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>14.16. Version 4.9.6</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17591,7 +18025,7 @@ target and project references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Mo
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>14.16. Version 4.9.5</h3>
+<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>14.17. Version 4.9.5</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17619,7 +18053,7 @@ when it is not on found in <code>PATH</code>.&#8201;&#8212;&#8201;<em>Nikita Kni
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>14.17. Version 4.9.4</h3>
+<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>14.18. Version 4.9.4</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17650,7 +18084,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.18. Version 4.9.3</h3>
+<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.19. Version 4.9.3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17660,7 +18094,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.19. Version 4.9.2</h3>
+<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.20. Version 4.9.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17670,7 +18104,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.20. Version 4.9.1</h3>
+<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.21. Version 4.9.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17685,7 +18119,7 @@ path specified in boost-build rule.&#8201;&#8212;&#8201;<em>René Ferdinand Rive
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.21. Version 4.9.0</h3>
+<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.22. Version 4.9.0</h3>
 <div class="paragraph">
 <p>This release has mostly internal cleanups and restructuring. The most
 significant being: fixing all memory leaks, automatic build system
@@ -17754,7 +18188,7 @@ deprecated and will be removed in a future release.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.22. Version 4.8.2</h3>
+<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.23. Version 4.8.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17765,7 +18199,7 @@ and incorrect target list pop unlinking.&#8201;&#8212;&#8201;<em>René Ferdinand
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.23. Version 4.8.1</h3>
+<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.24. Version 4.8.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17776,7 +18210,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.24. Version 4.8.0</h3>
+<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.25. Version 4.8.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17819,7 +18253,7 @@ cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.25. Version 4.7.2</h3>
+<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.26. Version 4.7.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17833,7 +18267,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.26. Version 4.7.1</h3>
+<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.27. Version 4.7.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17843,7 +18277,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.27. Version 4.7.0</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.28. Version 4.7.0</h3>
 <div class="paragraph">
 <p>Many, many fixes and internal cleanups in this release. But also adding
 auto-detection and bootstrap for VS 2022 preview toolset.</p>
@@ -17907,7 +18341,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.28. Version 4.6.1</h3>
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.29. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17920,7 +18354,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.29. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.30. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -17983,7 +18417,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.30. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.31. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -18005,7 +18439,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.31. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.32. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -18022,7 +18456,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.32. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.33. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -18035,7 +18469,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.33. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.34. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -18126,7 +18560,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.34. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.35. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -18226,7 +18660,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.35. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.36. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -18268,7 +18702,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.36. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.37. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -18350,7 +18784,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.37. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.38. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -18360,7 +18794,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.38. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.39. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
@@ -18506,10 +18940,13 @@ based on this CSS.</p>
 <a href="#_footnoteref_3">3</a>. see the definition of "free" in <a href="#b2.reference.features.attributes">the section called “Feature Attributes”</a>.
 </div>
 <div class="footnote" id="_footnotedef_4">
-<a href="#_footnoteref_4">4</a>. This name is historic, and will be eventually changed to <code>metatarget</code>
+<a href="#_footnoteref_4">4</a>. Semantic Versioning (<a href="https://semver.org/" class="bare">https://semver.org/</a>)
 </div>
 <div class="footnote" id="_footnotedef_5">
-<a href="#_footnoteref_5">5</a>. This create-then-register pattern is caused by limitations of the Boost.Jam language. Python port is likely to never create duplicate targets.
+<a href="#_footnoteref_5">5</a>. This name is historic, and will be eventually changed to <code>metatarget</code>
+</div>
+<div class="footnote" id="_footnotedef_6">
+<a href="#_footnoteref_6">6</a>. This create-then-register pattern is caused by limitations of the Boost.Jam language. Python port is likely to never create duplicate targets.
 </div>
 </div>
 </body>
