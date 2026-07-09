@@ -24,8 +24,9 @@
 	--light-hr-color: #aaa;
 	--light-th-color: #ddd;
 
-	--font-family-regular: Palatino, "Palatino Linotype", "Palatino LT STD",
-		"Book Antiqua", Georgia, serif;
+	--font-family-regular:
+		Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua",
+		Georgia, serif;
 	--font-family-code: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 
 	--font-size-base: 15px;
@@ -36,7 +37,7 @@
 
 	--narrow-margins: 8%;
 
-	--indent-block-border-left: solid var(--color-accent) 0.2rem;
+	--indent-block-border: solid var(--color-accent) 0.2rem;
 
 	color-scheme: light dark;
 }
@@ -124,6 +125,7 @@ p.subtitle,
 	font-size: 1.3rem;
 	display: block;
 	line-height: 1;
+	width: 55%;
 }
 
 .numeral {
@@ -212,8 +214,37 @@ section > table,
 .sect3 > .openblock,
 .sect4 > .openblock,
 .sect5 > .openblock,
-.tip {
+.tip,
+.note > table:not(dl table, ol table, ul table),
+.warning > table:not(dl table, ol table, ul table),
+.important > table:not(dl table, ol table, ul table) {
 	width: 55%;
+}
+
+.note > table:not(dl table, ol table, ul table),
+.warning > table:not(dl table, ol table, ul table),
+.important > table:not(dl table, ol table, ul table) {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+/* data tables */
+
+table.tableblock {
+	table-layout: auto;
+}
+table.tableblock col {
+	width: auto !important;
+}
+table.tableblock > * > tr > * {
+	border: 1px solid var(--color-accent);
+	padding: 2px 0.5em 2px 0.5em;
+	@media (prefers-color-scheme: light) {
+		border-color: var(--light-hr-color);
+	}
+	@media (prefers-color-scheme: dark) {
+		border-color: var(--dark-hr-color);
+	}
 }
 
 /* 50 + 5 == 55, to be the same width as paragraph */
@@ -288,10 +319,7 @@ img {
 .sidenote,
 .marginnote,
 .sidebarblock,
-#toc,
-.note > table:not(dl table, ol table, ul table),
-.warning > table:not(dl table, ol table, ul table),
-.important > table:not(dl table, ol table, ul table) {
+#toc {
 	float: right;
 	clear: right;
 	margin-right: -60%;
@@ -315,10 +343,7 @@ img {
 }
 
 .sidebarblock,
-#toc,
-.note > table:not(dl table, ol table, ul table),
-.warning > table:not(dl table, ol table, ul table),
-.important > table:not(dl table, ol table, ul table) {
+#toc {
 	margin-top: -3rem;
 	margin-right: 10%;
 	width: 30%;
@@ -423,7 +448,7 @@ h6 > code {
 	margin-left: 2rem;
 	padding-left: 1rem;
 	display: block;
-	border-left: var(--indent-block-border-left);
+	border-left: var(--indent-block-border);
 }
 
 .listingblock > .content,
@@ -552,7 +577,7 @@ label.margin-toggle:not(.sidenote-number) {
 	.sidenote,
 	.marginnote,
 	#toc {
-		display: none;
+		/* display: none; */
 	}
 
 	.sidebarblock,
@@ -618,12 +643,27 @@ label.margin-toggle:not(.sidenote-number) {
 	display: none;
 }
 
+#header h1 {
+	color: var(--color-accent);
+}
+
 #toc {
 	position: absolute;
-	width: 27%;
-	left: 60%;
+	width: 30%;
+	right: 5%;
 	margin-right: inherit;
-	padding-left: 5%;
+	margin-top: 3rem;
+	@media (max-width: 760px) {
+		position: static;
+		width: auto;
+		margin-top: inherit;
+		float: none;
+	}
+}
+#toc .sectlevel2 {
+	@media (max-width: 760px) {
+		display: none;
+	}
 }
 
 #toc ul {
@@ -647,6 +687,7 @@ a.anchor {
 	visibility: hidden;
 	text-align: center;
 	font-weight: normal;
+	color: var(--color-accent);
 }
 
 a.anchor:before {
@@ -661,16 +702,16 @@ a.anchor:hover {
 
 .admonitionblock .icon {
 	font-weight: bold;
-	font-size: 2rem;
-	width: 2rem;
+	font-size: 1.8rem;
+	width: 1.9rem;
 	text-align: center;
 	color: var(--color-accent);
 	vertical-align: text-top;
+	border-right: var(--indent-block-border);
 }
 
 .admonitionblock td.content {
-	padding-left: 1rem;
-	border-left: var(--indent-block-border-left);
+	padding-left: 1.1rem;
 }
 .admonitionblock .listingblock {
 	border-left: none !important;
@@ -694,6 +735,12 @@ table th {
 	}
 }
 
+#content h2,
+#content h3,
+#content h4 {
+	color: var(--color-accent);
+}
+
 </style>
 </head>
 <body class="article toc2 toc-left">
@@ -707,19 +754,167 @@ table th {
 <ul class="sectlevel1">
 <li><a href="#_introduction">1. Introduction</a></li>
 <li><a href="#b2.installation">2. Installation</a></li>
-<li><a href="#b2.tutorial">3. Tutorial</a></li>
-<li><a href="#b2.overview">4. Overview</a></li>
-<li><a href="#b2.tasks">5. Common tasks</a></li>
-<li><a href="#b2.reference">6. Reference</a></li>
-<li><a href="#b2.util">7. Utilities</a></li>
-<li><a href="#b2.extender">8. Extender Manual</a></li>
-<li><a href="#b2.faq">9. Frequently Asked Questions</a></li>
-<li><a href="#_extra_tools">10. Extra Tools</a></li>
-<li><a href="#_examples">11. Examples</a></li>
-<li><a href="#b2.jam">12. Boost.Jam Documentation</a></li>
-<li><a href="#b2.reference.code">13. Implementation Reference</a></li>
-<li><a href="#b2.history">14. History</a></li>
-<li><a href="#b2.appendix">Appendix A: Licenses</a></li>
+<li><a href="#b2.tutorial">3. Tutorial</a>
+<ul class="sectlevel2">
+<li><a href="#b2.tutorial.hello">3.1. Hello, world</a></li>
+<li><a href="#b2.tutorial.properties">3.2. Properties</a></li>
+<li><a href="#b2.tutorial.hierarchy">3.3. Project Hierarchies</a></li>
+<li><a href="#b2.tutorial.libs">3.4. Dependent Targets</a></li>
+<li><a href="#b2.tutorial.linkage">3.5. Static and shared libraries</a></li>
+<li><a href="#b2.tutorial.conditions">3.6. Conditions and alternatives</a></li>
+<li><a href="#b2.tutorial.prebuilt">3.7. Prebuilt targets</a></li>
+</ul>
+</li>
+<li><a href="#b2.overview">4. Overview</a>
+<ul class="sectlevel2">
+<li><a href="#b2.overview.concepts">4.1. Concepts</a></li>
+<li><a href="#b2.overview.jam_language">4.2. Boost.Jam Language</a></li>
+<li><a href="#b2.overview.configuration">4.3. Configuration</a></li>
+<li><a href="#b2.overview.invocation">4.4. Invocation</a></li>
+<li><a href="#b2.overview.targets">4.5. Declaring Targets</a></li>
+<li><a href="#b2.overview.projects">4.6. Projects</a></li>
+<li><a href="#b2.overview.build_process">4.7. The Build Process</a></li>
+</ul>
+</li>
+<li><a href="#b2.tasks">5. Common tasks</a>
+<ul class="sectlevel2">
+<li><a href="#b2.tasks.programs">5.1. Programs</a></li>
+<li><a href="#b2.tasks.libraries">5.2. Libraries</a></li>
+<li><a href="#b2.tasks.alias">5.3. Alias</a></li>
+<li><a href="#b2.tasks.installing">5.4. Installing</a></li>
+<li><a href="#b2.builtins.testing">5.5. Testing</a></li>
+<li><a href="#b2.builtins.raw">5.6. Custom commands</a></li>
+<li><a href="#b2.reference.precompiled_headers">5.7. Precompiled Headers</a></li>
+<li><a href="#b2.reference.generated_headers">5.8. Generated headers</a></li>
+<li><a href="#b2.tasks.crosscompile">5.9. Cross-compilation</a></li>
+<li><a href="#b2.tasks.packagemanagers">5.10. Package Managers</a></li>
+<li><a href="#b2.tasks.packagemanagers.vcpkg">5.11. vcpkg support</a></li>
+<li><a href="#b2.tasks.projectsearch">5.12. Searching For Projects</a></li>
+<li><a href="#b2.tasks.commanddb">5.13. Command Database, and IDE Integration</a></li>
+</ul>
+</li>
+<li><a href="#b2.reference">6. Reference</a>
+<ul class="sectlevel2">
+<li><a href="#b2.reference.general">6.1. General information</a></li>
+<li><a href="#b2.reference.rules">6.2. Builtin rules</a></li>
+<li><a href="#b2.overview.builtins.features">6.3. Builtin features</a></li>
+<li><a href="#b2.reference.tools">6.4. Builtin tools</a></li>
+<li><a href="#b2.reference.modules">6.5. Builtin modules</a></li>
+<li><a href="#b2.reference.class">6.6. Builtin classes</a></li>
+<li><a href="#b2.reference.buildprocess">6.7. Build process</a></li>
+<li><a href="#b2.reference.definitions">6.8. Definitions</a></li>
+</ul>
+</li>
+<li><a href="#b2.util">7. Utilities</a>
+<ul class="sectlevel2">
+<li><a href="#b2.util.debugger">7.1. Debugger</a></li>
+</ul>
+</li>
+<li><a href="#b2.extender">8. Extender Manual</a>
+<ul class="sectlevel2">
+<li><a href="#b2.extender.intro">8.1. Introduction</a></li>
+<li><a href="#b2.extender.example">8.2. Example: 1-to-1 generator</a></li>
+<li><a href="#b2.extending.targets">8.3. Target types</a></li>
+<li><a href="#b2.extending.scanners">8.4. Scanners</a></li>
+<li><a href="#b2.extending.tools">8.5. Tools and generators</a></li>
+<li><a href="#b2.extending.features">8.6. Features</a></li>
+<li><a href="#b2.extending.rules">8.7. Main target rules</a></li>
+<li><a href="#b2.extending.toolset_modules">8.8. Toolset modules</a></li>
+</ul>
+</li>
+<li><a href="#b2.faq">9. Frequently Asked Questions</a>
+<ul class="sectlevel2">
+<li><a href="#b2.faq.featurevalue">9.1. How do I get the current value of feature in Jamfile?</a></li>
+<li><a href="#b2.faq.duplicate">9.2. I am getting a "Duplicate name of actual target" error. What does that mean?</a></li>
+<li><a href="#b2.faq.envar">9.3. Accessing environment variables</a></li>
+<li><a href="#b2.faq.proporder">9.4. How to control properties order?</a></li>
+<li><a href="#b2.faq.liborder">9.5. How to control the library linking order on Unix?</a></li>
+<li><a href="#b2.faq.external">9.6. Can I get capture external program output using a Boost.Jam variable?</a></li>
+<li><a href="#b2.faq.projectroot">9.7. How to get the project root (a.k.a. Jamroot) location?</a></li>
+<li><a href="#b2.faq.flags">9.8. How to change compilation flags for one file?</a></li>
+<li><a href="#b2.faq.dll-path">9.9. Why are the <code>dll-path</code> and <code>hardcode-dll-paths</code> properties useful?</a></li>
+<li><a href="#b2.recipes.site-config">9.10. Targets in site-config.jam</a></li>
+<li><a href="#b2.faq.header-only-libraries">9.11. Header-only libraries</a></li>
+<li><a href="#b2.faq.names">9.12. What is the difference between B2, <code>b2</code>, <code>bjam</code> and Perforce Jam?</a></li>
+</ul>
+</li>
+<li><a href="#_extra_tools">10. Extra Tools</a>
+<ul class="sectlevel2">
+<li><a href="#_documentation_tools_2">10.1. Documentation Tools</a></li>
+<li><a href="#_miscellaneous_tools">10.2. Miscellaneous Tools</a></li>
+</ul>
+</li>
+<li><a href="#_examples">11. Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_introduction_2">11.1. Introduction</a></li>
+<li><a href="#_hello">11.2. Hello</a></li>
+<li><a href="#_sanitizers">11.3. Sanitizers</a></li>
+</ul>
+</li>
+<li><a href="#b2.jam">12. Boost.Jam Documentation</a>
+<ul class="sectlevel2">
+<li><a href="#jam.building">12.1. Building B2</a></li>
+<li><a href="#jam.language">12.2. Language</a></li>
+<li><a href="#jam.miscellaneous">12.3. Miscellaneous</a></li>
+</ul>
+</li>
+<li><a href="#b2.reference.code">13. Implementation Reference</a>
+<ul class="sectlevel2">
+<li><a href="#_b2list_cref">13.1. <code>b2::list_cref</code></a></li>
+<li><a href="#_b2list_ref">13.2. <code>b2::list_ref</code></a></li>
+<li><a href="#_b2lists">13.3. <code>b2::lists</code></a></li>
+</ul>
+</li>
+<li><a href="#b2.history">14. History</a>
+<ul class="sectlevel2">
+<li><a href="#_version_5_6_0">14.1. Version 5.6.0</a></li>
+<li><a href="#_version_5_5_1">14.2. Version 5.5.1</a></li>
+<li><a href="#_version_5_5_0">14.3. Version 5.5.0</a></li>
+<li><a href="#_version_5_4_2">14.4. Version 5.4.2</a></li>
+<li><a href="#_version_5_4_1">14.5. Version 5.4.1</a></li>
+<li><a href="#_version_5_4_0">14.6. Version 5.4.0</a></li>
+<li><a href="#_version_5_3_3">14.7. Version 5.3.3</a></li>
+<li><a href="#_version_5_3_2">14.8. Version 5.3.2</a></li>
+<li><a href="#_version_5_3_1">14.9. Version 5.3.1</a></li>
+<li><a href="#_version_5_3_0">14.10. Version 5.3.0</a></li>
+<li><a href="#_version_5_2_1">14.11. Version 5.2.1</a></li>
+<li><a href="#_version_5_2_0">14.12. Version 5.2.0</a></li>
+<li><a href="#_version_5_1_0">14.13. Version 5.1.0</a></li>
+<li><a href="#_version_5_0_1">14.14. Version 5.0.1</a></li>
+<li><a href="#_version_5_0_0">14.15. Version 5.0.0</a></li>
+<li><a href="#_version_4_10_1">14.16. Version 4.10.1</a></li>
+<li><a href="#_version_4_10_0">14.17. Version 4.10.0</a></li>
+<li><a href="#_version_4_9_6">14.18. Version 4.9.6</a></li>
+<li><a href="#_version_4_9_5">14.19. Version 4.9.5</a></li>
+<li><a href="#_version_4_9_4">14.20. Version 4.9.4</a></li>
+<li><a href="#_version_4_9_3">14.21. Version 4.9.3</a></li>
+<li><a href="#_version_4_9_2">14.22. Version 4.9.2</a></li>
+<li><a href="#_version_4_9_1">14.23. Version 4.9.1</a></li>
+<li><a href="#_version_4_9_0">14.24. Version 4.9.0</a></li>
+<li><a href="#_version_4_8_2">14.25. Version 4.8.2</a></li>
+<li><a href="#_version_4_8_1">14.26. Version 4.8.1</a></li>
+<li><a href="#_version_4_8_0">14.27. Version 4.8.0</a></li>
+<li><a href="#_version_4_7_2">14.28. Version 4.7.2</a></li>
+<li><a href="#_version_4_7_1">14.29. Version 4.7.1</a></li>
+<li><a href="#_version_4_7_0">14.30. Version 4.7.0</a></li>
+<li><a href="#_version_4_6_1">14.31. Version 4.6.1</a></li>
+<li><a href="#_version_4_6_0">14.32. Version 4.6.0</a></li>
+<li><a href="#_version_4_5_0">14.33. Version 4.5.0</a></li>
+<li><a href="#_version_4_4_2">14.34. Version 4.4.2</a></li>
+<li><a href="#_version_4_4_1">14.35. Version 4.4.1</a></li>
+<li><a href="#_version_4_4_0">14.36. Version 4.4.0</a></li>
+<li><a href="#_version_4_3_0">14.37. Version 4.3.0</a></li>
+<li><a href="#_version_4_2_0">14.38. Version 4.2.0</a></li>
+<li><a href="#_version_4_1_0">14.39. Version 4.1.0</a></li>
+<li><a href="#_version_4_0_1">14.40. Version 4.0.1</a></li>
+<li><a href="#_version_4_0_0">14.41. Version 4.0.0</a></li>
+</ul>
+</li>
+<li><a href="#b2.appendix">Appendix A: Licenses</a>
+<ul class="sectlevel2">
+<li><a href="#_mit_license">A.1. MIT License</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -728,6 +923,17 @@ table th {
 <h2 id="_introduction"><a class="anchor" href="#_introduction"></a>1. Introduction</h2>
 <div class="sectionbody">
 <style>
+div.copyright {
+	position: absolute;
+	width: 30%;
+	right: 5%;
+	margin-right: inherit;
+	top: 6rem;
+	@media (max-width: 760px) {
+		position: static;
+		width: auto;
+	}
+}
 </style>
 <div class="paragraph">
 <p>Want to learn about B2 features? Start with the
@@ -749,7 +955,7 @@ problem directly in the <a href="https://github.com/bfgroup/b2/issues">issue
 tracker</a>. For more general questions, please post them to our discussion
 forums (<a href="https://github.com/bfgroup/b2/discussions" class="bare">https://github.com/bfgroup/b2/discussions</a>).</p>
 </div>
-<div class="sidebarblock">
+<div class="sidebarblock copyright">
 <div class="content">
 <div class="paragraph">
 <p>Copyright 2018-2025 René Ferdinand Rivera Morell; Copyright 2006, 2014 Vladimir Prus
@@ -17402,14 +17608,18 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <h2 id="b2.history"><a class="anchor" href="#b2.history"></a>14. History</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_version_5_5_1"><a class="anchor" href="#_version_5_5_1"></a>14.1. Version 5.5.1</h3>
+<h3 id="_version_5_6_0"><a class="anchor" href="#_version_5_6_0"></a>14.1. Version 5.6.0</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_version_5_5_1"><a class="anchor" href="#_version_5_5_1"></a>14.2. Version 5.5.1</h3>
 <div class="paragraph">
 <p>Fix python config error when <code>ldd --version</code> fails instead of resulting in not
 detecting <code>glibc</code> for the Python configuration.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_5_0"><a class="anchor" href="#_version_5_5_0"></a>14.2. Version 5.5.0</h3>
+<h3 id="_version_5_5_0"><a class="anchor" href="#_version_5_5_0"></a>14.3. Version 5.5.0</h3>
 <div class="paragraph">
 <p>This release has a bunch of internal cleanups and bug fixes. But it also has a
 handful of new features. There&#8217;s initial support for the Fil-C compiler,
@@ -17510,21 +17720,21 @@ string.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_4_2"><a class="anchor" href="#_version_5_4_2"></a>14.3. Version 5.4.2</h3>
+<h3 id="_version_5_4_2"><a class="anchor" href="#_version_5_4_2"></a>14.4. Version 5.4.2</h3>
 <div class="paragraph">
 <p>Fix detection of Visual Studio 2026 to account for non-native tools being
 installed by default and hence conflicting with the native tools.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_4_1"><a class="anchor" href="#_version_5_4_1"></a>14.4. Version 5.4.1</h3>
+<h3 id="_version_5_4_1"><a class="anchor" href="#_version_5_4_1"></a>14.5. Version 5.4.1</h3>
 <div class="paragraph">
 <p>Fix error in path environment variables not being properly processed to split
 on path separator.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_4_0"><a class="anchor" href="#_version_5_4_0"></a>14.5. Version 5.4.0</h3>
+<h3 id="_version_5_4_0"><a class="anchor" href="#_version_5_4_0"></a>14.6. Version 5.4.0</h3>
 <div class="paragraph">
 <p>This is the end of year release. Biggest new items are the detection of
 Visual Studio 2026 (aka msvc145).</p>
@@ -17589,7 +17799,7 @@ library.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_3"><a class="anchor" href="#_version_5_3_3"></a>14.6. Version 5.3.3</h3>
+<h3 id="_version_5_3_3"><a class="anchor" href="#_version_5_3_3"></a>14.7. Version 5.3.3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17605,7 +17815,7 @@ library.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_2"><a class="anchor" href="#_version_5_3_2"></a>14.7. Version 5.3.2</h3>
+<h3 id="_version_5_3_2"><a class="anchor" href="#_version_5_3_2"></a>14.8. Version 5.3.2</h3>
 <div class="paragraph">
 <p>Fix regression for handling of the <code>--command-database</code> option. The new command
 line arguments parsing made the output to be reset and cleared causing nothing
@@ -17613,7 +17823,7 @@ to get output for the commands. Thanks to <em>Dmitry Arkhipov</em> for the fix.<
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_1"><a class="anchor" href="#_version_5_3_1"></a>14.8. Version 5.3.1</h3>
+<h3 id="_version_5_3_1"><a class="anchor" href="#_version_5_3_1"></a>14.9. Version 5.3.1</h3>
 <div class="paragraph">
 <p>Fix backward incompatibility of <code>option.get</code> if an argument is not added with
 <code>args.add-arg</code>. When such an argument isn&#8217;t registered we fail to check <code>ARGV</code>
@@ -17623,7 +17833,7 @@ checking if an argument is registered, and if not falling back on the direct
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_3_0"><a class="anchor" href="#_version_5_3_0"></a>14.9. Version 5.3.0</h3>
+<h3 id="_version_5_3_0"><a class="anchor" href="#_version_5_3_0"></a>14.10. Version 5.3.0</h3>
 <div class="paragraph">
 <p>Biggest changes for this release is the creation of two new toolsets: <code>ibmcxx</code>
 and <code>cc</code>. The former covers all the IBM compilers, and the latter is a generic
@@ -17692,7 +17902,7 @@ latter covers the same support.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_2_1"><a class="anchor" href="#_version_5_2_1"></a>14.10. Version 5.2.1</h3>
+<h3 id="_version_5_2_1"><a class="anchor" href="#_version_5_2_1"></a>14.11. Version 5.2.1</h3>
 <div class="paragraph">
 <p>This patch reverts the change to define <code>_HAS_EXCEPTIONS=0</code> for Dinkumware
 std library. It has the undesired effect of changing the ABI. It&#8217;s better for
@@ -17709,7 +17919,7 @@ initialize msvc.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_2_0"><a class="anchor" href="#_version_5_2_0"></a>14.11. Version 5.2.0</h3>
+<h3 id="_version_5_2_0"><a class="anchor" href="#_version_5_2_0"></a>14.12. Version 5.2.0</h3>
 <div class="paragraph">
 <p>Many fixes in this release from regular contributors Nikita and Dmitry. There
 are a couple of new features.. First the ability to have <code>dll-path</code> in searched
@@ -17788,7 +17998,7 @@ toolchain version 14.40.33807.&#8201;&#8212;&#8201;<em>Dmitry Andric</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_1_0"><a class="anchor" href="#_version_5_1_0"></a>14.12. Version 5.1.0</h3>
+<h3 id="_version_5_1_0"><a class="anchor" href="#_version_5_1_0"></a>14.13. Version 5.1.0</h3>
 <div class="paragraph">
 <p>This is mostly a bugfix release to account for issues impacting Boost Libraries.
 There is one "big" change though. It can be rather difficult to find build
@@ -17828,7 +18038,7 @@ supported, debug symbols option.&#8201;&#8212;&#8201;<em>John McFarlane</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_0_1"><a class="anchor" href="#_version_5_0_1"></a>14.13. Version 5.0.1</h3>
+<h3 id="_version_5_0_1"><a class="anchor" href="#_version_5_0_1"></a>14.14. Version 5.0.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17846,7 +18056,7 @@ native vs. non-native path handling.&#8201;&#8212;&#8201;<em>René Ferdinand Riv
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>14.14. Version 5.0.0</h3>
+<h3 id="_version_5_0_0"><a class="anchor" href="#_version_5_0_0"></a>14.15. Version 5.0.0</h3>
 <div class="paragraph">
 <p>This is a new era in B2. The drive of this new major version is to move the
 core build system from being implemented in Jam to C&#43;&#43;. This initial release
@@ -17910,7 +18120,7 @@ features became too much. And was taking away from other improvements.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_10_1"><a class="anchor" href="#_version_4_10_1"></a>14.15. Version 4.10.1</h3>
+<h3 id="_version_4_10_1"><a class="anchor" href="#_version_4_10_1"></a>14.16. Version 4.10.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -17921,7 +18131,7 @@ toolset in b2 build.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em><
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_10_0"><a class="anchor" href="#_version_4_10_0"></a>14.16. Version 4.10.0</h3>
+<h3 id="_version_4_10_0"><a class="anchor" href="#_version_4_10_0"></a>14.17. Version 4.10.0</h3>
 <div class="paragraph">
 <p>This release contains many bug fixes but along the way also cleanup and
 refactoring of many toolsets, thanks to Nikita.</p>
@@ -18022,7 +18232,7 @@ target and project references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Mo
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>14.17. Version 4.9.6</h3>
+<h3 id="_version_4_9_6"><a class="anchor" href="#_version_4_9_6"></a>14.18. Version 4.9.6</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18032,7 +18242,7 @@ target and project references.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Mo
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>14.18. Version 4.9.5</h3>
+<h3 id="_version_4_9_5"><a class="anchor" href="#_version_4_9_5"></a>14.19. Version 4.9.5</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18060,7 +18270,7 @@ when it is not on found in <code>PATH</code>.&#8201;&#8212;&#8201;<em>Nikita Kni
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>14.19. Version 4.9.4</h3>
+<h3 id="_version_4_9_4"><a class="anchor" href="#_version_4_9_4"></a>14.20. Version 4.9.4</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18091,7 +18301,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.20. Version 4.9.3</h3>
+<h3 id="_version_4_9_3"><a class="anchor" href="#_version_4_9_3"></a>14.21. Version 4.9.3</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18101,7 +18311,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.21. Version 4.9.2</h3>
+<h3 id="_version_4_9_2"><a class="anchor" href="#_version_4_9_2"></a>14.22. Version 4.9.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18111,7 +18321,7 @@ from the main system.&#8201;&#8212;&#8201;<em>David Seifert</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.22. Version 4.9.1</h3>
+<h3 id="_version_4_9_1"><a class="anchor" href="#_version_4_9_1"></a>14.23. Version 4.9.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18126,7 +18336,7 @@ path specified in boost-build rule.&#8201;&#8212;&#8201;<em>René Ferdinand Rive
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.23. Version 4.9.0</h3>
+<h3 id="_version_4_9_0"><a class="anchor" href="#_version_4_9_0"></a>14.24. Version 4.9.0</h3>
 <div class="paragraph">
 <p>This release has mostly internal cleanups and restructuring. The most
 significant being: fixing all memory leaks, automatic build system
@@ -18195,7 +18405,7 @@ deprecated and will be removed in a future release.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.24. Version 4.8.2</h3>
+<h3 id="_version_4_8_2"><a class="anchor" href="#_version_4_8_2"></a>14.25. Version 4.8.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18206,7 +18416,7 @@ and incorrect target list pop unlinking.&#8201;&#8212;&#8201;<em>René Ferdinand
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.25. Version 4.8.1</h3>
+<h3 id="_version_4_8_1"><a class="anchor" href="#_version_4_8_1"></a>14.26. Version 4.8.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18217,7 +18427,7 @@ missing <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> macros.&#8201;&#
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.26. Version 4.8.0</h3>
+<h3 id="_version_4_8_0"><a class="anchor" href="#_version_4_8_0"></a>14.27. Version 4.8.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18260,7 +18470,7 @@ cleanup in engine.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.27. Version 4.7.2</h3>
+<h3 id="_version_4_7_2"><a class="anchor" href="#_version_4_7_2"></a>14.28. Version 4.7.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18274,7 +18484,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.28. Version 4.7.1</h3>
+<h3 id="_version_4_7_1"><a class="anchor" href="#_version_4_7_1"></a>14.29. Version 4.7.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18284,7 +18494,7 @@ icpc is in the PATH.&#8201;&#8212;&#8201;<em>Mark E. Hamilton</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.29. Version 4.7.0</h3>
+<h3 id="_version_4_7_0"><a class="anchor" href="#_version_4_7_0"></a>14.30. Version 4.7.0</h3>
 <div class="paragraph">
 <p>Many, many fixes and internal cleanups in this release. But also adding
 auto-detection and bootstrap for VS 2022 preview toolset.</p>
@@ -18348,7 +18558,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.30. Version 4.6.1</h3>
+<h3 id="_version_4_6_1"><a class="anchor" href="#_version_4_6_1"></a>14.31. Version 4.6.1</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -18361,7 +18571,7 @@ compiler options.&#8201;&#8212;&#8201;<em>Konstantin Ivlev</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.31. Version 4.6.0</h3>
+<h3 id="_version_4_6_0"><a class="anchor" href="#_version_4_6_0"></a>14.32. Version 4.6.0</h3>
 <div class="paragraph">
 <p>This release wraps up a few new features that make using some toolsets easier
 (thanks to Nikita). It&#8217;s now also possible to specify empty flags features on
@@ -18424,7 +18634,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.32. Version 4.5.0</h3>
+<h3 id="_version_4_5_0"><a class="anchor" href="#_version_4_5_0"></a>14.33. Version 4.5.0</h3>
 <div class="paragraph">
 <p>Some minor fixes to improve some old issues.</p>
 </div>
@@ -18446,7 +18656,7 @@ native method of getting the path to executables, like OpenBSD.&#8201;&#8212;&#8
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.33. Version 4.4.2</h3>
+<h3 id="_version_4_4_2"><a class="anchor" href="#_version_4_4_2"></a>14.34. Version 4.4.2</h3>
 <div class="paragraph">
 <p>This release is the first of the new home for B2 at Build Frameworks Group.</p>
 </div>
@@ -18463,7 +18673,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.34. Version 4.4.1</h3>
+<h3 id="_version_4_4_1"><a class="anchor" href="#_version_4_4_1"></a>14.35. Version 4.4.1</h3>
 <div class="paragraph">
 <p>Minor patch to correct missing fix for macOS default engine compiler.</p>
 </div>
@@ -18476,7 +18686,7 @@ at equivalent bfgroup resources.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.35. Version 4.4.0</h3>
+<h3 id="_version_4_4_0"><a class="anchor" href="#_version_4_4_0"></a>14.36. Version 4.4.0</h3>
 <div class="paragraph">
 <p>Along with a variety of fixes this version introduces "dynamic" response file
 support for some toolsets. This means that under most circumstances, if
@@ -18567,7 +18777,7 @@ reasonably brief form.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.36. Version 4.3.0</h3>
+<h3 id="_version_4_3_0"><a class="anchor" href="#_version_4_3_0"></a>14.37. Version 4.3.0</h3>
 <div class="paragraph">
 <p>There are many invidual fixes in this release. Many thanks for the
 contributions. Special thanks to Nikita for the many improvements to msvc
@@ -18667,7 +18877,7 @@ original Jam bootstrap process.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera M
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.37. Version 4.2.0</h3>
+<h3 id="_version_4_2_0"><a class="anchor" href="#_version_4_2_0"></a>14.38. Version 4.2.0</h3>
 <div class="paragraph">
 <p>This release is predominantly minor fixes and cleanup of the engine. In
 particular the bootstrap/build process now clearly communicates C++11
@@ -18709,7 +18919,7 @@ error.&#8201;&#8212;&#8201;<em>Mateusz Loskot</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.38. Version 4.1.0</h3>
+<h3 id="_version_4_1_0"><a class="anchor" href="#_version_4_1_0"></a>14.39. Version 4.1.0</h3>
 <div class="paragraph">
 <p>Many small bug fixes in this release. But there are some new features also.
 There&#8217;s now an <code>lto</code> feature to specify the use of LTO, and what kind. The
@@ -18791,7 +19001,7 @@ and sun toolsets.&#8201;&#8212;&#8201;<em>Dmitry Arkhipov</em></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.39. Version 4.0.1</h3>
+<h3 id="_version_4_0_1"><a class="anchor" href="#_version_4_0_1"></a>14.40. Version 4.0.1</h3>
 <div class="paragraph">
 <p>This patch release fixes a minor issue when trying to configure toolsets that
 override the toolset version with a non-version tag. Currently this is only
@@ -18801,7 +19011,7 @@ Fix for this was provided Peter Dimov.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.40. Version 4.0.0</h3>
+<h3 id="_version_4_0_0"><a class="anchor" href="#_version_4_0_0"></a>14.41. Version 4.0.0</h3>
 <div class="paragraph">
 <p>After even more years of development the landscape of build systems has changed
 considerably, and so has the landscape of compilers. This version marks the
