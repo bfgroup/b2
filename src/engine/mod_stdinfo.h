@@ -49,7 +49,7 @@ struct std_info_module
 	: b2::bind::module_<std_info_module>
 	, b2::args::declaration_<std_info_module>
 {
-	const char * module_name = "command-db";
+	const char * module_name = "stdinfo";
 
 	template <class Binder>
 	void def(Binder & binder)
