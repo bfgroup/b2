@@ -940,7 +940,7 @@ toolset.flags gcc.link OPTIONS <coverage>on : --coverage ;
         -Wl,--start-group ;
     toolset.flags gcc.link END-GROUP <target-os>$(generic-os) : -Wl,--end-group ;
 
-    local rpath-os = [ set.difference $(all-os) : aix darwin vxworks solaris osf hpux windows ] ;
+    local rpath-os = [ set.difference $(all-os) : aix darwin vxworks solaris osf hpux windows iphone appletv ] ;
     toolset.flags gcc.link RPATH <target-os>$(rpath-os) : <dll-path> ;
     toolset.flags gcc.link RPATH_OPTION <target-os>$(rpath-os) : -rpath ;
     toolset.flags gcc.link RPATH_LINK <target-os>$(rpath-os) : <xdll-path> ;
