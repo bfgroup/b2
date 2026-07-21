@@ -485,6 +485,7 @@ tests = [
     "toolset_gcc",
     "toolset_intel_darwin",
     "toolset_msvc",
+    "toolset_msvc_linkflags",
     "toolset_requirements",
     "transitive_skip",
     "unit_test",
