@@ -38,6 +38,7 @@ import numbers ;
 import os ;
 import property ;
 import rc ;
+import regex ;
 import set ;
 
 feature.extend-subfeature toolset clang : platform : linux ;
@@ -74,6 +75,32 @@ rule init ( version ? :  command * : options * ) {
     : version $(version) ] ;
 
   common.handle-options clang-linux : $(condition) : $(command) : $(options) ;
+
+  # Autodetect target-os from the compiler's own triple,
+  # unless the toolset was already told what to target.
+  if $(command) && ! [ feature.get-values <target-os> : $(options) ]
+  {
+      local machine = [ MATCH "^([^ ]+)" :
+          [ SHELL "$(command-string) -dumpmachine" ] ] ;
+      local target-os ;
+      switch $(machine:L)
+      {
+          case *android* : target-os ?= android ;
+          case *mingw*   : target-os ?= windows ;
+          case *cygwin*  : target-os ?= cygwin ;
+          case *linux*   : target-os ?= linux ;
+          case *darwin*  : target-os ?= darwin ;
+          case *freebsd* : target-os ?= freebsd ;
+          case *solaris* : target-os ?= solaris ;
+          case *qnx*     : target-os ?= qnxnto ;
+      }
+      if $(target-os)
+      {
+          local conditionx = [ regex.replace $(condition) "/" "," ] ;
+          toolset.add-defaults $(conditionx)\:<target-os>$(target-os) ;
+      }
+  }
+
   clang.init-flags clang-linux : $(condition) : $(version) :
       [ feature.get-values <triple> : $(options) ] ;
 
