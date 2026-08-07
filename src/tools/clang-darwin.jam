@@ -14,7 +14,6 @@ import toolset : flags ;
 import common ;
 import errors ;
 import generators ;
-import regex ;
 
 feature.extend-subfeature toolset clang : platform : darwin ;
 # FIXME: import order affects default value for 'platform' subfeature
@@ -52,32 +51,9 @@ rule init ( version ? :  command * : options * )
 
     common.handle-options clang-darwin : $(condition) : $(command) : $(options) ;
 
-    # Autodetect target-os from the compiler's own triple, unless the
-    # toolset was already told what to target. Without this, a
-    # per-target NDK wrapper (e.g. aarch64-linux-android21-clang++)
-    # would silently inherit the darwin host default below, and
-    # clang.init-flags' hardcoded <target-os>darwin condition would then
-    # inject a conflicting --target=arm64-apple-darwin over whatever the
-    # wrapper set for itself.
-    if $(command) && ! [ feature.get-values <target-os> : $(options) ]
+    if $(command)
     {
-        local machine = [ MATCH "^([^ ]+)" :
-            [ SHELL "$(command-string) -dumpmachine" ] ] ;
-        local target-os ;
-        switch $(machine:L)
-        {
-            case *android* : target-os ?= android ;
-            case *linux*   : target-os ?= linux ;
-            case *darwin*  : target-os ?= darwin ;
-            case *freebsd* : target-os ?= freebsd ;
-            case *solaris* : target-os ?= solaris ;
-            case *qnx*     : target-os ?= qnxnto ;
-        }
-        if $(target-os)
-        {
-            local conditionx = [ regex.replace $(condition) "/" "," ] ;
-            toolset.add-defaults $(conditionx)\:<target-os>$(target-os) ;
-        }
+        clang.set-target-os-default clang-darwin : $(condition) : $(command-string) : $(options) ;
     }
 
     clang.init-flags clang-darwin : $(condition) : $(version) :
