@@ -50,6 +50,9 @@ rule set-target-os-default ( toolset : condition * : command-string : options * 
             case *mingw*   : target-os ?= windows ;
             case *cygwin*  : target-os ?= cygwin ;
             case *linux*   : target-os ?= linux ;
+            case *tvos*    : target-os ?= appletv ;
+            case *watchos* : target-os ?= iphone ;
+            case *ios*     : target-os ?= iphone ;
             case *darwin*  : target-os ?= darwin ;
             case *freebsd* : target-os ?= freebsd ;
             case *solaris* : target-os ?= solaris ;
