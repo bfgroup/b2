@@ -52,7 +52,7 @@ def test_target_os_gcc_autodetect():
         '''))
     t.write("test.cpp", "int f() { return 0; }")
 
-    t.run_build_system([f"-sPYTHON_CMD={sys.executable}", "toolset=gcc-autodetect", "test"])
+    t.run_build_system(["-sPYTHON_CMD=" + sys.executable, "toolset=gcc-autodetect", "test"])
     t.cleanup()
 
 def test_target_os_clang_linux_autodetect():
@@ -71,7 +71,7 @@ def test_target_os_clang_linux_autodetect():
         '''))
     t.write("test.cpp", "int f() { return 0; }")
 
-    t.run_build_system([f"-sPYTHON_CMD={sys.executable}", "toolset=clang-linux-autodetect", "test"])
+    t.run_build_system(["-sPYTHON_CMD=" + sys.executable, "toolset=clang-linux-autodetect", "test"])
     t.cleanup()
 
 def test_target_os_clang_darwin_autodetect():
@@ -90,7 +90,7 @@ def test_target_os_clang_darwin_autodetect():
         '''))
     t.write("test.cpp", "int f() { return 0; }")
 
-    t.run_build_system([f"-sPYTHON_CMD={sys.executable}", "toolset=clang-darwin-autodetect", "test"])
+    t.run_build_system(["-sPYTHON_CMD=" + sys.executable, "toolset=clang-darwin-autodetect", "test"])
     t.cleanup()
 
 
@@ -110,7 +110,7 @@ def test_target_os_clang_darwin_autodetect_linux():
         '''))
     t.write("test.cpp", "int f() { return 0; }")
 
-    t.run_build_system([f"-sPYTHON_CMD={sys.executable}", "toolset=clang-darwin-autodetect", "test"])
+    t.run_build_system(["-sPYTHON_CMD=" + sys.executable, "toolset=clang-darwin-autodetect", "test"])
     t.cleanup()
 
 
