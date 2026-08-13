@@ -44,7 +44,7 @@ feature.extend-subfeature toolset clang : platform : linux ;
 
 toolset.inherit-generators clang-linux
     <toolset>clang <toolset-clang:platform>linux : gcc
-  : gcc.mingw.link gcc.mingw.link.dll gcc.cygwin.link gcc.cygwin.link.dll ;
+  : gcc.cygwin.link gcc.cygwin.link.dll ;
 
 local all-os = [ feature.values <target-os> ] ;
 local all-arch = [ feature.values <architecture> ] ;
