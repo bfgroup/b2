@@ -1,0 +1,6 @@
+using intel-linux : : icx ;
+
+project : default-build <toolset>intel-linux ;
+
+exe hello : hello.cpp :
+    <cxxflags>-ipo <linkflags>-ipo ;

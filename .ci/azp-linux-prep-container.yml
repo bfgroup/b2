@@ -4,6 +4,7 @@ steps:
     target: host
     inputs:
       script: |
+        /usr/bin/docker pull intel/oneapi
         /usr/bin/docker exec -t -u root container mv /etc/sudoers /etc/sudoers.bak
         /usr/bin/docker exec -t -u root container apt-get -qq update
         /usr/bin/docker exec -t -u root container apt-get -qq install sudo

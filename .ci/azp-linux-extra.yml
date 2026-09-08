@@ -18,3 +18,4 @@ steps:
   - { bash: "./.ci/b2_example.sh example/hello", displayName: "example/hello" }
   - { bash: "./.ci/b2_example.sh example/libraries", displayName: "example/libraries" }
   - { bash: "./.ci/b2_example.sh example/make", displayName: "example/make" }
+  - { bash: "./.ci/b2_example.sh example/icx", displayName: "example/icx" }
