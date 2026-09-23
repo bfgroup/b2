@@ -17620,6 +17620,12 @@ self introspection information output.&#8201;&#8212;&#8201;<em>René Ferdinand R
 <li>
 <p>Fix obsolete <code>-ip</code> option for intel-linux toolset. Replaced with <code>-ipo</code>.&#8201;&#8212;&#8201;<em>Amlal El Mahrouss</em></p>
 </li>
+<li>
+<p>Fix <code>clang-win</code> toolset initialization error, <code>missing argument native</code> from
+<code>path.make</code>, on machines where <code>vswhere</code> does not find a Visual Studio
+installation. The VS detection now includes Build Tools installs
+(<code>vswhere -products *</code>), and a missing VS install is no longer a hard error.&#8201;&#8212;&#8201;<em>Sam Darwin</em></p>
+</li>
 </ul>
 </div>
 </div>
