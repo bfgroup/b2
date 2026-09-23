@@ -6,6 +6,8 @@
 * *New*: Add minimal https://ecostd.github.io/[EcoStd] support. Minimal being
   self introspection information output.
   -- _René Ferdinand Rivera Morell_
+* Fix obsolete `-ip` option for intel-linux toolset. Replaced with `-ipo`.
+  -- _Amlal El Mahrouss_
 
 == Version 5.5.3
 
