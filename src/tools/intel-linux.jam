@@ -36,6 +36,7 @@ toolset.inherit-flags intel-linux : gcc
           <warnings>off <warnings>all <warnings>on
           <warnings>extra <warnings>pedantic
           <warnings-as-errors>off <warnings-as-errors>on
+          <debug-symbols>on
         ;
 
 .debug-configuration = [ args.get-arg debug-configuration ] ;
@@ -238,6 +239,9 @@ rule init ( version ? :  command * : options * )
     flags intel-linux.compile RUN_PATH $(condition) : $(command_lib_path) ;
     flags intel-linux.link RUN_PATH $(condition) : $(command_lib_path) ;
 }
+
+toolset.flags intel-linux.compile OPTIONS <debug-symbols>on : -g -Rno-debug-disables-optimization ;
+toolset.flags intel-linux.link OPTIONS <debug-symbols>on : -g -Rno-debug-disables-optimization ;
 
 _ = " " ;
 
