@@ -74,6 +74,12 @@ rule init ( version ? :  command * : options * ) {
     : version $(version) ] ;
 
   common.handle-options clang-linux : $(condition) : $(command) : $(options) ;
+
+  if $(command)
+  {
+      clang.set-target-os-default clang-linux : $(condition) : $(command-string) : $(options) ;
+  }
+
   clang.init-flags clang-linux : $(condition) : $(version) :
       [ feature.get-values <triple> : $(options) ] ;
 

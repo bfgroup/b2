@@ -487,6 +487,7 @@ tests = [
     "toolset_msvc",
     "toolset_msvc_linkflags",
     "toolset_requirements",
+    "toolset_target_os_autodetect",
     "transitive_skip",
     "unit_test",
     "unused",
