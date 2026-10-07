@@ -13,6 +13,9 @@
   installation. The VS detection now includes Build Tools installs
   (`vswhere -products *`), and a missing VS install is no longer a hard error.
   -- _Sam Darwin_
+* Fix intermittent crash in `make1c()` from dereferencing a null `t->parents`
+  when updating includes of a just-created internal node.
+  -- _Sai Asish Y_
 
 == Version 5.5.3
 
