@@ -17611,6 +17611,11 @@ inline lists::operator LOL *() const B2_NOEXCEPT</code></pre>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_version_5_6_0"><a class="anchor" href="#_version_5_6_0"></a>14.1. Version 5.6.0</h3>
+<div class="paragraph">
+<p>Mostly a bugfix release for various issues that people reported or found
+(and generously provided fixes). Only addition is for early support of EcoStd
+introspection reporting (with a new <code>stdinfo</code> module).</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -17632,6 +17637,35 @@ when updating includes of a just-created internal node.&#8201;&#8212;&#8201;<em>
 </li>
 <li>
 <p>Fix parsing of Windows archive files larger than 2GiB.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Add <code>alpha</code> to the <code>architecture</code> feature.&#8201;&#8212;&#8201;<em>Matt Turner</em></p>
+</li>
+<li>
+<p>Add <code>python-numpy-include</code> feature to support numpy while cross-compiling.&#8201;&#8212;&#8201;<em>Rob Woolley</em></p>
+</li>
+<li>
+<p>Autodetect <code>&lt;target-os&gt;</code> from compiler triplet for gcc/clang toolsets.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
+</li>
+<li>
+<p>Fix generating Windows import libraries when linking shared libraries in
+clang-linux toolset.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
+</li>
+<li>
+<p>Forward <code>&lt;linkflags&gt;</code> from using msvc toolset options to the linker.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
+</li>
+<li>
+<p>Use getexecpath() on OpenBSD to detect the executable path.&#8201;&#8212;&#8201;<em>Brad Smith</em></p>
+</li>
+<li>
+<p>Avoid warnings about debug sym turning off optimization default for
+intel-linux toolset.&#8201;&#8212;&#8201;<em>René Ferdinand Rivera Morell</em></p>
+</li>
+<li>
+<p>Do not link pthread for Android on Python config.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
+</li>
+<li>
+<p>Exclude <code>iphone</code> and <code>appletv</code> from <code>rpath-os</code> fallback rule.&#8201;&#8212;&#8201;<em>Uilian Ries</em></p>
 </li>
 </ul>
 </div>
