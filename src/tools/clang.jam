@@ -66,6 +66,77 @@ rule set-target-os-default ( toolset : condition * : command-string : options * 
     }
 }
 
+rule set-architecture-default ( toolset : condition * : command-string : options * )
+{
+    # Autodetect architecture from the compiler's architecture macros,
+    # unless the <architecture> option was already provided.
+    #
+    # -dumpmachine reports the triple and ignores -arch, so we need to run the
+    # preprocessor with the using-line flags and read the architecture macros.
+    if ! $(command-string) || [ feature.get-values <architecture> : $(options) ]
+    {
+        return ;
+    }
+
+    local flags =
+        [ feature.get-values <compileflags> : $(options) ]
+        [ feature.get-values <cflags> : $(options) ]
+        [ feature.get-values <cxxflags> : $(options) ] ;
+    local empty = /dev/null ;
+    if [ os.name ] = NT
+    {
+        empty = NUL ;
+    }
+    local invocation = $(command-string) $(flags) -dM -E -x c++ $(empty) ;
+    invocation = $(invocation:J=" ") ;
+    local text = [ SHELL "$(invocation)" ] ;
+    text = $(text:J=" ") ;
+
+    local architecture ;
+    if [ MATCH "(__aarch64__|__arm64__|_M_ARM64|__arm__|_M_ARM|__thumb__)" : $(text) ]
+    {
+        architecture = arm ;
+    }
+    else if [ MATCH "(__x86_64__|__amd64__|_M_X64|__i386__|_M_IX86)" : $(text) ]
+    {
+        architecture = x86 ;
+    }
+    else if [ MATCH "(__riscv)" : $(text) ]
+    {
+        architecture = riscv ;
+    }
+    else if [ MATCH "(__powerpc|__ppc64__|__PPC64__|__PPC__|_ARCH_PPC64|_M_PPC)" : $(text) ]
+    {
+        architecture = power ;
+    }
+    else if [ MATCH "(__mips)" : $(text) ]
+    {
+        architecture = mips ;
+    }
+    else if [ MATCH "(__loongarch__)" : $(text) ]
+    {
+        architecture = loongarch ;
+    }
+    else if [ MATCH "(__s390)" : $(text) ]
+    {
+        architecture = s390x ;
+    }
+    else if [ MATCH "(__sparc)" : $(text) ]
+    {
+        architecture = sparc ;
+    }
+    else if [ MATCH "(__ia64__|_M_IA64)" : $(text) ]
+    {
+        architecture = ia64 ;
+    }
+
+    if $(architecture)
+    {
+        local conditionx = [ regex.replace $(condition) "/" "," ] ;
+        toolset.add-defaults $(conditionx)\:<architecture>$(architecture) ;
+    }
+}
+
 local rule cxxstd-flags ( toolset : condition * : options * )
 {
     toolset.flags $(toolset).compile.c++ OPTIONS $(condition) : $(options) : unchecked ;
