@@ -1173,7 +1173,8 @@ rule set-architecture-default ( condition * : command-string : options * )
     {
         empty = NUL ;
     }
-    local invocation = $(command-string) $(flags) -dM -E -x c++ $(empty) ;
+    local invocation = $(command-string) $(flags) -dM -E -x c++ $(empty)
+        "2>$(empty)" ;
     invocation = $(invocation:J=" ") ;
     local text = [ SHELL "$(invocation)" ] ;
     text = $(text:J=" ") ;
