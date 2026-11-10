@@ -477,6 +477,7 @@ tests = [
     "test2",
     "testing",
     "timedata",
+    "toolset_architecture_autodetect",
     "toolset_clang_darwin",
     "toolset_clang_linux",
     "toolset_clang_vxworks",

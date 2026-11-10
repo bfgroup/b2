@@ -228,8 +228,7 @@ rule init ( version ? : command * : options * : requirement * )
 
     if $(command)
     {
-        import clang ;
-        clang.set-architecture-default gcc : $(condition) : $(command-string)
+        common.set-architecture-default $(condition) : $(command-string)
             : $(options) $(requirement) ;
     }
 

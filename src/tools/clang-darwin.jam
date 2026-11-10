@@ -54,7 +54,7 @@ rule init ( version ? :  command * : options * )
     if $(command)
     {
         clang.set-target-os-default clang-darwin : $(condition) : $(command-string) : $(options) ;
-        clang.set-architecture-default clang-darwin : $(condition) : $(command-string) : $(options) ;
+        common.set-architecture-default $(condition) : $(command-string) : $(options) ;
     }
 
     clang.init-flags clang-darwin : $(condition) : $(version) :
