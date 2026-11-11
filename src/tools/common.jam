@@ -1177,7 +1177,6 @@ rule set-architecture-default ( condition * : command-string : options * )
         "2>$(empty)" ;
     invocation = $(invocation:J=" ") ;
     local text = [ SHELL "$(invocation)" ] ;
-    text = $(text:J=" ") ;
 
     local architecture ;
     local macros = $(.architecture-macros) ;
