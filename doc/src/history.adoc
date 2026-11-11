@@ -1,6 +1,14 @@
 [[b2.history]]
 = History
 
+== Version 5.6.2
+
+* Fix `-ipo` handling for intel-linux oneAPI compile failing for linking.
+  -- _René Ferdinand Rivera Morell_
+* Silence a build warning from an expected ls failure for  ibmcxx-clang
+  compiler.
+  -- _Hank Leininger_
+
 == Version 5.6.1
 
 * Autodetect the `architecture` feature for the `gcc`, `clang-linux` and
