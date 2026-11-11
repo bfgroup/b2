@@ -147,7 +147,6 @@ stages:
       matrix:
         GCC ${{variables.gcc_latest}}: {TOOLSET: "gcc-${{variables.gcc_latest}}", PACKAGES: "g++-${{variables.gcc_latest}}-multilib", VM_IMAGE: "${{variables.linux_latest_vm}}"}
         Clang ${{variables.clang_latest}}: {TOOLSET: "clang-${{variables.clang_latest}}", PACKAGES: "clang-${{variables.clang_latest}} libstdc++-${{variables.clang_latest_libstdcxx}}-dev-i386-cross", LLVM_OS: "${{variables.linux_latest_os}}", LLVM_VER: "${{variables.clang_latest}}", VM_IMAGE: "${{variables.linux_latest_vm}}"}
-        Intel oneAPI: {TOOLSET: "intel-linux", PACKAGES: "intel-oneapi-compiler-dpcpp-cpp", VM_IMAGE: "${{variables.linux_latest_vm}}"}
     pool:
       vmImage: $(VM_IMAGE)
     steps:
@@ -323,6 +322,17 @@ stages:
       displayName: Info
     - template: .ci/azp-linux-prep-container.yml
     - template: .ci/azp-linux-test.yml
+
+  - job: 'Linux'
+    strategy:
+      matrix:
+        Intel oneAPI: {TOOLSET: "intel-linux", PACKAGES: "intel-oneapi-compiler-dpcpp-cpp", VM_IMAGE: "${{variables.linux_latest_vm}}"}
+    pool:
+      vmImage: $(VM_IMAGE)
+    steps:
+    - template: .ci/azp-linux-test.yml
+      parameters:
+        b2_opts: address-model=32,64
 
   - job: 'Windows'
     strategy:
