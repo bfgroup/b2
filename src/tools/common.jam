@@ -1088,8 +1088,8 @@ rule make-command-string ( command + )
     return $(command-string:J=" ") ;
 }
 
-# Maps the platform b2 itself runs on (the engine's OSPLAT) to the value of the
-# <architecture> feature. Empty if the host architecture is unknown.
+# Maps the platform b2 itself runs on (OSPLAT) to the value of the
+# <architecture> feature.
 #
 local rule host-architecture ( )
 {
@@ -1110,9 +1110,7 @@ local rule host-architecture ( )
 
 
 # Compiler macros that identify each architecture, as a regular expression
-# matched against the output of 'compiler -dM -E'. Matches must start at a
-# macro definition, so that macro names that merely contain one of these
-# strings are not mistaken for it.
+# matched against the output of 'compiler -dM -E'.
 #
 .architecture-macros =
     arm       "define (__aarch64__|__arm64__|__arm__|__thumb__|_M_ARM64|_M_ARM)"
@@ -1131,17 +1129,12 @@ local rule host-architecture ( )
 
 # Sets the default <architecture> for a gcc-like compiler, based on the
 # architecture it generates code for, unless <architecture> was given in
-# 'options'.
+# 'options' first.
 #
-# The default is only set when the compiler targets an architecture other than
-# the one b2 runs on. A native build is what b2 does without any architecture,
-# and a default there would change the build directory layout and select
-# architecture specific flags for every existing user. For cross builds the
-# architecture is needed to select the right flags and for features such as
-# <address-model> to be meaningful.
+# We don't use -dumpmachine here because it ignores options such as '-arch'.
 #
-# The architecture is read from the compiler's predefined macros rather than
-# 'compiler -dumpmachine', as the latter ignores options such as '-arch'.
+# The default arch is only set when the compiler targets an architecture other than
+# the one b2 runs on, same archs still have address-model set.
 #
 rule set-architecture-default ( condition * : command-string : options * )
 {
