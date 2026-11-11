@@ -97,7 +97,7 @@ def test_cross_architecture_autodetect(toolset):
     """
     macro, arch = cross_architecture()
     t = build(toolset, macro)
-    t.expect_addition("bin/%s-autodetect/debug/architecture-%s*/test.o"
+    t.expect_addition("bin/%s-autodetect/debug/architecture-%s*/test.o*"
                       % (toolset, arch))
     t.cleanup()
 
@@ -110,7 +110,7 @@ def test_native_architecture_not_defaulted(toolset):
         return
     # Nothing is added to the build path for a native build.
     t = build(toolset, host[0])
-    t.expect_addition("bin/%s-autodetect/debug*/test.o" % toolset)
+    t.expect_addition("bin/%s-autodetect/debug*/test.o*" % toolset)
     expect_no_architecture(t)
     t.cleanup()
 
@@ -120,7 +120,7 @@ def test_explicit_architecture_wins(toolset):
     """
     macro, _ = cross_architecture()
     t = build(toolset, macro, extra_args=["architecture=mips"])
-    t.expect_addition("bin/%s-autodetect/debug/architecture-mips*/test.o"
+    t.expect_addition("bin/%s-autodetect/debug/architecture-mips*/test.o*"
                       % toolset)
     t.cleanup()
 
@@ -134,7 +134,7 @@ def test_universal_build_not_probed(toolset):
     macro, _ = cross_architecture()
     t = build(toolset, macro,
               using_options='<cxxflags>"-arch a" <cxxflags>"-arch b"')
-    t.expect_addition("bin/%s-autodetect/debug*/test.o" % toolset)
+    t.expect_addition("bin/%s-autodetect/debug*/test.o*" % toolset)
     expect_no_architecture(t)
     t.cleanup()
 
@@ -160,7 +160,7 @@ def test_stderr_of_probe_is_silenced(toolset):
     t.write("test.cpp", "int f() { return 0; }")
     t.run_build_system(["-sPYTHON_CMD=" + sys.executable,
                         "toolset=%s-autodetect" % toolset, "test"])
-    t.expect_addition("bin/%s-autodetect/debug/architecture-%s*/test.o"
+    t.expect_addition("bin/%s-autodetect/debug/architecture-%s*/test.o*"
                       % (toolset, cross_architecture()[1]))
     if "mock-noise" in t.stdout() + t.stderr():
         BoostBuild.annotation("failure", "probe stderr leaked")
