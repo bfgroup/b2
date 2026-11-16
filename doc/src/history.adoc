@@ -11,6 +11,11 @@
 
 == Version 5.6.1
 
+* Autodetect the `architecture` feature for the `gcc`, `clang-linux` and
+  `clang-darwin` toolsets from the compiler's predefined macros, when it is
+  not given explicitly and the compiler targets an architecture other than the
+  one b2 runs on. Native builds are unchanged.
+  -- _Uilian Ries_
 * Fix incorrectly adding `-m64` or `-m32` for all architectures with clang
   toolset. Not all architectures support the variation of address model and
   clang no longer ignores the option if not compatible.

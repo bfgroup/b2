@@ -21,6 +21,7 @@ import sequence ;
 import toolset ;
 import virtual-target ;
 import numbers ;
+import regex ;
 
 .debug-configuration = [ args.get-arg debug-configuration ] ;
 
@@ -1086,6 +1087,108 @@ rule make-command-string ( command + )
     local command-string = \"$(command)\" ;
     return $(command-string:J=" ") ;
 }
+
+# Maps the platform b2 itself runs on (OSPLAT) to the value of the
+# <architecture> feature.
+#
+local rule host-architecture ( )
+{
+    switch [ os.platform ]
+    {
+        case X86*    : return x86 ;
+        case ARM*    : return arm ;
+        case PPC     : return power ;
+        case AXP     : return alpha ;
+        case IA64    : return ia64 ;
+        case SPARC   : return sparc ;
+        case MIPS*   : return mips ;
+        case 390     : return s390x ;
+        case PARISC  : return parisc ;
+        case RISCV*  : return riscv ;
+    }
+}
+
+
+# Compiler macros that identify each architecture, as a regular expression
+# matched against the output of 'compiler -dM -E'.
+#
+.architecture-macros =
+    arm       "define (__aarch64__|__arm64__|__arm__|__thumb__|_M_ARM64|_M_ARM)"
+    x86       "define (__x86_64__|__amd64__|_M_X64|__i386__|_M_IX86)"
+    riscv     "define (__riscv)"
+    power     "define (__powerpc|__ppc64__|__PPC64__|__PPC__|_ARCH_PPC64|_M_PPC)"
+    mips      "define (__mips)"
+    loongarch "define (__loongarch__)"
+    s390x     "define (__s390)"
+    sparc     "define (__sparc)"
+    ia64      "define (__ia64__|_M_IA64)"
+    alpha     "define (__alpha__)"
+    parisc    "define (__hppa)"
+    ;
+
+
+# Sets the default <architecture> for a gcc-like compiler, based on the
+# architecture it generates code for, unless <architecture> was given in
+# 'options' first.
+#
+# We don't use -dumpmachine here because it ignores options such as '-arch'.
+#
+# The default arch is only set when the compiler targets an architecture other than
+# the one b2 runs on, same archs still have address-model set.
+#
+rule set-architecture-default ( condition * : command-string : options * )
+{
+    if ! $(command-string) || [ feature.get-values <architecture> : $(options) ]
+    {
+        return ;
+    }
+
+    local host = [ host-architecture ] ;
+    if ! $(host)
+    {
+        return ;
+    }
+
+    local flags =
+        [ feature.get-values <compileflags> : $(options) ]
+        [ feature.get-values <cflags> : $(options) ]
+        [ feature.get-values <cxxflags> : $(options) ] ;
+    local flags-string = $(flags:J=" ") ;
+    if [ MATCH "(-arch .*-arch )" : $(flags-string) ]
+    {
+        # A universal build, there is no single architecture to detect, and
+        # the compiler refuses to preprocess for more than one.
+        return ;
+    }
+
+    local empty = /dev/null ;
+    if [ os.name ] = NT
+    {
+        empty = NUL ;
+    }
+    local invocation = $(command-string) $(flags) -dM -E -x c++ $(empty)
+        "2>$(empty)" ;
+    invocation = $(invocation:J=" ") ;
+    local text = [ SHELL "$(invocation)" ] ;
+
+    local architecture ;
+    local macros = $(.architecture-macros) ;
+    while ! $(architecture) && $(macros)
+    {
+        if [ MATCH $(macros[2]) : $(text) ]
+        {
+            architecture = $(macros[1]) ;
+        }
+        macros = $(macros[3-]) ;
+    }
+
+    if $(architecture) && $(architecture) != $(host)
+    {
+        local conditionx = [ regex.replace $(condition) "/" "," ] ;
+        toolset.add-defaults $(conditionx)\:<architecture>$(architecture) ;
+    }
+}
+
 
 rule find-compiler ( toolset : tool : version ? : command * : additional-paths * )
 {
