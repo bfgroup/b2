@@ -226,6 +226,12 @@ rule init ( version ? : command * : options * : requirement * )
         toolset.add-defaults $(conditionx)\:<target-os>$(target-os) ;
     }
 
+    if $(command)
+    {
+        common.set-architecture-default $(condition) : $(command-string)
+            : $(options) $(requirement) ;
+    }
+
     # If gcc is installed in a non-standard location, we would need to add
     # LD_LIBRARY_PATH when running programs created with it (for unit-test/run
     # rules).

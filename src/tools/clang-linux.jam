@@ -71,6 +71,7 @@ rule init ( version ? :  command * : options * ) {
   if $(command)
   {
       clang.set-target-os-default clang-linux : $(condition) : $(command-string) : $(options) ;
+      common.set-architecture-default $(condition) : $(command-string) : $(options) ;
   }
 
   clang.init-flags clang-linux : $(condition) : $(version) :
